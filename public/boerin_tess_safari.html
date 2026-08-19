@@ -1,0 +1,1429 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Wereld Safaripark & Boerderij 🚜🦒 (7 Werelden • 42 Dieren)</title>
+  <!-- Google Fonts: Plus Jakarta Sans & Fredoka -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&family=Fredoka:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    :root {
+      --bg-cream: #F4FBF7;
+      --charcoal: #1E293B;
+      --primary-green: #059669;
+      --primary-green-dark: #047857;
+      --accent-orange: #D97706;
+      --light-green: #ECFDF5;
+      --light-orange: #FFFBEB;
+      --border-subtle: #E2E8F0;
+    }
+
+    body {
+      background-color: var(--bg-cream);
+      background-image: radial-gradient(#10b98115 1.5px, transparent 1.5px);
+      background-size: 24px 24px;
+      color: var(--charcoal);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 12px;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    @media (min-width: 640px) {
+      body {
+        padding: 20px;
+      }
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 960px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    /* Card standard */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(226, 232, 240, 0.8);
+      border-radius: 24px;
+      box-shadow: 0 10px 25px -5px rgba(5, 150, 105, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.03);
+      padding: 16px 20px;
+    }
+
+    /* Top bar */
+    .top-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-section {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .avatar-icon-btn {
+      width: 48px;
+      height: 48px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #10B981, #059669);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);
+      cursor: pointer;
+      border: 2px solid #fff;
+      transition: transform 0.2s;
+    }
+    .avatar-icon-btn:hover {
+      transform: scale(1.06);
+    }
+
+    .brand-titles h1 {
+      font-size: 18px;
+      font-weight: 900;
+      color: #064E3B;
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    .grade-badge {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 20px;
+      background: #ECFDF5;
+      color: #047857;
+      border: 1px solid #A7F3D0;
+      cursor: pointer;
+    }
+
+    .player-sub {
+      font-size: 11px;
+      color: #64748B;
+      font-weight: 700;
+      margin-top: 2px;
+    }
+
+    .stats-group {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .stat-pill {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+
+    .stat-pill .label {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: #94A3B8;
+      letter-spacing: 0.5px;
+    }
+
+    .stat-pill .value {
+      font-size: 16px;
+      font-weight: 900;
+      color: #064E3B;
+    }
+
+    .stat-pill.stars .value { color: #D97706; }
+    .stat-pill.streak .value { color: #E11D48; }
+
+    /* Nav Tabs */
+    .nav-tabs {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 2px;
+    }
+
+    .nav-tab-btn {
+      padding: 8px 16px;
+      border-radius: 16px;
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border: 1px solid #E2E8F0;
+      background: rgba(255, 255, 255, 0.85);
+      color: #475569;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .nav-tab-btn.active {
+      background: var(--primary-green);
+      color: white;
+      border-color: var(--primary-green-dark);
+      box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);
+    }
+
+    /* Biome Bar */
+    .biomes-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+    @media (min-width: 500px) {
+      .biomes-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+    @media (min-width: 768px) {
+      .biomes-grid { grid-template-columns: repeat(7, 1fr); }
+    }
+
+    .biome-btn {
+      background: white;
+      border: 1px solid #E2E8F0;
+      border-radius: 16px;
+      padding: 10px;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .biome-btn.active {
+      border: 2px solid var(--primary-green);
+      box-shadow: 0 4px 12px rgba(5, 150, 105, 0.15);
+      background: #F0FDF4;
+    }
+    .biome-emoji { font-size: 22px; }
+    .biome-name { font-size: 11px; font-weight: 900; color: #1E293B; margin-top: 4px; }
+    .biome-count { font-size: 9px; font-weight: 800; color: #64748B; }
+
+    /* Story Card */
+    .story-card {
+      background: linear-gradient(135deg, #ECFDF5 0%, #FFFBEB 100%);
+      border: 1px solid #A7F3D0;
+      border-radius: 20px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .story-avatar {
+      font-size: 40px;
+      line-height: 1;
+      cursor: pointer;
+      transition: transform 0.2s;
+      flex-shrink: 0;
+    }
+    .story-avatar:hover { transform: scale(1.15) rotate(5deg); }
+    .story-title { font-size: 13px; font-weight: 900; color: #065F46; }
+    .story-text { font-size: 12px; font-weight: 600; color: #334155; line-height: 1.5; margin-top: 2px; }
+
+    /* Quiz Area */
+    .quiz-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+    @media (min-width: 768px) {
+      .quiz-grid { grid-template-columns: 5fr 7fr; }
+    }
+
+    .question-side {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .question-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 900;
+      text-transform: uppercase;
+      color: #065F46;
+      background: #ECFDF5;
+      padding: 4px 10px;
+      border-radius: 12px;
+      margin-bottom: 8px;
+    }
+
+    .question-title {
+      font-size: 16px;
+      font-weight: 900;
+      color: #0F172A;
+      line-height: 1.4;
+    }
+
+    .passage-box {
+      background: #FFF;
+      border: 1px solid #CBD5E1;
+      border-radius: 14px;
+      padding: 12px;
+      font-size: 12px;
+      line-height: 1.6;
+      color: #334155;
+      margin-top: 10px;
+      font-style: italic;
+    }
+
+    .animal-center {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px 0;
+    }
+    .animal-emoji-big {
+      font-size: 64px;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .animal-emoji-big:hover { transform: scale(1.1); }
+
+    /* Options */
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .option-btn {
+      background: white;
+      border: 1px solid #E2E8F0;
+      border-radius: 18px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #1E293B;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: left;
+    }
+    .option-btn:hover {
+      border-color: #10B981;
+      background: #ECFDF5;
+    }
+    .option-btn.correct {
+      background: #ECFDF5;
+      border: 2px solid #10B981;
+      color: #065F46;
+    }
+    .option-btn.incorrect {
+      background: #FFF1F2;
+      border: 2px solid #F43F5E;
+      color: #9F1239;
+      text-decoration: line-through;
+    }
+    .option-marker {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      background: #F1F5F9;
+      color: #64748B;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+
+    /* Spelling Builder */
+    .spell-tray {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      min-height: 54px;
+      padding: 8px;
+      background: #F8FAFC;
+      border: 2px dashed #CBD5E1;
+      border-radius: 16px;
+      margin-bottom: 14px;
+    }
+    .letter-tile {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: #FBBF24;
+      color: #78350F;
+      font-size: 18px;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 3px 6px rgba(245, 158, 11, 0.3);
+      user-select: none;
+    }
+    .avail-tile {
+      background: white;
+      border: 2px solid #CBD5E1;
+      color: #1E293B;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    .avail-tile:hover {
+      border-color: #10B981;
+      background: #ECFDF5;
+    }
+
+    /* Hint area */
+    .hint-area {
+      background: #FEF3C7;
+      border: 1px solid #FCD34D;
+      border-radius: 16px;
+      padding: 12px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #92400E;
+      margin-top: 10px;
+      display: none;
+    }
+
+    /* Action bar */
+    .action-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid #E2E8F0;
+    }
+    .btn-next {
+      background: var(--primary-green);
+      color: white;
+      border: none;
+      border-radius: 16px;
+      padding: 12px 24px;
+      font-size: 13px;
+      font-weight: 900;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+      display: none;
+    }
+    .btn-next:hover { background: var(--primary-green-dark); }
+
+    /* Modal standard */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 16px;
+      display: none;
+    }
+    .modal-box {
+      background: white;
+      border-radius: 28px;
+      max-width: 540px;
+      width: 100%;
+      padding: 24px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .modal-title {
+      font-size: 20px;
+      font-weight: 900;
+      color: #064E3B;
+      margin-bottom: 6px;
+    }
+    .modal-desc {
+      font-size: 12px;
+      color: #64748B;
+      margin-bottom: 16px;
+    }
+
+    /* Avatar Grid in Modal */
+    .avatar-select-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    @media (min-width: 450px) {
+      .avatar-select-grid { grid-template-columns: repeat(5, 1fr); }
+    }
+    .avatar-option-card {
+      border: 2px solid #E2E8F0;
+      border-radius: 18px;
+      padding: 10px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .avatar-option-card:hover {
+      border-color: #10B981;
+      background: #ECFDF5;
+    }
+    .avatar-option-card.selected {
+      border-color: #10B981;
+      background: #ECFDF5;
+      box-shadow: 0 4px 12px rgba(5, 150, 105, 0.2);
+    }
+    .avatar-card-emoji { font-size: 32px; }
+    .avatar-card-name { font-size: 11px; font-weight: 800; color: #1E293B; margin-top: 4px; }
+    .avatar-card-title { font-size: 9px; color: #64748B; }
+
+    .input-field {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 14px;
+      border: 2px solid #CBD5E1;
+      font-size: 14px;
+      font-weight: 700;
+      color: #1E293B;
+      margin-bottom: 16px;
+      outline: none;
+    }
+    .input-field:focus { border-color: #10B981; }
+
+    .btn-save {
+      width: 100%;
+      padding: 14px;
+      background: var(--primary-green);
+      color: white;
+      border: none;
+      border-radius: 16px;
+      font-size: 14px;
+      font-weight: 900;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    /* Sanctuary grid */
+    .sanctuary-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    @media (min-width: 600px) {
+      .sanctuary-grid { grid-template-columns: repeat(6, 1fr); }
+    }
+    .sanctuary-card {
+      background: white;
+      border: 1px solid #E2E8F0;
+      border-radius: 18px;
+      padding: 12px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .sanctuary-card:hover { transform: translateY(-3px); }
+    .sanctuary-card.locked { opacity: 0.5; filter: grayscale(1); }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    
+    <!-- Top Bar -->
+    <header class="glass-card top-header">
+      <div class="brand-section">
+        <div id="avatarBtn" class="avatar-icon-btn" onclick="openLoginPrompt()" title="Wissel speler (Hemali / Ridheya)">👩‍🌾</div>
+        <div class="brand-titles">
+          <h1 id="openProfileTitle" onclick="openLoginPrompt()" style="cursor: pointer;">
+            <span id="playerNameDisplay">Ridheya</span>
+            <span class="grade-badge" id="gradeBadgeBtn">Groep 4-5</span>
+            <span style="font-size: 10px; background: #E0E7FF; color: #3730A3; padding: 2px 6px; border-radius: 6px; margin-left: 4px;">👤 Wissel</span>
+          </h1>
+          <div class="player-sub" id="playerTitleDisplay">De Vrolijke Boerderijheld • <span id="unlockedCountDisplay">1</span>/42 Dieren Vrijgespeeld</div>
+        </div>
+      </div>
+
+      <div class="stats-group">
+        <div class="stat-pill stars">
+          <span class="label">Score</span>
+          <span class="value" id="scoreDisplay">0 🌟</span>
+        </div>
+        <div class="stat-pill">
+          <span class="label">Munten</span>
+          <span class="value" id="coinsDisplay">50 🪙</span>
+        </div>
+        <div class="stat-pill streak">
+          <span class="label">Reeks</span>
+          <span class="value" id="streakDisplay">0 🔥</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="nav-tabs">
+      <button class="nav-tab-btn active" id="tabAdventure" onclick="switchTab('adventure')">🧭 Taal Avontuur</button>
+      <button class="nav-tab-btn" id="tabSanctuary" onclick="switchTab('sanctuary')">🏡 Dierenpark (42)</button>
+      <button class="nav-tab-btn" id="tabBadges" onclick="switchTab('badges')">🏆 Medailles</button>
+    </nav>
+
+    <!-- Prominent Grade Level Switcher -->
+    <div class="glass-card" style="margin-bottom: 12px; display: flex; flex-direction: row; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;">
+      <div>
+        <div style="font-size: 11px; font-weight: 900; text-transform: uppercase; color: #1E293B;">🎓 Kies Je Niveau:</div>
+        <div style="font-size: 10px; color: #64748B;">Beide groepen verzamelen alle 42 dieren in 7 werelden!</div>
+      </div>
+      <div style="display: flex; gap: 8px;">
+        <button id="btnGrade45" onclick="selectGrade('group_4_5')" style="padding: 8px 14px; border-radius: 12px; font-size: 11px; font-weight: 900; cursor: pointer; border: 1px solid #10B981; background: #059669; color: white;">
+          📖 Groep 4 - 5 (Basis)
+        </button>
+        <button id="btnGrade68" onclick="selectGrade('group_6_7_8')" style="padding: 8px 14px; border-radius: 12px; font-size: 11px; font-weight: 900; cursor: pointer; border: 1px solid #CBD5E1; background: #F8FAFC; color: #475569;">
+          ⚡ Groep 6 - 7 - 8 (Werkwoorden)
+        </button>
+      </div>
+    </div>
+
+    <!-- Biomes Selector (7 Global Werelden) -->
+    <section class="glass-card" id="biomeSection">
+      <div style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: #065F46; margin-bottom: 8px;">
+        🌍 Kies een Wereldlocatie (7 Werelden):
+      </div>
+      <div class="biomes-grid" id="biomesContainer"></div>
+    </section>
+
+    <!-- Main Game View -->
+    <main id="mainGameView">
+      <!-- Story Snippet -->
+      <div class="story-card" id="storyCard">
+        <div class="story-avatar" id="storyAnimalAvatar" onclick="petCurrentAnimal()">🐮</div>
+        <div>
+          <div class="story-title" id="storyTitle">Hoofdstuk 1: Boerderij Avontuur</div>
+          <div class="story-text" id="storyText">Bella de koe loeit vrolijk en vraagt om hulp bij het spellen!</div>
+        </div>
+      </div>
+
+      <!-- Quiz Card -->
+      <div class="glass-card quiz-grid" style="margin-top: 14px;">
+        <div class="question-side">
+          <div>
+            <span class="question-badge" id="categoryBadge">Klinkers & Klanken</span>
+            <h2 class="question-title" id="questionTitle">Kies het juiste woord: In de wei staan mooie grote ___.</h2>
+            <div class="passage-box" id="passageBox" style="display: none;"></div>
+          </div>
+
+          <div class="animal-center">
+            <div class="animal-emoji-big" id="quizAnimalEmoji" onclick="petCurrentAnimal()">🐮</div>
+            <div style="font-size: 11px; font-weight: 700; color: #64748B; margin-top: 4px;" id="quizAnimalName">Bella de Koe</div>
+          </div>
+
+          <div class="hint-area" id="hintArea">
+            💡 <span id="hintText">Denk aan de klankgroepenregel!</span>
+          </div>
+        </div>
+
+        <div class="answer-side">
+          <!-- Choice options -->
+          <div class="options-list" id="optionsContainer"></div>
+
+          <!-- Spelling letter tray -->
+          <div id="spellingContainer" style="display: none;">
+            <div style="font-size: 11px; font-weight: 800; color: #64748B; text-align: center; margin-bottom: 8px;">
+              Klik op de letters om het woord te spellen:
+            </div>
+            <div class="spell-tray" id="spelledLettersTray"></div>
+            <div style="display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;" id="availableLettersTray"></div>
+          </div>
+
+          <div class="action-bar">
+            <button onclick="speakCurrentQuestion()" style="background: #F1F5F9; border: none; border-radius: 12px; padding: 10px 14px; font-size: 12px; font-weight: 800; cursor: pointer;">
+              🔊 Voorlezen
+            </button>
+            <button class="btn-next" id="nextQuestionBtn" onclick="nextQuestion()">
+              Volgende Vraag ➔
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Sanctuary View -->
+    <main class="glass-card" id="sanctuaryView" style="display: none;">
+      <h2 style="font-size: 18px; font-weight: 900; color: #064E3B; margin-bottom: 6px;">
+        🏡 Het Grote Wereld Dierenreservaat
+      </h2>
+      <p style="font-size: 12px; color: #64748B; margin-bottom: 14px;">
+        Verzorg je 42 dieren uit 7 continenten met knuffels en lekkernijen!
+      </p>
+      <div class="sanctuary-grid" id="sanctuaryGrid"></div>
+    </main>
+
+    <!-- Badges View -->
+    <main class="glass-card" id="badgesView" style="display: none;">
+      <h2 style="font-size: 18px; font-weight: 900; color: #064E3B; margin-bottom: 6px;">
+        🏆 Safari Trofeeënkast
+      </h2>
+      <div id="badgesGrid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;"></div>
+    </main>
+
+  </div>
+
+  <!-- Profile / Avatar Modal -->
+  <div class="modal-overlay" id="profileModal">
+    <div class="modal-box">
+      <h2 class="modal-title">Kies Je Vrouwelijke Safari Avatar 👧🌸</h2>
+      <p class="modal-desc">Kies een ontdekkingsreiziger en vul je naam in om het avontuur te starten!</p>
+      
+      <div class="avatar-select-grid" id="avatarModalGrid"></div>
+
+      <label style="font-size: 12px; font-weight: 800; color: #1E293B; display: block; margin-bottom: 6px;">Je Naam:</label>
+      <input type="text" id="playerNameInput" class="input-field" value="Boerin Tess" placeholder="Typ je naam..." />
+
+      <button class="btn-save" onclick="saveProfile()">Start Safari Avontuur! 🌟</button>
+    </div>
+  </div>
+
+  <script>
+    // --- 1. DATA DEFINITION: 7 BIOMES & 42 ANIMALS ---
+    const BIOMES = [
+      { id: 'farm', name: 'Boerderij', emoji: '🚜', color: '#4CAF50' },
+      { id: 'safari', name: 'Savanne', emoji: '🦒', color: '#FF9800' },
+      { id: 'sea', name: 'Oceaan', emoji: '🌊', color: '#0288D1' },
+      { id: 'snow', name: 'Poolrijk', emoji: '❄️', color: '#00ACC1' },
+      { id: 'jungle', name: 'Jungle', emoji: '🎋', color: '#388E3C' },
+      { id: 'outback', name: 'Outback', emoji: '🦘', color: '#E65100' },
+      { id: 'mountain', name: 'Alpen', emoji: '🏔️', color: '#5C6BC0' }
+    ];
+
+    const FEMALE_AVATARS = [
+      { id: 'tess', name: 'Boerin Tess', emoji: '👩‍🌾', title: 'De Boerderijheld' },
+      { id: 'lotte', name: 'Ranger Lotte', emoji: '👧', title: 'De Dierenredder' },
+      { id: 'sophie', name: 'Kapitein Sophie', emoji: '👩‍✈️', title: 'De Oceaanduiker' },
+      { id: 'emma', name: 'Professor Emma', emoji: '👩‍🔬', title: 'De Woordenkampioen' },
+      { id: 'mila', name: 'Astronaut Mila', emoji: '👩‍🚀', title: 'De Sterrenspeurder' },
+      { id: 'noor', name: 'Prinses Noor', emoji: '👸', title: 'De Safari Koningin' },
+      { id: 'zara', name: 'Gids Zara', emoji: '🧕', title: 'De Savannereiziger' },
+      { id: 'nina', name: 'Detective Nina', emoji: '🕵️‍♀️', title: 'De Klankenspeurneus' },
+      { id: 'amber', name: 'Kunstenaar Amber', emoji: '👩‍🎨', title: 'De Woordkunstenaar' },
+      { id: 'fleur', name: 'Dierenarts Fleur', emoji: '🩺', title: 'De Knuffeldokter' }
+    ];
+
+    const ANIMALS = [
+      // Farm (6)
+      { id: 'bella-koe', name: 'Bella de Koe', emoji: '🐮', biome: 'farm', unlocked: true, fact: 'Koeien hebben vier magen!' },
+      { id: 'wolletje-schaap', name: 'Wolletje het Schaap', emoji: '🐑', biome: 'farm', unlocked: false, fact: 'Schapen onthouden 50 gezichten!' },
+      { id: 'storm-paard', name: 'Storm het Paard', emoji: '🐴', biome: 'farm', unlocked: false, fact: 'Paarden kunnen staand slapen!' },
+      { id: 'pip-varken', name: 'Pip het Varken', emoji: '🐷', biome: 'farm', unlocked: false, fact: 'Varkens rollen in modder om koel te blijven!' },
+      { id: 'haantje-haan', name: 'Haantje de Haan', emoji: '🐓', biome: 'farm', unlocked: false, fact: 'Hanen hebben een biologische klok!' },
+      { id: 'daisy-eend', name: 'Daisy het Eendje', emoji: '🦆', biome: 'farm', unlocked: false, fact: 'Eendenveertjes zijn helemaal waterdicht!' },
+      // Safari (6)
+      { id: 'gigi-giraf', name: 'Gigi de Giraf', emoji: '🦒', biome: 'safari', unlocked: false, fact: 'De tong van een giraf is donkerblauw!' },
+      { id: 'leo-leeuw', name: 'Leo de Leeuw', emoji: '🦁', biome: 'safari', unlocked: false, fact: 'De brul is 8 km ver te horen!' },
+      { id: 'ollie-olifant', name: 'Ollie de Olifant', emoji: '🐘', biome: 'safari', unlocked: false, fact: 'Olifanten drinken en ruiken met hun slurf!' },
+      { id: 'zara-zebra', name: 'Zara de Zebra', emoji: '🦓', biome: 'safari', unlocked: false, fact: 'Elke zebra heeft unieke strepen!' },
+      { id: 'mo-meerkat', name: 'Mo het Stokstaartje', emoji: '🦦', biome: 'safari', unlocked: false, fact: 'Staan kaarsrecht op de uitkijk!' },
+      { id: 'charly-cheeta', name: 'Charly de Cheeta', emoji: '🐆', biome: 'safari', unlocked: false, fact: 'Rennen 100 km per uur in 3 seconden!' },
+      // Sea (6)
+      { id: 'dolly-dolfijn', name: 'Dolly de Dolfijn', emoji: '🐬', biome: 'sea', unlocked: false, fact: 'Slapen met één oog open!' },
+      { id: 'sammy-schildpad', name: 'Sammy de Schildpad', emoji: '🐢', biome: 'sea', unlocked: false, fact: 'Vinden altijd hun geboortestrand terug!' },
+      { id: 'octo-octopus', name: 'Octo de Octopus', emoji: '🐙', biome: 'sea', unlocked: false, fact: 'Heeft drie harten en blauw bloed!' },
+      { id: 'willy-walvis', name: 'Willy de Walvis', emoji: '🐋', biome: 'sea', unlocked: false, fact: 'Het grootste dier ooit op aarde!' },
+      { id: 'kora-zeepaard', name: 'Kora het Zeepaardje', emoji: '🐡', biome: 'sea', unlocked: false, fact: 'Zwemmen rechtop tussen koraal!' },
+      { id: 'oscar-orka', name: 'Oscar de Orka', emoji: '🐬', biome: 'sea', unlocked: false, fact: 'Hebben hun eigen familietaal!' },
+      // Snow (6)
+      { id: 'barny-ijsbeer', name: 'Barny de IJsbeer', emoji: '🐻‍❄️', biome: 'snow', unlocked: false, fact: 'Zwarte huid onder de witte vacht!' },
+      { id: 'plons-pinguin', name: 'Plons de Pinguïn', emoji: '🐧', biome: 'snow', unlocked: false, fact: 'Vliegen onder water met 35 km/u!' },
+      { id: 'robbie-zeehond', name: 'Robbie de Zeehond', emoji: '🦭', biome: 'snow', unlocked: false, fact: 'Kunnen 2 uur onder water blijven!' },
+      { id: 'pip-poolvos', name: 'Pip de Poolvos', emoji: '🦊', biome: 'snow', unlocked: false, fact: 'Verandert van kleur in de zomer!' },
+      { id: 'hedwig-uil', name: 'Hedwig de Sneeuwuil', emoji: '🦉', biome: 'snow', unlocked: false, fact: 'Draait kop 270 graden rond!' },
+      { id: 'sven-rendier', name: 'Sven het Rendier', emoji: '🦌', biome: 'snow', unlocked: false, fact: 'Hoeven passen zich aan in de winter!' },
+      // Jungle (6)
+      { id: 'pippa-panda', name: 'Pippa de Panda', emoji: '🐼', biome: 'jungle', unlocked: false, fact: 'Eet 15 kilo bamboe per dag!' },
+      { id: 'paco-papegaai', name: 'Paco de Papegaai', emoji: '🦜', biome: 'jungle', unlocked: false, fact: 'Onthoudt menselijke woorden!' },
+      { id: 'toby-tijger', name: 'Toby de Tijger', emoji: '🐯', biome: 'jungle', unlocked: false, fact: 'Houdt van zwemmen in de rivier!' },
+      { id: 'koko-aap', name: 'Koko de Slingeraap', emoji: '🐒', biome: 'jungle', unlocked: false, fact: 'Gebruikt staart als vijfde hand!' },
+      { id: 'charlie-kameleon', name: 'Charlie de Kameleon', emoji: '🦎', biome: 'jungle', unlocked: false, fact: 'Ogen bewegen apart van elkaar!' },
+      { id: 'maya-toekan', name: 'Maya de Toekan', emoji: '🪶', biome: 'jungle', unlocked: false, fact: 'Grote maar vederlichte snavel!' },
+      // Outback (6)
+      { id: 'kiki-kangoeroe', name: 'Kiki de Kangoeroe', emoji: '🦘', biome: 'outback', unlocked: false, fact: 'Springt 9 meter ver in één sprong!' },
+      { id: 'coco-koala', name: 'Coco de Koala', emoji: '🐨', biome: 'outback', unlocked: false, fact: 'Slaapt 20 uur per dag in eucalyptus!' },
+      { id: 'wally-wombat', name: 'Wally de Wombat', emoji: '🐻', biome: 'outback', unlocked: false, fact: 'Graaft tunnels tot wel 30 meter!' },
+      { id: 'daan-dingo', name: 'Daan de Dingo', emoji: '🐕', biome: 'outback', unlocked: false, fact: 'Kan deuren met zijn polsen openen!' },
+      { id: 'ellie-emoe', name: 'Ellie de Emoe', emoji: '🦤', biome: 'outback', unlocked: false, fact: 'Kan niet achteruit lopen!' },
+      { id: 'finn-vos', name: 'Finn de Woestijnvos', emoji: '🦊', biome: 'outback', unlocked: false, fact: 'Grote oren koelen het lichaam af!' },
+      // Mountain (6)
+      { id: 'boris-steenbok', name: 'Boris de Steenbok', emoji: '🐐', biome: 'mountain', unlocked: false, fact: 'Klimt op kaarsrechte rotswanden!' },
+      { id: 'max-marmot', name: 'Max de Marmot', emoji: '🐿️', biome: 'mountain', unlocked: false, fact: 'Fluit keihard bij naderend gevaar!' },
+      { id: 'luna-alpaca', name: 'Luna de Alpaca', emoji: '🦙', biome: 'mountain', unlocked: false, fact: 'Alpacawol kriebelt nooit!' },
+      { id: 'alex-arend', name: 'Alex de Koningsarend', emoji: '🦅', biome: 'mountain', unlocked: false, fact: 'Ziet een muis van 3 km afstand!' },
+      { id: 'saar-hond', name: 'Saar de Sint-Bernard', emoji: '🐕‍🦺', biome: 'mountain', unlocked: false, fact: 'Redt wandelaars in de sneeuw!' },
+      { id: 'bella-gems', name: 'Bella het Gemsje', emoji: '🦌', biome: 'mountain', unlocked: false, fact: 'Springt moeiteloos over gletsjers!' }
+    ];
+
+    // Questions database (Groep 4-5 & Groep 6-7-8)
+    const QUESTIONS = [
+      // --- GROEP 4-5 QUESTIONS ---
+      {
+        grade: 'group_4_5',
+        biome: 'farm',
+        category: 'Klinkers & Klanken',
+        question: 'Kies het juist gespelde woord: In de wei staan mooie grote ___.',
+        type: 'choice',
+        options: ['boomen', 'bomen', 'boommen'],
+        correct: 1,
+        hint: 'Klankgroep bo-men: lange klank aan het einde van de klankgroep, dus één klinker!'
+      },
+      {
+        grade: 'group_4_5',
+        biome: 'farm',
+        category: 'Letters Leggen',
+        question: 'Spel het woord voor het dier met manen dat hinnikt:',
+        type: 'spell',
+        targetWord: 'PAARD',
+        scrambled: ['P', 'A', 'A', 'R', 'D'],
+        hint: 'Luister naar de klanken: p - aa - r - d.'
+      },
+      {
+        grade: 'group_4_5',
+        biome: 'farm',
+        category: 'Begrijpend Lezen',
+        question: 'Waarom hebben koeien vier magen?',
+        passage: 'Koeien zijn herkauwers. Ze eten taai gras dat moeilijk te verteren is. Dankzij hun vier verschillende magen kunnen ze het gras fijnmalen en alle vitamines opnemen.',
+        type: 'choice',
+        options: ['Om taai gras goed te verteren', 'Omdat ze 4 liter water drinken', 'Om harder te kunnen rennen'],
+        correct: 0,
+        hint: 'Kijk in de tekst naar het woord "verteren".'
+      },
+      {
+        grade: 'group_4_5',
+        biome: 'safari',
+        category: 'Klinkers',
+        question: 'De giraf eet van de hoogste ___.',
+        type: 'choice',
+        options: ['takken', 'taken', 'tacken'],
+        correct: 0,
+        hint: 'Korte klank a, dus twee medeklinkers (k-k).'
+      },
+      {
+        grade: 'group_4_5',
+        biome: 'sea',
+        category: 'Eindklank (d/t)',
+        question: 'De dolfijn zwemt naar het zandige ___.',
+        type: 'choice',
+        options: ['strant', 'strand', 'straant'],
+        correct: 1,
+        hint: 'Maak het woord langer: één strand, twee stranden.'
+      },
+      {
+        grade: 'group_4_5',
+        biome: 'snow',
+        category: 'Begrijpend Lezen',
+        question: 'Welke kleur heeft de huid van een ijsbeer onder zijn vacht?',
+        passage: 'De haren van een ijsbeer zijn hol en doorzichtig. De huid eronder is diepzwart om alle zonnewarmte op te slaan.',
+        type: 'choice',
+        options: ['Zwart, om zonnewarmte op te slaan', 'Roze als een varken', 'Sneeuwwit'],
+        correct: 0,
+        hint: 'Lees over de diepzwarte huid.'
+      },
+      {
+        grade: 'group_4_5',
+        biome: 'jungle',
+        category: 'Samenstellingen',
+        question: 'Welk woord is juist gespeld?',
+        type: 'choice',
+        options: ['regenwout', 'regenwoud', 'reegenwoud'],
+        correct: 1,
+        hint: 'Maak het woord woud langer: wouden.'
+      },
+      {
+        grade: 'group_4_5',
+        biome: 'outback',
+        category: 'Begrijpend Lezen',
+        question: 'Waarom springen kangoeroes zo hoog?',
+        passage: 'Kangoeroes hebben sterke pezen in hun achterpoten die werken als elastieken veren.',
+        type: 'choice',
+        options: ['Hun pezen werken als elastische veren', 'Omdat ze vleugels hebben', 'Door veel water te drinken'],
+        correct: 0,
+        hint: 'Zoek naar het woord veren.'
+      },
+      {
+        grade: 'group_4_5',
+        biome: 'mountain',
+        category: 'Woorden met -cht',
+        question: 'Vanaf de bergtop heb je een prachtig ___.',
+        type: 'choice',
+        options: ['uitzigt', 'uitzicht', 'uitzygt'],
+        correct: 1,
+        hint: 'Na een korte klank schrijf je -cht.'
+      },
+
+      // --- GROEP 6-7-8 QUESTIONS (Sterke Werkwoorden, Leenwoorden & Grammatica) ---
+      {
+        grade: 'group_6_7_8',
+        biome: 'farm',
+        category: 'Werkwoordspelling (d/t/dt)',
+        question: 'De boer ___ vroeg in de ochtend de verse eieren.',
+        type: 'choice',
+        options: ['vind', 'vindt', 'vint'],
+        correct: 1,
+        hint: 'Hij-vorm: stam vind + t = vindt.'
+      },
+      {
+        grade: 'group_6_7_8',
+        biome: 'farm',
+        category: 'Sterke Werkwoorden (VT)',
+        question: 'Wat is de verleden tijd van "brengen"? (Gisteren ... hij)',
+        type: 'choice',
+        options: ['bracht', 'bragte', 'brengde'],
+        correct: 0,
+        hint: 'Sterk werkwoord: brengen - bracht - gebracht.'
+      },
+      {
+        grade: 'group_6_7_8',
+        biome: 'farm',
+        category: 'Voltooid Deelwoord',
+        question: 'Welke zin is grammaticaal geheel correct?',
+        type: 'choice',
+        options: ['Het hooi is keurig opgestapelt.', 'Het hooi is keurig opgestapeld.'],
+        correct: 1,
+        hint: 'Stam is stapel (l zit niet in ’t kofschip) -> -d.'
+      },
+      {
+        grade: 'group_6_7_8',
+        biome: 'safari',
+        category: 'Sterke Werkwoorden (VT)',
+        question: 'Wat is de verleden tijd van "vechten"? (De leeuwen ...)',
+        type: 'choice',
+        options: ['vochten', 'vechtten', 'vachten'],
+        correct: 0,
+        hint: 'Vechten - vocht - vochten.'
+      },
+      {
+        grade: 'group_6_7_8',
+        biome: 'safari',
+        category: 'Begrijpend Lezen',
+        question: 'Waarom moet een cheeta na een sprint direct rusten?',
+        passage: 'Tijdens een sprint van 110 km/u verbruikt een cheeta enorm veel energie en stijgt zijn lichaamstemperatuur razendsnel naar 41 graden, waardoor hij moet afkoelen om oververhitting te voorkomen.',
+        type: 'choice',
+        options: ['Om oververhitting te voorkomen', 'Omdat zijn klauwen slijten', 'Omdat hij moet slapen'],
+        correct: 0,
+        hint: 'Lees over de lichaamstemperatuur en afkoelen.'
+      },
+      {
+        grade: 'group_6_7_8',
+        biome: 'sea',
+        category: 'Letters Leggen (Sterke Werkwoorden)',
+        question: 'Spel het voltooid deelwoord van "DUIKEN":',
+        type: 'spell',
+        targetWord: 'GEDOKEN',
+        scrambled: ['G', 'E', 'D', 'O', 'K', 'E', 'N'],
+        hint: 'Duiken - dook - gedoken.'
+      },
+      {
+        grade: 'group_6_7_8',
+        biome: 'snow',
+        category: 'Woorden met -isch',
+        question: 'Het noorderlicht is een ___ natuurverschijnsel.',
+        type: 'choice',
+        options: ['fantastisch', 'fantastis', 'fantastiese'],
+        correct: 0,
+        hint: 'Klank -ies schrijf je aan het eind als -isch.'
+      },
+      {
+        grade: 'group_6_7_8',
+        biome: 'jungle',
+        category: 'Apostrof Meervoud',
+        question: 'Wat is het juiste meervoud van "panda"?',
+        type: 'choice',
+        options: ["panda's", 'pandas', "panda'es"],
+        correct: 0,
+        hint: 'Woorden op lange a, o, u krijgen een apostrof-s.'
+      },
+      {
+        grade: 'group_6_7_8',
+        biome: 'outback',
+        category: 'Sterke Werkwoorden (VT)',
+        question: 'Wat is de verleden tijd van "springen"? (De kangoeroe ...)',
+        type: 'choice',
+        options: ['sprong', 'springde', 'sprang'],
+        correct: 0,
+        hint: 'Springen - sprong - gesprongen.'
+      },
+      {
+        grade: 'group_6_7_8',
+        biome: 'mountain',
+        category: 'Vaste Voorzetsels',
+        question: 'De berggids verbaast zich ___ het prachtige uitzicht.',
+        type: 'choice',
+        options: ['over', 'aan', 'voor'],
+        correct: 0,
+        hint: 'Je verbaast je altijd "over" iets.'
+      }
+    ];
+
+    // --- 2. MULTI-USER & GAME STATE ---
+    const USER_ACCOUNTS = {
+      hemali: { name: 'Hemali', avatarEmoji: '👧', avatarTitle: 'De Dierenredder', defaultGrade: 'group_6_7_8', password: 'Big2014!' },
+      ridheya: { name: 'Ridheya', avatarEmoji: '👩‍🌾', avatarTitle: 'De Boerderijheld', defaultGrade: 'group_4_5', password: 'Small2018!' }
+    };
+
+    let currentUser = 'ridheya';
+    let userProfiles = {
+      hemali: { score: 0, coins: 50, streak: 0, unlocked: ['bella-koe'], grade: 'group_6_7_8' },
+      ridheya: { score: 0, coins: 50, streak: 0, unlocked: ['bella-koe'], grade: 'group_4_5' }
+    };
+
+    let state = {
+      name: 'Ridheya',
+      avatarId: 'tess',
+      avatarEmoji: '👩‍🌾',
+      avatarTitle: 'De Boerderijheld',
+      selectedGrade: 'group_4_5',
+      score: 0,
+      coins: 50,
+      streak: 0,
+      selectedBiome: 'farm',
+      currentQuestionIdx: 0,
+      spelledLetters: [],
+      isAnswered: false,
+      isCorrect: false
+    };
+
+    function openLoginPrompt() {
+      const choice = prompt('Kies een speler:\n1: Hemali (Groep 6-7-8, ww: Big2014!)\n2: Ridheya (Groep 4-5, ww: Small2018!)\n\nTyp 1 of 2:');
+      if (!choice) return;
+
+      if (choice.trim() === '1' || choice.trim().toLowerCase() === 'hemali') {
+        const pw = prompt('Voer wachtwoord in voor Hemali:');
+        if (pw === 'Big2014!') {
+          switchUser('hemali');
+        } else {
+          alert('Onjuist wachtwoord voor Hemali.');
+        }
+      } else if (choice.trim() === '2' || choice.trim().toLowerCase() === 'ridheya') {
+        const pw = prompt('Voer wachtwoord in voor Ridheya:');
+        if (pw === 'Small2018!') {
+          switchUser('ridheya');
+        } else {
+          alert('Onjuist wachtwoord voor Ridheya.');
+        }
+      }
+    }
+
+    function switchUser(userKey) {
+      currentUser = userKey;
+      const acc = USER_ACCOUNTS[userKey];
+      const p = userProfiles[userKey];
+
+      state.name = acc.name;
+      state.avatarEmoji = acc.avatarEmoji;
+      state.avatarTitle = acc.avatarTitle;
+      state.selectedGrade = p.grade;
+      state.score = p.score;
+      state.coins = p.coins;
+      state.streak = p.streak;
+      state.currentQuestionIdx = 0;
+
+      document.getElementById('playerNameDisplay').innerText = state.name;
+      document.getElementById('playerTitleDisplay').innerText = `${state.avatarTitle} • 42 Dieren Vrijgespeeld`;
+      document.getElementById('avatarBtn').innerText = state.avatarEmoji;
+
+      selectGrade(state.selectedGrade);
+      updateTopBar();
+      playAudioTone(600, 0.2);
+    }
+
+    // --- 3. INIT & SOUND ---
+    function playAudioTone(freq, duration) {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.frequency.value = freq;
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        gain.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + duration);
+        osc.stop(ctx.currentTime + duration);
+      } catch(e) {}
+    }
+
+    function selectGrade(grade) {
+      state.selectedGrade = grade;
+      state.currentQuestionIdx = 0;
+      playAudioTone(523.25, 0.15);
+      
+      const btn45 = document.getElementById('btnGrade45');
+      const btn68 = document.getElementById('btnGrade68');
+      const gradeBadge = document.getElementById('gradeBadgeBtn');
+
+      if (grade === 'group_4_5') {
+        btn45.style.background = '#059669';
+        btn45.style.color = '#FFFFFF';
+        btn45.style.border = '1px solid #10B981';
+        btn68.style.background = '#F8FAFC';
+        btn68.style.color = '#475569';
+        btn68.style.border = '1px solid #CBD5E1';
+        if (gradeBadge) gradeBadge.innerText = 'Groep 4-5';
+      } else {
+        btn68.style.background = '#D97706';
+        btn68.style.color = '#FFFFFF';
+        btn68.style.border = '1px solid #F59E0B';
+        btn45.style.background = '#F8FAFC';
+        btn45.style.color = '#475569';
+        btn45.style.border = '1px solid #CBD5E1';
+        if (gradeBadge) gradeBadge.innerText = 'Groep 6-7-8';
+      }
+      renderCurrentQuestion();
+    }
+
+    function getCurrentBiomeQuestions() {
+      const filtered = QUESTIONS.filter(q => q.biome === state.selectedBiome && q.grade === state.selectedGrade);
+      if (filtered.length) return filtered;
+      const biomeOnly = QUESTIONS.filter(q => q.biome === state.selectedBiome);
+      return biomeOnly.length ? biomeOnly : QUESTIONS;
+    }
+
+    function speakDutch(text) {
+      if ('speechSynthesis' in window) {
+        const u = new SpeechSynthesisUtterance(text);
+        u.lang = 'nl-NL';
+        window.speechSynthesis.speak(u);
+      }
+    }
+
+    function initGame() {
+      renderBiomes();
+      renderCurrentQuestion();
+      renderAvatarModal();
+      updateTopBar();
+    }
+
+    function renderBiomes() {
+      const container = document.getElementById('biomesContainer');
+      container.innerHTML = '';
+      BIOMES.forEach(b => {
+        const count = ANIMALS.filter(a => a.biome === b.id && a.unlocked).length;
+        const total = ANIMALS.filter(a => a.biome === b.id).length;
+        const isActive = state.selectedBiome === b.id;
+        const div = document.createElement('div');
+        div.className = `biome-btn ${isActive ? 'active' : ''}`;
+        div.onclick = () => selectBiome(b.id);
+        div.innerHTML = `
+          <div class="biome-emoji">${b.emoji}</div>
+          <div class="biome-name">${b.name}</div>
+          <div class="biome-count">${count}/${total} 🐾</div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function selectBiome(biomeId) {
+      state.selectedBiome = biomeId;
+      state.currentQuestionIdx = 0;
+      playAudioTone(440, 0.1);
+      renderBiomes();
+      renderCurrentQuestion();
+    }
+
+    function getCurrentBiomeQuestions() {
+      const filtered = QUESTIONS.filter(q => q.biome === state.selectedBiome);
+      return filtered.length ? filtered : QUESTIONS;
+    }
+
+    function renderCurrentQuestion() {
+      const qs = getCurrentBiomeQuestions();
+      const q = qs[state.currentQuestionIdx % qs.length];
+      const animal = ANIMALS.find(a => a.biome === state.selectedBiome && a.unlocked) || ANIMALS.find(a => a.biome === state.selectedBiome) || ANIMALS[0];
+
+      state.isAnswered = false;
+      state.isCorrect = false;
+      state.spelledLetters = [];
+
+      document.getElementById('storyTitle').innerText = `${state.name} in de ${BIOMES.find(b => b.id === state.selectedBiome).name}`;
+      document.getElementById('storyText').innerText = `${animal.name} (${animal.emoji}) staat klaar! Wist je dat: ${animal.fact}`;
+      document.getElementById('storyAnimalAvatar').innerText = animal.emoji;
+
+      document.getElementById('categoryBadge').innerText = q.category;
+      document.getElementById('questionTitle').innerText = q.question;
+      document.getElementById('quizAnimalEmoji').innerText = animal.emoji;
+      document.getElementById('quizAnimalName').innerText = animal.name;
+
+      const passageBox = document.getElementById('passageBox');
+      if (q.passage) {
+        passageBox.innerText = `"${q.passage}"`;
+        passageBox.style.display = 'block';
+      } else {
+        passageBox.style.display = 'none';
+      }
+
+      // Hide hint before answering
+      const hintArea = document.getElementById('hintArea');
+      hintArea.style.display = 'none';
+      document.getElementById('hintText').innerText = q.hint;
+
+      // Hide Next button
+      document.getElementById('nextQuestionBtn').style.display = 'none';
+
+      // Choice vs Spell
+      const opts = document.getElementById('optionsContainer');
+      const spellBox = document.getElementById('spellingContainer');
+
+      if (q.type === 'choice') {
+        opts.style.display = 'flex';
+        spellBox.style.display = 'none';
+        opts.innerHTML = '';
+        q.options.forEach((opt, idx) => {
+          const btn = document.createElement('button');
+          btn.className = 'option-btn';
+          btn.innerHTML = `<div class="option-marker">${String.fromCharCode(65 + idx)}</div><span>${opt}</span>`;
+          btn.onclick = () => handleChoice(idx, q.correct);
+          opts.appendChild(btn);
+        });
+      } else if (q.type === 'spell') {
+        opts.style.display = 'none';
+        spellBox.style.display = 'block';
+        renderSpellingLetters(q.scrambled, q.targetWord);
+      }
+    }
+
+    function handleChoice(selectedIdx, correctIdx) {
+      if (state.isAnswered) return;
+      state.isAnswered = true;
+      const opts = document.getElementById('optionsContainer').children;
+
+      if (selectedIdx === correctIdx) {
+        state.isCorrect = true;
+        opts[selectedIdx].classList.add('correct');
+        playAudioTone(587.33, 0.2);
+        if (window.confetti) confetti({ particleCount: 30, spread: 60 });
+        state.score += 15;
+        state.coins += 15;
+        state.streak += 1;
+      } else {
+        state.isCorrect = false;
+        opts[selectedIdx].classList.add('incorrect');
+        opts[correctIdx].classList.add('correct');
+        playAudioTone(220, 0.3);
+        state.streak = 0;
+        // Reveal hint AFTER wrong attempt
+        document.getElementById('hintArea').style.display = 'block';
+      }
+
+      updateTopBar();
+      document.getElementById('nextQuestionBtn').style.display = 'inline-block';
+    }
+
+    function renderSpellingLetters(available, targetWord) {
+      const tray = document.getElementById('spelledLettersTray');
+      const avail = document.getElementById('availableLettersTray');
+      tray.innerHTML = '';
+      avail.innerHTML = '';
+
+      state.spelledLetters.forEach((char, idx) => {
+        const t = document.createElement('div');
+        t.className = 'letter-tile';
+        t.innerText = char;
+        t.onclick = () => {
+          if (state.isAnswered && state.isCorrect) return;
+          state.spelledLetters.splice(idx, 1);
+          renderSpellingLetters(available, targetWord);
+        };
+        tray.appendChild(t);
+      });
+
+      const remaining = [...available];
+      state.spelledLetters.forEach(c => {
+        const i = remaining.indexOf(c);
+        if (i !== -1) remaining.splice(i, 1);
+      });
+
+      remaining.forEach(char => {
+        const t = document.createElement('div');
+        t.className = 'letter-tile avail-tile';
+        t.innerText = char;
+        t.onclick = () => {
+          if (state.isAnswered && state.isCorrect) return;
+          state.spelledLetters.push(char);
+          renderSpellingLetters(available, targetWord);
+
+          if (state.spelledLetters.length === targetWord.length) {
+            state.isAnswered = true;
+            if (state.spelledLetters.join('') === targetWord) {
+              state.isCorrect = true;
+              playAudioTone(587.33, 0.2);
+              if (window.confetti) confetti({ particleCount: 30, spread: 60 });
+              state.score += 20;
+              state.coins += 20;
+              state.streak += 1;
+            } else {
+              state.isCorrect = false;
+              playAudioTone(220, 0.3);
+              state.streak = 0;
+              document.getElementById('hintArea').style.display = 'block';
+            }
+            updateTopBar();
+            document.getElementById('nextQuestionBtn').style.display = 'inline-block';
+          }
+        };
+        avail.appendChild(t);
+      });
+    }
+
+    function nextQuestion() {
+      // Check if unlock next animal in current biome
+      const lockedAnimal = ANIMALS.find(a => a.biome === state.selectedBiome && !a.unlocked);
+      if (lockedAnimal && state.isCorrect) {
+        lockedAnimal.unlocked = true;
+        if (window.confetti) confetti({ particleCount: 80, spread: 90 });
+        alert(`🎉 Gefeliciteerd! Je hebt ${lockedAnimal.name} (${lockedAnimal.emoji}) vrijgespeeld!`);
+      }
+
+      state.currentQuestionIdx++;
+      renderBiomes();
+      renderCurrentQuestion();
+      updateTopBar();
+    }
+
+    function updateTopBar() {
+      const unlocked = ANIMALS.filter(a => a.unlocked).length;
+      document.getElementById('playerNameDisplay').innerText = state.name;
+      document.getElementById('avatarBtn').innerText = state.avatarEmoji;
+      document.getElementById('playerTitleDisplay').innerText = `${state.avatarTitle} • ${unlocked}/42 Dieren`;
+      document.getElementById('scoreDisplay').innerText = `${state.score} 🌟`;
+      document.getElementById('coinsDisplay').innerText = `${state.coins} 🪙`;
+      document.getElementById('streakDisplay').innerText = `${state.streak} 🔥`;
+    }
+
+    function speakCurrentQuestion() {
+      const qs = getCurrentBiomeQuestions();
+      const q = qs[state.currentQuestionIdx % qs.length];
+      speakDutch(`${q.passage ? q.passage + '. ' : ''}${q.question}`);
+    }
+
+    function petCurrentAnimal() {
+      playAudioTone(659.25, 0.15);
+      if (window.confetti) confetti({ particleCount: 15, spread: 40 });
+    }
+
+    // Modal & Avatar
+    function renderAvatarModal() {
+      const grid = document.getElementById('avatarModalGrid');
+      grid.innerHTML = '';
+      FEMALE_AVATARS.forEach(av => {
+        const card = document.createElement('div');
+        card.className = `avatar-option-card ${state.avatarId === av.id ? 'selected' : ''}`;
+        card.onclick = () => {
+          document.querySelectorAll('.avatar-option-card').forEach(c => c.classList.remove('selected'));
+          card.classList.add('selected');
+          state.avatarId = av.id;
+          state.avatarEmoji = av.emoji;
+          state.avatarTitle = av.title;
+        };
+        card.innerHTML = `
+          <div class="avatar-card-emoji">${av.emoji}</div>
+          <div class="avatar-card-name">${av.name}</div>
+          <div class="avatar-card-title">${av.title}</div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    document.getElementById('avatarBtn').onclick = () => {
+      document.getElementById('profileModal').style.display = 'flex';
+    };
+    document.getElementById('openProfileTitle').onclick = () => {
+      document.getElementById('profileModal').style.display = 'flex';
+    };
+
+    function saveProfile() {
+      const input = document.getElementById('playerNameInput').value.trim();
+      if (input) state.name = input;
+      document.getElementById('profileModal').style.display = 'none';
+      updateTopBar();
+      renderCurrentQuestion();
+    }
+
+    function switchTab(tab) {
+      document.querySelectorAll('.nav-tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('mainGameView').style.display = 'none';
+      document.getElementById('sanctuaryView').style.display = 'none';
+      document.getElementById('badgesView').style.display = 'none';
+      document.getElementById('biomeSection').style.display = 'none';
+
+      if (tab === 'adventure') {
+        document.getElementById('tabAdventure').classList.add('active');
+        document.getElementById('mainGameView').style.display = 'block';
+        document.getElementById('biomeSection').style.display = 'block';
+      } else if (tab === 'sanctuary') {
+        document.getElementById('tabSanctuary').classList.add('active');
+        document.getElementById('sanctuaryView').style.display = 'block';
+        renderSanctuary();
+      } else if (tab === 'badges') {
+        document.getElementById('tabBadges').classList.add('active');
+        document.getElementById('badgesView').style.display = 'block';
+        renderBadges();
+      }
+    }
+
+    function renderSanctuary() {
+      const grid = document.getElementById('sanctuaryGrid');
+      grid.innerHTML = '';
+      ANIMALS.forEach(a => {
+        const div = document.createElement('div');
+        div.className = `sanctuary-card ${a.unlocked ? '' : 'locked'}`;
+        div.innerHTML = `
+          <div style="font-size: 32px;">${a.emoji}</div>
+          <div style="font-size: 11px; font-weight: 800; margin-top: 4px;">${a.name}</div>
+          <div style="font-size: 9px; color: #64748B;">${a.unlocked ? '❤️ Vrij' : '🔒 Level Quiz'}</div>
+        `;
+        if (a.unlocked) {
+          div.onclick = () => {
+            petCurrentAnimal();
+            speakDutch(`${a.name}. ${a.fact}`);
+          };
+        }
+        grid.appendChild(div);
+      });
+    }
+
+    function renderBadges() {
+      const grid = document.getElementById('badgesGrid');
+      grid.innerHTML = `
+        <div class="glass-card" style="padding: 12px; display: flex; align-items: center; gap: 10px;">
+          <div style="font-size: 28px;">🌟</div>
+          <div>
+            <div style="font-weight: 900; font-size: 13px;">Eerste Stap</div>
+            <div style="font-size: 10px; color: #64748B;">Beantwoord je eerste vraag juist</div>
+          </div>
+        </div>
+        <div class="glass-card" style="padding: 12px; display: flex; align-items: center; gap: 10px;">
+          <div style="font-size: 28px;">🔥</div>
+          <div>
+            <div style="font-weight: 900; font-size: 13px;">Reekskampioen</div>
+            <div style="font-size: 10px; color: #64748B;">Haal een reeks van 3 goede antwoorden</div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Start
+    window.onload = initGame;
+  </script>
+</body>
+</html>
