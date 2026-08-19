@@ -799,6 +799,12 @@ export default function App() {
         onClose={() => setShowGradeModal(false)}
       />
 
+      {/* Version Flash Modal (Game Versie 8) */}
+      <VersionFlashModal
+        isOpen={showVersionModal}
+        onClose={() => setShowVersionModal(false)}
+      />
+
       {/* Level Complete / Animal Unlock Reward Modal */}
       <RewardModal
         isOpen={showRewardModal}
