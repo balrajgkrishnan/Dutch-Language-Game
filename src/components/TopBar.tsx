@@ -74,35 +74,35 @@ export const TopBar: React.FC<TopBarProps> = ({
         {/* Left Branding / Avatar & Profile */}
         <div className="flex items-center gap-3 w-full md:w-auto justify-between md:justify-start flex-wrap sm:flex-nowrap">
           <div className="flex items-center gap-3">
-            {/* Clickable Avatar Badge */}
+            {/* Clickable Avatar Badge - opens Avatar/Profile Modal */}
             <button
+              id="avatar-profile-btn"
               onClick={() => {
                 sound.playPop();
-                if (onOpenLoginModal) onOpenLoginModal();
-                else onOpenProfileModal();
+                onOpenProfileModal();
               }}
               className="w-11 h-11 sm:w-12 sm:h-12 bg-gradient-to-br from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 rounded-2xl flex items-center justify-center text-white text-2xl sm:text-3xl font-bold shadow-md shadow-emerald-600/20 flex-shrink-0 cursor-pointer transition-all hover:scale-105 active:scale-95 border-2 border-white ring-2 ring-emerald-200"
-              title="Klik om van speler te wisselen"
+              title="Klik om je avatar en titel aan te passen"
             >
               {avatarEmoji}
             </button>
 
             <div>
-              <div className="flex items-center gap-2">
-                {/* Player Name Button */}
+              <div className="flex items-center gap-2 flex-wrap">
+                {/* Player Switch Login Button */}
                 <button
+                  id="user-switch-button"
                   onClick={() => {
                     sound.playPop();
                     if (onOpenLoginModal) onOpenLoginModal();
                     else onOpenProfileModal();
                   }}
-                  className="text-base sm:text-lg font-black text-emerald-950 hover:text-emerald-700 tracking-tight leading-none text-left cursor-pointer transition-colors flex items-center gap-1.5"
-                  title="Wissel van speler (Hemali / Ridheya)"
+                  className="bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 text-emerald-950 font-black text-xs sm:text-sm px-2.5 py-1 rounded-xl cursor-pointer transition-all flex items-center gap-1.5 shadow-xs hover:scale-102 active:scale-95"
+                  title="Klik om in te loggen als Hemali of Ridheya"
                 >
-                  <span>{playerName}</span>
-                  <span className="text-[10px] text-emerald-700 font-bold bg-emerald-100/90 px-1.5 py-0.5 rounded-md flex items-center gap-0.5">
-                    <User className="w-2.5 h-2.5" />
-                    <span>Wissel</span>
+                  <span>👤 {playerName}</span>
+                  <span className="text-[10px] text-white font-black bg-emerald-600 px-1.5 py-0.5 rounded-md flex items-center gap-0.5 uppercase tracking-wide">
+                    Wissel
                   </span>
                 </button>
                 
@@ -113,19 +113,19 @@ export const TopBar: React.FC<TopBarProps> = ({
                     sound.playPop();
                     onOpenGradeSelector();
                   }}
-                  className={`text-[10px] sm:text-xs font-black uppercase px-2.5 py-0.5 rounded-full border cursor-pointer transition-all flex items-center gap-1 shadow-xs active:scale-95 ${
+                  className={`text-[10px] sm:text-xs font-black uppercase px-2.5 py-1 rounded-xl border cursor-pointer transition-all flex items-center gap-1 shadow-xs active:scale-95 ${
                     selectedGrade === 'group_4_5'
                       ? 'bg-emerald-50 text-emerald-800 border-emerald-300 hover:bg-emerald-100'
                       : 'bg-amber-50 text-amber-800 border-amber-300 hover:bg-amber-100'
                   }`}
                   title="Klik om te wisselen tussen Groep 4-5 en Groep 6-7-8"
                 >
-                  <GraduationCap className="w-3 h-3" />
+                  <GraduationCap className="w-3.5 h-3.5" />
                   <span>{selectedGrade === 'group_4_5' ? 'Groep 4-5' : 'Groep 6-7-8'}</span>
                 </button>
               </div>
 
-              <div className="text-[11px] font-bold text-slate-500 mt-0.5 flex items-center gap-1.5">
+              <div className="text-[11px] font-bold text-slate-500 mt-1 flex items-center gap-1.5">
                 <span className="text-emerald-700 font-extrabold">{avatarTitle}</span>
                 <span>•</span>
                 <span>{unlockedCount}/{totalAnimals} Dieren vrijgespeeld</span>
@@ -134,7 +134,7 @@ export const TopBar: React.FC<TopBarProps> = ({
           </div>
 
           {/* Action Buttons (Scoreboard, Download & Sound) */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             {onOpenScoreboardModal && (
               <button
                 id="parent-scoreboard-btn"
@@ -142,11 +142,11 @@ export const TopBar: React.FC<TopBarProps> = ({
                   sound.playPop();
                   onOpenScoreboardModal();
                 }}
-                className="px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl border border-indigo-200 bg-indigo-50 text-indigo-800 hover:bg-indigo-100 transition-all cursor-pointer font-black text-xs uppercase tracking-wider flex items-center gap-1.5 shadow-xs active:scale-95"
-                title="Open Ouder Scorebord & Dagelijkse Voortgang"
+                className="px-3 py-1.5 sm:py-2 rounded-xl border-2 border-indigo-300 bg-indigo-600 hover:bg-indigo-700 text-white transition-all cursor-pointer font-black text-xs uppercase tracking-wider flex items-center gap-1.5 shadow-md shadow-indigo-600/20 active:scale-95"
+                title="Open Ouder Scorebord & Voortgang per Uur / Dag"
               >
-                <span>📊</span>
-                <span className="hidden sm:inline">Scorebord</span>
+                <span className="text-sm">📊</span>
+                <span className="font-extrabold">Ouder Scorebord</span>
               </button>
             )}
 
@@ -157,7 +157,7 @@ export const TopBar: React.FC<TopBarProps> = ({
               title="Download standalone HTML bestand om offline te spelen"
             >
               <Download className="w-3.5 sm:w-4 h-3.5 sm:h-4 text-emerald-600" />
-              <span className="hidden sm:inline">Offline .html</span>
+              <span className="inline">Offline .html</span>
             </button>
 
             <button

@@ -8,29 +8,59 @@ import { AnimalAvatar } from './AnimalAvatar';
 import { StoryDialogueCard } from './StoryDialogueCard';
 import confetti from 'canvas-confetti';
 
+import { ALL_BIOME_ANIMALS } from '../data/biomeData';
+
 interface VerbQuizCardProps {
-  verb: VerbItem;
-  animal: Animal;
-  tierName: string;
-  questionNumber: number;
-  totalQuestions: number;
+  verb?: VerbItem;
+  verbItem?: VerbItem;
+  animal?: Animal;
+  mascotAnimal?: Animal;
+  tierName?: string;
+  selectedTier?: 'all' | 'A1' | 'A2' | 'B1' | 'B2';
+  onSelectTier?: (tier: 'all' | 'A1' | 'A2' | 'B1' | 'B2') => void;
+  playerName?: string;
+  avatarEmoji?: string;
+  questionNumber?: number;
+  currentVerbIndex?: number;
+  totalQuestions?: number;
+  totalVerbsAvailable?: number;
   biome?: BiomeType;
   onAnswerCorrect: (points: number) => void;
   onAnswerIncorrect: () => void;
-  onNextQuestion: () => void;
+  onNextQuestion?: () => void;
+  onNextVerb?: () => void;
 }
 
 export const VerbQuizCard: React.FC<VerbQuizCardProps> = ({
   verb,
+  verbItem,
   animal,
+  mascotAnimal,
   tierName,
+  selectedTier,
+  onSelectTier,
+  playerName,
+  avatarEmoji,
   questionNumber,
+  currentVerbIndex,
   totalQuestions,
+  totalVerbsAvailable,
   biome = 'safari',
   onAnswerCorrect,
   onAnswerIncorrect,
-  onNextQuestion
+  onNextQuestion,
+  onNextVerb
 }) => {
+  const activeVerb = verb || verbItem || WERKWOORDEN_DATA[0];
+  const activeAnimal = animal || mascotAnimal || ALL_BIOME_ANIMALS[0];
+  const activeQNum = questionNumber || (currentVerbIndex !== undefined ? currentVerbIndex + 1 : 1);
+  const activeTotal = totalQuestions || totalVerbsAvailable || WERKWOORDEN_DATA.length;
+  const activeTierLabel = tierName || (selectedTier ? `Niveau ${selectedTier.toUpperCase()}` : `Niveau ${activeVerb.tier}`);
+  const handleNext = () => {
+    if (onNextQuestion) onNextQuestion();
+    else if (onNextVerb) onNextVerb();
+  };
+
   const [step, setStep] = useState<'step_mc' | 'step_participle' | 'feedback'>('step_mc');
   const [mcOptions, setMcOptions] = useState<string[]>([]);
   const [selectedMcOption, setSelectedMcOption] = useState<string | null>(null);
@@ -52,20 +82,20 @@ export const VerbQuizCard: React.FC<VerbQuizCardProps> = ({
     setParticipleResult(null);
     setAuxResult(null);
 
-    const opts = getImperfectumOptions(verb, WERKWOORDEN_DATA, 4);
+    const opts = getImperfectumOptions(activeVerb, WERKWOORDEN_DATA, 4);
     setMcOptions(opts);
-  }, [verb]);
+  }, [activeVerb]);
 
   const handleSpeak = () => {
-    sound.speakDutch(`${verb.infinitief}. ${verb.example?.nl || ''}`);
+    sound.speakDutch(`${activeVerb.infinitief}. ${activeVerb.example?.nl || ''}`);
   };
 
   const handleSelectMc = (opt: string) => {
     if (selectedMcOption !== null) return;
     setSelectedMcOption(opt);
 
-    const isCorrect = opt.toLowerCase() === verb.imperfectum_ev.toLowerCase() ||
-      (verb.accept_alt?.imperfectum_ev?.some(alt => alt.toLowerCase() === opt.toLowerCase()) ?? false);
+    const isCorrect = opt.toLowerCase() === activeVerb.imperfectum_ev.toLowerCase() ||
+      (activeVerb.accept_alt?.imperfectum_ev?.some(alt => alt.toLowerCase() === opt.toLowerCase()) ?? false);
 
     setIsMcCorrect(isCorrect);
 
@@ -89,8 +119,8 @@ export const VerbQuizCard: React.FC<VerbQuizCardProps> = ({
     }
     setAuxError(false);
 
-    const auxOk = checkAux(selectedAux, verb.hulpwerkwoord);
-    const partOk = checkParticiple(participleInput, verb);
+    const auxOk = checkAux(selectedAux, activeVerb.hulpwerkwoord);
+    const partOk = checkParticiple(participleInput, activeVerb);
 
     setAuxResult(auxOk);
     setParticipleResult(partOk);
@@ -125,10 +155,10 @@ export const VerbQuizCard: React.FC<VerbQuizCardProps> = ({
       {/* Top Story Dialogue Narrative Card */}
       <StoryDialogueCard
         biome={biome}
-        animal={animal}
-        chapterTitle={`Werkwoord Training: ${tierName}`}
-        storyText={`Onderzoek samen met Boerin Tess de verleden tijd en het voltooid deelwoord van '${verb.infinitief}'!`}
-        onPetAnimal={() => sound.playAnimalHappy(animal.soundName)}
+        animal={activeAnimal}
+        chapterTitle={`Werkwoord Training: ${activeTierLabel}`}
+        storyText={`Onderzoek samen met Boerin Tess de verleden tijd en het voltooid deelwoord van '${activeVerb.infinitief}'!`}
+        onPetAnimal={() => sound.playAnimalHappy(activeAnimal.soundName)}
       />
 
       <div className="grid grid-cols-1 md:grid-cols-12 gap-5 items-stretch">
@@ -140,19 +170,19 @@ export const VerbQuizCard: React.FC<VerbQuizCardProps> = ({
               Groep 6-7-8 Werkwoorden
             </span>
             <span className="text-xs font-black text-amber-700 bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-full uppercase">
-              {tierName}
+              {activeTierLabel}
             </span>
           </div>
 
           <div className="my-3 flex flex-col items-center">
             <div className="p-3 bg-gradient-to-br from-amber-50 to-emerald-50 rounded-2xl border border-amber-200/60 shadow-inner">
-              <AnimalAvatar animalId={animal.id} size="lg" interactive={true} isAnimated={true} />
+              <AnimalAvatar animalId={activeAnimal.id} size="lg" interactive={true} isAnimated={true} />
             </div>
             <h3 className="text-lg font-black text-slate-800 mt-2 leading-none">
-              {animal.name}
+              {activeAnimal.name}
             </h3>
             <p className="text-xs font-bold text-amber-700 uppercase tracking-wider mt-0.5">
-              {animal.title}
+              {activeAnimal.title}
             </p>
           </div>
 
@@ -162,7 +192,7 @@ export const VerbQuizCard: React.FC<VerbQuizCardProps> = ({
               <span>Taalweetje van Tess</span>
             </div>
             <p className="text-xs font-medium text-slate-700 leading-relaxed">
-              Sterke werkwoorden veranderen van klank in de verleden tijd! Oefen mee met {animal.name}.
+              Sterke werkwoorden veranderen van klank in de verleden tijd! Oefen mee met {activeAnimal.name}.
             </p>
           </div>
         </div>
@@ -174,9 +204,9 @@ export const VerbQuizCard: React.FC<VerbQuizCardProps> = ({
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
                 <span className="bg-emerald-600 text-white text-xs font-black px-3 py-1 rounded-full uppercase">
-                  Vraag {questionNumber}/{totalQuestions}
+                  Vraag {activeQNum}/{activeTotal}
                 </span>
-                {verb.school_priority && (
+                {activeVerb.school_priority && (
                   <span className="bg-amber-500 text-white text-[10px] font-black px-2 py-0.5 rounded-full uppercase">
                     ⭐ CITO Kern
                   </span>
@@ -199,10 +229,10 @@ export const VerbQuizCard: React.FC<VerbQuizCardProps> = ({
                 Infinitief (Hele Werkwoord)
               </span>
               <h2 className="text-2xl sm:text-3xl font-black text-slate-900 mt-0.5 tracking-wide">
-                {verb.infinitief}
+                {activeVerb.infinitief}
               </h2>
               <p className="text-xs font-bold text-slate-500 mt-1">
-                🇬🇧 {verb.english}
+                🇬🇧 {activeVerb.english}
               </p>
             </div>
 
@@ -223,7 +253,7 @@ export const VerbQuizCard: React.FC<VerbQuizCardProps> = ({
                 <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
                   {mcOptions.map((opt, idx) => {
                     const isSelected = selectedMcOption === opt;
-                    const isTargetCorrect = opt.toLowerCase() === verb.imperfectum_ev.toLowerCase();
+                    const isTargetCorrect = opt.toLowerCase() === activeVerb.imperfectum_ev.toLowerCase();
                     let btnStyle = "bg-white text-slate-800 border-slate-200 hover:border-emerald-500 hover:bg-emerald-50/50 shadow-sm";
 
                     if (selectedMcOption !== null) {
@@ -356,18 +386,18 @@ export const VerbQuizCard: React.FC<VerbQuizCardProps> = ({
                   </div>
 
                   <div className="text-xs font-bold space-y-1 mt-2">
-                    <p>• Verleden tijd (enkelvoud): <b className="text-black">{verb.imperfectum_ev}</b></p>
-                    <p>• Verleden tijd (meervoud): <b className="text-black">{verb.imperfectum_mv}</b></p>
-                    <p>• Voltooid deelwoord: <b className="text-black">{verb.hulpwerkwoord.split('/')[0]} {verb.perfectum}</b></p>
+                    <p>• Verleden tijd (enkelvoud): <b className="text-black">{activeVerb.imperfectum_ev}</b></p>
+                    <p>• Verleden tijd (meervoud): <b className="text-black">{activeVerb.imperfectum_mv}</b></p>
+                    <p>• Voltooid deelwoord: <b className="text-black">{activeVerb.hulpwerkwoord.split('/')[0]} {activeVerb.perfectum}</b></p>
                   </div>
 
-                  {verb.example && (
+                  {activeVerb.example && (
                     <div className="mt-2.5 pt-2 border-t border-black/10">
                       <p className="text-xs italic font-bold text-slate-700">
-                        "{verb.example.nl}"
+                        "{activeVerb.example.nl}"
                       </p>
                       <p className="text-[11px] text-slate-500">
-                        🇬🇧 {verb.example.en}
+                        🇬🇧 {activeVerb.example.en}
                       </p>
                     </div>
                   )}
@@ -376,7 +406,7 @@ export const VerbQuizCard: React.FC<VerbQuizCardProps> = ({
                 <button
                   onClick={() => {
                     sound.playPop();
-                    onNextQuestion();
+                    handleNext();
                   }}
                   className="w-full bg-amber-500 hover:bg-amber-600 text-white text-base font-black py-3.5 rounded-2xl shadow-md shadow-amber-600/20 uppercase tracking-wider cursor-pointer active:scale-98 flex items-center justify-center gap-2 mt-1"
                 >

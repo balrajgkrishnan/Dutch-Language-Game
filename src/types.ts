@@ -135,6 +135,7 @@ export interface PlayerProfile {
   score: number;
   stars: number;
   currentLevelIndex: number;
+  biomeProgress?: Record<string, number>;
   verbTierIndex: number;
   streak: number;
   highestStreak: number;

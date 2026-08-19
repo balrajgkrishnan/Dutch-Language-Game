@@ -14,7 +14,9 @@ import { ParentScoreboardModal } from './components/ParentScoreboardModal';
 import { BiomeSelector } from './components/BiomeSelector';
 import { AmbientParticles } from './components/AmbientParticles';
 import { INITIAL_BADGES } from './data/gameData';
-import { BIOMES, ALL_BIOME_ANIMALS, BIOME_LEVELS_GROEP_4_5, BIOME_LEVELS_GROEP_6_8 } from './data/biomeData';
+import { BIOMES, ALL_BIOME_ANIMALS } from './data/biomeData';
+import { BIOME_LEVELS_GROEP_4_5 } from './data/biomeLevels45';
+import { BIOME_LEVELS_GROEP_6_8 } from './data/biomeLevels68';
 import { WERKWOORDEN_DATA } from './data/werkwoorden';
 import { Animal, Badge, PlayerProfile, GradeLevel, VerbItem, BiomeType } from './types';
 import { sound } from './services/soundService';
@@ -140,7 +142,8 @@ export default function App() {
     ? BIOME_LEVELS_GROEP_4_5
     : BIOME_LEVELS_GROEP_6_8;
   const biomeLevels = levelsByGrade[selectedBiome] || levelsByGrade.farm;
-  const currentLevel = biomeLevels[profile.currentLevelIndex % biomeLevels.length] || biomeLevels[0];
+  const currentBiomeLevelIdx = profile.biomeProgress?.[selectedBiome] ?? (profile.currentLevelIndex % biomeLevels.length);
+  const currentLevel = biomeLevels[currentBiomeLevelIdx % biomeLevels.length] || biomeLevels[0];
   const currentQuestion = currentLevel.questions[currentQuestionIndex % currentLevel.questions.length] || currentLevel.questions[0];
 
   // Group 6-8 Extra Verb Trainer
@@ -264,6 +267,8 @@ export default function App() {
         ? profile.unlockedAnimals
         : [...profile.unlockedAnimals, rewardAnimal.id];
 
+      const curBiomeIdx = profile.biomeProgress?.[selectedBiome] ?? (profile.currentLevelIndex % biomeLevels.length);
+      const nextBiomeLevelIndex = Math.min(curBiomeIdx + 1, biomeLevels.length - 1);
       const nextLevelIndex = Math.min(profile.currentLevelIndex + 1, biomeLevels.length - 1);
 
       setProfile(prev => {
@@ -272,7 +277,11 @@ export default function App() {
           stars: prev.stars + 50,
           score: prev.score + 50,
           unlockedAnimals: updatedUnlocked,
-          currentLevelIndex: nextLevelIndex
+          currentLevelIndex: nextLevelIndex,
+          biomeProgress: {
+            ...(prev.biomeProgress || {}),
+            [selectedBiome]: nextBiomeLevelIndex
+          }
         };
         evaluateBadges(next);
         return next;
@@ -472,7 +481,11 @@ export default function App() {
                 /* Primary Unified Expeditie Quiz for Both Grades */
                 <QuizCard
                   question={currentQuestion}
+                  animal={currentLevel.animalReward}
                   level={currentLevel}
+                  biome={selectedBiome}
+                  chapterTitle={currentLevel.title}
+                  introStory={currentLevel.introStory}
                   playerName={profile.name}
                   avatarEmoji={profile.avatarEmoji}
                   totalQuestionsInLevel={currentLevel.questions.length}
@@ -538,11 +551,18 @@ export default function App() {
               />
               <LevelRoadmap
                 levels={biomeLevels}
-                currentLevelIndex={profile.currentLevelIndex}
+                currentLevelIndex={currentBiomeLevelIdx}
                 unlockedAnimals={animals}
                 selectedBiome={selectedBiome}
                 onSelectLevel={(idx) => {
-                  setProfile(prev => ({ ...prev, currentLevelIndex: idx }));
+                  setProfile(prev => ({
+                    ...prev,
+                    currentLevelIndex: idx,
+                    biomeProgress: {
+                      ...(prev.biomeProgress || {}),
+                      [selectedBiome]: idx
+                    }
+                  }));
                   setCurrentQuestionIndex(0);
                   setActiveTab('adventure');
                 }}

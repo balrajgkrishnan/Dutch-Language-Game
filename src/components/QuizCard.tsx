@@ -1,38 +1,56 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Volume2, Lightbulb, CheckCircle2, ArrowRight, RotateCcw, Sparkles, BookOpen } from 'lucide-react';
-import { Question, Animal, BiomeType } from '../types';
+import { Question, Animal, BiomeType, Level } from '../types';
+import { ALL_BIOME_ANIMALS } from '../data/biomeData';
 import { sound } from '../services/soundService';
 import { AnimalAvatar } from './AnimalAvatar';
 import { StoryDialogueCard } from './StoryDialogueCard';
 
 interface QuizCardProps {
   question: Question;
-  animal: Animal;
-  levelNumber: number;
-  questionNumber: number;
-  totalQuestionsInLevel: number;
+  animal?: Animal;
+  level?: Level;
+  levelNumber?: number;
+  questionNumber?: number;
+  currentQuestionIndex?: number;
+  totalQuestionsInLevel?: number;
   biome?: BiomeType;
   chapterTitle?: string;
   introStory?: string;
+  playerName?: string;
+  avatarEmoji?: string;
   onAnswerCorrect: (pointsEarned: number) => void;
   onAnswerIncorrect: () => void;
   onNextQuestion: () => void;
+  onSpeakStory?: () => void;
 }
 
 export const QuizCard: React.FC<QuizCardProps> = ({
   question,
   animal,
+  level,
   levelNumber,
   questionNumber,
+  currentQuestionIndex,
   totalQuestionsInLevel,
   biome = 'farm',
   chapterTitle,
   introStory,
+  playerName,
+  avatarEmoji,
   onAnswerCorrect,
   onAnswerIncorrect,
-  onNextQuestion
+  onNextQuestion,
+  onSpeakStory
 }) => {
+  const activeAnimal: Animal = animal || (level && level.animalReward) || ALL_BIOME_ANIMALS[0];
+  const activeLevelNum = levelNumber || (level && level.id) || 1;
+  const activeQNum = questionNumber || (currentQuestionIndex !== undefined ? currentQuestionIndex + 1 : 1);
+  const activeTotalQ = totalQuestionsInLevel || (level && level.questions ? level.questions.length : 1);
+  const activeChapter = chapterTitle || (level && level.title) || `Level ${activeLevelNum}: ${activeAnimal.name}`;
+  const activeIntroStory = introStory || (level && level.introStory) || question.shortStory || `Boerin Tess en ${activeAnimal.name} zijn op zoek naar het juiste woord!`;
+
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [spelledLetters, setSpelledLetters] = useState<string[]>([]);
   const [availableLetters, setAvailableLetters] = useState<string[]>([]);
@@ -135,18 +153,18 @@ export const QuizCard: React.FC<QuizCardProps> = ({
     sound.speakDutch(fullText);
   };
 
-  const storySnippet = introStory || question.shortStory || `Boerin Tess en ${animal.name} zijn op zoek naar het juiste woord!`;
+  const storySnippet = activeIntroStory;
 
   return (
     <div id="quiz-card-container" className="w-full max-w-5xl mx-auto px-4 py-2 space-y-4">
       {/* Top Story Dialogue Narrative Card */}
       <StoryDialogueCard
         biome={biome}
-        animal={animal}
-        chapterTitle={chapterTitle || `Level ${levelNumber}: ${animal.name}`}
+        animal={activeAnimal}
+        chapterTitle={activeChapter}
         storyText={storySnippet}
         passage={question.passage}
-        onPetAnimal={() => sound.playAnimalHappy(animal.soundName)}
+        onPetAnimal={() => sound.playAnimalHappy(activeAnimal.soundName)}
       />
 
       {/* Main Question & Interaction Grid */}
@@ -161,7 +179,7 @@ export const QuizCard: React.FC<QuizCardProps> = ({
                 {question.category}
               </span>
               <span className="text-xs font-bold text-slate-500 bg-slate-100 px-2.5 py-1 rounded-full">
-                {questionNumber}/{totalQuestionsInLevel}
+                {activeQNum}/{activeTotalQ}
               </span>
             </div>
 
@@ -174,10 +192,10 @@ export const QuizCard: React.FC<QuizCardProps> = ({
           {/* Center Graphic */}
           <div className="flex flex-col items-center justify-center my-4">
             <div className="p-3 bg-gradient-to-br from-amber-50 to-emerald-50 rounded-2xl border border-amber-200/60 shadow-inner">
-              <AnimalAvatar animalId={animal.id} size="lg" interactive={true} isAnimated={true} />
+              <AnimalAvatar animalId={activeAnimal.id} size="lg" interactive={true} isAnimated={true} />
             </div>
             <span className="text-[11px] font-bold text-slate-500 mt-2">
-              {animal.name} ({animal.title})
+              {activeAnimal.name} ({activeAnimal.title})
             </span>
           </div>
 
