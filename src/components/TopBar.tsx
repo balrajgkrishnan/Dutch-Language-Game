@@ -17,6 +17,7 @@ interface TopBarProps {
   onOpenSpellingFactoryModal?: () => void;
   onOpenSisterTeamModal?: () => void;
   onOpenWardrobeModal?: () => void;
+  onOpenVersionModal?: () => void;
   stars: number;
   score: number;
   streak: number;
@@ -41,6 +42,7 @@ export const TopBar: React.FC<TopBarProps> = ({
   onOpenSpellingFactoryModal,
   onOpenSisterTeamModal,
   onOpenWardrobeModal,
+  onOpenVersionModal,
   stars,
   score,
   streak,
@@ -144,8 +146,23 @@ export const TopBar: React.FC<TopBarProps> = ({
             </div>
           </div>
 
-          {/* Action Buttons (Scoreboard, Download & Sound) */}
+          {/* Action Buttons (Scoreboard, Download, Version 8 & Sound) */}
           <div className="flex items-center gap-2 flex-wrap">
+            {onOpenVersionModal && (
+              <button
+                id="game-version-badge-btn"
+                onClick={() => {
+                  sound.playPop();
+                  onOpenVersionModal();
+                }}
+                className="px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl border border-amber-300 bg-amber-100/90 hover:bg-amber-200 text-amber-950 transition-all cursor-pointer font-black text-xs uppercase tracking-wider flex items-center gap-1.5 shadow-xs active:scale-95 animate-bounce-short"
+                title="Klik om te zien wat er nieuw is in Game Versie 8"
+              >
+                <Sparkles className="w-3.5 h-3.5 text-amber-600 animate-spin-slow" />
+                <span>Versie 8 ✨</span>
+              </button>
+            )}
+
             {onOpenScoreboardModal && (
               <button
                 id="parent-scoreboard-btn"

@@ -17,6 +17,7 @@ import { HemaliReporterModal } from './components/HemaliReporterModal';
 import { RidheyaSpellingFactoryModal } from './components/RidheyaSpellingFactoryModal';
 import { SisterTeamModal } from './components/SisterTeamModal';
 import { ExplorerWardrobeModal } from './components/ExplorerWardrobeModal';
+import { VersionFlashModal } from './components/VersionFlashModal';
 import { AccessibilityBar } from './components/AccessibilityBar';
 import { BiomeSelector } from './components/BiomeSelector';
 import { AmbientParticles } from './components/AmbientParticles';
@@ -65,6 +66,7 @@ export default function App() {
   const [showSpellingFactoryModal, setShowSpellingFactoryModal] = useState(false);
   const [showSisterTeamModal, setShowSisterTeamModal] = useState(false);
   const [showWardrobeModal, setShowWardrobeModal] = useState(false);
+  const [showVersionModal, setShowVersionModal] = useState(false);
 
   const [justUnlockedAnimal, setJustUnlockedAnimal] = useState<Animal>(ALL_BIOME_ANIMALS[0]);
   const [justUnlockedBadges, setJustUnlockedBadges] = useState<Badge[]>([]);
@@ -470,6 +472,7 @@ export default function App() {
         onOpenSpellingFactoryModal={() => setShowSpellingFactoryModal(true)}
         onOpenSisterTeamModal={() => setShowSisterTeamModal(true)}
         onOpenWardrobeModal={() => setShowWardrobeModal(true)}
+        onOpenVersionModal={() => setShowVersionModal(true)}
         stars={profile.stars}
         score={profile.score}
         streak={profile.streak}
@@ -485,6 +488,29 @@ export default function App() {
       {/* Main Content Area */}
       <div className="flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-2 sm:py-3 space-y-3">
         
+        {/* Game Versie 8 Status Flash Bar */}
+        <div 
+          onClick={() => {
+            sound.playPop();
+            setShowVersionModal(true);
+          }}
+          className="bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-500 hover:to-teal-500 text-white rounded-2xl px-4 py-2 shadow-md shadow-emerald-950/10 flex items-center justify-between gap-3 cursor-pointer transition-all hover:scale-[1.01] active:scale-99 border border-emerald-400/40"
+          title="Klik voor meer info over Game Versie 8"
+        >
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="bg-amber-300 text-emerald-950 text-[10px] sm:text-xs font-black px-2.5 py-0.5 rounded-full uppercase tracking-wider shadow-xs flex items-center gap-1">
+              <Sparkles className="w-3.5 h-3.5 text-amber-900" />
+              Game Versie 8 Actief
+            </span>
+            <span className="text-xs sm:text-sm font-black tracking-tight">
+              ✨ Nieuwste Update Geladen: Onbeperkt Dierenpark &amp; Huisdier-XP
+            </span>
+          </div>
+          <span className="text-[11px] font-black underline decoration-amber-300 underline-offset-2 flex-shrink-0 text-amber-200 hidden sm:inline">
+            Bekijk Details ➔
+          </span>
+        </div>
+
         {/* Companion Pet Interactive Card (🦉 Professor Ollie or 🐒 Max) */}
         <CompanionCard
           profile={profile}

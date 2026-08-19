@@ -1,6 +1,6 @@
 {
   "name": "Boerin Tess & Het Safaripark",
-  "description": "Een vrolijk en speels Nederlands taal- en spellingspel met schattige dieren, beloningen en geanimeerde badges.",
+  "description": "Game Versie 8: Een vrolijk en speels Nederlands taal- en spellingspel met schattige dieren, beloningen, leesverhalen en geanimeerde badges.",
   "requestFramePermissions": ["microphone"],
   "majorCapabilities": [
     "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
