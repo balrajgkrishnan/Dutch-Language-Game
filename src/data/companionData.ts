@@ -60,6 +60,84 @@ export const ALL_PETS: PetDefinition[] = [
     specialAbility: 'Hakt lastige Nederlandse woorden in kleurrijke lettergrepen.'
   },
   {
+    id: 'bowie-puppy',
+    name: 'Bowie de Speurpup',
+    species: 'Puppy',
+    emoji: '🐶',
+    avatarBg: 'from-amber-300 to-yellow-500',
+    recommendedFor: 'all',
+    focusSkill: 'Trouwe Hulp & Woordspeurtochten',
+    personality: 'Ontzettend enthousiast, kwispelt bij elk goed antwoord en ruikt moeilijke letters van verre!',
+    sampleQuestions: ['Woef! Welke letter ruik jij als eerste in dit woord?'],
+    encouragements: ['Woef woef! Je bent de allerbeste speurneus van het land!'],
+    specialAbility: 'Geeft een gratis hint bij de moeilijkste vraag.'
+  },
+  {
+    id: 'mimi-kitten',
+    name: 'Mimi het Knuffelkittentje',
+    species: 'Kittentje',
+    emoji: '🐱',
+    avatarBg: 'from-pink-300 to-rose-400',
+    recommendedFor: 'all',
+    focusSkill: 'Zachte Klanken & Ritmisch Lezen',
+    personality: 'Spint luidkeels van geluk als je rustig en vloeiend leest, dol op bolletjes wol en aaitjes!',
+    sampleQuestions: ['Mauw! Kun je dit woord zachtjes en zuiver spellen?'],
+    encouragements: ['Prrr! Mijn hartje spint van trots om hoe jij leest!'],
+    specialAbility: 'Herstelt 1 extra poging bij een leesfoutje.'
+  },
+  {
+    id: 'pippa-panda',
+    name: 'Pippa de Luie Panda',
+    species: 'Panda',
+    emoji: '🐼',
+    avatarBg: 'from-emerald-300 to-teal-500',
+    recommendedFor: 'all',
+    focusSkill: 'Rust, Geduld & Diepe Concentratie',
+    personality: 'Houdt van bamboe snacks en helpt je kalm te blijven tijdens lange leesteksten.',
+    sampleQuestions: ['Neem even rustig de tijd om de vraag nog een keer te bekijken.'],
+    encouragements: ['Super ontspannen en geconcentreerd gewerkt!'],
+    specialAbility: 'Geeft 50% extra concentratie-XP bij voltooide verhalen.'
+  },
+  {
+    id: 'bibi-bunny',
+    name: 'Bibi het Huppelkonijntje',
+    species: 'Konijntje',
+    emoji: '🐰',
+    avatarBg: 'from-purple-300 to-pink-400',
+    recommendedFor: 'all',
+    focusSkill: 'Snelheid & Vlot Leestempo',
+    personality: 'Huppelt vrolijk in het rond en viert elke voltooide alinea met een vrolijke sprong!',
+    sampleQuestions: ['Hop hop! Zullen we doorlezen naar de volgende alinea?'],
+    encouragements: ['Je leest net zo vlot als een huppelend konijntje!'],
+    specialAbility: 'Verhoogt je leessnelheid-bonus met +10 sterren.'
+  },
+  {
+    id: 'vossie-fox',
+    name: 'Vossie de Poolvos',
+    species: 'Poolvos',
+    emoji: '🦊',
+    avatarBg: 'from-orange-300 to-rose-500',
+    recommendedFor: 'all',
+    focusSkill: 'Slimme Woordstrategieën & Raadsels',
+    personality: 'Pienter en behendig. Lost met plezier de meest ingewikkelde grammaticaraadsels op!',
+    sampleQuestions: ['Wat is de slimste truc om deze werkwoordsvorm te vinden?'],
+    encouragements: ['Sluw en slim als een vosje! Goed nagedacht!'],
+    specialAbility: 'Onthult de stam van elk Nederlands werkwoord.'
+  },
+  {
+    id: 'draco-dragon',
+    name: 'Draco het Vuur-Draakje',
+    species: 'Draakje',
+    emoji: '🐉',
+    avatarBg: 'from-red-400 to-amber-500',
+    recommendedFor: 'all',
+    focusSkill: 'Kracht, Passie & Woordenschat-Magie',
+    personality: 'Spuwt magische glittervonkjes wanneer je een 5-streak behaalt!',
+    sampleQuestions: ['Voel de magische energie in deze zin!'],
+    encouragements: ['Vlammend goed gedaan! Niet te stoppen!'],
+    specialAbility: 'Geeft een magische vlammen-streak bonus.'
+  },
+  {
     id: 'coco-parrot',
     name: 'Coco de Papegaai',
     species: 'Papegaai',
@@ -164,6 +242,53 @@ export const PET_HOMES: Record<PetHomeType, { name: string; emoji: string; bgGra
   }
 };
 
+export interface TamagotchiItem {
+  id: string;
+  name: string;
+  emoji: string;
+  type: 'food' | 'wash' | 'toy' | 'sleep' | 'accessory';
+  effect: {
+    hunger?: number;
+    happiness?: number;
+    energy?: number;
+    cleanliness?: number;
+    xp?: number;
+    hearts?: number;
+  };
+  cost: number;
+  description: string;
+}
+
+export const TAMAGOTCHI_FOODS: TamagotchiItem[] = [
+  { id: 'apple', name: 'Knapperige Appel', emoji: '🍎', type: 'food', effect: { hunger: 25, happiness: 15, xp: 20 }, cost: 0, description: 'Lekker vers en gezond!' },
+  { id: 'banana', name: 'Gouden Banaan', emoji: '🍌', type: 'food', effect: { hunger: 30, happiness: 20, xp: 25 }, cost: 5, description: 'Super zoet en vol energie!' },
+  { id: 'cookies', name: 'Melk & Koekjes', emoji: '🥛', type: 'food', effect: { hunger: 35, happiness: 30, xp: 30 }, cost: 10, description: 'Warme melk en knapperige koekjes.' },
+  { id: 'fish', name: 'Vers Visje', emoji: '🐟', type: 'food', effect: { hunger: 40, happiness: 35, xp: 35 }, cost: 10, description: 'Geliefd bij katjes, pinguïns en welpjes!' },
+  { id: 'bamboo', name: 'Zoete Bamboe Scheut', emoji: '🎋', type: 'food', effect: { hunger: 35, happiness: 30, xp: 30 }, cost: 10, description: 'Knapperig lievelingseten van panda Pippa!' },
+  { id: 'cake', name: 'Verjaardags Feesttaart', emoji: '🎂', type: 'food', effect: { hunger: 50, happiness: 50, xp: 50, hearts: 1 }, cost: 20, description: 'Een gigantische feesttraktatie!' }
+];
+
+export const TAMAGOTCHI_CARE_ACTIONS = [
+  { id: 'soap_wash', name: 'Lekker Inzepen', emoji: '🧼', type: 'wash', effect: { cleanliness: 40, happiness: 20, xp: 25 }, description: 'Zachte schuimbellen overal!' },
+  { id: 'warm_shower', name: 'Warme Douche', emoji: '🚿', type: 'wash', effect: { cleanliness: 60, happiness: 30, xp: 30 }, description: 'Lekker afspoelen met warm water.' },
+  { id: 'ball_play', name: 'Balletje Gooien', emoji: '🎾', type: 'toy', effect: { happiness: 40, energy: -15, xp: 35 }, description: 'Gooi de bal en je maatje rent erachteraan!' },
+  { id: 'dance_party', name: 'Dansfeestje', emoji: '🪕', type: 'toy', effect: { happiness: 45, energy: -20, xp: 40 }, description: 'Zet de safariradio aan en dans samen!' },
+  { id: 'tickle_hug', name: 'Knuffelen & Kietelen', emoji: '💖', type: 'toy', effect: { happiness: 30, xp: 20, hearts: 1 }, description: 'Zachte aaitjes en liefde.' },
+  { id: 'power_nap', name: 'Knus Dutje Doen', emoji: '🛏️', type: 'sleep', effect: { energy: 50, happiness: 15, xp: 20 }, description: 'Onder het warme dekentje slapen.' },
+  { id: 'lullaby', name: 'Slaapliedje Zingen', emoji: '🌙', type: 'sleep', effect: { energy: 75, happiness: 25, xp: 30 }, description: 'Een rustig sterrenliedje voor zoete dromen.' }
+];
+
+export const TAMAGOTCHI_HATS = [
+  { id: 'none', name: 'Geen Hoed', emoji: '❌' },
+  { id: 'crown', name: 'Gouden Kroon', emoji: '👑' },
+  { id: 'safari_hat', name: 'Safari Hoed', emoji: '🤠' },
+  { id: 'party_hat', name: 'Feestmuts', emoji: '🥳' },
+  { id: 'headphones', name: 'Gamer Headset', emoji: '🎧' },
+  { id: 'bow', name: 'Roze Strikje', emoji: '🎀' },
+  { id: 'glasses', name: 'Slimme Bril', emoji: '👓' },
+  { id: 'nightcap', name: 'Slaapmuts', emoji: '🛌' }
+];
+
 export function createInitialCompanion(petId: CompanionPetId = 'ollie-owl'): PetCompanionState {
   const def = ALL_PETS.find(p => p.id === petId) || ALL_PETS[0];
   return {
@@ -180,6 +305,12 @@ export function createInitialCompanion(petId: CompanionPetId = 'ollie-owl'): Pet
     unlockedHomeDecorations: ['warm-carpet', 'bookshelf', 'fairy-lights'],
     customAccessories: ['safari-bandana'],
     personality: def.personality,
-    specialAbility: def.specialAbility
+    specialAbility: def.specialAbility,
+    hunger: 85,
+    happiness: 90,
+    energy: 95,
+    cleanliness: 90,
+    equippedHat: 'none',
+    equippedAccessory: 'none'
   };
 }

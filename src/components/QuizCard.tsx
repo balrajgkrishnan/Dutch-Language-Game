@@ -54,10 +54,25 @@ export const QuizCard: React.FC<QuizCardProps> = ({
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [spelledLetters, setSpelledLetters] = useState<string[]>([]);
   const [availableLetters, setAvailableLetters] = useState<string[]>([]);
+  const [shuffledOptions, setShuffledOptions] = useState<{ text: string; isCorrect: boolean }[]>([]);
   const [isAnswered, setIsAnswered] = useState(false);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
   const [showHintAfterError, setShowHintAfterError] = useState(false);
   const [failedAttempts, setFailedAttempts] = useState(0);
+
+  // Helper to thoroughly scramble letters
+  const scrambleLetters = (letters: string[], targetWord?: string): string[] => {
+    const arr = [...letters];
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    // If it accidentally equals target word and has at least 2 letters, swap first two
+    if (targetWord && arr.join('').toUpperCase() === targetWord.toUpperCase() && arr.length > 1) {
+      [arr[0], arr[1]] = [arr[1], arr[0]];
+    }
+    return arr;
+  };
 
   // Initialize or reset question state
   useEffect(() => {
@@ -67,8 +82,28 @@ export const QuizCard: React.FC<QuizCardProps> = ({
     setShowHintAfterError(false);
     setFailedAttempts(0);
 
-    if (question.type === 'spell' && question.scrambledLetters) {
-      setAvailableLetters([...question.scrambledLetters]);
+    // Shuffle options so correct answer is NOT always in the same position
+    if ((question.type === 'choice' || question.type === 'comprehension') && question.options) {
+      const mapped = question.options.map((opt, idx) => ({
+        text: opt,
+        isCorrect: idx === question.correctOptionIndex
+      }));
+      // Fisher-Yates shuffle
+      for (let i = mapped.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [mapped[i], mapped[j]] = [mapped[j], mapped[i]];
+      }
+      setShuffledOptions(mapped);
+    } else {
+      setShuffledOptions([]);
+    }
+
+    // Scramble spelling letters thoroughly
+    if (question.type === 'spell') {
+      const sourceLetters = question.scrambledLetters && question.scrambledLetters.length > 0
+        ? question.scrambledLetters
+        : question.targetWord ? question.targetWord.toUpperCase().split('') : [];
+      setAvailableLetters(scrambleLetters(sourceLetters, question.targetWord));
       setSpelledLetters([]);
     }
   }, [question]);
@@ -79,7 +114,8 @@ export const QuizCard: React.FC<QuizCardProps> = ({
     setSelectedOption(index);
     sound.playPop();
 
-    const correct = index === question.correctOptionIndex;
+    const optionItem = shuffledOptions[index];
+    const correct = optionItem ? optionItem.isCorrect : index === question.correctOptionIndex;
     setIsAnswered(true);
     setIsCorrect(correct);
 
@@ -141,10 +177,11 @@ export const QuizCard: React.FC<QuizCardProps> = ({
     sound.playPop();
     setIsAnswered(false);
     setIsCorrect(null);
-    if (question.scrambledLetters) {
-      setAvailableLetters([...question.scrambledLetters]);
-      setSpelledLetters([]);
-    }
+    const sourceLetters = question.scrambledLetters && question.scrambledLetters.length > 0
+      ? question.scrambledLetters
+      : question.targetWord ? question.targetWord.toUpperCase().split('') : [];
+    setAvailableLetters(scrambleLetters(sourceLetters, question.targetWord));
+    setSpelledLetters([]);
   };
 
   const handleReadAloud = () => {
@@ -219,11 +256,11 @@ export const QuizCard: React.FC<QuizCardProps> = ({
         <section className="lg:col-span-7 flex flex-col justify-between gap-4">
           
           {/* Question Mode: Choice & Comprehension */}
-          {(question.type === 'choice' || question.type === 'comprehension') && question.options && (
+          {(question.type === 'choice' || question.type === 'comprehension') && (shuffledOptions.length > 0 ? shuffledOptions : (question.options || []).map((o, i) => ({ text: o, isCorrect: i === question.correctOptionIndex }))) && (
             <div id="quiz-options-list" className="flex-1 flex flex-col justify-center gap-2.5">
-              {question.options.map((option, idx) => {
+              {(shuffledOptions.length > 0 ? shuffledOptions : (question.options || []).map((o, i) => ({ text: o, isCorrect: i === question.correctOptionIndex }))).map((optionItem, idx) => {
                 const isSelected = selectedOption === idx;
-                const isThisCorrect = idx === question.correctOptionIndex;
+                const isThisCorrect = optionItem.isCorrect;
 
                 let cardClasses = 'group bg-white hover:bg-emerald-50/50 border border-slate-200 hover:border-emerald-400 rounded-2xl p-4 flex items-center justify-between transition-all shadow-sm hover:shadow-md cursor-pointer relative overflow-hidden';
                 let markerClasses = 'w-9 h-9 rounded-xl bg-slate-100 group-hover:bg-emerald-100 flex items-center justify-center font-black text-sm text-slate-500 group-hover:text-emerald-700 mr-3.5 flex-shrink-0';
@@ -254,7 +291,7 @@ export const QuizCard: React.FC<QuizCardProps> = ({
                         {String.fromCharCode(65 + idx)}
                       </div>
                       <span className="text-sm sm:text-base font-bold text-slate-800">
-                        {option}
+                        {optionItem.text}
                       </span>
                     </div>
 

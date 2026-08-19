@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { sound } from '../services/soundService';
+import { ALL_BIOME_ANIMALS } from '../data/biomeAnimals';
 
 interface AnimalAvatarProps {
   animalId: string;
@@ -56,46 +57,71 @@ export const AnimalAvatar: React.FC<AnimalAvatarProps> = ({
     }
   };
 
-  // Animal Emoji Map with accessory animations
-  const animalConfig: Record<string, { emoji: string; badge: string; soundType?: string }> = {
-    // Farm
+  // Comprehensive Animal Emoji & Badge Map for all 7 Biomes
+  const animalConfig: Record<string, { emoji: string; badge: string }> = {
+    // 1. Farm
     'bella-koe': { emoji: '🐮', badge: '🍀' },
     'wolletje-schaap': { emoji: '🐑', badge: '🌾' },
     'storm-paard': { emoji: '🐴', badge: '🍎' },
     'pip-varken': { emoji: '🐷', badge: '🍉' },
     'tok-kip': { emoji: '🐔', badge: '🌽' },
+    'daisy-eend': { emoji: '🦆', badge: '💧' },
 
-    // Safari
+    // 2. Safari
     'gigi-giraf': { emoji: '🦒', badge: '🌿' },
     'leo-leeuw': { emoji: '🦁', badge: '🐾' },
     'olli-olifant': { emoji: '🐘', badge: '💧' },
     'ollie-olifant': { emoji: '🐘', badge: '💧' },
     'zara-zebra': { emoji: '🦓', badge: '🌾' },
     'mo-meerkat': { emoji: '🦦', badge: '🥜' },
+    'kibo-neushoorn': { emoji: '🦏', badge: '🌿' },
 
-    // Sea
+    // 3. Sea
     'dolly-dolfijn': { emoji: '🐬', badge: '🫧' },
     'sammy-zeeschildpad': { emoji: '🐢', badge: '🪸' },
     'octo-octopus': { emoji: '🐙', badge: '🫧' },
     'wally-walvis': { emoji: '🐳', badge: '🌊' },
     'finley-haai': { emoji: '🦈', badge: '🐟' },
+    'clippy-krab': { emoji: '🦀', badge: '🐚' },
 
-    // Snow
+    // 4. Snow
     'barny-ijsbeer': { emoji: '🐻‍❄️', badge: '❄️' },
     'penny-pinguin': { emoji: '🐧', badge: '🧊' },
     'robbie-zeehond': { emoji: '🦭', badge: '⭐' },
     'pip-poolvos': { emoji: '🦊', badge: '❄️' },
     'hedwig-sneeuwuil': { emoji: '🦉', badge: '✨' },
+    'sven-rendier': { emoji: '🦌', badge: '🌿' },
 
-    // Jungle
+    // 5. Jungle
     'pippa-panda': { emoji: '🐼', badge: '🎋' },
     'paco-papegaai': { emoji: '🦜', badge: '🌺' },
-    'kiki-kangoeroe': { emoji: '🦘', badge: '🥕' },
+    'toby-tijger': { emoji: '🐯', badge: '🥥' },
     'koko-aap': { emoji: '🐒', badge: '🍌' },
-    'charlie-kameleon': { emoji: '🦎', badge: '🍃' }
+    'charlie-kameleon': { emoji: '🦎', badge: '🍃' },
+    'maya-toekan': { emoji: '🪶', badge: '🫐' },
+
+    // 6. Outback
+    'kiki-kangoeroe': { emoji: '🦘', badge: '🌾' },
+    'coco-koala': { emoji: '🐨', badge: '🌿' },
+    'wally-wombat': { emoji: '🐻', badge: '🥕' },
+    'daan-dingo': { emoji: '🐕', badge: '🍖' },
+    'ellie-emoe': { emoji: '🦤', badge: '🌾' },
+    'finn-woestijnvos': { emoji: '🦊', badge: '🫐' },
+
+    // 7. Mountain
+    'boris-steenbok': { emoji: '🐐', badge: '🌿' },
+    'max-marmot': { emoji: '🐿️', badge: '🌸' },
+    'luna-alpaca': { emoji: '🦙', badge: '🌾' },
+    'alex-arend': { emoji: '🦅', badge: '🐟' },
+    'saar-sint-bernard': { emoji: '🐕‍🦺', badge: '🧀' },
+    'bella-gems': { emoji: '🦌', badge: '🌸' }
   };
 
-  const currentConfig = animalConfig[animalId] || { emoji: '🐾', badge: '✨' };
+  const matchedAnimal = ALL_BIOME_ANIMALS.find(a => a.id === animalId);
+  const currentConfig = animalConfig[animalId] || {
+    emoji: matchedAnimal?.emoji || '🌟',
+    badge: matchedAnimal?.favoriteFoodEmoji || '✨'
+  };
 
   return (
     <motion.div

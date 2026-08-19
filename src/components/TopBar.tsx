@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { Sparkles, Volume2, VolumeX, Flame, Star, Coins, Award, Compass, Trees, Download, GraduationCap, User, BookOpen, Mic, Wrench, Crown, Shirt } from 'lucide-react';
+import { Sparkles, Volume2, VolumeX, Flame, Star, Coins, Award, Compass, Trees, Download, GraduationCap, User, BookOpen, Mic, Wrench, Crown, Shirt, Palette } from 'lucide-react';
 import { sound } from '../services/soundService';
 import { GradeLevel, BiomeType } from '../types';
 import { BIOMES } from '../data/biomeData';
+import { TocaAvatar } from './TocaAvatar';
+import { TocaCustomization } from '../data/tocaAvatarData';
 
 interface TopBarProps {
   playerName: string;
   avatarEmoji?: string;
   avatarTitle?: string;
+  tocaCustomization?: Partial<TocaCustomization>;
   onOpenProfileModal: () => void;
   onOpenLoginModal?: () => void;
   onOpenScoreboardModal?: () => void;
@@ -18,6 +21,7 @@ interface TopBarProps {
   onOpenSisterTeamModal?: () => void;
   onOpenWardrobeModal?: () => void;
   onOpenVersionModal?: () => void;
+  onOpenVetHospitalModal?: () => void;
   stars: number;
   score: number;
   streak: number;
@@ -34,6 +38,7 @@ export const TopBar: React.FC<TopBarProps> = ({
   playerName,
   avatarEmoji = '👩‍🌾',
   avatarTitle = 'Avonturier',
+  tocaCustomization,
   onOpenProfileModal,
   onOpenLoginModal,
   onOpenScoreboardModal,
@@ -43,6 +48,7 @@ export const TopBar: React.FC<TopBarProps> = ({
   onOpenSisterTeamModal,
   onOpenWardrobeModal,
   onOpenVersionModal,
+  onOpenVetHospitalModal,
   stars,
   score,
   streak,
@@ -86,7 +92,7 @@ export const TopBar: React.FC<TopBarProps> = ({
         {/* Left Branding / Avatar & Profile */}
         <div className="flex items-center gap-3 w-full md:w-auto justify-between md:justify-start flex-wrap sm:flex-nowrap">
           <div className="flex items-center gap-3">
-            {/* Clickable Avatar Badge */}
+            {/* Clickable Avatar Badge with Live Toca / Roblox Avatar */}
             <button
               id="avatar-profile-btn"
               onClick={() => {
@@ -94,10 +100,13 @@ export const TopBar: React.FC<TopBarProps> = ({
                 if (onOpenWardrobeModal) onOpenWardrobeModal();
                 else onOpenProfileModal();
               }}
-              className="w-12 h-12 sm:w-13 sm:h-13 bg-gradient-to-br from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 rounded-2xl flex items-center justify-center text-white text-2xl sm:text-3xl font-bold shadow-md shadow-emerald-600/20 flex-shrink-0 cursor-pointer transition-all hover:scale-105 active:scale-95 border-2 border-white ring-2 ring-emerald-200"
-              title="Klik om je avatar en outfit aan te passen"
+              className="relative p-0.5 w-12 h-12 sm:w-13 sm:h-13 bg-gradient-to-br from-teal-500 via-cyan-500 to-indigo-600 hover:from-teal-400 hover:to-indigo-500 rounded-2xl flex items-center justify-center shadow-md shadow-cyan-600/25 flex-shrink-0 cursor-pointer transition-all hover:scale-105 active:scale-95 border-2 border-white ring-2 ring-cyan-200 overflow-hidden group"
+              title="Klik om je Toca & Roblox karakter, haarstijl en streetwear aan te passen!"
             >
-              {avatarEmoji}
+              <TocaAvatar customization={tocaCustomization} size={46} />
+              <div className="absolute inset-0 bg-slate-950/20 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                <Sparkles className="w-4 h-4 text-cyan-300 animate-spin" />
+              </div>
             </button>
 
             <div>
@@ -259,6 +268,18 @@ export const TopBar: React.FC<TopBarProps> = ({
           </button>
         )}
 
+        {onOpenVetHospitalModal && (
+          <button
+            onClick={() => {
+              sound.playPop();
+              onOpenVetHospitalModal();
+            }}
+            className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-teal-600 to-cyan-600 hover:from-teal-500 hover:to-cyan-500 text-white font-black text-xs uppercase tracking-wider flex items-center gap-1.5 cursor-pointer shadow-xs whitespace-nowrap transition-all active:scale-95"
+          >
+            <span>🏥 Dierenarts Ziekenhuis</span>
+          </button>
+        )}
+
         {isHemali && onOpenReporterModal && (
           <button
             onClick={() => {
@@ -304,10 +325,10 @@ export const TopBar: React.FC<TopBarProps> = ({
               sound.playPop();
               onOpenWardrobeModal();
             }}
-            className="px-3 py-1.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 font-black text-xs uppercase tracking-wider flex items-center gap-1.5 cursor-pointer shadow-2xs whitespace-nowrap transition-all active:scale-95"
+            className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-pink-500 via-purple-600 to-indigo-600 hover:from-pink-400 hover:to-indigo-500 text-white font-black text-xs uppercase tracking-wider flex items-center gap-1.5 cursor-pointer shadow-xs whitespace-nowrap transition-all active:scale-95"
           >
-            <Shirt className="w-3.5 h-3.5 text-emerald-600" />
-            <span>🤠 Kledingkast</span>
+            <Palette className="w-3.5 h-3.5 text-amber-300" />
+            <span>✨ Avatar Studio</span>
           </button>
         )}
       </div>

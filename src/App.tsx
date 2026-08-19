@@ -16,8 +16,10 @@ import { ReadingAdventureModal } from './components/ReadingAdventureModal';
 import { HemaliReporterModal } from './components/HemaliReporterModal';
 import { RidheyaSpellingFactoryModal } from './components/RidheyaSpellingFactoryModal';
 import { SisterTeamModal } from './components/SisterTeamModal';
-import { ExplorerWardrobeModal } from './components/ExplorerWardrobeModal';
+import { TocaWardrobeStudioModal } from './components/TocaWardrobeStudioModal';
+import { TamagotchiPetRoomModal } from './components/TamagotchiPetRoomModal';
 import { VersionFlashModal } from './components/VersionFlashModal';
+import { VeterinarianHospitalModal } from './components/VeterinarianHospitalModal';
 import { AccessibilityBar } from './components/AccessibilityBar';
 import { BiomeSelector } from './components/BiomeSelector';
 import { AmbientParticles } from './components/AmbientParticles';
@@ -67,6 +69,8 @@ export default function App() {
   const [showSisterTeamModal, setShowSisterTeamModal] = useState(false);
   const [showWardrobeModal, setShowWardrobeModal] = useState(false);
   const [showVersionModal, setShowVersionModal] = useState(false);
+  const [showVetHospitalModal, setShowVetHospitalModal] = useState(false);
+  const [showTamagotchiModal, setShowTamagotchiModal] = useState(false);
 
   const [justUnlockedAnimal, setJustUnlockedAnimal] = useState<Animal>(ALL_BIOME_ANIMALS[0]);
   const [justUnlockedBadges, setJustUnlockedBadges] = useState<Badge[]>([]);
@@ -101,14 +105,18 @@ export default function App() {
   };
 
   // Handle Save Profile / Avatar
-  const handleSaveProfile = (name: string, avatarId: string, avatarEmoji: string, avatarTitle: string) => {
+  const handleSaveProfile = (name: string, avatarId: string, avatarEmoji: string, avatarTitle: string, tocaData?: any) => {
     setProfile(prev => ({
       ...prev,
       name,
       avatarId,
       avatarEmoji,
       avatarTitle,
-      hasCustomizedAvatar: true
+      hasCustomizedAvatar: true,
+      customization: {
+        ...prev.customization,
+        ...(tocaData ? { toca: tocaData, outfit: tocaData.outfit, hairStyle: tocaData.hairStyle, hairColor: tocaData.hairColor } : {})
+      } as any
     }));
     setShowProfileModal(false);
   };
@@ -294,11 +302,11 @@ export default function App() {
       };
 
       // Boost Pet Companion XP
-      const updatedPetCompanion = profile.petCompanion ? {
-        ...profile.petCompanion,
-        xp: profile.petCompanion.xp + 75,
-        friendshipHearts: Math.min(5, profile.petCompanion.friendshipHearts + 1)
-      } : undefined;
+      const updatedCompanion = profile.companion ? {
+        ...profile.companion,
+        xp: profile.companion.xp + 75,
+        friendshipHearts: Math.min(5, profile.companion.friendshipHearts + 1)
+      } : profile.companion;
 
       const curBiomeIdx = profile.biomeProgress?.[selectedBiome] ?? (profile.currentLevelIndex % biomeLevels.length);
       
@@ -320,7 +328,7 @@ export default function App() {
           score: prev.score + 50,
           unlockedAnimals: updatedUnlocked,
           animalHearts: updatedHearts,
-          petCompanion: updatedPetCompanion,
+          companion: updatedCompanion || prev.companion,
           currentLevelIndex: nextBiomeLevelIndex,
           biomeProgress: {
             ...(prev.biomeProgress || {}),
@@ -464,6 +472,7 @@ export default function App() {
         playerName={profile.name}
         avatarEmoji={profile.avatarEmoji}
         avatarTitle={profile.avatarTitle}
+        tocaCustomization={(profile.customization as any)?.toca}
         onOpenProfileModal={() => setShowProfileModal(true)}
         onOpenLoginModal={() => setShowLoginModal(true)}
         onOpenScoreboardModal={() => setShowScoreboardModal(true)}
@@ -473,6 +482,7 @@ export default function App() {
         onOpenSisterTeamModal={() => setShowSisterTeamModal(true)}
         onOpenWardrobeModal={() => setShowWardrobeModal(true)}
         onOpenVersionModal={() => setShowVersionModal(true)}
+        onOpenVetHospitalModal={() => setShowVetHospitalModal(true)}
         stars={profile.stars}
         score={profile.score}
         streak={profile.streak}
@@ -515,6 +525,7 @@ export default function App() {
         <CompanionCard
           profile={profile}
           onUpdateProfile={(updater) => setProfile(updater)}
+          onOpenTamagotchiRoom={() => setShowTamagotchiModal(true)}
         />
 
         {/* Prominent Grade Switcher Bar with Description */}
@@ -629,6 +640,7 @@ export default function App() {
             <AnimalSanctuary
               animals={animals}
               score={profile.score}
+              profile={profile}
               onFeedAnimal={handleFeedAnimal}
               onPetAnimal={handlePetAnimal}
               onGoToAdventure={() => setActiveTab('adventure')}
@@ -783,8 +795,8 @@ export default function App() {
         onOpenRidheyaMission={() => setShowSpellingFactoryModal(true)}
       />
 
-      {/* Explorer Wardrobe Customization Modal */}
-      <ExplorerWardrobeModal
+      {/* Toca & Roblox Avatar & Wardrobe Studio Modal */}
+      <TocaWardrobeStudioModal
         isOpen={showWardrobeModal}
         profile={profile}
         onClose={() => setShowWardrobeModal(false)}
@@ -803,6 +815,22 @@ export default function App() {
       <VersionFlashModal
         isOpen={showVersionModal}
         onClose={() => setShowVersionModal(false)}
+      />
+
+      {/* Veterinarian Animal Hospital Modal (Dokter Ridheya) */}
+      <VeterinarianHospitalModal
+        isOpen={showVetHospitalModal}
+        onClose={() => setShowVetHospitalModal(false)}
+        profile={profile}
+        onUpdateProfile={(updater) => setProfile(updater)}
+      />
+
+      {/* Interactive Tamagotchi Pet Room & Adoption Studio Modal */}
+      <TamagotchiPetRoomModal
+        isOpen={showTamagotchiModal}
+        onClose={() => setShowTamagotchiModal(false)}
+        profile={profile}
+        onUpdateProfile={(updater) => setProfile(updater)}
       />
 
       {/* Level Complete / Animal Unlock Reward Modal */}

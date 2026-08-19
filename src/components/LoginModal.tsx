@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from 'motion/react';
 import { UserCheck, Lock, Sparkles, Key, AlertCircle, ArrowRight, Shield } from 'lucide-react';
 import { verifyLogin, USER_ACCOUNTS } from '../services/authService';
 import { sound } from '../services/soundService';
+import { TocaAvatar } from './TocaAvatar';
+import { TOCA_PRESETS } from '../data/tocaAvatarData';
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -71,13 +73,15 @@ export const LoginModal: React.FC<LoginModalProps> = ({
               onClick={() => handleSelectQuick('Hemali')}
               className={`p-3.5 rounded-2xl border transition-all cursor-pointer flex flex-col items-center text-center relative ${
                 selectedUser.toLowerCase() === 'hemali'
-                  ? 'bg-amber-50 border-2 border-amber-500 shadow-md ring-2 ring-amber-400/20'
+                  ? 'bg-cyan-50 border-2 border-cyan-500 shadow-md ring-2 ring-cyan-400/20'
                   : 'bg-slate-50 hover:bg-slate-100 border-slate-200'
               }`}
             >
-              <div className="text-3xl mb-1">👧</div>
+              <div className="p-1 rounded-xl bg-white shadow-2xs mb-1">
+                <TocaAvatar customization={TOCA_PRESETS[1].customization} size={48} />
+              </div>
               <div className="font-black text-sm text-slate-800">Hemali</div>
-              <div className="text-[10px] text-amber-700 font-bold bg-amber-100 px-2 py-0.5 rounded-full mt-1">
+              <div className="text-[10px] text-cyan-800 font-bold bg-cyan-100 px-2 py-0.5 rounded-full mt-1">
                 Groep 6-7-8
               </div>
             </button>
@@ -88,13 +92,15 @@ export const LoginModal: React.FC<LoginModalProps> = ({
               onClick={() => handleSelectQuick('Ridheya')}
               className={`p-3.5 rounded-2xl border transition-all cursor-pointer flex flex-col items-center text-center relative ${
                 selectedUser.toLowerCase() === 'ridheya'
-                  ? 'bg-emerald-50 border-2 border-emerald-500 shadow-md ring-2 ring-emerald-400/20'
+                  ? 'bg-teal-50 border-2 border-teal-500 shadow-md ring-2 ring-teal-400/20'
                   : 'bg-slate-50 hover:bg-slate-100 border-slate-200'
               }`}
             >
-              <div className="text-3xl mb-1">👩‍🌾</div>
+              <div className="p-1 rounded-xl bg-white shadow-2xs mb-1">
+                <TocaAvatar customization={TOCA_PRESETS[0].customization} size={48} />
+              </div>
               <div className="font-black text-sm text-slate-800">Ridheya</div>
-              <div className="text-[10px] text-emerald-700 font-bold bg-emerald-100 px-2 py-0.5 rounded-full mt-1">
+              <div className="text-[10px] text-teal-800 font-bold bg-teal-100 px-2 py-0.5 rounded-full mt-1">
                 Groep 4-5
               </div>
             </button>

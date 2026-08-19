@@ -2,7 +2,18 @@ export type GradeLevel = 'group_4_5' | 'group_6_7_8';
 
 export type BiomeType = 'farm' | 'safari' | 'sea' | 'snow' | 'jungle' | 'outback' | 'mountain';
 
-export type CompanionPetId = 'ollie-owl' | 'max-monkey' | 'tess-dog' | 'luna-cat' | 'coco-parrot' | 'leo-lion' | 'ella-elephant';
+export type CompanionPetId = 
+  | 'ollie-owl' 
+  | 'max-monkey' 
+  | 'bowie-puppy' 
+  | 'mimi-kitten' 
+  | 'coco-parrot' 
+  | 'leo-lion' 
+  | 'ella-elephant'
+  | 'pippa-panda'
+  | 'bibi-bunny'
+  | 'vossie-fox'
+  | 'draco-dragon';
 
 export type PetHomeType = 'treehouse' | 'acacia_grove' | 'savannah_nest' | 'waterfall_cave' | 'safari_camp' | 'jungle_cabin' | 'explorer_lodge' | 'animal_sanctuary';
 
@@ -111,13 +122,21 @@ export interface PetCompanionState {
   xp: number;
   maxXp: number;
   friendshipHearts: number; // 1-5
-  mood?: 'super_happy' | 'proud' | 'curious' | 'encouraging' | 'sleepy';
+  mood?: 'super_happy' | 'proud' | 'curious' | 'encouraging' | 'sleepy' | 'hungry' | 'playful';
   specialAbility: string;
   home: PetHomeType;
   unlockedAccessories?: string[];
   unlockedHomeDecorations?: string[];
   customAccessories?: string[];
   personality?: string;
+  // Tamagotchi Care Vitals (0 - 100)
+  hunger?: number; // 100 = full
+  happiness?: number; // 100 = joyful
+  energy?: number; // 100 = rested
+  cleanliness?: number; // 100 = sparkling clean
+  equippedHat?: string;
+  equippedAccessory?: string;
+  customColor?: string;
 }
 
 export interface ExplorerCustomization {
@@ -408,4 +427,38 @@ export interface UserAccountConfig {
   companionSpecies: string;
   companionEmoji: string;
   focusBio: string;
+}
+
+export interface VetPatientCase {
+  id: string;
+  patientName: string;
+  species: string;
+  animalEmoji: string;
+  age: string;
+  biome: BiomeType;
+  symptoms: string[];
+  temperature: string;
+  caseReport: string; // Under 100 words child-friendly reading
+  targetProblem: string;
+  treatmentTool: {
+    id: string;
+    name: string;
+    icon: string;
+    description: string;
+  };
+  toolOptions: {
+    id: string;
+    name: string;
+    icon: string;
+    description: string;
+  }[];
+  spellingWord: {
+    word: string;
+    hint: string;
+    scrambledLetters: string[];
+  };
+  cureCheerMessage: string;
+  rewardStars: number;
+  rewardCoins: number;
+  badgeRewardId?: string;
 }
