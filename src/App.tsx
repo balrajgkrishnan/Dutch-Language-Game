@@ -10,7 +10,14 @@ import { GradeSelectorModal } from './components/GradeSelectorModal';
 import { GradeSwitcherBar } from './components/GradeSwitcherBar';
 import { ProfileAvatarModal } from './components/ProfileAvatarModal';
 import { LoginModal } from './components/LoginModal';
-import { ParentScoreboardModal } from './components/ParentScoreboardModal';
+import { EnhancedParentDashboardModal } from './components/EnhancedParentDashboardModal';
+import { CompanionCard } from './components/CompanionCard';
+import { ReadingAdventureModal } from './components/ReadingAdventureModal';
+import { HemaliReporterModal } from './components/HemaliReporterModal';
+import { RidheyaSpellingFactoryModal } from './components/RidheyaSpellingFactoryModal';
+import { SisterTeamModal } from './components/SisterTeamModal';
+import { ExplorerWardrobeModal } from './components/ExplorerWardrobeModal';
+import { AccessibilityBar } from './components/AccessibilityBar';
 import { BiomeSelector } from './components/BiomeSelector';
 import { AmbientParticles } from './components/AmbientParticles';
 import { INITIAL_BADGES } from './data/gameData';
@@ -18,14 +25,14 @@ import { BIOMES, ALL_BIOME_ANIMALS } from './data/biomeData';
 import { BIOME_LEVELS_GROEP_4_5 } from './data/biomeLevels45';
 import { BIOME_LEVELS_GROEP_6_8 } from './data/biomeLevels68';
 import { WERKWOORDEN_DATA } from './data/werkwoorden';
-import { Animal, Badge, PlayerProfile, GradeLevel, VerbItem, BiomeType } from './types';
+import { Animal, Badge, PlayerProfile, GradeLevel, VerbItem, BiomeType, AccessibilitySettings } from './types';
 import { sound } from './services/soundService';
 import { 
   getActiveUsername, 
   setActiveUsername, 
   loadUserProfile, 
   saveUserProfile, 
-  appendActivityLog 
+  addActivityLog 
 } from './services/authService';
 import { Map, RotateCcw, Sparkles, Zap, BookOpen, Compass, Download, User, BarChart3, Users } from 'lucide-react';
 
@@ -52,6 +59,13 @@ export default function App() {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showScoreboardModal, setShowScoreboardModal] = useState(false);
   
+  // New Adaptive Modals state
+  const [showReadingModal, setShowReadingModal] = useState(false);
+  const [showReporterModal, setShowReporterModal] = useState(false);
+  const [showSpellingFactoryModal, setShowSpellingFactoryModal] = useState(false);
+  const [showSisterTeamModal, setShowSisterTeamModal] = useState(false);
+  const [showWardrobeModal, setShowWardrobeModal] = useState(false);
+
   const [justUnlockedAnimal, setJustUnlockedAnimal] = useState<Animal>(ALL_BIOME_ANIMALS[0]);
   const [justUnlockedBadges, setJustUnlockedBadges] = useState<Badge[]>([]);
 
@@ -211,14 +225,13 @@ export default function App() {
       const totalStars = prev.stars + (pointsEarned * bonusMultiplier);
       const totalCoins = prev.score + (pointsEarned * bonusMultiplier);
 
-      const logged = appendActivityLog(
-        prev,
-        currentQuestion.question,
-        currentQuestion.category,
-        activeBiomeConfig.name,
-        true,
-        pointsEarned * bonusMultiplier
-      );
+      const logged = addActivityLog(prev, {
+        question: currentQuestion.question,
+        category: currentQuestion.category,
+        biomeName: activeBiomeConfig.name,
+        isCorrect: true,
+        pointsEarned: pointsEarned * bonusMultiplier
+      });
 
       const nextProfile: PlayerProfile = {
         ...logged,
@@ -227,7 +240,12 @@ export default function App() {
         streak: newStreak,
         highestStreak: Math.max(prev.highestStreak, newStreak),
         totalCorrect: prev.totalCorrect + 1,
-        totalAnswered: prev.totalAnswered + 1
+        totalAnswered: prev.totalAnswered + 1,
+        mastery: {
+          ...prev.mastery,
+          spelling: Math.min(100, prev.mastery.spelling + 1),
+          grammar: Math.min(100, prev.mastery.grammar + 1)
+        }
       };
 
       evaluateBadges(nextProfile);
@@ -238,14 +256,13 @@ export default function App() {
   // Handler: Answer Incorrect
   const handleAnswerIncorrect = () => {
     setProfile(prev => {
-      const logged = appendActivityLog(
-        prev,
-        currentQuestion.question,
-        currentQuestion.category,
-        activeBiomeConfig.name,
-        false,
-        0
-      );
+      const logged = addActivityLog(prev, {
+        question: currentQuestion.question,
+        category: currentQuestion.category,
+        biomeName: activeBiomeConfig.name,
+        isCorrect: false,
+        pointsEarned: 0
+      });
 
       return {
         ...logged,
@@ -267,9 +284,32 @@ export default function App() {
         ? profile.unlockedAnimals
         : [...profile.unlockedAnimals, rewardAnimal.id];
 
+      // If already unlocked, boost friendship hearts up to 5!
+      const currentHearts = profile.animalHearts?.[rewardAnimal.id] || (isAlreadyUnlocked ? 1 : 0);
+      const updatedHearts = {
+        ...(profile.animalHearts || {}),
+        [rewardAnimal.id]: Math.min(5, currentHearts + 1)
+      };
+
+      // Boost Pet Companion XP
+      const updatedPetCompanion = profile.petCompanion ? {
+        ...profile.petCompanion,
+        xp: profile.petCompanion.xp + 75,
+        friendshipHearts: Math.min(5, profile.petCompanion.friendshipHearts + 1)
+      } : undefined;
+
       const curBiomeIdx = profile.biomeProgress?.[selectedBiome] ?? (profile.currentLevelIndex % biomeLevels.length);
-      const nextBiomeLevelIndex = Math.min(curBiomeIdx + 1, biomeLevels.length - 1);
-      const nextLevelIndex = Math.min(profile.currentLevelIndex + 1, biomeLevels.length - 1);
+      
+      // If at last level of current biome, cycle to next biome or restart with prestige
+      let nextBiome = selectedBiome;
+      let nextBiomeLevelIndex = curBiomeIdx + 1;
+      
+      if (nextBiomeLevelIndex >= biomeLevels.length) {
+        const biomeOrder: BiomeType[] = ['farm', 'safari', 'sea', 'snow', 'jungle', 'outback', 'mountain'];
+        const curIdx = biomeOrder.indexOf(selectedBiome);
+        nextBiome = biomeOrder[(curIdx + 1) % biomeOrder.length];
+        nextBiomeLevelIndex = 0;
+      }
 
       setProfile(prev => {
         const next: PlayerProfile = {
@@ -277,7 +317,9 @@ export default function App() {
           stars: prev.stars + 50,
           score: prev.score + 50,
           unlockedAnimals: updatedUnlocked,
-          currentLevelIndex: nextLevelIndex,
+          animalHearts: updatedHearts,
+          petCompanion: updatedPetCompanion,
+          currentLevelIndex: nextBiomeLevelIndex,
           biomeProgress: {
             ...(prev.biomeProgress || {}),
             [selectedBiome]: nextBiomeLevelIndex
@@ -286,6 +328,10 @@ export default function App() {
         evaluateBadges(next);
         return next;
       });
+
+      if (nextBiome !== selectedBiome) {
+        setSelectedBiome(nextBiome);
+      }
 
       setJustUnlockedAnimal(rewardAnimal);
       setShowRewardModal(true);
@@ -383,10 +429,33 @@ export default function App() {
   const unlockedCount = profile.unlockedAnimals.length;
   const totalAnimals = ALL_BIOME_ANIMALS.length;
 
+  const fontClass = profile.accessibility?.dyslexiaFont
+    ? 'font-mono'
+    : 'font-sans';
+
+  const sizeClass = profile.accessibility?.fontSize === 'xlarge'
+    ? 'text-lg'
+    : profile.accessibility?.fontSize === 'large'
+    ? 'text-base'
+    : 'text-sm';
+
   return (
-    <div className="min-h-screen bg-slate-100/90 text-slate-900 flex flex-col font-sans relative selection:bg-emerald-200 selection:text-emerald-950 pb-12">
+    <div className={`min-h-screen bg-slate-100/90 text-slate-900 flex flex-col ${fontClass} ${sizeClass} relative selection:bg-emerald-200 selection:text-emerald-950 pb-12`}>
       {/* Background ambient gentle particles */}
       <AmbientParticles biome={selectedBiome} />
+
+      {/* Accessibility Helper Bar */}
+      <div className="pt-2">
+        <AccessibilityBar
+          settings={profile.accessibility}
+          onChangeSettings={(updater) => {
+            setProfile(prev => ({
+              ...prev,
+              accessibility: updater(prev.accessibility)
+            }));
+          }}
+        />
+      </div>
 
       {/* Top Application Header Bar */}
       <TopBar
@@ -396,6 +465,11 @@ export default function App() {
         onOpenProfileModal={() => setShowProfileModal(true)}
         onOpenLoginModal={() => setShowLoginModal(true)}
         onOpenScoreboardModal={() => setShowScoreboardModal(true)}
+        onOpenReadingModal={() => setShowReadingModal(true)}
+        onOpenReporterModal={() => setShowReporterModal(true)}
+        onOpenSpellingFactoryModal={() => setShowSpellingFactoryModal(true)}
+        onOpenSisterTeamModal={() => setShowSisterTeamModal(true)}
+        onOpenWardrobeModal={() => setShowWardrobeModal(true)}
         stars={profile.stars}
         score={profile.score}
         streak={profile.streak}
@@ -409,8 +483,14 @@ export default function App() {
       />
 
       {/* Main Content Area */}
-      <div className="flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-2 sm:py-3">
+      <div className="flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-2 sm:py-3 space-y-3">
         
+        {/* Companion Pet Interactive Card (🦉 Professor Ollie or 🐒 Max) */}
+        <CompanionCard
+          profile={profile}
+          onUpdateProfile={(updater) => setProfile(updater)}
+        />
+
         {/* Prominent Grade Switcher Bar with Description */}
         <GradeSwitcherBar
           selectedGrade={profile.selectedGrade}
@@ -575,12 +655,12 @@ export default function App() {
       {/* Footer Controls & Reset */}
       <footer className="w-full max-w-5xl mx-auto px-4 mt-8 pt-4 border-t border-slate-200/80 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 font-medium gap-3 relative z-10">
         <div className="flex items-center gap-2">
-          <span>🌍 Wereld Safaripark & Boerderij</span>
+          <span>🌍 Wereld Safaripark &amp; Boerderij</span>
           <span>•</span>
-          <span>7 Wereldlocaties • 42 Dieren • Groep 4-5 & Groep 6-7-8</span>
+          <span>7 Wereldlocaties • 42 Dieren • Groep 4-5 &amp; Groep 6-7-8</span>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 flex-wrap">
           <button
             onClick={() => setShowLoginModal(true)}
             className="text-slate-700 hover:text-emerald-800 font-bold text-[11px] flex items-center gap-1.5 bg-white/90 hover:bg-white px-3 py-1.5 rounded-xl border border-slate-200 shadow-xs cursor-pointer"
@@ -635,11 +715,54 @@ export default function App() {
         onClose={() => setShowLoginModal(false)}
       />
 
-      {/* Parent Scoreboard & Progress Modal */}
-      <ParentScoreboardModal
+      {/* Enhanced Parent & Teacher Dashboard Modal */}
+      <EnhancedParentDashboardModal
         isOpen={showScoreboardModal}
+        currentProfile={profile}
         onClose={() => setShowScoreboardModal(false)}
-        onSelectUser={handleSwitchUser}
+        onResetProgress={handleResetProgress}
+        onUpdateProfile={(updater) => setProfile(updater)}
+      />
+
+      {/* Reading Adventure Modal */}
+      <ReadingAdventureModal
+        isOpen={showReadingModal}
+        profile={profile}
+        onClose={() => setShowReadingModal(false)}
+        onUpdateProfile={(updater) => setProfile(updater)}
+      />
+
+      {/* Hemali Safari Reporter Modal */}
+      <HemaliReporterModal
+        isOpen={showReporterModal}
+        profile={profile}
+        onClose={() => setShowReporterModal(false)}
+        onUpdateProfile={(updater) => setProfile(updater)}
+      />
+
+      {/* Ridheya Spelling Factory Modal */}
+      <RidheyaSpellingFactoryModal
+        isOpen={showSpellingFactoryModal}
+        profile={profile}
+        onClose={() => setShowSpellingFactoryModal(false)}
+        onUpdateProfile={(updater) => setProfile(updater)}
+      />
+
+      {/* Sister Team Cooperative Quest Modal */}
+      <SisterTeamModal
+        isOpen={showSisterTeamModal}
+        profile={profile}
+        onClose={() => setShowSisterTeamModal(false)}
+        onOpenHemaliMission={() => setShowReporterModal(true)}
+        onOpenRidheyaMission={() => setShowSpellingFactoryModal(true)}
+      />
+
+      {/* Explorer Wardrobe Customization Modal */}
+      <ExplorerWardrobeModal
+        isOpen={showWardrobeModal}
+        profile={profile}
+        onClose={() => setShowWardrobeModal(false)}
+        onUpdateProfile={(updater) => setProfile(updater)}
       />
 
       {/* Grade Level Selection Modal */}

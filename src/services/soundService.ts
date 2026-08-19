@@ -73,6 +73,22 @@ class SoundService {
     this.playIncorrect();
   }
 
+  playSuccess() {
+    this.playCorrect();
+  }
+
+  playError() {
+    this.playIncorrect();
+  }
+
+  playLevelUp() {
+    this.playFanfare();
+  }
+
+  playVictory() {
+    this.playFanfare();
+  }
+
   playMunch() {
     this.playPop();
   }

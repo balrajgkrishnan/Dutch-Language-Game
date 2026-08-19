@@ -87,26 +87,36 @@ export const RewardModal: React.FC<RewardModalProps> = ({
 
           {/* Title */}
           <h2 className="text-2xl sm:text-3xl font-black text-emerald-950 tracking-tight mt-3 mb-0.5">
-            Nieuw Dier Gered! 🎉
+            {animal.unlocked ? 'Level Meesterlijk Voltooid! 🎉' : 'Nieuw Dier Gered! 🎉'}
           </h2>
           <p className="text-sm font-black text-amber-700 uppercase tracking-wider mb-3">
             {animal.name} ({animal.title})
           </p>
 
           <p className="text-slate-700 font-medium text-xs sm:text-sm leading-relaxed bg-slate-50 p-3.5 rounded-2xl border border-slate-200 mb-4">
-            {animal.name} is super blij met jouw hulp en woont nu veilig in jouw Wonderpark!
+            {animal.unlocked
+              ? `${animal.name} straalt van geluk! Je verdient extra vriendschapshartjes ❤️ en je huisdier groeit in wijsheid!`
+              : `${animal.name} is super blij met jouw hulp en woont nu veilig in jouw Wonderpark!`}
           </p>
 
           {/* Rewards Pill */}
           <div className="flex items-center justify-center gap-3 mb-6 flex-wrap">
             <div className="bg-amber-50 text-amber-900 font-black px-3.5 py-1.5 rounded-xl border border-amber-200 flex items-center gap-1 text-xs sm:text-sm">
               <Star className="w-4 h-4 fill-amber-500 text-amber-500" />
-              <span>+{earnedStars} Score & Munten 🌟</span>
+              <span>+{earnedStars} Sterren & Munten 🌟</span>
+            </div>
+
+            <div className="bg-rose-50 text-rose-900 font-black px-3.5 py-1.5 rounded-xl border border-rose-200 flex items-center gap-1 text-xs sm:text-sm">
+              <span>❤️ +1 Vriendschapshartje</span>
+            </div>
+
+            <div className="bg-emerald-50 text-emerald-900 font-black px-3.5 py-1.5 rounded-xl border border-emerald-200 flex items-center gap-1 text-xs sm:text-sm">
+              <span>✨ +75 Huisdier XP</span>
             </div>
 
             {newBadges.length > 0 && (
-              <div className="bg-emerald-50 text-emerald-900 font-black px-3.5 py-1.5 rounded-xl border border-emerald-200 flex items-center gap-1 text-xs sm:text-sm">
-                <Award className="w-4 h-4 text-emerald-600" />
+              <div className="bg-indigo-50 text-indigo-900 font-black px-3.5 py-1.5 rounded-xl border border-indigo-200 flex items-center gap-1 text-xs sm:text-sm">
+                <Award className="w-4 h-4 text-indigo-600" />
                 <span>Nieuwe Medaille Vrij!</span>
               </div>
             )}

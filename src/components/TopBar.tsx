@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { Sparkles, Volume2, VolumeX, Flame, Star, Coins, Award, Compass, Trees, Download, GraduationCap, User } from 'lucide-react';
+import { Sparkles, Volume2, VolumeX, Flame, Star, Coins, Award, Compass, Trees, Download, GraduationCap, User, BookOpen, Mic, Wrench, Crown, Shirt } from 'lucide-react';
 import { sound } from '../services/soundService';
 import { GradeLevel, BiomeType } from '../types';
 import { BIOMES } from '../data/biomeData';
@@ -12,6 +12,11 @@ interface TopBarProps {
   onOpenProfileModal: () => void;
   onOpenLoginModal?: () => void;
   onOpenScoreboardModal?: () => void;
+  onOpenReadingModal?: () => void;
+  onOpenReporterModal?: () => void;
+  onOpenSpellingFactoryModal?: () => void;
+  onOpenSisterTeamModal?: () => void;
+  onOpenWardrobeModal?: () => void;
   stars: number;
   score: number;
   streak: number;
@@ -31,6 +36,11 @@ export const TopBar: React.FC<TopBarProps> = ({
   onOpenProfileModal,
   onOpenLoginModal,
   onOpenScoreboardModal,
+  onOpenReadingModal,
+  onOpenReporterModal,
+  onOpenSpellingFactoryModal,
+  onOpenSisterTeamModal,
+  onOpenWardrobeModal,
   stars,
   score,
   streak,
@@ -44,7 +54,7 @@ export const TopBar: React.FC<TopBarProps> = ({
 }) => {
   const [soundOn, setSoundOn] = useState(true);
 
-  const currentBiome = BIOMES.find(b => b.id === selectedBiome) || BIOMES[0];
+  const isHemali = playerName.toLowerCase() === 'hemali';
 
   const toggleSound = () => {
     const next = !soundOn;
@@ -67,22 +77,23 @@ export const TopBar: React.FC<TopBarProps> = ({
   const progressPercent = Math.min(100, Math.round((unlockedCount / totalAnimals) * 100));
 
   return (
-    <header id="top-navbar" className="w-full max-w-5xl mx-auto px-3 sm:px-4 pt-3 sm:pt-4 pb-2">
+    <header id="top-navbar" className="w-full max-w-5xl mx-auto px-3 sm:px-4 pt-3 sm:pt-4 pb-2 space-y-2.5">
       {/* Top Header Card in Modern Fluid Glassmorphic Style */}
       <div className="bg-white/95 backdrop-blur-md rounded-3xl shadow-xl shadow-emerald-950/5 border border-emerald-100 px-4 sm:px-6 py-3.5 sm:py-4 flex flex-col md:flex-row items-center justify-between gap-3 sm:gap-4">
         
         {/* Left Branding / Avatar & Profile */}
         <div className="flex items-center gap-3 w-full md:w-auto justify-between md:justify-start flex-wrap sm:flex-nowrap">
           <div className="flex items-center gap-3">
-            {/* Clickable Avatar Badge - opens Avatar/Profile Modal */}
+            {/* Clickable Avatar Badge */}
             <button
               id="avatar-profile-btn"
               onClick={() => {
                 sound.playPop();
-                onOpenProfileModal();
+                if (onOpenWardrobeModal) onOpenWardrobeModal();
+                else onOpenProfileModal();
               }}
-              className="w-11 h-11 sm:w-12 sm:h-12 bg-gradient-to-br from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 rounded-2xl flex items-center justify-center text-white text-2xl sm:text-3xl font-bold shadow-md shadow-emerald-600/20 flex-shrink-0 cursor-pointer transition-all hover:scale-105 active:scale-95 border-2 border-white ring-2 ring-emerald-200"
-              title="Klik om je avatar en titel aan te passen"
+              className="w-12 h-12 sm:w-13 sm:h-13 bg-gradient-to-br from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 rounded-2xl flex items-center justify-center text-white text-2xl sm:text-3xl font-bold shadow-md shadow-emerald-600/20 flex-shrink-0 cursor-pointer transition-all hover:scale-105 active:scale-95 border-2 border-white ring-2 ring-emerald-200"
+              title="Klik om je avatar en outfit aan te passen"
             >
               {avatarEmoji}
             </button>
@@ -128,7 +139,7 @@ export const TopBar: React.FC<TopBarProps> = ({
               <div className="text-[11px] font-bold text-slate-500 mt-1 flex items-center gap-1.5">
                 <span className="text-emerald-700 font-extrabold">{avatarTitle}</span>
                 <span>•</span>
-                <span>{unlockedCount}/{totalAnimals} Dieren vrijgespeeld</span>
+                <span>{unlockedCount}/{totalAnimals} Dieren</span>
               </div>
             </div>
           </div>
@@ -143,7 +154,7 @@ export const TopBar: React.FC<TopBarProps> = ({
                   onOpenScoreboardModal();
                 }}
                 className="px-3 py-1.5 sm:py-2 rounded-xl border-2 border-indigo-300 bg-indigo-600 hover:bg-indigo-700 text-white transition-all cursor-pointer font-black text-xs uppercase tracking-wider flex items-center gap-1.5 shadow-md shadow-indigo-600/20 active:scale-95"
-                title="Open Ouder Scorebord & Voortgang per Uur / Dag"
+                title="Open Ouder Scorebord & Vaardigheden"
               >
                 <span className="text-sm">📊</span>
                 <span className="font-extrabold">Ouder Scorebord</span>
@@ -203,8 +214,89 @@ export const TopBar: React.FC<TopBarProps> = ({
         </div>
       </div>
 
-      {/* Modern Navigation Tabs */}
-      <nav id="game-navigation-tabs" className="mt-3 flex items-center justify-between gap-1.5 sm:gap-2 overflow-x-auto pb-1">
+      {/* Special Learning Adventures & Missions Quick Bar */}
+      <div className="flex items-center gap-2 overflow-x-auto pb-1">
+        {onOpenScoreboardModal && (
+          <button
+            onClick={() => {
+              sound.playPop();
+              onOpenScoreboardModal();
+            }}
+            className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-black text-xs uppercase tracking-wider flex items-center gap-1.5 cursor-pointer shadow-xs whitespace-nowrap transition-all active:scale-95"
+          >
+            <Award className="w-3.5 h-3.5" />
+            <span>📊 Groei &amp; Rapport</span>
+          </button>
+        )}
+
+        {onOpenReadingModal && (
+          <button
+            onClick={() => {
+              sound.playPop();
+              onOpenReadingModal();
+            }}
+            className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-xs uppercase tracking-wider flex items-center gap-1.5 cursor-pointer shadow-xs whitespace-nowrap transition-all active:scale-95"
+          >
+            <BookOpen className="w-3.5 h-3.5" />
+            <span>📖 Lees Avonturen</span>
+          </button>
+        )}
+
+        {isHemali && onOpenReporterModal && (
+          <button
+            onClick={() => {
+              sound.playPop();
+              onOpenReporterModal();
+            }}
+            className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-black text-xs uppercase tracking-wider flex items-center gap-1.5 cursor-pointer shadow-xs whitespace-nowrap transition-all active:scale-95"
+          >
+            <Mic className="w-3.5 h-3.5" />
+            <span>🎙️ Safari Reporter</span>
+          </button>
+        )}
+
+        {!isHemali && onOpenSpellingFactoryModal && (
+          <button
+            onClick={() => {
+              sound.playPop();
+              onOpenSpellingFactoryModal();
+            }}
+            className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-white font-black text-xs uppercase tracking-wider flex items-center gap-1.5 cursor-pointer shadow-xs whitespace-nowrap transition-all active:scale-95"
+          >
+            <Wrench className="w-3.5 h-3.5" />
+            <span>🏭 Spelling Fabriek</span>
+          </button>
+        )}
+
+        {onOpenSisterTeamModal && (
+          <button
+            onClick={() => {
+              sound.playPop();
+              onOpenSisterTeamModal();
+            }}
+            className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-yellow-500 to-amber-600 hover:from-yellow-400 hover:to-amber-500 text-white font-black text-xs uppercase tracking-wider flex items-center gap-1.5 cursor-pointer shadow-xs whitespace-nowrap transition-all active:scale-95"
+          >
+            <Crown className="w-3.5 h-3.5" />
+            <span>👑 Zussen Team</span>
+          </button>
+        )}
+
+        {onOpenWardrobeModal && (
+          <button
+            onClick={() => {
+              sound.playPop();
+              onOpenWardrobeModal();
+            }}
+            className="px-3 py-1.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 font-black text-xs uppercase tracking-wider flex items-center gap-1.5 cursor-pointer shadow-2xs whitespace-nowrap transition-all active:scale-95"
+          >
+            <Shirt className="w-3.5 h-3.5 text-emerald-600" />
+            <span>🤠 Kledingkast</span>
+          </button>
+        )}
+      </div>
+
+      {/* Main Navigation Tabs */}
+      <nav id="game-navigation-tabs" className="flex items-center justify-between gap-1.5 sm:gap-2 overflow-x-auto pb-1">
         <div className="flex items-center gap-1.5 sm:gap-2 flex-nowrap min-w-max">
           {/* Adventure Tab */}
           <button
