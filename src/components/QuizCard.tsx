@@ -6,6 +6,7 @@ import { ALL_BIOME_ANIMALS } from '../data/biomeData';
 import { sound } from '../services/soundService';
 import { AnimalAvatar } from './AnimalAvatar';
 import { StoryDialogueCard } from './StoryDialogueCard';
+import { InteractiveDutchText } from './InteractiveDutchText';
 
 interface QuizCardProps {
   question: Question;
@@ -222,7 +223,7 @@ export const QuizCard: React.FC<QuizCardProps> = ({
 
             {/* Question Text */}
             <h2 className="text-base sm:text-lg font-black text-slate-800 leading-snug">
-              {question.question}
+              <InteractiveDutchText text={question.question} />
             </h2>
           </div>
 

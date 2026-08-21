@@ -22,6 +22,9 @@ interface TopBarProps {
   onOpenWardrobeModal?: () => void;
   onOpenVersionModal?: () => void;
   onOpenVetHospitalModal?: () => void;
+  onOpenCitoRpgModal?: () => void;
+  onOpenVoiceModal?: () => void;
+  onOpenDictionaryModal?: () => void;
   stars: number;
   score: number;
   streak: number;
@@ -49,6 +52,9 @@ export const TopBar: React.FC<TopBarProps> = ({
   onOpenWardrobeModal,
   onOpenVersionModal,
   onOpenVetHospitalModal,
+  onOpenCitoRpgModal,
+  onOpenVoiceModal,
+  onOpenDictionaryModal,
   stars,
   score,
   streak,
@@ -157,6 +163,21 @@ export const TopBar: React.FC<TopBarProps> = ({
 
           {/* Action Buttons (Scoreboard, Download, Version 8 & Sound) */}
           <div className="flex items-center gap-2 flex-wrap">
+            {onOpenCitoRpgModal && (
+              <button
+                id="cito-rpg-exam-btn"
+                onClick={() => {
+                  sound.playPop();
+                  onOpenCitoRpgModal();
+                }}
+                className="px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl border-2 border-emerald-400 bg-gradient-to-r from-emerald-600 via-teal-600 to-indigo-700 hover:from-emerald-500 hover:to-indigo-600 text-white transition-all cursor-pointer font-black text-xs uppercase tracking-wider flex items-center gap-1.5 shadow-md shadow-emerald-700/25 active:scale-95 animate-pulse"
+                title="Open Cito RPG Avontuur, Doorstroomtoets Vragen & Leesdiagnose"
+              >
+                <span className="text-sm">🗺️</span>
+                <span>Cito RPG Toets ✨</span>
+              </button>
+            )}
+
             {onOpenVersionModal && (
               <button
                 id="game-version-badge-btn"
@@ -242,6 +263,44 @@ export const TopBar: React.FC<TopBarProps> = ({
 
       {/* Special Learning Adventures & Missions Quick Bar */}
       <div className="flex items-center gap-2 overflow-x-auto pb-1">
+        {onOpenCitoRpgModal && (
+          <button
+            onClick={() => {
+              sound.playPop();
+              onOpenCitoRpgModal();
+            }}
+            className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-indigo-600 hover:from-emerald-500 hover:to-indigo-500 text-white font-black text-xs uppercase tracking-wider flex items-center gap-1.5 cursor-pointer shadow-xs whitespace-nowrap transition-all active:scale-95 border border-emerald-300/40"
+          >
+            <span>🗺️ Cito RPG &amp; Diagnose ✨</span>
+          </button>
+        )}
+
+        {onOpenDictionaryModal && (
+          <button
+            onClick={() => {
+              sound.playPop();
+              onOpenDictionaryModal();
+            }}
+            className="px-3 py-1.5 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-950 border border-amber-300 font-black text-xs uppercase tracking-wider flex items-center gap-1.5 cursor-pointer shadow-xs whitespace-nowrap transition-all active:scale-95"
+            title="Open interactief Nederlands woordenboek & woordenschatzoeker"
+          >
+            <span>📖 Woordenboek</span>
+          </button>
+        )}
+
+        {onOpenVoiceModal && (
+          <button
+            onClick={() => {
+              sound.playPop();
+              onOpenVoiceModal();
+            }}
+            className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 hover:from-amber-400 hover:to-orange-400 text-white font-black text-xs uppercase tracking-wider flex items-center gap-1.5 cursor-pointer shadow-xs whitespace-nowrap transition-all active:scale-95 border border-amber-300/40"
+            title="Kies een vrolijke, vrouwelijke voorleesstem of stel de snelheid in"
+          >
+            <span>🎙️ Vrolijke Stem 🌸</span>
+          </button>
+        )}
+
         {onOpenScoreboardModal && (
           <button
             onClick={() => {

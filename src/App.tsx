@@ -20,6 +20,9 @@ import { TocaWardrobeStudioModal } from './components/TocaWardrobeStudioModal';
 import { TamagotchiPetRoomModal } from './components/TamagotchiPetRoomModal';
 import { VersionFlashModal } from './components/VersionFlashModal';
 import { VeterinarianHospitalModal } from './components/VeterinarianHospitalModal';
+import { CitoRpgExamModal } from './components/CitoRpgExamModal';
+import { VoiceSettingsModal } from './components/VoiceSettingsModal';
+import { DutchDictionaryModal } from './components/DutchDictionaryModal';
 import { AccessibilityBar } from './components/AccessibilityBar';
 import { BiomeSelector } from './components/BiomeSelector';
 import { AmbientParticles } from './components/AmbientParticles';
@@ -71,6 +74,9 @@ export default function App() {
   const [showVersionModal, setShowVersionModal] = useState(false);
   const [showVetHospitalModal, setShowVetHospitalModal] = useState(false);
   const [showTamagotchiModal, setShowTamagotchiModal] = useState(false);
+  const [showCitoRpgModal, setShowCitoRpgModal] = useState(false);
+  const [showVoiceModal, setShowVoiceModal] = useState(false);
+  const [showDictionaryModal, setShowDictionaryModal] = useState(false);
 
   const [justUnlockedAnimal, setJustUnlockedAnimal] = useState<Animal>(ALL_BIOME_ANIMALS[0]);
   const [justUnlockedBadges, setJustUnlockedBadges] = useState<Badge[]>([]);
@@ -458,6 +464,8 @@ export default function App() {
       <div className="pt-2">
         <AccessibilityBar
           settings={profile.accessibility}
+          onOpenVoiceModal={() => setShowVoiceModal(true)}
+          onOpenDictionaryModal={() => setShowDictionaryModal(true)}
           onChangeSettings={(updater) => {
             setProfile(prev => ({
               ...prev,
@@ -483,6 +491,9 @@ export default function App() {
         onOpenWardrobeModal={() => setShowWardrobeModal(true)}
         onOpenVersionModal={() => setShowVersionModal(true)}
         onOpenVetHospitalModal={() => setShowVetHospitalModal(true)}
+        onOpenCitoRpgModal={() => setShowCitoRpgModal(true)}
+        onOpenVoiceModal={() => setShowVoiceModal(true)}
+        onOpenDictionaryModal={() => setShowDictionaryModal(true)}
         stars={profile.stars}
         score={profile.score}
         streak={profile.streak}
@@ -519,6 +530,44 @@ export default function App() {
           <span className="text-[11px] font-black underline decoration-amber-300 underline-offset-2 flex-shrink-0 text-amber-200 hidden sm:inline">
             Bekijk Details ➔
           </span>
+        </div>
+
+        {/* Cito RPG Adventure & Diagnostic Interactive Card */}
+        <div 
+          onClick={() => {
+            sound.playPop();
+            setShowCitoRpgModal(true);
+          }}
+          className="bg-gradient-to-r from-emerald-800 via-teal-800 to-indigo-900 hover:from-emerald-700 hover:to-indigo-800 text-white rounded-3xl p-4 sm:p-5 shadow-lg shadow-emerald-950/15 flex flex-col sm:flex-row items-center justify-between gap-4 cursor-pointer transition-all hover:scale-[1.01] active:scale-99 border-2 border-emerald-400/50 group"
+          title="Klik om het Cito RPG Avontuur en de Doorstroomtoets Vragen te openen"
+        >
+          <div className="flex items-center gap-3.5">
+            <div className="w-13 h-13 rounded-2xl bg-white/10 border border-white/30 flex items-center justify-center text-3xl shadow-inner flex-shrink-0 group-hover:rotate-6 transition-transform">
+              🗺️
+            </div>
+            <div>
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="bg-amber-400 text-slate-950 text-[10px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider shadow-xs">
+                  Nieuw • Cito &amp; RPG
+                </span>
+                <span className="text-xs text-emerald-200 font-bold">
+                  Voor Ridheya (Gr 3-4) &amp; Hemali (Gr 5-6)
+                </span>
+              </div>
+              <h3 className="text-base sm:text-lg font-black text-white mt-0.5 tracking-tight">
+                Cito RPG Avontuur: Het Mysterie van het Onderzoeksschip 📜
+              </h3>
+              <p className="text-xs text-emerald-100/90 font-medium line-clamp-1">
+                Beantwoord begrijpend lezen vragen, signaalwoorden &amp; kies je eigen avonturenpad!
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+            <button className="bg-emerald-400 hover:bg-emerald-300 text-slate-950 font-black text-xs sm:text-sm px-4 py-2.5 rounded-2xl shadow-md transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap">
+              <span>Start Vragen ➔</span>
+            </button>
+          </div>
         </div>
 
         {/* Companion Pet Interactive Card (🦉 Professor Ollie or 🐒 Max) */}
@@ -715,10 +764,17 @@ export default function App() {
             <span>Ouder Scorebord</span>
           </button>
 
+          <button
+            onClick={() => setShowCitoRpgModal(true)}
+            className="text-emerald-800 hover:text-emerald-950 font-black uppercase text-[11px] flex items-center gap-1 bg-emerald-100/80 hover:bg-emerald-100 px-3 py-1.5 rounded-xl border border-emerald-300 shadow-xs cursor-pointer"
+          >
+            <span>🗺️ Cito RPG &amp; Toets</span>
+          </button>
+
           <a
             href="/boerin_tess_safari.html"
             download="Boerin_Tess_Safaripark_Spel.html"
-            className="text-emerald-800 hover:text-emerald-950 font-black uppercase text-[11px] flex items-center gap-1 bg-white/80 hover:bg-white px-3 py-1.5 rounded-xl border border-emerald-200 shadow-xs"
+            className="text-slate-800 hover:text-slate-950 font-black uppercase text-[11px] flex items-center gap-1 bg-white/80 hover:bg-white px-3 py-1.5 rounded-xl border border-slate-200 shadow-xs"
           >
             <span>📥 Offline HTML</span>
           </a>
@@ -831,6 +887,32 @@ export default function App() {
         onClose={() => setShowTamagotchiModal(false)}
         profile={profile}
         onUpdateProfile={(updater) => setProfile(updater)}
+      />
+
+      {/* Cito RPG Choose-Your-Own-Adventure & Diagnostic Placement Modal */}
+      <CitoRpgExamModal
+        isOpen={showCitoRpgModal}
+        onClose={() => setShowCitoRpgModal(false)}
+        defaultActiveProfile={currentUsername.toLowerCase() === 'ridheya' ? 'ridheya' : 'hemali'}
+        onRewardStars={(stars) => {
+          setProfile(p => ({
+            ...p,
+            stars: p.stars + stars,
+            score: p.score + stars * 10
+          }));
+        }}
+      />
+
+      {/* Voice Persona & Audio Settings Modal */}
+      <VoiceSettingsModal
+        isOpen={showVoiceModal}
+        onClose={() => setShowVoiceModal(false)}
+      />
+
+      {/* Dutch Educational Dictionary & Vocabulary Explorer Modal */}
+      <DutchDictionaryModal
+        isOpen={showDictionaryModal}
+        onClose={() => setShowDictionaryModal(false)}
       />
 
       {/* Level Complete / Animal Unlock Reward Modal */}

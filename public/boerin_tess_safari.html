@@ -773,7 +773,34 @@
       closeModal('wardrobeModal');
     }
 
-    // Sound & Speech Synthesis
+    // Sound & Speech Synthesis (Exciting Natural Dutch Female Voice)
+    let bestDutchVoice = null;
+    function findBestDutchVoice() {
+      if (!('speechSynthesis' in window)) return null;
+      const voices = window.speechSynthesis.getVoices();
+      if (!voices || voices.length === 0) return null;
+      
+      const nlVoices = voices.filter(v => v.lang && (v.lang.startsWith('nl') || v.lang.includes('Dutch') || v.lang.includes('Nederlands')));
+      if (nlVoices.length === 0) return null;
+
+      // Prioritize natural/excited female voices like Fleur, Tess, Laura, Colette, Fenna
+      const femaleKeywords = ['fleur', 'tess', 'laura', 'claire', 'fenna', 'sanne', 'emma', 'lotte', 'natural', 'female', 'vrouw', 'premium'];
+      for (const kw of femaleKeywords) {
+        const found = nlVoices.find(v => v.name.toLowerCase().includes(kw));
+        if (found) return found;
+      }
+      // Avoid robotic espeak or de-DE
+      const nonRobotic = nlVoices.find(v => !v.name.toLowerCase().includes('espeak') && !v.name.toLowerCase().includes('german'));
+      return nonRobotic || nlVoices[0];
+    }
+
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.onvoiceschanged = () => {
+        bestDutchVoice = findBestDutchVoice();
+      };
+      bestDutchVoice = findBestDutchVoice();
+    }
+
     function playTone(freq, dur) {
       if (!soundEnabled) return;
       try {
@@ -788,15 +815,26 @@
         osc.stop(ctx.currentTime + dur);
       } catch (e) {}
     }
+
     function toggleAudio() {
       soundEnabled = !soundEnabled;
       document.getElementById('audioToggleBtn').textContent = soundEnabled ? '🔊 Geluid' : '🔇 Stil';
     }
+
     function speakText(text) {
-      if ('speechSynthesis' in window) {
-        const u = new SpeechSynthesisUtterance(text);
+      if (!('speechSynthesis' in window) || !soundEnabled) return;
+      try {
+        window.speechSynthesis.cancel();
+        const cleanText = text.replace(/[*_#`~]/g, '');
+        const u = new SpeechSynthesisUtterance(cleanText);
         u.lang = 'nl-NL';
+        if (!bestDutchVoice) bestDutchVoice = findBestDutchVoice();
+        if (bestDutchVoice) u.voice = bestDutchVoice;
+        u.pitch = 1.15; // Lively, friendly pitch for kids
+        u.rate = 0.95;  // Clear, natural speaking rate
         window.speechSynthesis.speak(u);
+      } catch (e) {
+        console.warn('Speech error', e);
       }
     }
     function speakQuestionText() {

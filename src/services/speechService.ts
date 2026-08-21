@@ -1,4 +1,60 @@
-// High-Quality Dutch Speech Synthesis and Recognition Service
+// High-Quality Dutch Speech Synthesis and Recognition Service with Excited Female Storyteller Optimization
+
+export interface VoicePreset {
+  id: 'tess_excited' | 'fleur_warm' | 'rpg_adventure' | 'ollie_wise' | 'custom';
+  name: string;
+  description: string;
+  emoji: string;
+  pitch: number;
+  rate: number;
+  preferredGender: 'female' | 'neutral';
+}
+
+export const VOICE_PRESETS: Record<string, VoicePreset> = {
+  tess_excited: {
+    id: 'tess_excited',
+    name: 'Boerin Tess (Vrolijk & Enthousiast 👩‍🌾)',
+    description: 'Enthousiaste, warme vrouwelijke stem vol energie voor jonge kinderen!',
+    emoji: '👩‍🌾',
+    pitch: 1.22,
+    rate: 0.96,
+    preferredGender: 'female'
+  },
+  fleur_warm: {
+    id: 'fleur_warm',
+    name: 'Juf Fleur (Vriendelijk & Rustig 🌸)',
+    description: 'Zachte, vriendelijke en super duidelijke uitlegstem.',
+    emoji: '🌸',
+    pitch: 1.12,
+    rate: 0.90,
+    preferredGender: 'female'
+  },
+  rpg_adventure: {
+    id: 'rpg_adventure',
+    name: 'Avontuurlijke Vertelster (Spannend 🗺️)',
+    description: 'Levendige en expressieve voorleesstem voor de Cito RPG verhalen.',
+    emoji: '🗺️',
+    pitch: 1.18,
+    rate: 0.98,
+    preferredGender: 'female'
+  },
+  ollie_wise: {
+    id: 'ollie_wise',
+    name: 'Professor Ollie (Wijs & Kalm 🦉)',
+    description: 'Rustige, wijze uilenstem voor moeilijke woordjes.',
+    emoji: '🦉',
+    pitch: 0.96,
+    rate: 0.90,
+    preferredGender: 'neutral'
+  }
+};
+
+export interface VoiceSettings {
+  presetId: 'tess_excited' | 'fleur_warm' | 'rpg_adventure' | 'ollie_wise' | 'custom';
+  pitch: number;
+  rate: number;
+  selectedVoiceURI: string;
+}
 
 export interface SpeechScoreResult {
   accuracy: number; // 0 - 100
@@ -9,34 +65,173 @@ export interface SpeechScoreResult {
   feedback: string;
 }
 
+const STORAGE_KEY = 'DUTCH_VOICE_SETTINGS_V2';
+
 class SpeechService {
   private synth: SpeechSynthesis | null = null;
   private dutchVoice: SpeechSynthesisVoice | null = null;
-  public speechRate: number = 1.0; // 0.75, 1.0, 1.25
+  public availableVoices: SpeechSynthesisVoice[] = [];
+  public settings: VoiceSettings = {
+    presetId: 'tess_excited',
+    pitch: 1.22,
+    rate: 0.96,
+    selectedVoiceURI: ''
+  };
   public isListening: boolean = false;
   private recognition: any = null;
+  private onVoicesLoadedCallbacks: Array<() => void> = [];
 
   constructor() {
+    this.loadSettings();
+
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
       this.synth = window.speechSynthesis;
       this.initVoice();
+
       if (speechSynthesis.onvoiceschanged !== undefined) {
-        speechSynthesis.onvoiceschanged = () => this.initVoice();
+        speechSynthesis.onvoiceschanged = () => {
+          this.initVoice();
+          this.onVoicesLoadedCallbacks.forEach(cb => cb());
+        };
       }
+
+      // Retry voice loading after slight delay for Chrome/Safari async voice registry
+      setTimeout(() => {
+        this.initVoice();
+        this.onVoicesLoadedCallbacks.forEach(cb => cb());
+      }, 300);
+      setTimeout(() => {
+        this.initVoice();
+      }, 1000);
     }
     this.initRecognition();
   }
 
+  public onVoicesLoaded(cb: () => void) {
+    this.onVoicesLoadedCallbacks.push(cb);
+  }
+
+  private loadSettings() {
+    if (typeof window === 'undefined') return;
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        this.settings = {
+          ...this.settings,
+          ...parsed
+        };
+      }
+    } catch {
+      // ignore JSON parse error
+    }
+  }
+
+  public saveSettings(newSettings: Partial<VoiceSettings>) {
+    this.settings = { ...this.settings, ...newSettings };
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(this.settings));
+      } catch {}
+    }
+    this.applySelectedVoice();
+  }
+
+  public setPreset(presetId: 'tess_excited' | 'fleur_warm' | 'rpg_adventure' | 'ollie_wise') {
+    const preset = VOICE_PRESETS[presetId];
+    if (preset) {
+      this.saveSettings({
+        presetId,
+        pitch: preset.pitch,
+        rate: preset.rate
+      });
+    }
+  }
+
+  public getAvailableDutchVoices(): SpeechSynthesisVoice[] {
+    if (!this.synth) return [];
+    const allVoices = this.synth.getVoices();
+
+    // Strict Dutch filter (nl-NL, nl-BE, etc. - NEVER German de-DE or English)
+    const dutchVoices = allVoices.filter(v => {
+      const lang = (v.lang || '').toLowerCase();
+      const name = (v.name || '').toLowerCase();
+      return (
+        lang.startsWith('nl') ||
+        lang.includes('nld') ||
+        (name.includes('dutch') && !name.includes('german') && !name.includes('deutsch')) ||
+        name.includes('nederlands') ||
+        name.includes('vlaams')
+      );
+    });
+
+    // Score voices: prioritize high quality natural female Dutch voices
+    return dutchVoices.sort((a, b) => this.scoreVoice(b) - this.scoreVoice(a));
+  }
+
+  // Scoring function: Rewards natural female Dutch voices, heavily penalizes robotic / eSpeak / German-sounding voices
+  private scoreVoice(v: SpeechSynthesisVoice): number {
+    let score = 0;
+    const name = (v.name || '').toLowerCase();
+    const lang = (v.lang || '').toLowerCase();
+
+    // nl-NL preferred over nl-BE
+    if (lang === 'nl-nl' || lang === 'nl_nl') score += 30;
+    else if (lang.startsWith('nl')) score += 20;
+
+    // Top tier premium online / neural female voices (Microsoft, Apple, Google)
+    const topFemaleNames = [
+      'fenna', 'colette', 'fleur', 'laura', 'claire', 'saskia', 
+      'lotte', 'ellen', 'maaike', 'sanne', 'sofie', 'emma', 'eva', 'tess'
+    ];
+
+    if (topFemaleNames.some(fn => name.includes(fn))) {
+      score += 60;
+    }
+
+    if (name.includes('natural') || name.includes('online')) score += 40;
+    if (name.includes('google nederlands') || name.includes('google dutch')) score += 35;
+    if (name.includes('premium') || name.includes('enhanced') || name.includes('neural')) score += 35;
+    if (name.includes('female') || name.includes('vrouw')) score += 30;
+
+    // Siri / Apple Claire
+    if (name.includes('claire') || name.includes('siri')) score += 45;
+
+    // Penalize robotic / eSpeak / male voices
+    if (name.includes('espeak') || name.includes('mbrola')) score -= 80;
+    if (name.includes('compact')) score -= 15;
+    if (name.includes('xander') || name.includes('ruben') || name.includes('stefan') || name.includes('male') || name.includes('man')) {
+      score -= 20;
+    }
+
+    return score;
+  }
+
   private initVoice() {
     if (!this.synth) return;
-    const voices = this.synth.getVoices();
-    // Look for Dutch voices (nl-NL, nl-BE, Google Nederlands, etc.)
-    const nlVoices = voices.filter(v => v.lang.startsWith('nl') || v.lang.includes('Dutch'));
-    if (nlVoices.length > 0) {
-      // Prioritize natural / Google voices if available
-      const naturalNl = nlVoices.find(v => v.name.toLowerCase().includes('natural') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('premium'));
-      this.dutchVoice = naturalNl || nlVoices[0];
+    const voices = this.getAvailableDutchVoices();
+    this.availableVoices = voices;
+
+    this.applySelectedVoice();
+  }
+
+  private applySelectedVoice() {
+    const voices = this.getAvailableDutchVoices();
+    if (voices.length === 0) {
+      this.dutchVoice = null;
+      return;
     }
+
+    if (this.settings.selectedVoiceURI) {
+      const chosen = voices.find(v => v.voiceURI === this.settings.selectedVoiceURI);
+      if (chosen) {
+        this.dutchVoice = chosen;
+        return;
+      }
+    }
+
+    // Default to the highest scoring female Dutch voice
+    this.dutchVoice = voices[0];
   }
 
   private initRecognition() {
@@ -58,11 +253,41 @@ class SpeechService {
     return !!this.recognition;
   }
 
+  /**
+   * Pre-process text to enhance Dutch pronunciation cadence:
+   * Expands abbreviations, cleans tags, adds natural breath pauses for exclamation & question marks.
+   */
+  private preprocessDutchText(rawText: string): string {
+    let t = rawText
+      .replace(/<[^>]*>?/gm, ' ') // Strip HTML tags
+      .replace(/\*\*/g, '')        // Strip markdown bold asterisks
+      .replace(/•/g, '')           // Strip bullet points
+      .trim();
+
+    // Expand common Dutch abbreviations
+    t = t.replace(/\bo\.a\.\b/gi, 'onder andere')
+         .replace(/\bbijv\.\b/gi, 'bijvoorbeeld')
+         .replace(/\bblz\.\b/gi, 'bladzijde')
+         .replace(/\benz\.\b/gi, 'enzovoort')
+         .replace(/\bd\.w\.z\.\b/gi, 'dat wil zeggen')
+         .replace(/\bca\.\b/gi, 'ongeveer')
+         .replace(/\bAVI-(\w+)\b/gi, 'A-V-I $1')
+         .replace(/\bGroep (\d)\b/gi, 'Groep $1,');
+
+    // Add natural micro-pauses after colons and exclamations for expressive storytelling
+    t = t.replace(/:/g, '... ')
+         .replace(/!+/g, '! ')
+         .replace(/\?+/g, '? ');
+
+    return t;
+  }
+
   public speak(
     text: string,
     options?: {
       rate?: number;
       pitch?: number;
+      voiceURI?: string;
       onWord?: (charIndex: number, length: number) => void;
       onEnd?: () => void;
     }
@@ -70,16 +295,27 @@ class SpeechService {
     if (!this.synth) return;
     this.stop();
 
-    const cleanText = text.replace(/<[^>]*>?/gm, '').trim();
+    const cleanText = this.preprocessDutchText(text);
     if (!cleanText) return;
 
     const utterance = new SpeechSynthesisUtterance(cleanText);
     utterance.lang = 'nl-NL';
-    if (this.dutchVoice) {
-      utterance.voice = this.dutchVoice;
+
+    // Apply active voice or override
+    let voiceToUse = this.dutchVoice;
+    if (options?.voiceURI) {
+      const v = this.availableVoices.find(item => item.voiceURI === options.voiceURI);
+      if (v) voiceToUse = v;
     }
-    utterance.rate = options?.rate ?? this.speechRate;
-    utterance.pitch = options?.pitch ?? 1.05; // Slightly cheerful and warm for kids
+
+    if (voiceToUse) {
+      utterance.voice = voiceToUse;
+    }
+
+    // Set cheerful, enthusiastic pitch & speed from settings or options
+    utterance.rate = options?.rate ?? this.settings.rate;
+    utterance.pitch = options?.pitch ?? this.settings.pitch;
+    utterance.volume = 1.0;
 
     if (options?.onWord) {
       utterance.onboundary = (event) => {
@@ -93,14 +329,32 @@ class SpeechService {
       utterance.onend = options.onEnd;
     }
 
-    this.synth.speak(utterance);
+    // Workaround for some mobile/Safari browsers pausing speech after ~15s
+    try {
+      this.synth.speak(utterance);
+    } catch (e) {
+      console.warn('Speech synthesis error:', e);
+    }
+  }
+
+  /**
+   * Preview / Test the current voice settings with a lively Dutch phrase
+   */
+  public testVoice(phrase?: string) {
+    const samplePhrases = [
+      'Hoi Ridheya en Hemali! Wauw, wat een superleuk avontuur! Zullen we snel beginnen?',
+      'Fantastisch gedaan! Je hebt een nieuwe gouden ster verdiend!',
+      'Boerin Tess en professor Ollie heten je van harte welkom in het Safaripark!'
+    ];
+    const text = phrase || samplePhrases[Math.floor(Math.random() * samplePhrases.length)];
+    this.speak(text);
   }
 
   public speakSyllables(syllables: string[], delayMs: number = 350) {
     if (!this.synth) return;
     this.stop();
     const joined = syllables.join(' ... ');
-    this.speak(joined, { rate: 0.8, pitch: 1.1 });
+    this.speak(joined, { rate: 0.82, pitch: 1.25 });
   }
 
   public stop() {
@@ -128,7 +382,7 @@ class SpeechService {
       onResult(score);
     };
 
-    this.recognition.onerror = (event: any) => {
+    this.recognition.onerror = () => {
       this.isListening = false;
       onError('Kon je stem niet goed horen. Klik op de microfoon en probeer het nog een keer rustig!');
     };
@@ -139,7 +393,7 @@ class SpeechService {
 
     try {
       this.recognition.start();
-    } catch (e) {
+    } catch {
       this.isListening = false;
       onError('Microfoon kon niet gestart worden.');
     }
@@ -169,7 +423,7 @@ class SpeechService {
 
     try {
       this.recognition.start();
-    } catch (e) {
+    } catch {
       this.isListening = false;
     }
   }
@@ -186,7 +440,7 @@ class SpeechService {
     if (this.recognition && this.isListening) {
       try {
         this.recognition.stop();
-      } catch (e) {}
+      } catch {}
       this.isListening = false;
     }
   }
@@ -216,7 +470,7 @@ class SpeechService {
 
     let feedback = '';
     if (accuracy >= 85) {
-      feedback = '🌟 Fantastisch uitgesproken! Je klonk heel zelfverzekerd en helder!';
+      feedback = '🌟 Wauw, fantastisch uitgesproken! Je klonk heel vrolijk, helder en zelfverzekerd!';
     } else if (accuracy >= 60) {
       feedback = '👍 Goed geprobeerd! Let nog even extra op de moeilijke klanken.';
     } else {
@@ -236,4 +490,5 @@ class SpeechService {
 
 export const speech = new SpeechService();
 export const speechService = speech;
+
 

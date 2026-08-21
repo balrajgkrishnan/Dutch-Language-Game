@@ -1,6 +1,6 @@
 {
   "name": "Boerin Tess & Het Safaripark",
-  "description": "Game Versie 8: Een vrolijk en speels Nederlands taal- en spellingspel met schattige dieren, beloningen, leesverhalen en geanimeerde badges.",
+  "description": "Een vrolijk en speels Nederlands taal-, lees- en Cito RPG spel voor Ridheya & Hemali met interactief zwevend woordenboek, natuurlijke voorleesstemmen en leuke dierenbeloningen.",
   "requestFramePermissions": ["microphone"],
   "majorCapabilities": [
     "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"

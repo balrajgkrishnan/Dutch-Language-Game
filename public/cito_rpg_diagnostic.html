@@ -1,0 +1,2477 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Cito RPG Avonturen & Diagnostische Toets • Ridheya & Hemali</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+  <style>
+    :root {
+      --primary: #059669;
+      --primary-dark: #047857;
+      --primary-light: #d1fae5;
+      --accent-amber: #f59e0b;
+      --accent-indigo: #4f46e5;
+      --slate-900: #0f172a;
+      --slate-800: #1e293b;
+      --slate-700: #334155;
+      --slate-100: #f1f5f9;
+      --slate-50: #f8fafc;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', -apple-system, sans-serif; }
+    body {
+      background-color: #0f172a;
+      background-image: radial-gradient(#10b98125 1.5px, transparent 1.5px);
+      background-size: 24px 24px;
+      color: #0f172a;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px 12px 60px;
+    }
+    .main-shell {
+      width: 100%;
+      max-width: 1000px;
+      background: white;
+      border-radius: 32px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.45);
+      border: 3px solid #10b981;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .header-bar {
+      background: linear-gradient(135deg, #047857 0%, #0f766e 50%, #3730a3 100%);
+      color: white;
+      padding: 20px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .header-title-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .header-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1.5px solid rgba(255, 255, 255, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      flex-shrink: 0;
+    }
+    .badge-pill {
+      background: #fbbf24;
+      color: #0f172a;
+      font-size: 10px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 3px 8px;
+      border-radius: 999px;
+      display: inline-block;
+    }
+    .profile-switch-bar {
+      background: #f8fafc;
+      border-bottom: 2px solid #e2e8f0;
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .protagonist-btn {
+      padding: 8px 16px;
+      border-radius: 16px;
+      border: 2px solid #cbd5e1;
+      background: white;
+      font-size: 13px;
+      font-weight: 900;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.15s;
+    }
+    .protagonist-btn:hover { transform: translateY(-1px); border-color: #10b981; }
+    .protagonist-btn.active-ridheya {
+      background: #fef3c7;
+      border-color: #f59e0b;
+      color: #78350f;
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2);
+    }
+    .protagonist-btn.active-hemali {
+      background: #e0e7ff;
+      border-color: #6366f1;
+      color: #312e81;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+    }
+    .tab-bar {
+      display: flex;
+      background: #f1f5f9;
+      padding: 8px 16px 0;
+      gap: 8px;
+      overflow-x: auto;
+      border-bottom: 2px solid #e2e8f0;
+      scrollbar-width: none;
+    }
+    .tab-bar::-webkit-scrollbar { display: none; }
+    .tab-btn {
+      padding: 10px 16px;
+      border-radius: 14px 14px 0 0;
+      border: 2px solid transparent;
+      border-bottom: none;
+      background: transparent;
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: #64748b;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+      transition: all 0.15s;
+    }
+    .tab-btn:hover { color: #0f172a; }
+    .tab-btn.active {
+      background: white;
+      color: #047857;
+      border-color: #a7f3d0;
+      box-shadow: 0 -4px 10px rgba(0,0,0,0.03);
+    }
+    .content-area {
+      padding: 22px;
+      background: #fafafa;
+      min-height: 520px;
+    }
+    .card-box {
+      background: white;
+      border: 2px solid #e2e8f0;
+      border-radius: 24px;
+      padding: 22px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.03);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+    .campaign-selector-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .campaign-card {
+      border: 2px solid #e2e8f0;
+      border-radius: 20px;
+      padding: 14px 16px;
+      background: white;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .campaign-card:hover {
+      border-color: #10b981;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(16, 185, 129, 0.12);
+    }
+    .campaign-card.active {
+      border-color: #059669;
+      background: #ecfdf5;
+      box-shadow: 0 4px 14px rgba(5, 150, 105, 0.2);
+    }
+    .page-nav-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #f1f5f9;
+      padding: 4px;
+      border-radius: 14px;
+      flex-wrap: wrap;
+    }
+    .page-num-btn {
+      padding: 6px 12px;
+      border-radius: 10px;
+      border: none;
+      font-size: 11px;
+      font-weight: 800;
+      cursor: pointer;
+      background: white;
+      color: #64748b;
+      transition: all 0.15s;
+    }
+    .page-num-btn.active {
+      background: #059669;
+      color: white;
+      box-shadow: 0 2px 6px rgba(5, 150, 105, 0.3);
+    }
+    .story-passage {
+      background: #fffbeb;
+      border: 1.5px solid #fde68a;
+      border-radius: 20px;
+      padding: 20px;
+      font-size: 15px;
+      line-height: 1.7;
+      color: #1e293b;
+      white-space: pre-line;
+    }
+    .story-passage strong {
+      color: #047857;
+      background: #d1fae5;
+      padding: 2px 6px;
+      border-radius: 6px;
+      font-weight: 900;
+      border: 1px solid #a7f3d0;
+    }
+    .vocab-help-box {
+      background: #fef3c7;
+      border: 2px solid #fde047;
+      border-radius: 20px;
+      padding: 16px 20px;
+    }
+    .vocab-item {
+      font-size: 13px;
+      color: #451a03;
+      margin-top: 8px;
+      line-height: 1.5;
+    }
+    .vocab-item strong {
+      color: #78350f;
+    }
+    .clue-box {
+      background: #eef2ff;
+      border: 2px solid #c7d2fe;
+      border-radius: 22px;
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .choice-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 10px;
+      margin-top: 6px;
+    }
+    .choice-btn {
+      background: #059669;
+      color: white;
+      border: none;
+      padding: 14px 18px;
+      border-radius: 18px;
+      font-size: 13px;
+      font-weight: 900;
+      cursor: pointer;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);
+      transition: all 0.15s;
+    }
+    .choice-btn:hover {
+      background: #047857;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(4, 120, 87, 0.35);
+    }
+    .opt-btn {
+      background: white;
+      border: 2px solid #cbd5e1;
+      padding: 12px 16px;
+      border-radius: 16px;
+      font-size: 13px;
+      font-weight: 700;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.15s;
+      color: #1e293b;
+    }
+    .opt-btn:hover {
+      border-color: #3b82f6;
+      background: #f8fafc;
+    }
+    .opt-btn.correct {
+      border-color: #10b981;
+      background: #d1fae5;
+      color: #065f46;
+      font-weight: 900;
+    }
+    .opt-btn.wrong {
+      border-color: #ef4444;
+      background: #fee2e2;
+      color: #991b1b;
+    }
+    .btn-action {
+      padding: 10px 18px;
+      border-radius: 14px;
+      font-size: 13px;
+      font-weight: 900;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s;
+    }
+    .btn-emerald {
+      background: #059669;
+      color: white;
+      box-shadow: 0 4px 10px rgba(5, 150, 105, 0.3);
+    }
+    .btn-emerald:hover { background: #047857; }
+    .btn-indigo {
+      background: #4f46e5;
+      color: white;
+      box-shadow: 0 4px 10px rgba(79, 70, 229, 0.3);
+    }
+    .btn-indigo:hover { background: #4338ca; }
+    .btn-outline {
+      background: white;
+      border: 2px solid #cbd5e1;
+      color: #334155;
+    }
+    .btn-outline:hover { background: #f8fafc; border-color: #94a3b8; }
+    .audio-btn {
+      background: white;
+      border: 1.5px solid #cbd5e1;
+      color: #059669;
+      padding: 4px 10px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s;
+    }
+    .audio-btn:hover { background: #ecfdf5; border-color: #10b981; }
+    .json-code-box {
+      background: #0f172a;
+      color: #38bdf8;
+      padding: 18px;
+      border-radius: 20px;
+      font-family: monospace;
+      font-size: 12px;
+      line-height: 1.5;
+      overflow-x: auto;
+      max-height: 440px;
+    }
+    /* Interactive Words & Dictionary Popups */
+    .interactive-word {
+      cursor: pointer;
+      display: inline-block;
+      padding: 1px 4px;
+      border-radius: 6px;
+      transition: all 0.15s ease;
+      color: #0f172a;
+    }
+    .interactive-word:hover {
+      background: #e2e8f0;
+      color: #047857;
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 3px;
+    }
+    .interactive-word-bold {
+      background: #fef3c7;
+      color: #92400e;
+      font-weight: 900;
+      border-bottom: 2px solid #f59e0b;
+      padding: 2px 6px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .interactive-word-bold:hover {
+      background: #fde68a;
+      color: #78350f;
+      transform: translateY(-1px);
+      box-shadow: 0 3px 8px rgba(245, 158, 11, 0.25);
+    }
+    .vocab-item-card {
+      background: #ffffff;
+      border: 1.5px solid #fde68a;
+      border-radius: 14px;
+      padding: 10px 14px;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .vocab-item-card:hover {
+      background: #fefce8;
+      border-color: #f59e0b;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.15);
+    }
+
+    /* Floating Word Modal Backdrop & Dialog */
+    .modal-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      z-index: 99999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      animation: modalFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .modal-dialog {
+      background: #ffffff;
+      border: 3px solid #fbbf24;
+      border-radius: 28px;
+      width: 100%;
+      max-width: 480px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+      animation: modalSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes modalFadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes modalSlideUp {
+      from { opacity: 0; transform: translateY(20px) scale(0.95); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .search-input {
+      width: 100%;
+      padding: 12px 18px;
+      border-radius: 16px;
+      border: 2px solid #cbd5e1;
+      font-size: 14px;
+      font-weight: 600;
+      color: #0f172a;
+      background: white;
+      transition: border-color 0.15s;
+    }
+    .search-input:focus {
+      outline: none;
+      border-color: #059669;
+      box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.15);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="main-shell">
+    
+    <!-- Top Header -->
+    <div class="header-bar">
+      <div class="header-title-group">
+        <div class="header-icon" id="headerEmoji">🩺</div>
+        <div>
+          <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+            <h1 style="font-size:18px; font-weight:900; letter-spacing:-0.02em;">Cito RPG Avontuur & Diagnostische Toets</h1>
+            <span class="badge-pill">Doorstroomtoets & AVI Scaffolds</span>
+          </div>
+          <p style="font-size:12px; opacity:0.9; margin-top:2px;">
+            Interactieve Choose-Your-Own-Adventure voor <b>Ridheya</b> & <b>Hemali</b> (Offline Editie)
+          </p>
+        </div>
+      </div>
+
+      <div style="display:flex; gap:8px; align-items:center;">
+        <button onclick="playStarSound(); downloadJsonFile();" class="btn-action" style="background:rgba(255,255,255,0.2); color:white; border:1px solid rgba(255,255,255,0.4); font-size:12px; padding:6px 12px;">
+          💾 Download JSON
+        </button>
+      </div>
+    </div>
+
+    <!-- Protagonist Profile Switcher -->
+    <div class="profile-switch-bar">
+      <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+        <span style="font-size:11px; font-weight:900; color:#64748b; text-transform:uppercase;">Kies Hoofdrol:</span>
+        <button id="btnRidheya" onclick="setProfile('ridheya')" class="protagonist-btn active-ridheya">
+          <span>🩺</span>
+          <div style="text-align:left;">
+            <div>Ridheya</div>
+            <span style="font-size:10px; opacity:0.8; font-weight:700;">Groep 3–4 (M3-E4)</span>
+          </div>
+        </button>
+        <button id="btnHemali" onclick="setProfile('hemali')" class="protagonist-btn">
+          <span>✨</span>
+          <div style="text-align:left;">
+            <div>Hemali</div>
+            <span style="font-size:10px; opacity:0.8; font-weight:700;">Groep 5–6 (M5-E6)</span>
+          </div>
+        </button>
+      </div>
+
+      <div id="profileTraitsPill" style="font-size:11px; font-weight:800; color:#065f46; background:#d1fae5; border:1px solid #a7f3d0; padding:4px 12px; border-radius:999px;">
+        🩺 Dierenarts in opleiding in Maleisië • Korte woorden & voegwoorden (AVI M3-E4)
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="tab-bar">
+      <button id="tabRpg" class="tab-btn active" onclick="switchTab('rpg')">
+        <span>📖</span> RPG Verhalen
+      </button>
+      <button id="tabCito" class="tab-btn" onclick="switchTab('cito')">
+        <span>🎯</span> Cito Diagnostische Toets
+      </button>
+      <button id="tabInterest" class="tab-btn" onclick="switchTab('interest')">
+        <span>🧭</span> Interesse Profiel (6 Vragen)
+      </button>
+      <button id="tabDict" class="tab-btn" onclick="switchTab('dict')">
+        <span>📚</span> Woordenboek & Hulp
+      </button>
+      <button id="tabJson" class="tab-btn" onclick="switchTab('json')">
+        <span>💾</span> Export JSON
+      </button>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="content-area">
+
+      <!-- TAB 1: RPG ADVENTURES -->
+      <div id="panelRpg">
+        
+        <!-- Campaign Selector Grid -->
+        <div style="margin-bottom:14px;">
+          <div style="font-size:12px; font-weight:900; color:#475569; text-transform:uppercase; margin-bottom:8px;">
+            Kies jouw Verhaallijn (Campaign):
+          </div>
+          <div class="campaign-selector-grid">
+            <div id="camp_ridheya" class="campaign-card active" onclick="selectCampaign('ridheya_malaysia')">
+              <span style="font-size:28px;">🩺</span>
+              <div>
+                <div style="font-weight:900; font-size:13px; color:#0f172a;">Ridheya's Dierenkliniek Maleisië</div>
+                <div style="font-size:11px; color:#059669; font-weight:700;">Kuala Lumpur • Hond Kopi & IJsvogel</div>
+              </div>
+            </div>
+
+            <div id="camp_hemali" class="campaign-card" onclick="selectCampaign('hemali_jungle')">
+              <span style="font-size:28px;">✨</span>
+              <div>
+                <div style="font-weight:900; font-size:13px; color:#0f172a;">Hemali's Magische Nachtjungle</div>
+                <div style="font-size:11px; color:#4f46e5; font-weight:700;">Taman Negara • Teleportatie & Olifant Raja</div>
+              </div>
+            </div>
+
+            <div id="camp_safari" class="campaign-card" onclick="selectCampaign('sisters_safari')">
+              <span style="font-size:28px;">👑</span>
+              <div>
+                <div style="font-weight:900; font-size:13px; color:#0f172a;">Zussen Team & Onderzoeksschip</div>
+                <div style="font-size:11px; color:#d97706; font-weight:700;">Savanne Safari • Wassen Zegel & Simba</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Active Page Content Box -->
+        <div class="card-box">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+            <div>
+              <span id="rpgBiomeBadge" style="font-size:11px; font-weight:900; background:#e0e7ff; color:#3730a3; padding:2px 8px; border-radius:6px; text-transform:uppercase;">
+                Tropische Stad in Maleisië
+              </span>
+              <h2 id="rpgPageTitle" style="font-size:17px; font-weight:900; color:#0f172a; margin-top:4px;">
+                Pagina 1: De Dierenarts van Kuala Lumpur
+              </h2>
+            </div>
+
+            <div style="display:flex; align-items:center; gap:8px;">
+              <button onclick="speakStoryText()" class="audio-btn">
+                <span>🔊</span> Lees Voor
+              </button>
+              <div class="page-nav-pill" id="pagePillsContainer">
+                <!-- Page buttons injected via JS -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Story Passage -->
+          <div id="rpgStoryPassage" class="story-passage">
+            <!-- Text injected via JS -->
+          </div>
+
+          <!-- Footnote Dictionary Box -->
+          <div class="vocab-help-box">
+            <div style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:900; color:#78350f;">
+              <span>💡</span> Woordenhulp op deze pagina:
+            </div>
+            <div id="rpgVocabList" style="margin-top:6px;">
+              <!-- Vocab list injected via JS -->
+            </div>
+          </div>
+
+          <!-- Mystery Clue Box -->
+          <div class="clue-box" id="rpgClueBox">
+            <div style="display:flex; align-items:center; justify-content:space-between;">
+              <span id="rpgClueTitle" style="font-size:13px; font-weight:900; color:#312e81;">
+                🧩 Mysterie Vraag
+              </span>
+              <span id="clueStatusBadge" style="font-size:11px; font-weight:800; color:#6366f1;">
+                Beantwoord voor extra XP
+              </span>
+            </div>
+            <p id="rpgClueQuestion" style="font-size:14px; font-weight:700; color:#1e293b;"></p>
+            <div id="rpgClueOptions" style="display:flex; flex-direction:column; gap:6px;"></div>
+            <div id="rpgClueFeedback" style="display:none; padding:10px 14px; border-radius:12px; font-size:12px; font-weight:800;"></div>
+          </div>
+
+          <!-- Choose Path Next Actions -->
+          <div>
+            <div style="font-size:12px; font-weight:900; color:#475569; text-transform:uppercase; margin-bottom:8px;">
+              Kies jouw volgende stap (Choose Your Path):
+            </div>
+            <div class="choice-grid" id="rpgChoiceButtons">
+              <!-- Choices injected via JS -->
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- TAB 2: CITO DIAGNOSTIC EXAM -->
+      <div id="panelCito" style="display:none;">
+        <div class="card-box">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+            <div>
+              <span id="citoLevelBadge" style="font-size:11px; font-weight:900; background:#fef3c7; color:#92400e; padding:3px 8px; border-radius:6px; text-transform:uppercase;">
+                Groep 3-4 (M3-E4)
+              </span>
+              <h2 style="font-size:17px; font-weight:900; color:#0f172a; margin-top:4px;">
+                Cito & Doorstroomtoets Diagnostische Leestoets
+              </h2>
+            </div>
+            <div style="font-size:13px; font-weight:900; color:#059669; background:#ecfdf5; border:1.5px solid #a7f3d0; padding:6px 14px; border-radius:12px;">
+              Score: <span id="citoScoreDisplay">0 / 0</span>
+            </div>
+          </div>
+
+          <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:4px;" id="citoQuestionIndexPills">
+            <!-- Question pills -->
+          </div>
+
+          <div id="citoQuestionCard" style="display:flex; flex-direction:column; gap:14px;">
+            <div id="citoContextHeader" style="font-size:13px; font-weight:900; color:#4f46e5;"></div>
+            <div id="citoPassageText" class="story-passage"></div>
+            
+            <div>
+              <h3 id="citoQuestionText" style="font-size:15px; font-weight:900; color:#0f172a; margin-bottom:10px;"></h3>
+              <div id="citoOptionsContainer" style="display:flex; flex-direction:column; gap:8px;"></div>
+            </div>
+
+            <div id="citoExplanationBox" style="display:none; padding:14px; border-radius:16px; font-size:13px; font-weight:700;"></div>
+
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px;">
+              <button id="btnPrevCito" onclick="prevCitoQuestion()" class="btn-action btn-outline">
+                ← Vorige Vraag
+              </button>
+              <button id="btnNextCito" onclick="nextCitoQuestion()" class="btn-action btn-emerald">
+                Volgende Vraag →
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 3: INTEREST ASSESSMENT (6 DIMENSIONS) -->
+      <div id="panelInterest" style="display:none;">
+        <div class="card-box">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+            <div>
+              <h2 style="font-size:17px; font-weight:900; color:#0f172a;">
+                Interesse- & Avonturenprofiel (6 Categorieën)
+              </h2>
+              <p style="font-size:12px; color:#64748b; font-weight:600; margin-top:2px;">
+                Stem de RPG verhalen af op jouw favoriete dieren, magische krachten en locaties!
+              </p>
+            </div>
+
+            <div style="display:flex; gap:6px;">
+              <button onclick="applyPreset('ridheya')" class="btn-action btn-outline" style="font-size:11px; padding:6px 10px;">
+                🩺 Ridheya Preset
+              </button>
+              <button onclick="applyPreset('hemali')" class="btn-action btn-outline" style="font-size:11px; padding:6px 10px;">
+                ✨ Hemali Preset
+              </button>
+            </div>
+          </div>
+
+          <!-- Dynamic Recommendation Banner -->
+          <div id="interestRecBanner" style="background:#ecfdf5; border:2px solid #6ee7b7; border-radius:18px; padding:14px 18px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+            <div>
+              <div style="font-size:13px; font-weight:900; color:#065f46;">
+                ✨ Aanbevolen Verhaal op basis van keuzes:
+              </div>
+              <div id="interestRecText" style="font-size:12px; font-weight:700; color:#047857; margin-top:2px;">
+                Ridheya's Dierenkliniek in Maleisië (Kuala Lumpur)
+              </div>
+            </div>
+            <button onclick="startRecommendedCampaign()" class="btn-action btn-emerald" style="font-size:12px; padding:8px 14px;">
+              🚀 Start Dit Avontuur Nu
+            </button>
+          </div>
+
+          <div id="interestQuestionsList" style="display:flex; flex-direction:column; gap:16px;">
+            <!-- Questions rendered via JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 4: DUTCH DICTIONARY & HELPER -->
+      <div id="panelDict" style="display:none;">
+        <div class="card-box">
+          <div>
+            <h2 style="font-size:17px; font-weight:900; color:#0f172a;">
+              📚 Nederlands Woordenboek & Woordenhulp
+            </h2>
+            <p style="font-size:12px; color:#64748b; font-weight:600; margin-top:2px;">
+              Zoek elk Nederlands woord op voor lettergrepen, kindvriendelijke Cito uitleg, Engelse vertaling en voorbeeldzinnen.
+            </p>
+          </div>
+
+          <div>
+            <input type="text" id="dictSearchInput" class="search-input" placeholder="Typ een Nederlands woord (bijv. dierenartstas, desondanks, girafje, zwerfhond)..." oninput="handleDictSearch()" />
+          </div>
+
+          <!-- Quick Word Chips -->
+          <div style="display:flex; gap:6px; flex-wrap:wrap;">
+            <button onclick="lookupDictWord('dierenartstas')" class="audio-btn">dierenartstas</button>
+            <button onclick="lookupDictWord('desondanks')" class="audio-btn">desondanks</button>
+            <button onclick="lookupDictWord('daardoor')" class="audio-btn">daardoor</button>
+            <button onclick="lookupDictWord('ijsvogel')" class="audio-btn">ijsvogel</button>
+            <button onclick="lookupDictWord('teleportatie')" class="audio-btn">teleportatie</button>
+            <button onclick="lookupDictWord('zombie-aapje')" class="audio-btn">zombie-aapje</button>
+            <button onclick="lookupDictWord('girafje')" class="audio-btn">girafje</button>
+            <button onclick="lookupDictWord('onderzoeksschip')" class="audio-btn">onderzoeksschip</button>
+            <button onclick="lookupDictWord('achterdochtig')" class="audio-btn">achterdochtig</button>
+            <button onclick="lookupDictWord('heldhaftig')" class="audio-btn">heldhaftig</button>
+          </div>
+
+          <div id="dictResultCard" style="display:none; background:#f8fafc; border:2px solid #e2e8f0; border-radius:20px; padding:18px;">
+            <!-- Result injected via JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 5: JSON EXPORT -->
+      <div id="panelJson" style="display:none;">
+        <div class="card-box">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+            <div>
+              <h2 style="font-size:17px; font-weight:900; color:#0f172a;">
+                Diagnostisch JSON Rapport
+              </h2>
+              <p style="font-size:12px; color:#64748b; font-weight:600;">
+                Volledig compatibel met het Next.js / AI Studio Dashboard
+              </p>
+            </div>
+
+            <div style="display:flex; gap:8px;">
+              <button onclick="copyJsonText()" class="btn-action btn-indigo">
+                📋 Kopieer JSON
+              </button>
+              <button onclick="downloadJsonFile()" class="btn-action btn-emerald">
+                💾 Download .json
+              </button>
+            </div>
+          </div>
+
+          <pre id="jsonPreviewBox" class="json-code-box"></pre>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FLOATING WORD POPUP MODAL -->
+  <div id="wordModalBackdrop" class="modal-backdrop" onclick="closeWordModal(event)" style="display:none;">
+    <div id="wordModalCard" class="modal-dialog" onclick="event.stopPropagation()">
+      <div style="background: linear-gradient(135deg, #f59e0b, #ea580c); padding: 16px 20px; border-radius: 24px 24px 0 0; color: white; display: flex; justify-content: space-between; align-items: center;">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <span style="font-size:24px;">📖</span>
+          <div>
+            <div style="font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:0.05em; color:#fef3c7;">Woordenhulp & Uitleg</div>
+            <div id="modalWordTitle" style="font-size:20px; font-weight:900; line-height:1.2;">Woord</div>
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <button id="modalAudioBtn" class="audio-btn" style="background:white; color:#b45309; border:none; padding:6px 12px; border-radius:12px; font-size:12px; font-weight:900;" onclick="speakCurrentModalWord()">
+            🔊 Uitspraak
+          </button>
+          <button onclick="closeWordModal()" style="background:rgba(255,255,255,0.25); border:none; color:white; width:32px; height:32px; border-radius:10px; font-size:16px; font-weight:900; cursor:pointer; display:flex; align-items:center; justify-content:center;">
+            ✕
+          </button>
+        </div>
+      </div>
+
+      <div id="modalWordBody" style="padding: 20px; display: flex; flex-direction: column; gap: 14px;">
+        <!-- Injected via JavaScript -->
+      </div>
+
+      <div style="padding: 12px 20px 16px; background:#f8fafc; border-top: 1.5px solid #e2e8f0; border-radius: 0 0 24px 24px; display:flex; justify-content:space-between; align-items:center;">
+        <button onclick="openInDictionaryTab()" class="btn-action btn-outline" style="font-size:12px; padding:6px 12px;">
+          📚 Zoek in Woordenboek
+        </button>
+        <button onclick="closeWordModal()" class="btn-action btn-emerald" style="font-size:12px; padding:6px 16px;">
+          Sluiten ✓
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ==========================================
+    // DATA LAYER: CAMPAIGNS, QUESTIONS & DICT
+    // ==========================================
+    const PROFILES = {
+      ridheya: {
+        name: 'Ridheya',
+        gradeLevel: 'Groep 3–4',
+        aviLevel: 'AVI M3–E4',
+        emoji: '🩺',
+        traits: '🩺 Dierenarts in opleiding in Maleisië • Korte woorden & voegwoorden (AVI M3-E4)',
+        campaign: 'ridheya_malaysia'
+      },
+      hemali: {
+        name: 'Hemali',
+        gradeLevel: 'Groep 5–6',
+        aviLevel: 'AVI M5–E6',
+        emoji: '✨',
+        traits: '✨ Magische ontdekkingsreiziger • Signaalwoorden & Cito Doorstroomtoets (AVI M5-E6)',
+        campaign: 'hemali_jungle'
+      }
+    };
+
+    const CAMPAIGNS = {
+      ridheya_malaysia: {
+        id: 'ridheya_malaysia',
+        title: "Ridheya's Dierenkliniek in Maleisië",
+        biome: 'Tropische Stad in Maleisië',
+        pages: [
+          {
+            pageNumber: 1,
+            title: 'De Dierenarts van Kuala Lumpur (De Gewonde Zwerfhond)',
+            storyText: `Ridheya loopt met een grote glimlach door de levendige straatjes van Kuala Lumpur in Maleisië. Aan haar schouder hangt haar gloednieuwe rode **dierenartstas**. Achter haar ronde brilglazen speurt ze aandachtig rond naar dieren in nood. De geur van zoete mango’s en jasmijn vult de warme stadslucht.
+
+Opeens hoort Ridheya een zacht, zielig gepiep achter een felgekleurde fruitkraam. Ze knielt neer en ontdekt een magere, harige **zwerfhond**. Het diertje heeft een pijnlijk wondje aan zijn voorpoot door gebroken glas. 
+
+"Maak je geen zorgen, lief hondje," fluistert Ridheya vriendelijk. Een vrolijke jongen met een bakfiets stopt nieuwsgierig. "Hoi, ik ben Amir!" roept hij. "Kan ik je helpen met die gewonde hond?" Ridheya knikt blij: "Ja graag Amir! Ik ben dierenarts Ridheya, en wij gaan dit dier redden!"`,
+            vocab: [
+              { word: 'dierenartstas', breakdown: 'dierenarts + tas', dutch: 'een tas met medische spulletjes zoals verband en zalf om zieke dieren te verzorgen.', eng: 'Veterinarian medical bag' },
+              { word: 'zwerfhond', breakdown: 'zwerf + hond', dutch: 'een trouwe straathond zonder vast baasje.', eng: 'Stray dog / street dog' },
+              { word: 'pootafdruk', breakdown: 'poot + afdruk', dutch: 'het spoor dat een dierenpootje achterlaat in het zand.', eng: 'Paw print' }
+            ],
+            clue: {
+              title: '🔍 Dierenarts Diagnose #1',
+              question: 'Wat is er aan de hand met de zwerfhond die Ridheya vindt?',
+              options: [
+                'De hond is verdwaald in een kasteel.',
+                'De hond heeft een pijnlijk wondje aan zijn pootje door gebroken glas.',
+                'De hond wil alleen maar ijsjes eten.',
+                'De hond heeft een toverstok ingeslikt.'
+              ],
+              correct: 1,
+              expl: 'Ridheya ziet dat het hondje een pijnlijk wondje aan zijn voorpootje heeft opgelopen.'
+            },
+            choices: [
+              { label: 'Open de dierenartstas en maak het pootje schoon met zacht water', nextPage: 2, icon: '🩹' },
+              { label: 'Vraag vriend Amir om Kopi op zijn bakfiets te vervoeren', nextPage: 2, icon: '🚲' }
+            ]
+          },
+          {
+            pageNumber: 2,
+            title: 'Het Gevaarlijke Steentje & De Blauwe IJsvogel',
+            storyText: `Terwijl Ridheya voorzichtig het pootje van de hond verzorgt met schoon **verbandgaas**, klinkt er plotseling een scherp geluid boven de grote banyanboom. Een ondeugende straatjongen schiet met een katapult en een klein **steentje** schampt een prachtige vogel!
+
+Een schitterende tropische **ijsvogel** met felblauwe en oranje veertjes fladdert geschrokken omlaag en landt in een zachte rieten mand vol bananenbladeren. De vleugel hangt een beetje slap.
+
+"Kijk daar!" roept een vriendelijk meisje dat net aan komt rennen met een kom schoon drinkwater. "Ik ben Mei-Ling! Ik zag het gebeuren!" Ridheya pakt meteen haar vergrootglas. "Geen paniek Mei-Ling en Amir," zegt Ridheya vastberaden. "De vleugel is alleen gekneusd. Met goede zorg kan deze prachtige vogel snel weer vliegen!"`,
+            vocab: [
+              { word: 'verbandgaas', breakdown: 'verband + gaas', dutch: 'zacht wit doek om wonden mee af te dekken en te beschermen tegen vuil.', eng: 'Bandage gauze' },
+              { word: 'steentje', breakdown: 'steen + tje', dutch: 'een klein hard keitje.', eng: 'Little stone / pebble' },
+              { word: 'ijsvogel', breakdown: 'ijs + vogel', dutch: 'een opvallend mooie vogel met glanzende blauwe en oranje veertjes.', eng: 'Kingfisher (bird)' }
+            ],
+            clue: {
+              title: '🩺 Oorzaak & Gevolg Clue',
+              question: 'Waarom viel de tropische ijsvogel in de rieten mand?',
+              options: [
+                'Omdat hij wilde slapen op de bananenbladeren.',
+                'Omdat hij per ongeluk geraakt werd door een rondvliegend steentje.',
+                'Omdat het heel hard begon te sneeuwen.',
+                'Omdat hij bang was voor Mei-Ling.'
+              ],
+              correct: 1,
+              expl: 'In de tekst staat dat het steentje de vogel schampte waardoor zijn vleugel gekneusd raakte.'
+            },
+            choices: [
+              { label: 'Leg de ijsvogel voorzichtig op een zacht kussen in Mei-Lings tuin', nextPage: 3, icon: '🪶' },
+              { label: 'Luister met de stethoscoop naar de hartslag van het vogeltje', nextPage: 3, icon: '🩺' }
+            ]
+          },
+          {
+            pageNumber: 3,
+            title: 'De Geheime Tuinkliniek van Amir en Mei-Ling',
+            storyText: `Samen wandelt het drietal naar de rustige binnentuin van Mei-Ling. Tussen de bloeiende orchideeën en palmbomen hebben ze een prachtige **tuinkliniek** ingericht. Ridheya legt Kopi de hond op een koel bamboematje en geeft hem een kommetje rijst met gekookte vis.
+
+Vervolgens legt dierenarts Ridheya een minuscuul spalkje aan bij de blauwe ijsvogel, zodat de veertjes kunnen rusten. "Kijk," wijst Amir trots, "Kopi kwispelt alweer met zijn staart!" Mei-Ling brengt verse mangosap voor iedereen.
+
+"Wij zijn nu een echt team," glimlacht Ridheya terwijl ze haar bril rechtzet. "De Dierenredders van Maleisië! Zolang we dieren met liefde en geduld verzorgen, komt de **genezing** altijd snel." Boven hen fluiten de vogels in koor.`,
+            vocab: [
+              { word: 'tuinkliniek', breakdown: 'tuin + kliniek', dutch: 'een rustige plek in een tuin waar zieke dieren worden behandeld en verzorgd.', eng: 'Garden rescue clinic' },
+              { word: 'genezing', dutch: 'het proces waarin een wondje of ziekte weer helemaal overgaat en beter wordt.', eng: 'Healing / recovery' },
+              { word: 'dierenredder', breakdown: 'dieren + redder', dutch: 'een dapper persoon die dieren beschermt en in veiligheid brengt.', eng: 'Animal rescuer' }
+            ],
+            clue: {
+              title: '🤝 Vriendschap & Begrip Clue',
+              question: 'Hoe heten de twee menselijke vrienden die Ridheya in Maleisië ontmoet?',
+              options: [
+                'Simba en Ollie',
+                'Amir en Mei-Ling',
+                'Harry en Ron',
+                'Klaas en Jan'
+              ],
+              correct: 1,
+              expl: 'Amir (met de bakfiets) en Mei-Ling (met de binnentuin) zijn Ridheya’s twee trouwe menselijke vrienden.'
+            },
+            choices: [
+              { label: 'Vier het herstel van Kopi en de ijsvogel met het hele team', nextPage: 4, icon: '🎉' },
+              { label: 'Maak een officieel Dierenarts-Dossier voor Kuala Lumpur', nextPage: 4, icon: '📋' }
+            ]
+          },
+          {
+            pageNumber: 4,
+            title: 'Het Grote Dierenfeest in de Stad',
+            storyText: `De volgende ochtend is het feest in de Maleisische wijk! Kopi de zwerfhond loopt weer vrolijk en stevig op al zijn vier pootjes rond. De blauwe ijsvogel spreidt zijn glinsterende vleugels uit, zingt een zuiver liedje en vliegt sierlijk naar de top van een bloeiende frangipaniboom.
+
+Alle marktkramers klappen enthousiast voor de jonge dierenarts. De burgemeester overhandigt Ridheya, Amir en Mei-Ling een schitterende gouden medaille: *"Voor heldhaftige dierenliefde, trouwe vriendschap en uitzonderlijke verzorging."*
+
+Ridheya aait Kopi nog een laatste keer over zijn zachte oren. "Elk dier verdient een veilig thuis," zegt ze met een stralende lach. Dit Maleisische avontuur zal ze nooit meer vergeten!`,
+            vocab: [
+              { word: 'heldhaftig', breakdown: 'held + haftig', dutch: 'heel erg dapper en dapper handelend als een echte held.', eng: 'Heroic / courageous' },
+              { word: 'dankbaar', breakdown: 'dank + baar', dutch: 'blij en erkentelijk voor de hulp die je van iemand hebt gekregen.', eng: 'Grateful / thankful' },
+              { word: 'feestelijk', breakdown: 'feest + elijk', dutch: 'vrolijk en feestelijk aangekleed ter ere van een mooie gebeurtenis.', eng: 'Festive / celebratory' }
+            ],
+            clue: {
+              title: '🏆 Eind Clue: Hoofdgedachte',
+              question: 'Wat is de belangrijkste les van Ridheya’s avontuur in Maleisië?',
+              options: [
+                'Je moet altijd stenen gooien naar vogels.',
+                'Met goede dierenzorg, vriendschap en samenwerking kun je elk dier in nood redden.',
+                'Zwerfhonden houden niet van vis en rijst.',
+                'Het is te warm om dieren te helpen in de stad.'
+              ],
+              correct: 1,
+              expl: 'De kern is dat Ridheya met haar dierenartskennis en de hulp van haar vrienden de dieren heeft gered.'
+            },
+            choices: [
+              { label: '🩺 Start opnieuw vanaf Pagina 1', nextPage: 1, icon: '🔄' },
+              { label: '✨ Wissel naar Hemali’s Nachtjungle Avontuur', nextPage: 1, icon: '✨', switchCamp: 'hemali_jungle' }
+            ]
+          }
+        ]
+      },
+
+      hemali_jungle: {
+        id: 'hemali_jungle',
+        title: "Hemali's Magische Nachtjungle",
+        biome: 'Betoverd Oerwoud (Taman Negara)',
+        pages: [
+          {
+            pageNumber: 1,
+            title: 'De Nachtelijke Teleportatie naar het Oerwoud',
+            storyText: `Hemali draaide geconcentreerd aan het saffieren tandwiel van haar magische amulet. In een oogverblindende flits van azuurblauw licht voltrok de **teleportatie** zich geruisloos. Binnen een fractie van een seconde stond zij midden in het oeroude regenwoud van Taman Negara.
+
+Het was middernacht. Boven haar hoofd vormden reusachtige woudreuzen een dicht bladerdak, waartussen het zilveren maanlicht filterde. Fluorescerende paddenstoelen gaven een zachtgroene gloed af aan de kronkelige lianen. Hemali opende haar tovernotitieboek.
+
+Zij trainde vastberaden om een volleerde **ontdekkingsreiziger** te worden. De jungle was geheimzinnig en vol onbekende geluiden; **desondanks** voelde Hemali geen spoor van vrees. Haar scherpe intellect en magische kompas zouden haar feilloos door de nachtelijke wildernis loodsen.`,
+            vocab: [
+              { word: 'teleportatie', dutch: 'het magisch of wetenschappelijk verplaatsen van de ene plek naar de andere in een oogwenk.', eng: 'Teleportation / instant travel' },
+              { word: 'ontdekkingsreiziger', breakdown: 'ontdekking + reiziger', dutch: 'iemand die onbekende gebieden verkent om geheimen, dieren of landen te ontdekken.', eng: 'Explorer' },
+              { word: 'desondanks', dutch: 'toch, alhoewel er gevaar of een belemmering is.', eng: 'Nevertheless / despite this' }
+            ],
+            clue: {
+              title: '✨ Signaalwoord & Logica Clue #1',
+              question: 'Welk verband geeft het signaalwoord "desondanks" aan in de laatste alinea?',
+              options: [
+                'Een chronologische tijdsvolgorde',
+                'Een tegenstelling: al was het woud eng en donker, ze was toch niet bang',
+                'Een oorzaak van de teleportatieflits',
+                'Een opsomming van magische paddenstoelen'
+              ],
+              correct: 1,
+              expl: '"Desondanks" markeert een tegenstelling tussen de enge jungle en haar moedige gemoedstoestand.'
+            },
+            choices: [
+              { label: 'Volg de oplichtende lianen dieper het nachthoorwoud in', nextPage: 2, icon: '🌿' },
+              { label: 'Gebruik het magische kompas om de oude tempelruïne te lokaliseren', nextPage: 2, icon: '🧭' }
+            ]
+          },
+          {
+            pageNumber: 2,
+            title: 'Het Raadsel van het Betoverde Zombie-Aapje',
+            storyText: `Een ritselend geluid in het bamboestruikgewas trok Hemali’s aandacht. Vanuit een overhangende tak sprong een merkwaardig wezen tevoorschijn: een **zombie-aapje** met paars gloeiende ogen en een warrig vachtje. Het diertje maakte komische, ongecontroleerde sprongetjes en sprak in omgekeerde raadsels!
+
+Hemali bestudeerde de oude inscripties op het tempelaltaar. Zij ontdekte dat het aapje helemaal niet kwaadaardig was, maar gevangen zat in een slaapwandelende maanbetovering. **Daardoor** begreep zij onmiddellijk wat haar te doen stond.
+
+Zij sprak met heldere stem de zuivere Nederlandse tegenbezwering uit: *"Klaarheid in de nacht, verbreek de vloek met zachte kracht!"* De paarse gloed vervaagde tot een warme gouden glans. Het aapje gaf een opgelucht gilletje, maakte een salto en nestelde zich dankbaar op Hemali’s schouder als haar nieuwe trouwe gids Zazu!`,
+            vocab: [
+              { word: 'zombie-aapje', breakdown: 'zombie + aapje', dutch: 'een ondeugend aapje dat door een maanvloek als een zombie ronddoolde.', eng: 'Enchanted zombie monkey' },
+              { word: 'daardoor', dutch: 'om die specifieke reden, als logisch gevolg van het eerdere inzicht.', eng: 'As a result / therefore' },
+              { word: 'nachtmist', breakdown: 'nacht + mist', dutch: 'geheimzinnige nevel die tijdens de nacht over de bomen hangt.', eng: 'Night mist / nocturnal fog' }
+            ],
+            clue: {
+              title: '🐒 Oorzaak & Gevolg Clue #2',
+              question: 'Waarom gedroeg het zombie-aapje zich zo merkwaardig volgens de tempelinscriptie?',
+              options: [
+                'Omdat hij teveel bananen had gegeten.',
+                'Omdat hij betoverd was door een slaapwandelende maanvloek.',
+                'Omdat hij Hemali wilde laten schrikken voor de grap.',
+                'Omdat het vroor in de jungle.'
+              ],
+              correct: 1,
+              expl: 'Hemali las op de tempelstenen dat het diertje gevangen zat in een magische maanbetovering.'
+            },
+            choices: [
+              { label: 'Volg Zazu het aapje naar de Geheime Waterbron van de Olifanten', nextPage: 3, icon: '🐒' },
+              { label: 'Teleporteer samen met Zazu naar de heilige bamboepoel', nextPage: 3, icon: '✨' }
+            ]
+          },
+          {
+            pageNumber: 3,
+            title: 'De Wijze Pratende Olifant Raja & Baby Giraf Appel',
+            storyText: `Aan de rand van een kristalheldere bron stond een kolossale, majestueuze olifant met zilveren slagtanden. Tot Hemali’s grote verwondering boog het reusachtige dier het hoofd en sprak hij met een diepe, warme stem: *"Gegroet, jonge ontdekkingsreiziger Hemali. Ik ben Raja, de hoeder van dit oerwoud."*
+
+Raja wees met zijn reusachtige slurf naar een bosje geurende waterlelies. Daarachter schuilde een pasgeboren, weerloos **girafje** met unieke appelvormige vlekjes op haar zachte vacht. **Bovendien** was het diertje haar moeder kwijtgeraakt tijdens een zware moessonstorm.
+
+Hemali voelde onmiddellijk een diepe band. Zij knielde neer en fluisterde: *"Ik zal voor je zorgen. Jouw naam is Appel!"* Het girafje knipperde met haar lange wimpers en legde haar kinnetje teder in Hemali’s handpalmen. Hemali had haar eerste magische dierenvriend geadopteerd!`,
+            vocab: [
+              { word: 'girafje', breakdown: 'giraf + je', dutch: 'een jong girafje met een lange slanke nek en een zachte gevlekte vacht.', eng: 'Baby giraffe' },
+              { word: 'bovendien', dutch: 'ook nog eens, daarbovenop als extra toevoeging.', eng: 'Furthermore / moreover' },
+              { word: 'weelderig', dutch: 'overvloedig en rijk groeiend in de natuur.', eng: 'Lush / exuberant' }
+            ],
+            clue: {
+              title: '🦒 Signaalwoord van Opsomming Clue #3',
+              question: 'Welke extra informatie wordt gegeven na het signaalwoord "Bovendien"?',
+              options: [
+                'Dat Raja een gouden kroon droeg.',
+                'Dat babygiraf Appel haar moeder was kwijtgeraakt tijdens een moessonstorm.',
+                'Dat het zombie-aapje honger had gekregen.',
+                'Dat de bron droog was komen te staan.'
+              ],
+              correct: 1,
+              expl: '"Bovendien" introduceert het extra feit dat het girafje door de storm haar moeder kwijt was geraakt.'
+            },
+            choices: [
+              { label: 'Vorm een verbond tussen Raja de olifant, girafje Appel en Zazu de aap', nextPage: 4, icon: '👑' },
+              { label: 'Gebruik Hemali’s notitieboek om een veilige woudroute te tekenen', nextPage: 4, icon: '📜' }
+            ]
+          },
+          {
+            pageNumber: 4,
+            title: 'De Meester-Ontdekkingsreiziger en haar Dierenleger',
+            storyText: `Toen de eerste zonnestralen door de ochtendmist braken, stonden Hemali en haar nieuwe dierenvrienden verenigd op het tempelplateau. Dankzij haar **onverschrokken** karakter, haar magische teleportatiegaven en haar scherpzinnige taalvaardigheid had zij het evenwicht in het oerwoud hersteld.
+
+Raja de wijze olifant overhandigde Hemali het Geheime Zegel van de Jungle: *"Jij hebt bewezen dat luisteren, medeleven en verstand sterker zijn dan welke duistere spreuk ook."* 
+
+Babygiraf Appel huppelde vrolijk rondjes om Hemali heen, terwijl Zazu het aapje bloemenkransen strooide. Hemali sloeg haar toverboek dicht met een glimlach van pure voldoening. Zij was nu een volwaardige meester-ontdekkingsreiziger, klaar voor elk nieuw Cito- en taalmysterie dat op haar pad zou komen!`,
+            vocab: [
+              { word: 'onverschrokken', breakdown: 'on + verschrokken', dutch: 'zonder vrees, buitengewoon dapper en moedig.', eng: 'Fearless / undaunted' },
+              { word: 'eendracht', breakdown: 'een + dracht', dutch: 'het eensgezind en harmonieus samenwerken voor een edel doel.', eng: 'Unity / solidarity' },
+              { word: 'ontzagwekkend', breakdown: 'ontzag + wekkend', dutch: 'zo groots of indrukwekkend dat het diepe bewondering oproept.', eng: 'Awe-inspiring / magnificent' }
+            ],
+            clue: {
+              title: '🏆 Hoofdgedachte & Cito Doorstroomtoets Clue',
+              question: 'Wat is de voornaamste hoofdgedachte van Hemali’s oerwoudavontuur?',
+              options: [
+                'Teleportatie is alleen mogelijk als het regent.',
+                'Door moed, medeleven en scherpzinnig taalbegrip sluit een echte ontdekkingsreiziger vriendschap met alle dieren en herstelt de vrede.',
+                'Zazu het aapje wilde liever in de stad wonen.',
+                'Olifanten kunnen alleen \'s nachts praten.'
+              ],
+              correct: 1,
+              expl: 'De tekst benadrukt dat luisteren, medeleven en taalvaardigheid haar tot een echte ontdekkingsreiziger maken.'
+            },
+            choices: [
+              { label: '✨ Start opnieuw vanaf Pagina 1', nextPage: 1, icon: '🔄' },
+              { label: '👑 Speel het Zussen Team & Onderzoeksschip Avontuur', nextPage: 1, icon: '👑', switchCamp: 'sisters_safari' }
+            ]
+          }
+        ]
+      },
+
+      sisters_safari: {
+        id: 'sisters_safari',
+        title: "Zussen Team & Het Onderzoeksschip",
+        biome: 'Savanne Safari & Kust',
+        pages: [
+          {
+            pageNumber: 1,
+            title: 'De Geheime Brief van het Onderzoeksschip',
+            storyText: `Hemali en Ridheya liepen voorzichtig over het smalle duinpad richting de baai. Ridheya speurde met haar **vergrootglas** naar sporen in het rulle zand, terwijl Hemali haar aantekeningenboek stevig vasthield. In de verte zagen ze een groot **onderzoeksschip** voor anker liggen. Een dichte mist trok langzaam op over het water.
+
+Opeens zag Ridheya iets glinsteren tussen het helmgras. Het was een loden koker met een wassen zegel. "Kijk Hemali!" riep Ridheya opgewonden. "Er zit een perkamenten brief in!" Hemali bekeek de koker **achterdochtig**. Op het zegel stond het wapen van het koninklijke dierenreservaat.
+
+"We moeten voorzichtig zijn," fluisterde Hemali. "De schipper keek daarnet niet voor niets zo schichtig om zich heen. Laten we eerst het raadsel op het zegel ontcijferen voordat we verder lopen."`,
+            vocab: [
+              { word: 'onderzoeksschip', breakdown: 'onderzoek + schip', dutch: 'een schip speciaal gebouwd voor wetenschappelijk onderzoek op zee.', eng: 'Research vessel' },
+              { word: 'achterdochtig', dutch: 'wantrouwig, als je iemand of iets niet zomaar meteen vertrouwt.', eng: 'Suspicious / distrustful' },
+              { word: 'vergrootglas', breakdown: 'vergroot + glas', dutch: 'een bol geslepen glas waardoor kleine details duidelijk zichtbaar worden.', eng: 'Magnifying glass' }
+            ],
+            clue: {
+              title: '🔍 Clue #1: Het Wassen Zegel',
+              question: 'Waarom bekeek Hemali de loden koker "achterdochtig"?',
+              options: [
+                'Omdat ze bang was dat het kistje van chocola was gemaakt.',
+                'Omdat de situatie vreemd was en de schipper zich verdacht gedroeg.',
+                'Omdat Ridheya haar bril was vergeten.',
+                'Omdat het begon te sneeuwen op het strand.'
+              ],
+              correct: 1,
+              expl: 'Achterdochtig betekent wantrouwig: de verdachte sfeer en de schichtige schipper maakten haar alert.'
+            },
+            choices: [
+              { label: 'Breek het wassen zegel en lees de geheime boodschap voor', nextPage: 2, icon: '📜' },
+              { label: 'Volg eerst de pootafdrukken van een dier het bos in', nextPage: 3, icon: '🐾' }
+            ]
+          },
+          {
+            pageNumber: 2,
+            title: 'De Sleutel van de Savanne Wachter',
+            storyText: `Hemali brak het zegel. Op het perkament stonden sierlijke letters: *"Aan de vinders van deze brief: het safaridorp verkeert in gevaar. De grote waterbron is geblokkeerd door een zware rotslawine. **Desondanks** proberen de stropers de dieren weg te lokken."*
+
+Ridheya wees naar een tekening onderaan het document. "Dat is Simba de leeuwenwelp! Hij zit gevangen bij de oude acacia boom." 
+
+Hemali pakte haar kompas. "Als we de oostelijke route nemen, bereiken we de kloof **onmiddellijk**. Maar we moeten stil zijn, want de bewakers hebben scherpe oren. Ridheya, leid jij ons met je wandelstaf over de veilige stapstenen?" Ridheya knikte vastberaden. Haar ogen glinsterden achter haar ronde brilglazen.`,
+            vocab: [
+              { word: 'desondanks', dutch: 'toch, ondanks de moeilijke omstandigheden.', eng: 'Nevertheless / despite this' },
+              { word: 'onmiddellijk', dutch: 'meteen, zonder ook maar een seconde te wachten.', eng: 'Immediately / right away' },
+              { word: 'rotslawine', breakdown: 'rots + lawine', dutch: 'een grote hoeveelheid stenen en rotsblokken die van een berg naar beneden stort.', eng: 'Rock avalanche / landslide' }
+            ],
+            clue: {
+              title: '🧠 Clue #2: Oorzaak & Gevolg',
+              question: 'Wat is het directe gevolg van de rotslawine volgens het document?',
+              options: [
+                'Het safarischip is gezonken in de zee.',
+                'De grote waterbron voor de dieren is geblokkeerd.',
+                'Hemali is haar bril kwijtgeraakt.',
+                'Alle bomen zijn in brand gevlogen.'
+              ],
+              correct: 1,
+              expl: 'In de brief staat letterlijk dat de waterbron door de rotslawine geblokkeerd is geraakt.'
+            },
+            choices: [
+              { label: 'Sluip via het apenpad om Simba de Leeuw te bevrijden', nextPage: 4, icon: '🦁' },
+              { label: 'Vraag Professor Ollie Uil om een overzichtskaart', nextPage: 4, icon: '🦉' }
+            ]
+          },
+          {
+            pageNumber: 3,
+            title: 'Het Spoor van de Geheime Grot',
+            storyText: `Ridheya volgde de diepe afdrukken met haar houten staf. De sporen leidden diep het dichte regenwoud in, waar reusachtige varens het zonlicht tegenhielden. 
+
+"Kijk hier," wees Ridheya fluisterend. "De bladeren zijn hier vers geknakt. Een zwaar dier heeft hier **haastig** gelopen." 
+
+Hemali noteerde de afmetingen nauwkeurig in haar speurneuzenboek. "De afstand tussen de stappen is ruim twee meter. **Daardoor** kunnen we concluderen dat het een volwassen jaguar of een groot safaridier moet zijn. We naderen een verborgen waterval!" Achter het kletterende water ontdekten de zussen een geheime stenen poort met fonkelende edelstenen.`,
+            vocab: [
+              { word: 'haastig', dutch: 'heel snel en met veel spoed.', eng: 'Hastily / in a hurry' },
+              { word: 'daardoor', dutch: 'om die reden, als logisch gevolg daarvan.', eng: 'As a result / because of that' },
+              { word: 'speurneuzenboek', breakdown: 'speurneuzen + boek', dutch: 'een schrift waarin een detective aanwijzingen noteert.', eng: 'Detective notebook' }
+            ],
+            clue: {
+              title: '🐾 Clue #3: Conclusie Trekken',
+              question: 'Hoe weet Hemali dat het dier erg groot is?',
+              options: [
+                'Omdat ze het dier heeft horen brullen in het donker.',
+                'Omdat de afstand tussen de stappen ruim twee meter is.',
+                'Omdat Ridheya een veer van een vogel vond.',
+                'Omdat het water van de waterval groen kleurde.'
+              ],
+              correct: 1,
+              expl: 'De grote stapafstand van twee meter bewijst dat het dier lange poten heeft en heel groot is.'
+            },
+            choices: [
+              { label: 'Stap door de waterval en open de poort met de toverspreuk', nextPage: 4, icon: '✨' },
+              { label: 'Roep het Zussen Team bijeen om samen te werken', nextPage: 4, icon: '👑' }
+            ]
+          },
+          {
+            pageNumber: 4,
+            title: 'De Grote Overwinning van het Safaripark',
+            storyText: `Dankzij het scherpe observatievermogen van Ridheya en de briljante logica van Hemali werd het mysterie **volledig** ontrafeld. Simba de leeuw werd veilig teruggebracht naar zijn moeder in de savanne, en de verstopte waterbron stroomde weer als een heldere beek door het safaripark.
+
+Alle dieren kwamen bijeen om de twee heldhaftige zussen te bedanken. Professor Ollie Uil landde trots op Ridheya’s schouder, terwijl Max de Aap vrolijk salto’s maakte in de bomen.
+
+De hoofdboswachter overhandigde beide meisjes een gouden onderscheiding: *"Voor uitzonderlijke moed, perfecte leesvaardigheid en onbreekbare zusterliefde."* Hemali en Ridheya keken elkaar lachend aan. Dit was nog maar het begin van hun vele avonturen!`,
+            vocab: [
+              { word: 'volledig', dutch: 'helemaal, compleet van begin tot eind.', eng: 'Completely / entirely' },
+              { word: 'heldhaftig', breakdown: 'held + haftig', dutch: 'heel erg dapper en dapper handelend als een echte held.', eng: 'Heroic / valiant' },
+              { word: 'onderscheiding', dutch: 'een medaille of ereteken als beloning voor een bijzondere prestatie.', eng: 'Award / distinction' }
+            ],
+            clue: {
+              title: '🏆 Eind Clue: Samenvatting',
+              question: 'Wat was de sleutel tot het succes van Hemali en Ridheya?',
+              options: [
+                'Ze hebben alleen maar gerust en gewacht op hulp.',
+                'Ze combineerden Ridheya’s observatie met Hemali’s logica en werkten samen als zussen.',
+                'Ze zijn weggerend toen ze de rotslawine zagen.',
+                'Ze hebben het onderzoeksschip verkocht.'
+              ],
+              correct: 1,
+              expl: 'Hun samenwerking, scherpe blik en logische puzzelkracht zorgden voor de overwinning.'
+            },
+            choices: [
+              { label: '🎉 Start een nieuw RPG Avontuur vanaf Pagina 1', nextPage: 1, icon: '🔄' }
+            ]
+          }
+        ]
+      }
+    };
+
+    const CITO_QUESTIONS = {
+      ridheya: [
+        {
+          id: 'cito_r_1',
+          curriculumLevel: 'Groep 3-4 (M3-E4)',
+          skillTested: 'Samengestelde woorden & Context raden',
+          contextHeader: '🩺 Dierenarts Ridheya in Maleisië',
+          passage: 'Ridheya ritst haar rode **dierenartstas** open. Ze ziet een magere **zwerfhond** met een bezeerd pootje onder een mangokraam liggen. "Geen zorgen vriendje," zegt Ridheya zachtjes.',
+          question: 'Wat is een "zwerfhond" volgens deze tekst?',
+          options: [
+            'Een hond die kunstjes doet in het circus',
+            'Een lieve hond op straat die geen vast baasje heeft',
+            'Een hond die alleen op een schip woont',
+            'Een speelgoedhondje van plastic'
+          ],
+          correct: 1,
+          expl: 'Zwerf + hond betekent een straathond die rondzwerft zonder vast huisje.'
+        },
+        {
+          id: 'cito_r_2',
+          curriculumLevel: 'Groep 3-4 (M3-E4)',
+          skillTested: 'Voegwoorden van reden (want / omdat)',
+          contextHeader: '🩹 Eerste Hulp bij de IJsvogel',
+          passage: 'Ridheya legt een zacht spalkje aan bij de vleugel van de blauwe ijsvogel, **want** het diertje werd geraakt door een rondvliegend steentje.',
+          question: 'Waarom legt Ridheya een spalkje aan bij de vogel?',
+          options: [
+            'Omdat de vogel wilde gaan slapen in de boom',
+            'Omdat het diertje geraakt werd door een steentje en pijn heeft',
+            'Omdat Amir een nieuwe fiets heeft gekocht',
+            'Omdat het ijsvogelmannetje wilde zwemmen'
+          ],
+          correct: 1,
+          expl: 'Het woord "want" legt de oorzaak uit: de vogel werd geraakt door een steentje.'
+        },
+        {
+          id: 'cito_r_3',
+          curriculumLevel: 'Groep 3-4 (M3-E4)',
+          skillTested: 'Verwijswoorden (hij / ze / deze)',
+          contextHeader: '🌿 De Binnentuin van Mei-Ling',
+          passage: 'Mei-Ling brengt een grote schaal met zoete mango’s en koud water naar de kliniek. **Zij** zorgt ervoor dat alle geredde dieren genoeg te drinken krijgen.',
+          question: 'Naar wie verwijst het woord "**Zij**" in de tweede zin?',
+          options: [
+            'Naar de gewonde hond Kopi',
+            'Naar Mei-Ling',
+            'Naar de blauwe ijsvogel',
+            'Naar de fruitkraam'
+          ],
+          correct: 1,
+          expl: '"Zij" is een persoonlijk voornaamwoord dat terugslaat op Mei-Ling.'
+        }
+      ],
+
+      hemali: [
+        {
+          id: 'cito_h_1',
+          curriculumLevel: 'Groep 5-6 (M5-E6)',
+          skillTested: 'Signaalwoorden van tegenstelling (desondanks)',
+          contextHeader: '✨ Teleportatie naar het Oerwoud',
+          passage: 'De nachtjungle van Taman Negara was pikdonker en gehuld in een dichte nevel. Hemali voelde **desondanks** geen enkele aarzeling toen haar saffieren amulet begon te gloeien voor de sprong door de ruimte.',
+          question: 'Wat betekent het woord "**desondanks**" in deze tekst?',
+          options: [
+            'Als direct gevolg van de duisternis',
+            'Toch / ondanks dat het donker en mistig was',
+            'Vrijwel onmiddellijk daarna',
+            'Helemaal niet meer mogelijk'
+          ],
+          correct: 1,
+          expl: '"Desondanks" drukt een tegenstelling uit: alhoewel het donker was, was ze toch niet bang.'
+        },
+        {
+          id: 'cito_h_2',
+          curriculumLevel: 'Groep 5-6 (M5-E6)',
+          skillTested: 'Signaalwoorden van gevolg (daardoor)',
+          contextHeader: '🐒 Het raadsel van het zombie-aapje',
+          passage: 'Hemali ontdekte dat het zombie-aapje niet kwaadaardig was, maar gevangen zat in een slaapwandelende maanbetovering. **Daardoor** begreep zij direct dat ze geen wapens, maar de juiste Nederlandse toverrijmspreuk nodig had om hem te verlossen.',
+          question: 'Welk verband drukt het woord "**Daardoor**" uit?',
+          options: [
+            'Een opsomming van toverdrankjes',
+            'Een logisch gevolg van haar ontdekking over de maanbetovering',
+            'Een tegenstelling met de tempelinscriptie',
+            'Een tijdstip in de vroege ochtend'
+          ],
+          correct: 1,
+          expl: '"Daardoor" toont het gevolg van haar ontdekking.'
+        },
+        {
+          id: 'cito_h_3',
+          curriculumLevel: 'Groep 5-6 (M5-E6)',
+          skillTested: 'Complexe verwijswoorden (deze / waarmee)',
+          contextHeader: '🐘 De Wijze Olifant Raja & Girafje Appel',
+          passage: 'De wijze olifant Raja wees met zijn slurf naar een jong gevlekt diertje. **Waarmee** Hemali de kleine babygiraf kon voeden, was een schaal met gouden acaciabladeren. **Deze** dronk het diertje echter niet, maar knabbelde er gretig op los.',
+          question: 'Waar verwijst het woord "**Deze**" in de laatste zin naar?',
+          options: [
+            'De wijze olifant Raja',
+            'De schaal met gouden acaciabladeren',
+            'De kleine babygiraf (Appel)',
+            'Het tovernotitieboek'
+          ],
+          correct: 2,
+          expl: '"Deze" slaat terug op het onderwerp dat knabbelt: de kleine babygiraf.'
+        },
+        {
+          id: 'cito_h_4',
+          curriculumLevel: 'Groep 5-6 (M5-E6)',
+          skillTested: 'Hoofdgedachte & Cito Doorstroomtoets',
+          contextHeader: '🌿 De Meester-Ontdekkingsreiziger',
+          passage: 'Echte ontdekkingsreizigers veroveren geen natuurgebieden, maar leren luisteren naar de bewoners van het oerwoud. Door vriendschap te sluiten met het verloste zombie-aapje, de wijze pratende olifant Raja en het geadopteerde babygirafje Appel, bewees Hemali dat medeleven en scherpzinnige taalvaardigheid de allergrootste magische krachten zijn.',
+          question: 'Wat is de **hoofdgedachte** van deze alinea?',
+          options: [
+            'Olifanten eten uitsluitend acaciabladeren in het wild.',
+            'Een ware ontdekkingsreiziger overwint door te luisteren, vriendschap te sluiten en wijsheid te tonen.',
+            'Teleportatie werkt alleen wanneer de maan vol is.',
+            'Giraffen kunnen beter praten dan apen in de jungle.'
+          ],
+          correct: 1,
+          expl: 'De kernboodschap is dat luisteren, medeleven en wijsheid kenmerkend zijn voor een ware ontdekkingsreiziger.'
+        }
+      ]
+    };
+
+    const INTEREST_QUESTIONS = [
+      {
+        id: 'int_1',
+        category: '1. Heldenrol & Beroep',
+        question: 'Welke heldenrol of droomberoep past het allerbeste bij jou in dit verhaal?',
+        options: [
+          { text: 'Dierenarts in opleiding: met stethoscoop en verband gewonde dieren redden in de stad (zoals Ridheya)', key: 'malaysia_vet', icon: '🩺' },
+          { text: 'Magische Ontdekkingsreiziger: teleporteren, praten met olifanten en mysteries ontrafelen (zoals Hemali)', key: 'jungle_magic', icon: '✨' },
+          { text: 'Koninklijke Safaribeschermer: samen met je zus een groot dierenreservaat behoeden voor gevaar', key: 'sisters_safari', icon: '👑' },
+          { text: 'Natuurwetenschapper: op een historisch onderzoeksschip zeldzame fauna bestuderen', key: 'ship', icon: '🚢' }
+        ]
+      },
+      {
+        id: 'int_2',
+        category: '2. Locatie & Wereld',
+        question: 'Op welke avontuurlijke locatie wil jij jouw verhaal laten afspelen?',
+        options: [
+          { text: 'De tropische stad Kuala Lumpur in Maleisië 🇲🇾 (tussen fruitkramen, banyanbomen en binnentuinen)', key: 'city_malaysia', icon: '🏙️' },
+          { text: 'Het mysterieuze nachthoorwoud van Taman Negara 🌙 (midden in de nacht met gloeiende lianen)', key: 'night_jungle', icon: '🌿' },
+          { text: 'De zonnige savannekust en duinpaden van het dierenreservaat 🦁', key: 'savanna_coast', icon: '🌊' },
+          { text: 'Een oude tempelruïne vol geheime stenen inscripties en toveraltaren 🏛️', key: 'temple_ruins', icon: '📜' }
+        ]
+      },
+      {
+        id: 'int_3',
+        category: '3. Dieren Eerste Hulp',
+        question: 'Welk dier in nood wil jij als eerste eerste hulp verlenen en verzorgen?',
+        options: [
+          { text: 'Een gewonde zwerfhond (Kopi) met een bezeerd pootje door gebroken glas verzorgen', key: 'stray_dog_kopi', icon: '🐕' },
+          { text: 'Een prachtige blauwe tropische ijsvogel verzorgen die geraakt werd door een steentje', key: 'kingfisher_stone', icon: '🐦' },
+          { text: 'Een betoverd nachtelijk zombie-aapje verlossen van een slaapwandelende maanvloek', key: 'zombie_monkey', icon: '🐒' },
+          { text: 'Een jonge leeuwenwelp (Simba) bevrijden uit een smalle kloof na een rotslawine', key: 'lion_cub', icon: '🦁' }
+        ]
+      },
+      {
+        id: 'int_4',
+        category: '4. Krachten & Gereedschap',
+        question: 'Welke bijzondere magische gave of uitrusting wil jij gebruiken tijdens je tocht?',
+        options: [
+          { text: 'Magische teleportatie met een saffieren amulet om in een flits door de ruimte te reizen', key: 'teleportation', icon: '✨' },
+          { text: 'Een rode dierenartstas met stethoscoop, verbandgaas, zalf en vergrootglas', key: 'vet_toolkit', icon: '🩺' },
+          { text: 'Een detective-notitieboek om geheime Cito signaalwoorden en raadsels te ontcijferen', key: 'detective_book', icon: '📖' },
+          { text: 'Een houten wandelstaf en magisch kompas om veilige paden te vinden', key: 'magic_compass', icon: '🧭' }
+        ]
+      },
+      {
+        id: 'int_5',
+        category: '5. Dieren Vriend & Adoptie',
+        question: 'Met welk trouw dierenvriendje wil jij vriendschap sluiten en adopteren?',
+        options: [
+          { text: 'Een schattig babygirafje genaamd Appel met ronde appelvlekjes adopteren en voeden', key: 'baby_giraffe_apple', icon: '🦒' },
+          { text: 'De wijze pratende olifant Raja die met een diepe stem oude geheimen deelt', key: 'talking_elephant_raja', icon: '🐘' },
+          { text: 'Kopi de geadopteerde straathond die kwispelt en de tuinkliniek bewaakt', key: 'adopted_kopi', icon: '🐕' },
+          { text: 'Zazu het ondeugende aapje dat salto’s maakt en bloemenkransen strooit', key: 'guide_monkey_zazu', icon: '🐒' }
+        ]
+      },
+      {
+        id: 'int_6',
+        category: '6. Vrienden & Samenwerking',
+        question: 'Hoe werk jij het allerliefst samen om moeilijke situaties en raadsels op te lossen?',
+        options: [
+          { text: 'Team Maleisië: samenwerken met fietskoerier Amir (met bakfiets) en Mei-Ling (met binnentuin)', key: 'team_malaysia_friends', icon: '🚲' },
+          { text: 'Het Zussen Verbond: observatie (Ridheya) en logica (Hemali) combineren als onverslaanbaar team', key: 'sisters_team', icon: '👑' },
+          { text: 'Praten met dieren: luisteren naar wijze jungledieren om de natuurlijke harmonie te herstellen', key: 'talking_animals', icon: '🌿' },
+          { text: 'Logisch redeneren: Cito signaalwoorden van oorzaak, gevolg en tegenstelling kraken', key: 'cito_logic', icon: '🧠' }
+        ]
+      }
+    ];
+
+    const OFFLINE_DICTIONARY = {
+      'dierenartstas': { syllables: ['die', 'ren', 'arts', 'tas'], type: 'Zelfstandig naamwoord', compound: 'dierenarts + tas', nl: 'Een tas met medische spulletjes zoals verband en zalf om zieke dieren te verzorgen.', en: 'Veterinarian medical bag', example: 'Dierenarts Ridheya opende haar dierenartstas om het pootje van hondje Kopi te verbinden.' },
+      'dierenarts': { syllables: ['die', 'ren', 'arts'], type: 'Zelfstandig naamwoord', compound: 'dieren + arts', nl: 'Een dokter die gespecialiseerd is in het genezen en verzorgen van dieren.', en: 'Veterinarian / animal doctor', example: 'Ridheya droomt ervan om de allerbeste dierenarts van Maleisië te worden.' },
+      'kliniek': { syllables: ['kli', 'niek'], type: 'Zelfstandig naamwoord', nl: 'Een medische plek waar patiënten of dieren worden verzorgd en onderzocht.', en: 'Clinic / veterinary clinic', example: 'De binnentuinkliniek stond vol met schone mandjes en vers water.' },
+      'zwerfhond': { syllables: ['zwerf', 'hond'], type: 'Zelfstandig naamwoord', compound: 'zwerf + hond', nl: 'Een trouwe straathond zonder vast baasje.', en: 'Stray dog / street dog', example: 'Het geredde hondje Kopi loopt weer vrolijk rond in de binnentuinkliniek.' },
+      'hond': { syllables: ['hond'], type: 'Zelfstandig naamwoord', nl: 'Trouw viervoetig huisdier.', en: 'Dog', example: 'De hond kwispelde blij met zijn staart.' },
+      'kat': { syllables: ['kat'], type: 'Zelfstandig naamwoord', nl: 'Katachtig huisdier.', en: 'Cat', example: 'De kat spinde tevreden in het zonnetje.' },
+      'ijsvogel': { syllables: ['ijs', 'vo', 'gel'], type: 'Zelfstandig naamwoord', compound: 'ijs + vogel', nl: 'Een opvallend mooie vogel met felblauwe en oranje veertjes.', en: 'Kingfisher (bird)', example: 'De veren van de tropische ijsvogel schitterden in prachtig felblauw boven de banyanboom.' },
+      'verbandgaas': { syllables: ['ver', 'band', 'gaas'], type: 'Zelfstandig naamwoord', compound: 'verband + gaas', nl: 'Zacht wit doek om wonden mee af te dekken en te beschermen.', en: 'Bandage gauze', example: 'Ridheya wikkelde voorzichtig een rolletje verbandgaas om de gekneusde vleugel.' },
+      'verband': { syllables: ['ver', 'band'], type: 'Zelfstandig naamwoord', nl: 'Een witte strook stof om een wond te beschermen, of een logische samenhang.', en: 'Bandage / connection', example: 'Ridheya bracht een schoon verband aan om het pootje.' },
+      'spalk': { syllables: ['spalk'], type: 'Zelfstandig naamwoord', nl: 'Een stevig latje om een gebroken pootje of botje recht te houden tijdens de genezing.', en: 'Splint / brace', example: 'Met een klein spalkje kon de ijsvogel zijn vleugel rust geven.' },
+      'spalken': { syllables: ['spal', 'ken'], type: 'Werkwoord', nl: 'Een botje of pootje vastzetten met een spalk.', en: 'To splint / to brace', example: 'Dierenarts Ridheya kan voorzichtig kleine vogelvleugels spalken.' },
+      'glimlach': { syllables: ['glim', 'lach'], type: 'Zelfstandig naamwoord', compound: 'glim + lach', nl: 'Een vriendelijke, blije uitdrukking op je gezicht waarbij de mondhoeken omhoog krullen.', en: 'Smile', example: 'Met een warme glimlach begroette Ridheya de dieren in de kliniek.' },
+      'glimlachen': { syllables: ['glim', 'la', 'chen'], type: 'Werkwoord', compound: 'glim + lachen', nl: 'Vriendelijk en zachtjes lachen zonder geluid te maken.', en: 'To smile', example: 'De twee zussen moesten vrolijk glimlachen naar het ondeugende aapje.' },
+      'glimlachte': { syllables: ['glim', 'lach', 'te'], type: 'Werkwoord', nl: 'Verleden tijd van glimlachen: keek met een vriendelijke lach.', en: 'Smiled (past tense)', example: 'Hemali glimlachte toen het toverboek oplichtte.' },
+      'lach': { syllables: ['lach'], type: 'Zelfstandig naamwoord', nl: 'Het vrolijke geluid en gezicht als je moet lachen.', en: 'Laugh / laughter', example: 'Haar vrolijke lach maakte iedereen blij.' },
+      'lachen': { syllables: ['la', 'chen'], type: 'Werkwoord', nl: 'Geluid maken als je iets grappigs beleeft.', en: 'To laugh', example: 'Samen konden Ridheya en Hemali heerlijk lachen.' },
+      'lachte': { syllables: ['lach', 'te'], type: 'Werkwoord', nl: 'Verleden tijd van lachen.', en: 'Laughed (past tense)', example: 'Amir lachte vrolijk toen Kopi een sprongetje maakte.' },
+      'wonderzalf': { syllables: ['won', 'der', 'zalf'], type: 'Zelfstandig naamwoord', compound: 'wonder + zalf', nl: 'Een geneeskrachtige crème die wondjes snel heelt.', en: 'Miracle healing ointment', example: 'Ridheya smeerde een druppeltje wonderzalf op het bezeerde kussentje.' },
+      'zalf': { syllables: ['zalf'], type: 'Zelfstandig naamwoord', nl: 'Zacht smeersel voor wonden.', en: 'Ointment / salve', example: 'De zachte zalf verzachtte de pijn onmiddellijk.' },
+      'tuinkliniek': { syllables: ['tuin', 'kli', 'niek'], type: 'Zelfstandig naamwoord', compound: 'tuin + kliniek', nl: 'Een veilige plek in een tuin waar zieke dieren worden verzorgd.', en: 'Garden clinic', example: 'In de tuinkliniek van Mei-Ling vonden alle gewonde dieren rust en genezing.' },
+      'desondanks': { syllables: ['des', 'on', 'danks'], type: 'Signaalwoord (Cito)', nl: 'Toch / ondanks dat er gevaar of een tegenstelling is.', en: 'Nevertheless / despite this', example: 'Het oerwoud was donker; desondanks stapte Hemali vol zelfvertrouwen naar voren.' },
+      'daardoor': { syllables: ['daar', 'door'], type: 'Signaalwoord (Cito)', nl: 'Om die reden, als direct logisch gevolg van iets.', en: 'As a result / therefore', example: 'De tovervloeistof lichtte groen op; daardoor kon Hemali de runen ontcijferen.' },
+      'teleportatie': { syllables: ['te', 'le', 'por', 'ta', 'tie'], type: 'Zelfstandig naamwoord', nl: 'Het magisch verplaatsen van de ene plek naar de andere in een flits.', en: 'Teleportation', example: 'Met een flits van haar saffieren amulet voltrok de teleportatie zich naar Taman Negara.' },
+      'teleporteren': { syllables: ['te', 'le', 'por', 'te', 'ren'], type: 'Werkwoord', nl: 'Zich magisch door de ruimte verplaatsen.', en: 'To teleport', example: 'Hemali kan veilig naar de geheime tempel teleporteren.' },
+      'zombie-aapje': { syllables: ['zom', 'bie', 'aap', 'je'], type: 'Zelfstandig naamwoord', compound: 'zombie + aapje', nl: 'Een betoverd aapje dat door een maanvloek slaapwandelde in het woud.', en: 'Enchanted zombie monkey', example: 'Zazu het ondeugende aapje werd door Hemali verlost van de nachtelijke vloek.' },
+      'girafje': { syllables: ['gi', 'raf', 'je'], type: 'Zelfstandig naamwoord', compound: 'giraf + je', nl: 'Een klein, schattig jong girafje met appelvormige vlekjes.', en: 'Baby giraffe', example: 'Babygirafje Appel gaf Hemali een lief en dankbaar kopje bij de waterbron.' },
+      'onderzoeksschip': { syllables: ['on', 'der', 'zoek', 'schip'], type: 'Zelfstandig naamwoord', compound: 'onderzoek + schip', nl: 'Een schip gebouwd voor wetenschappelijk onderzoek op zee.', en: 'Research vessel', example: 'Het koninklijke onderzoeksschip lag rustig voor anker in de savannebaai.' },
+      'achterdochtig': { syllables: ['ach', 'ter', 'doch', 'tig'], type: 'Bijvoeglijk naamwoord', nl: 'Wantrouwig, als je iets niet zomaar meteen vertrouwt.', en: 'Suspicious / distrustful', example: 'Hemali keek achterdochtig naar het wassen zegel op de loden koker.' },
+      'heldhaftig': { syllables: ['held', 'haf', 'tig'], type: 'Bijvoeglijk naamwoord', compound: 'held + haftig', nl: 'Heel erg dapper als een echte held.', en: 'Heroic / brave', example: 'Voor hun heldhaftige inzet kregen de zussen een gouden eremedaille.' },
+      'bovendien': { syllables: ['bo', 'ven', 'dien'], type: 'Signaalwoord (Cito)', nl: 'Ook nog eens, daarbovenop als extra toevoeging.', en: 'Furthermore / moreover', example: 'De kleine giraf was gewond; bovendien was ze haar moeder kwijtgeraakt.' },
+      'oerwoud': { syllables: ['oer', 'woud'], type: 'Zelfstandig naamwoord', compound: 'oer + woud', nl: 'Dicht tropisch regenwoud vol wilde dieren.', en: 'Primeval rainforest / jungle', example: 'In het eeuwenoude oerwoud ontmoetten ze de wijze olifant Raja.' },
+      'regenwoud': { syllables: ['re', 'gen', 'woud'], type: 'Zelfstandig naamwoord', compound: 'regen + woud', nl: 'Tropisch woud waar veel regen valt.', en: 'Rainforest', example: 'Het regenwoud van Maleisië herbergt duizenden zeldzame dieren.' },
+      'mysterie': { syllables: ['mys', 'te', 'rie'], type: 'Zelfstandig naamwoord', nl: 'Een geheimzinnig raadsel dat opgelost moet worden.', en: 'Mystery / puzzle', example: 'Hemali loste het oude mysterie van het amulet op.' },
+      'mysterieus': { syllables: ['mys', 'te', 'ri', 'eus'], type: 'Bijvoeglijk naamwoord', nl: 'Vol geheimen en geheimzinnige verschijnselen.', en: 'Mysterious / enigmatic', example: 'Een mysterieus zilveren licht scheen door de boomkruinen.' },
+      'safari': { syllables: ['sa', 'fa', 'ri'], type: 'Zelfstandig naamwoord', nl: 'Een ontdekkingsreis om wilde dieren in de natuur te observeren.', en: 'Safari expedition', example: 'De zussen vertrokken op een spannende safari door de savanne.' },
+      'verrekijker': { syllables: ['ver', 're', 'kij', 'ker'], type: 'Zelfstandig naamwoord', compound: 'ver + kijker', nl: 'Een optisch apparaat met twee lenzen om dingen in de verte dichtbij te zien.', en: 'Binoculars', example: 'Door haar verrekijker zag Ridheya de leeuwenwelp in de kloof.' },
+      'boerin': { syllables: ['boe', 'rin'], type: 'Zelfstandig naamwoord', nl: 'Een vrouw die op het platteland woont of een wildreservaat beheert.', en: 'Farmer / ranger woman', example: 'Boerin Tess wees de zussen de weg naar de savannebaai.' }
+    };
+
+    // ==========================================
+    // AUDIO ENGINE (Web Audio API Synthesizer)
+    // ==========================================
+    let audioCtx = null;
+    function getAudioContext() {
+      if (!audioCtx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new AudioContext();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      return audioCtx;
+    }
+
+    function playPopSound() {
+      try {
+        const ctx = getAudioContext();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(450, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(800, ctx.currentTime + 0.08);
+        gain.gain.setValueAtTime(0.2, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.08);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.08);
+      } catch (e) {}
+    }
+
+    function playStarSound() {
+      try {
+        const ctx = getAudioContext();
+        const now = ctx.currentTime;
+        [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, now + i * 0.07);
+          gain.gain.setValueAtTime(0.18, now + i * 0.07);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.07 + 0.3);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now + i * 0.07);
+          osc.stop(now + i * 0.07 + 0.3);
+        });
+      } catch (e) {}
+    }
+
+    function speakText(text) {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const cleanText = text.replace(/\*\*/g, '');
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        utterance.lang = 'nl-NL';
+        utterance.rate = currentProfile === 'ridheya' ? 0.88 : 1.0;
+        window.speechSynthesis.speak(utterance);
+      }
+    }
+
+    function triggerConfetti() {
+      if (typeof confetti === 'function') {
+        confetti({
+          particleCount: 70,
+          spread: 60,
+          origin: { y: 0.7 }
+        });
+      }
+    }
+
+    // ==========================================
+    // STATE MANAGEMENT
+    // ==========================================
+    let currentProfile = 'ridheya';
+    let currentCampaignId = 'ridheya_malaysia';
+    let currentRpgPage = 1;
+    let currentCitoIndex = 0;
+    let userAnswers = {};
+    let clueAnswers = {};
+    let interestSelections = {
+      int_1: 'malaysia_vet',
+      int_2: 'city_malaysia',
+      int_3: 'stray_dog_kopi',
+      int_4: 'vet_toolkit',
+      int_5: 'adopted_kopi',
+      int_6: 'team_malaysia_friends'
+    };
+
+    // ==========================================
+    // INITIALIZATION & TAB SWITCHING
+    // ==========================================
+    window.addEventListener('DOMContentLoaded', () => {
+      initApp();
+    });
+
+    function initApp() {
+      renderCampaignSelector();
+      renderRpgPage();
+      renderCitoQuestions();
+      renderInterestQuestions();
+      updateJsonView();
+    }
+
+    function switchTab(tabId) {
+      playPopSound();
+      ['rpg', 'cito', 'interest', 'dict', 'json'].forEach(t => {
+        const btn = document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1));
+        const panel = document.getElementById('panel' + t.charAt(0).toUpperCase() + t.slice(1));
+        if (btn && panel) {
+          if (t === tabId) {
+            btn.classList.add('active');
+            panel.style.display = 'block';
+          } else {
+            btn.classList.remove('active');
+            panel.style.display = 'none';
+          }
+        }
+      });
+      if (tabId === 'json') {
+        updateJsonView();
+      }
+    }
+
+    function setProfile(profileKey) {
+      playPopSound();
+      currentProfile = profileKey;
+      const p = PROFILES[profileKey];
+      
+      document.getElementById('btnRidheya').className = 'protagonist-btn ' + (profileKey === 'ridheya' ? 'active-ridheya' : '');
+      document.getElementById('btnHemali').className = 'protagonist-btn ' + (profileKey === 'hemali' ? 'active-hemali' : '');
+      document.getElementById('headerEmoji').textContent = p.emoji;
+      document.getElementById('profileTraitsPill').textContent = p.traits;
+
+      currentCampaignId = p.campaign;
+      currentRpgPage = 1;
+      currentCitoIndex = 0;
+
+      renderCampaignSelector();
+      renderRpgPage();
+      renderCitoQuestions();
+      updateJsonView();
+    }
+
+    function selectCampaign(campId) {
+      playPopSound();
+      currentCampaignId = campId;
+      currentRpgPage = 1;
+      renderCampaignSelector();
+      renderRpgPage();
+    }
+
+    function renderCampaignSelector() {
+      ['ridheya', 'hemali', 'safari'].forEach(key => {
+        const map = { ridheya: 'ridheya_malaysia', hemali: 'hemali_jungle', safari: 'sisters_safari' };
+        const el = document.getElementById('camp_' + key);
+        if (el) {
+          if (map[key] === currentCampaignId) {
+            el.classList.add('active');
+          } else {
+            el.classList.remove('active');
+          }
+        }
+      });
+    }
+
+    // ==========================================
+    // RPG STORY ENGINE
+    // ==========================================
+    function renderRpgPage() {
+      const camp = CAMPAIGNS[currentCampaignId] || CAMPAIGNS['ridheya_malaysia'];
+      const page = camp.pages.find(p => p.pageNumber === currentRpgPage) || camp.pages[0];
+
+      document.getElementById('rpgBiomeBadge').textContent = camp.biome;
+      document.getElementById('rpgPageTitle').textContent = `Pagina ${page.pageNumber}: ${page.title}`;
+
+      // Render page pills
+      const pillsContainer = document.getElementById('pagePillsContainer');
+      pillsContainer.innerHTML = '';
+      camp.pages.forEach(p => {
+        const btn = document.createElement('button');
+        btn.className = 'page-num-btn ' + (p.pageNumber === currentRpgPage ? 'active' : '');
+        btn.textContent = `P${p.pageNumber}`;
+        btn.onclick = () => {
+          playPopSound();
+          currentRpgPage = p.pageNumber;
+          renderRpgPage();
+        };
+        pillsContainer.appendChild(btn);
+      });
+
+      // Render interactive story text with clickable dictionary tokens
+      const rawText = page.storyText;
+      const parts = rawText.split(/(\*\*.*?\*\*)/g);
+      let html = '';
+      parts.forEach(part => {
+        if (part.startsWith('**') && part.endsWith('**')) {
+          const boldWord = part.slice(2, -2);
+          const cleanWord = boldWord.replace(/[^\w\s-]/gi, '');
+          html += `<span class="interactive-word-bold" onclick="openWordModal('${cleanWord}')" title="Klik voor betekenis en uitspraak">${boldWord}</span>`;
+        } else {
+          // Tokenize normal words so they are clickable
+          const tokens = part.split(/([a-zA-ZÀ-ÿ-]+)/g);
+          tokens.forEach(tok => {
+            if (/^[a-zA-ZÀ-ÿ-]+$/.test(tok) && tok.length > 1) {
+              const cleanTok = tok.replace(/[^\w-]/gi, '');
+              html += `<span class="interactive-word" onclick="openWordModal('${cleanTok}')" title="Klik voor woordenhulp">${tok}</span>`;
+            } else {
+              html += tok;
+            }
+          });
+        }
+      });
+      document.getElementById('rpgStoryPassage').innerHTML = html;
+
+      // Render vocab list with interactive clickable cards
+      const vocabList = document.getElementById('rpgVocabList');
+      vocabList.innerHTML = '';
+      page.vocab.forEach(v => {
+        const card = document.createElement('div');
+        card.className = 'vocab-item-card';
+        card.onclick = () => openWordModal(v.word);
+        const breakdownStr = v.breakdown ? ` <span style="color:#b45309; font-weight:800; font-size:12px;">[${v.breakdown}]</span>` : '';
+        card.innerHTML = `
+          <div style="flex:1;">
+            <div style="display:flex; align-items:center; gap:6px;">
+              <strong style="color:#92400e; font-size:14px;">${v.word}</strong>
+              ${breakdownStr}
+            </div>
+            <div style="font-size:12px; color:#451a03; margin-top:2px;">
+              ${v.dutch} <em style="color:#047857; font-weight:700;">(${v.eng})</em>
+            </div>
+          </div>
+          <div style="display:flex; align-items:center; gap:6px; flex-shrink:0;">
+            <button class="audio-btn" onclick="event.stopPropagation(); speakText('${v.word}')" title="Beluister">🔊</button>
+            <span style="font-size:11px; font-weight:900; color:#b45309; background:#fef3c7; padding:4px 8px; border-radius:8px;">🔍 Uitleg</span>
+          </div>
+        `;
+        vocabList.appendChild(card);
+      });
+
+      // Render Mystery Clue
+      const clue = page.clue;
+      const clueBox = document.getElementById('rpgClueBox');
+      const clueQuestion = document.getElementById('rpgClueQuestion');
+      const clueOptions = document.getElementById('rpgClueOptions');
+      const clueFeedback = document.getElementById('rpgClueFeedback');
+      const clueStatus = document.getElementById('clueStatusBadge');
+
+      clueFeedback.style.display = 'none';
+      if (clue) {
+        clueBox.style.display = 'flex';
+        document.getElementById('rpgClueTitle').textContent = clue.title;
+        clueQuestion.textContent = clue.question;
+        clueOptions.innerHTML = '';
+
+        const pageKey = `${currentCampaignId}_p${currentRpgPage}`;
+        const prevAnswer = clueAnswers[pageKey];
+
+        clue.options.forEach((optText, optIdx) => {
+          const btn = document.createElement('button');
+          btn.className = 'opt-btn';
+          btn.textContent = `${String.fromCharCode(65 + optIdx)}) ${optText}`;
+
+          if (prevAnswer !== undefined) {
+            if (optIdx === clue.correct) btn.classList.add('correct');
+            else if (optIdx === prevAnswer) btn.classList.add('wrong');
+          }
+
+          btn.onclick = () => {
+            clueAnswers[pageKey] = optIdx;
+            if (optIdx === clue.correct) {
+              playStarSound();
+              triggerConfetti();
+              btn.className = 'opt-btn correct';
+              clueFeedback.style.display = 'block';
+              clueFeedback.style.background = '#d1fae5';
+              clueFeedback.style.color = '#065f46';
+              clueFeedback.innerHTML = `🎉 <b>Uitstekend!</b> ${clue.expl}`;
+              clueStatus.textContent = '✅ Opgelost (+15 XP)';
+              clueStatus.style.color = '#059669';
+            } else {
+              playPopSound();
+              btn.className = 'opt-btn wrong';
+              clueFeedback.style.display = 'block';
+              clueFeedback.style.background = '#fee2e2';
+              clueFeedback.style.color = '#991b1b';
+              clueFeedback.innerHTML = `💡 <b>Tip:</b> Kijk goed in de tekst naar de aanwijzingen.`;
+            }
+            updateJsonView();
+          };
+          clueOptions.appendChild(btn);
+        });
+
+        if (prevAnswer !== undefined) {
+          if (prevAnswer === clue.correct) {
+            clueFeedback.style.display = 'block';
+            clueFeedback.style.background = '#d1fae5';
+            clueFeedback.style.color = '#065f46';
+            clueFeedback.innerHTML = `🎉 <b>Uitstekend!</b> ${clue.expl}`;
+            clueStatus.textContent = '✅ Opgelost (+15 XP)';
+          }
+        } else {
+          clueStatus.textContent = 'Beantwoord voor extra XP';
+          clueStatus.style.color = '#6366f1';
+        }
+      } else {
+        clueBox.style.display = 'none';
+      }
+
+      // Render choice buttons
+      const choicesContainer = document.getElementById('rpgChoiceButtons');
+      choicesContainer.innerHTML = '';
+      page.choices.forEach(ch => {
+        const btn = document.createElement('button');
+        btn.className = 'choice-btn';
+        btn.innerHTML = `
+          <span>${ch.label}</span>
+          <span style="font-size:20px; flex-shrink:0;">${ch.icon || '👉'}</span>
+        `;
+        btn.onclick = () => {
+          playStarSound();
+          if (ch.switchCamp) {
+            selectCampaign(ch.switchCamp);
+          } else {
+            currentRpgPage = ch.nextPage;
+            renderRpgPage();
+          }
+          window.scrollTo({ top: 120, behavior: 'smooth' });
+        };
+        choicesContainer.appendChild(btn);
+      });
+    }
+
+    function speakStoryText() {
+      playPopSound();
+      const camp = CAMPAIGNS[currentCampaignId] || CAMPAIGNS['ridheya_malaysia'];
+      const page = camp.pages.find(p => p.pageNumber === currentRpgPage) || camp.pages[0];
+      speakText(page.storyText);
+    }
+
+    // ==========================================
+    // CITO PLACEMENT ENGINE
+    // ==========================================
+    function renderCitoQuestions() {
+      const qList = CITO_QUESTIONS[currentProfile] || CITO_QUESTIONS['ridheya'];
+      const totalQ = qList.length;
+      if (currentCitoIndex >= totalQ) currentCitoIndex = totalQ - 1;
+      if (currentCitoIndex < 0) currentCitoIndex = 0;
+
+      const q = qList[currentCitoIndex];
+
+      // Update score display
+      let correctCount = 0;
+      let answeredCount = 0;
+      qList.forEach(item => {
+        if (userAnswers[item.id] !== undefined) {
+          answeredCount++;
+          if (userAnswers[item.id] === item.correct) correctCount++;
+        }
+      });
+      document.getElementById('citoScoreDisplay').textContent = `${correctCount} / ${totalQ} Goed (${answeredCount} gemaakt)`;
+      document.getElementById('citoLevelBadge').textContent = q.curriculumLevel;
+
+      // Render pills
+      const indexPills = document.getElementById('citoQuestionIndexPills');
+      indexPills.innerHTML = '';
+      qList.forEach((item, idx) => {
+        const pill = document.createElement('button');
+        pill.className = 'page-num-btn ' + (idx === currentCitoIndex ? 'active' : '');
+        const isDone = userAnswers[item.id] !== undefined;
+        const isCorr = isDone && userAnswers[item.id] === item.correct;
+        pill.textContent = `Vraag ${idx + 1} ${isDone ? (isCorr ? '✓' : '✗') : ''}`;
+        pill.onclick = () => {
+          playPopSound();
+          currentCitoIndex = idx;
+          renderCitoQuestions();
+        };
+        indexPills.appendChild(pill);
+      });
+
+      // Render current question with interactive dictionary tokens
+      document.getElementById('citoContextHeader').textContent = q.contextHeader || `Doelvaardigheid: ${q.skillTested}`;
+      
+      const citoRaw = q.passage;
+      const citoParts = citoRaw.split(/(\*\*.*?\*\*)/g);
+      let citoHtml = '';
+      citoParts.forEach(part => {
+        if (part.startsWith('**') && part.endsWith('**')) {
+          const boldWord = part.slice(2, -2);
+          const cleanWord = boldWord.replace(/[^\w\s-]/gi, '');
+          citoHtml += `<span class="interactive-word-bold" onclick="openWordModal('${cleanWord}')" title="Klik voor betekenis en uitspraak">${boldWord}</span>`;
+        } else {
+          const tokens = part.split(/([a-zA-ZÀ-ÿ-]+)/g);
+          tokens.forEach(tok => {
+            if (/^[a-zA-ZÀ-ÿ-]+$/.test(tok) && tok.length > 1) {
+              const cleanTok = tok.replace(/[^\w-]/gi, '');
+              citoHtml += `<span class="interactive-word" onclick="openWordModal('${cleanTok}')" title="Woordenhulp">${tok}</span>`;
+            } else {
+              citoHtml += tok;
+            }
+          });
+        }
+      });
+      document.getElementById('citoPassageText').innerHTML = citoHtml;
+      document.getElementById('citoQuestionText').textContent = `${currentCitoIndex + 1}. ${q.question}`;
+
+      const optionsContainer = document.getElementById('citoOptionsContainer');
+      optionsContainer.innerHTML = '';
+      const chosen = userAnswers[q.id];
+      const explBox = document.getElementById('citoExplanationBox');
+      explBox.style.display = 'none';
+
+      q.options.forEach((optStr, optIdx) => {
+        const btn = document.createElement('button');
+        btn.className = 'opt-btn';
+        btn.textContent = `${String.fromCharCode(65 + optIdx)}) ${optStr}`;
+
+        if (chosen !== undefined) {
+          if (optIdx === q.correct) btn.classList.add('correct');
+          else if (optIdx === chosen) btn.classList.add('wrong');
+        }
+
+        btn.onclick = () => {
+          userAnswers[q.id] = optIdx;
+          if (optIdx === q.correct) {
+            playStarSound();
+            triggerConfetti();
+          } else {
+            playPopSound();
+          }
+          renderCitoQuestions();
+          updateJsonView();
+        };
+        optionsContainer.appendChild(btn);
+      });
+
+      if (chosen !== undefined) {
+        explBox.style.display = 'block';
+        if (chosen === q.correct) {
+          explBox.style.background = '#d1fae5';
+          explBox.style.color = '#065f46';
+          explBox.innerHTML = `🎉 <b>Heel goed gedaan!</b> ${q.expl}`;
+        } else {
+          explBox.style.background = '#fee2e2';
+          explBox.style.color = '#991b1b';
+          explBox.innerHTML = `💡 <b>Uitleg:</b> ${q.expl}`;
+        }
+      }
+
+      document.getElementById('btnPrevCito').disabled = currentCitoIndex === 0;
+      document.getElementById('btnNextCito').textContent = (currentCitoIndex === totalQ - 1) ? '🎉 Afronden' : 'Volgende Vraag →';
+    }
+
+    function prevCitoQuestion() {
+      playPopSound();
+      if (currentCitoIndex > 0) {
+        currentCitoIndex--;
+        renderCitoQuestions();
+      }
+    }
+
+    function nextCitoQuestion() {
+      playPopSound();
+      const qList = CITO_QUESTIONS[currentProfile] || CITO_QUESTIONS['ridheya'];
+      if (currentCitoIndex < qList.length - 1) {
+        currentCitoIndex++;
+        renderCitoQuestions();
+      } else {
+        playStarSound();
+        triggerConfetti();
+        switchTab('json');
+      }
+    }
+
+    // ==========================================
+    // INTEREST & DIAGNOSTIC ASSESSMENT
+    // ==========================================
+    function renderInterestQuestions() {
+      const container = document.getElementById('interestQuestionsList');
+      container.innerHTML = '';
+
+      INTEREST_QUESTIONS.forEach(iq => {
+        const box = document.createElement('div');
+        box.style.background = '#f8fafc';
+        box.style.border = '2px solid #e2e8f0';
+        box.style.borderRadius = '18px';
+        box.style.padding = '16px';
+
+        const cat = document.createElement('span');
+        cat.style.fontSize = '10px';
+        cat.style.fontWeight = '900';
+        cat.style.color = '#b45309';
+        cat.style.background = '#fef3c7';
+        cat.style.padding = '2px 8px';
+        cat.style.borderRadius = '6px';
+        cat.style.textTransform = 'uppercase';
+        cat.textContent = iq.category;
+
+        const qTitle = document.createElement('h4');
+        qTitle.style.fontSize = '14px';
+        qTitle.style.fontWeight = '800';
+        qTitle.style.color = '#0f172a';
+        qTitle.style.margin = '6px 0 10px';
+        qTitle.textContent = iq.question;
+
+        const optGrid = document.createElement('div');
+        optGrid.style.display = 'grid';
+        optGrid.style.gridTemplateColumns = 'repeat(auto-fit, minmax(260px, 1fr))';
+        optGrid.style.gap = '8px';
+
+        iq.options.forEach(opt => {
+          const isSelected = interestSelections[iq.id] === opt.key;
+          const btn = document.createElement('button');
+          btn.className = 'opt-btn';
+          if (isSelected) {
+            btn.style.borderColor = '#059669';
+            btn.style.background = '#d1fae5';
+            btn.style.color = '#065f46';
+            btn.style.fontWeight = '900';
+          }
+          btn.innerHTML = `<span style="font-size:16px;">${opt.icon}</span> <span>${opt.text}</span>`;
+          btn.onclick = () => {
+            playPopSound();
+            interestSelections[iq.id] = opt.key;
+            renderInterestQuestions();
+            updateRecommendation();
+            updateJsonView();
+          };
+          optGrid.appendChild(btn);
+        });
+
+        box.appendChild(cat);
+        box.appendChild(qTitle);
+        box.appendChild(optGrid);
+        container.appendChild(box);
+      });
+
+      updateRecommendation();
+    }
+
+    function applyPreset(presetType) {
+      playPopSound();
+      if (presetType === 'ridheya') {
+        interestSelections = {
+          int_1: 'malaysia_vet',
+          int_2: 'city_malaysia',
+          int_3: 'stray_dog_kopi',
+          int_4: 'vet_toolkit',
+          int_5: 'adopted_kopi',
+          int_6: 'team_malaysia_friends'
+        };
+      } else {
+        interestSelections = {
+          int_1: 'jungle_magic',
+          int_2: 'night_jungle',
+          int_3: 'zombie_monkey',
+          int_4: 'teleportation',
+          int_5: 'baby_giraffe_apple',
+          int_6: 'talking_animals'
+        };
+      }
+      renderInterestQuestions();
+      updateJsonView();
+    }
+
+    function updateRecommendation() {
+      const vals = Object.values(interestSelections);
+      const isMalaysia = vals.some(v => ['malaysia_vet', 'city_malaysia', 'stray_dog_kopi', 'kingfisher_stone', 'vet_toolkit', 'adopted_kopi', 'team_malaysia_friends'].includes(v));
+      const isJungle = vals.some(v => ['jungle_magic', 'night_jungle', 'zombie_monkey', 'teleportation', 'baby_giraffe_apple', 'talking_elephant_raja', 'guide_monkey_zazu', 'talking_animals'].includes(v));
+      
+      const recText = document.getElementById('interestRecText');
+      if (isMalaysia && !isJungle) {
+        recText.textContent = "🩺 Ridheya's Dierenkliniek in Maleisië (Kuala Lumpur) • Hond Kopi & IJsvogel";
+      } else if (isJungle) {
+        recText.textContent = "✨ Hemali's Magische Nachtjungle (Taman Negara) • Teleportatie & Olifant Raja";
+      } else {
+        recText.textContent = "👑 Zussen Team & Het Onderzoeksschip (Savanne Safari) • Simba de Leeuw";
+      }
+    }
+
+    function startRecommendedCampaign() {
+      playStarSound();
+      triggerConfetti();
+      const vals = Object.values(interestSelections);
+      const isMalaysia = vals.some(v => ['malaysia_vet', 'city_malaysia', 'stray_dog_kopi', 'kingfisher_stone', 'vet_toolkit', 'adopted_kopi', 'team_malaysia_friends'].includes(v));
+      const isJungle = vals.some(v => ['jungle_magic', 'night_jungle', 'zombie_monkey', 'teleportation', 'baby_giraffe_apple', 'talking_elephant_raja', 'guide_monkey_zazu', 'talking_animals'].includes(v));
+      
+      if (isMalaysia && !isJungle) {
+        setProfile('ridheya');
+        selectCampaign('ridheya_malaysia');
+      } else if (isJungle) {
+        setProfile('hemali');
+        selectCampaign('hemali_jungle');
+      } else {
+        selectCampaign('sisters_safari');
+      }
+      switchTab('rpg');
+    }
+
+    // ==========================================
+    // DICTIONARY & HELPER ENGINE
+    // ==========================================
+    let currentModalWord = 'dierenarts';
+
+    function syllabifyOffline(word) {
+      if (!word) return ['...'];
+      const vowels = /[aeiouyáéíóúàèëïöü]/i;
+      const lower = word.toLowerCase();
+      
+      // Known irregular/common breaks
+      const known = {
+        'dierenarts': ['die', 'ren', 'arts'],
+        'dierenartstas': ['die', 'ren', 'arts', 'tas'],
+        'glimlach': ['glim', 'lach'],
+        'glimlachen': ['glim', 'la', 'chen'],
+        'glimlachte': ['glim', 'lach', 'te'],
+        'wonderzalf': ['won', 'der', 'zalf'],
+        'tuinkliniek': ['tuin', 'kli', 'niek'],
+        'desondanks': ['des', 'on', 'danks'],
+        'daardoor': ['daar', 'door'],
+        'teleportatie': ['te', 'le', 'por', 'ta', 'tie'],
+        'teleporteren': ['te', 'le', 'por', 'te', 'ren'],
+        'zombie-aapje': ['zom', 'bie', 'aap', 'je'],
+        'girafje': ['gi', 'raf', 'je'],
+        'onderzoeksschip': ['on', 'der', 'zoek', 'schip'],
+        'achterdochtig': ['ach', 'ter', 'doch', 'tig'],
+        'heldhaftig': ['held', 'haf', 'tig'],
+        'bovendien': ['bo', 'ven', 'dien'],
+        'verrekijker': ['ver', 're', 'kij', 'ker'],
+        'ijsvogel': ['ijs', 'vo', 'gel'],
+        'spalken': ['spal', 'ken']
+      };
+      if (known[lower]) return known[lower];
+
+      // Simple phonetic syllabification fallback
+      const chunks = [];
+      let cur = '';
+      for (let i = 0; i < lower.length; i++) {
+        cur += lower[i];
+        if (vowels.test(lower[i]) && i < lower.length - 2 && !vowels.test(lower[i+1]) && vowels.test(lower[i+2])) {
+          chunks.push(cur);
+          cur = '';
+        } else if (vowels.test(lower[i]) && i < lower.length - 3 && !vowels.test(lower[i+1]) && !vowels.test(lower[i+2]) && vowels.test(lower[i+3])) {
+          cur += lower[i+1];
+          i++;
+          chunks.push(cur);
+          cur = '';
+        }
+      }
+      if (cur) chunks.push(cur);
+      return chunks.length > 0 ? chunks : [word];
+    }
+
+    function lookupDutchWordOffline(rawWord) {
+      if (!rawWord) return null;
+      const clean = rawWord.toLowerCase().replace(/[^a-z-]/g, '');
+      
+      // 1. Direct match in dictionary
+      if (OFFLINE_DICTIONARY[clean]) {
+        const item = OFFLINE_DICTIONARY[clean];
+        return {
+          word: rawWord,
+          cleanWord: clean,
+          syllables: item.syllables || syllabifyOffline(clean),
+          type: item.type || 'Zelfstandig naamwoord',
+          compound: item.compound || null,
+          nl: item.nl,
+          en: item.en,
+          example: item.example || `Ridheya en Hemali leerden het woord "${clean}" tijdens hun avontuur.`
+        };
+      }
+
+      // 2. Verb past tense & inflections (-te, -ten, -de, -den, -t, -en)
+      const verbSuffixes = [
+        { suf: 'ten', repl: 'ten', type: 'Werkwoord (verleden tijd mv.)' },
+        { suf: 'den', repl: 'den', type: 'Werkwoord (verleden tijd mv.)' },
+        { suf: 'te', repl: '', type: 'Werkwoord (verleden tijd)', inf: 'en' },
+        { suf: 'de', repl: '', type: 'Werkwoord (verleden tijd)', inf: 'en' },
+        { suf: 'end', repl: '', type: 'Tegenwoordig deelwoord' }
+      ];
+
+      for (const vs of verbSuffixes) {
+        if (clean.endsWith(vs.suf) && clean.length > vs.suf.length + 2) {
+          const stem = clean.slice(0, -vs.suf.length);
+          const candidates = [stem + 'en', stem, stem + 'n'];
+          for (const cand of candidates) {
+            if (OFFLINE_DICTIONARY[cand]) {
+              const base = OFFLINE_DICTIONARY[cand];
+              return {
+                word: rawWord,
+                cleanWord: clean,
+                syllables: syllabifyOffline(clean),
+                type: vs.type,
+                compound: base.compound || null,
+                nl: `${vs.type} van "${cand}": ${base.nl}`,
+                en: `${base.en} (past / inflected form of "${cand}")`,
+                example: base.example || `Hemali en Ridheya ${clean} vol verwondering.`
+              };
+            }
+          }
+        }
+      }
+
+      // 3. Diminutives (-je, -pje, -tje, -kje, -etje) & Plurals (-en, -s)
+      if (clean.endsWith('jes') || clean.endsWith('je')) {
+        const stem = clean.replace(/j?es$/, '').replace(/je$/, '');
+        if (OFFLINE_DICTIONARY[stem]) {
+          const base = OFFLINE_DICTIONARY[stem];
+          return {
+            word: rawWord,
+            cleanWord: clean,
+            syllables: syllabifyOffline(clean),
+            type: 'Verkleinwoord (diminutive)',
+            compound: `${stem} + je`,
+            nl: `Een klein of schattig exemplaar van ${stem}: ${base.nl}`,
+            en: `Little / small ${base.en}`,
+            example: base.example || `Het ${clean} keek nieuwsgierig rond.`
+          };
+        }
+      }
+
+      if (clean.endsWith('en') && clean.length > 4) {
+        const stem = clean.slice(0, -2);
+        if (OFFLINE_DICTIONARY[stem]) {
+          const base = OFFLINE_DICTIONARY[stem];
+          return {
+            word: rawWord,
+            cleanWord: clean,
+            syllables: syllabifyOffline(clean),
+            type: 'Meervoud / Werkwoord',
+            compound: base.compound || null,
+            nl: `Meervoud of vorm van ${stem}: ${base.nl}`,
+            en: `Plural / form of ${base.en}`,
+            example: base.example
+          };
+        }
+      }
+
+      // 4. Compound decomposition across dictionary keys
+      const keys = Object.keys(OFFLINE_DICTIONARY).sort((a, b) => b.length - a.length);
+      for (const k1 of keys) {
+        if (k1.length >= 3 && clean.startsWith(k1)) {
+          const remainder = clean.slice(k1.length).replace(/^-/, '');
+          if (OFFLINE_DICTIONARY[remainder]) {
+            const e1 = OFFLINE_DICTIONARY[k1];
+            const e2 = OFFLINE_DICTIONARY[remainder];
+            return {
+              word: rawWord,
+              cleanWord: clean,
+              syllables: syllabifyOffline(clean),
+              type: 'Samenstelling',
+              compound: `${k1} + ${remainder}`,
+              nl: `Samengesteld woord uit "${k1}" (${e1.en}) en "${remainder}" (${e2.en}).`,
+              en: `${e1.en} + ${e2.en}`,
+              example: `In het verhaal wordt "${clean}" gebruikt als samengesteld kernbegrip.`
+            };
+          }
+        }
+      }
+
+      // 5. Intelligent Fallback with Syllables and Grammar
+      const syll = syllabifyOffline(clean);
+      let detectedType = 'Woord uit het verhaal';
+      if (clean.endsWith('en') || clean.endsWith('te') || clean.endsWith('de')) detectedType = 'Werkwoordsvorm';
+      else if (clean.endsWith('ig') || clean.endsWith('lijk') || clean.endsWith('isch')) detectedType = 'Bijvoeglijk naamwoord';
+      else if (clean.endsWith('ing') || clean.endsWith('heid')) detectedType = 'Zelfstandig naamwoord';
+
+      return {
+        word: rawWord,
+        cleanWord: clean,
+        syllables: syll,
+        type: detectedType,
+        compound: null,
+        nl: `Een belangrijk Nederlands woord in de tekst van Ridheya en Hemali.`,
+        en: `Dutch vocabulary word (${clean})`,
+        example: `In de zinnen helpt dit woord om het verhaal spannend en begrijpelijk te maken.`
+      };
+    }
+
+    function openWordModal(rawWord) {
+      playPopSound();
+      currentModalWord = rawWord;
+      const data = lookupDutchWordOffline(rawWord);
+      if (!data) return;
+
+      document.getElementById('modalWordTitle').textContent = data.cleanWord;
+      
+      const syllableStr = data.syllables.join(' · ');
+      const compoundHtml = data.compound ? `
+        <div style="background:#fffbeb; border:1px solid #fde68a; border-radius:12px; padding:8px 12px; display:flex; align-items:center; gap:8px;">
+          <span style="font-size:16px;">🧩</span>
+          <div style="font-size:12px; font-weight:800; color:#b45309;">
+            Samenstelling: <span style="color:#92400e; font-weight:900;">${data.compound}</span>
+          </div>
+        </div>` : '';
+
+      const bodyHtml = `
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px;">
+          <div>
+            <div style="font-size:16px; font-weight:900; color:#047857; letter-spacing:0.04em;">
+              🗣️ ${syllableStr}
+            </div>
+            <div style="font-size:11px; font-weight:800; color:#64748b; margin-top:2px;">
+              Klankgroepen (Lettergrepen)
+            </div>
+          </div>
+          <span style="font-size:11px; font-weight:900; background:#e0e7ff; color:#3730a3; padding:4px 10px; border-radius:8px;">
+            ${data.type}
+          </span>
+        </div>
+
+        ${compoundHtml}
+
+        <div style="background:#f8fafc; border:1.5px solid #e2e8f0; border-radius:16px; padding:12px 14px;">
+          <div style="font-size:11px; font-weight:900; text-transform:uppercase; color:#64748b; letter-spacing:0.04em; margin-bottom:4px;">
+            📖 Nederlandse Betekenis (Cito)
+          </div>
+          <div style="font-size:14px; font-weight:700; color:#0f172a; line-height:1.45;">
+            ${data.nl}
+          </div>
+        </div>
+
+        <div style="background:#ecfdf5; border:1.5px solid #a7f3d0; border-radius:16px; padding:12px 14px;">
+          <div style="font-size:11px; font-weight:900; text-transform:uppercase; color:#065f46; letter-spacing:0.04em; margin-bottom:4px;">
+            🇬🇧 Engelse Vertaling (Kobo Hulp)
+          </div>
+          <div style="font-size:14px; font-weight:800; color:#047857;">
+            ${data.en}
+          </div>
+        </div>
+
+        <div style="background:#fffbeb; border:1.5px solid #fde68a; border-radius:16px; padding:12px 14px;">
+          <div style="font-size:11px; font-weight:900; text-transform:uppercase; color:#92400e; letter-spacing:0.04em; margin-bottom:4px;">
+            💡 Voorbeeldzin in de Praktijk
+          </div>
+          <div style="font-size:13px; font-style:italic; color:#78350f; line-height:1.45;">
+            "${data.example}"
+          </div>
+        </div>
+      `;
+
+      document.getElementById('modalWordBody').innerHTML = bodyHtml;
+      document.getElementById('wordModalBackdrop').style.display = 'flex';
+    }
+
+    function closeWordModal(e) {
+      if (e) e.stopPropagation();
+      const backdrop = document.getElementById('wordModalBackdrop');
+      if (backdrop) backdrop.style.display = 'none';
+    }
+
+    function speakCurrentModalWord() {
+      if (currentModalWord) {
+        speakText(currentModalWord);
+      }
+    }
+
+    function openInDictionaryTab() {
+      closeWordModal();
+      switchTab('dict');
+      document.getElementById('dictSearchInput').value = currentModalWord;
+      lookupDictWord(currentModalWord);
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeWordModal();
+    });
+
+    function handleDictSearch() {
+      const query = document.getElementById('dictSearchInput').value.trim().toLowerCase();
+      if (query) {
+        lookupDictWord(query);
+      }
+    }
+
+    function lookupDictWord(word) {
+      playPopSound();
+      document.getElementById('dictSearchInput').value = word;
+      const clean = word.toLowerCase().replace(/[^a-z-]/g, '');
+      const entry = lookupDutchWordOffline(clean);
+
+      const resCard = document.getElementById('dictResultCard');
+      resCard.style.display = 'block';
+
+      if (entry) {
+        const syllableStr = entry.syllables ? entry.syllables.join(' · ') : clean;
+        const compoundStr = entry.compound ? `<div style="font-size:12px; color:#b45309; font-weight:800; margin-top:2px;">Samenstelling: ${entry.compound}</div>` : '';
+        resCard.innerHTML = `
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+            <div>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <h3 style="font-size:18px; font-weight:900; color:#0f172a;">${entry.cleanWord}</h3>
+                <span style="font-size:11px; font-weight:900; background:#e0e7ff; color:#3730a3; padding:2px 8px; border-radius:6px;">${entry.type}</span>
+              </div>
+              <div style="font-size:13px; font-weight:800; color:#059669; margin-top:2px;">${syllableStr}</div>
+              ${compoundStr}
+            </div>
+
+            <button onclick="speakText('${entry.cleanWord}')" class="audio-btn">
+              <span>🔊</span> Spreek Uit
+            </button>
+          </div>
+
+          <div style="margin-top:12px; font-size:14px; color:#1e293b; line-height:1.5;">
+            <b>Nederlandse Betekenis:</b> ${entry.nl}
+          </div>
+
+          <div style="margin-top:6px; font-size:13px; color:#047857; font-weight:700;">
+            <b>Engelse Vertaling:</b> ${entry.en}
+          </div>
+
+          ${entry.example ? `
+          <div style="margin-top:10px; background:#fffbeb; border:1px solid #fde68a; border-radius:12px; padding:10px 14px; font-size:13px; color:#78350f;">
+            <b>Voorbeeldzin:</b> "${entry.example}"
+          </div>` : ''}
+        `;
+      }
+    }
+
+    // ==========================================
+    // JSON EXPORT & DOWNLOAD
+    // ==========================================
+    function generateDiagnosticJson() {
+      const qList = CITO_QUESTIONS[currentProfile] || CITO_QUESTIONS['ridheya'];
+      let correct = 0;
+      let answered = 0;
+      qList.forEach(q => {
+        if (userAnswers[q.id] !== undefined) {
+          answered++;
+          if (userAnswers[q.id] === q.correct) correct++;
+        }
+      });
+
+      return {
+        assessmentTitle: `Diagnostic Reading & Interest Assessment - ${PROFILES[currentProfile].name} (${PROFILES[currentProfile].gradeLevel})`,
+        timestamp: new Date().toISOString(),
+        studentProfile: {
+          name: PROFILES[currentProfile].name,
+          gradeLevel: PROFILES[currentProfile].gradeLevel,
+          aviLevel: PROFILES[currentProfile].aviLevel,
+          activeCampaign: CAMPAIGNS[currentCampaignId].title
+        },
+        performanceScore: {
+          totalAnswered: answered,
+          totalCorrect: correct,
+          accuracyPercentage: answered > 0 ? Math.round((correct / answered) * 100) : 0
+        },
+        interestPreferences: interestSelections,
+        placementQuestions: qList.map(q => ({
+          id: q.id,
+          curriculumLevel: q.curriculumLevel,
+          skillTested: q.skillTested,
+          passage: q.passage,
+          question: q.question,
+          options: q.options,
+          correctIndex: q.correct,
+          studentAnswer: userAnswers[q.id] !== undefined ? userAnswers[q.id] : null,
+          isCorrect: userAnswers[q.id] !== undefined ? (userAnswers[q.id] === q.correct) : false,
+          explanation: q.expl
+        }))
+      };
+    }
+
+    function updateJsonView() {
+      const json = generateDiagnosticJson();
+      const el = document.getElementById('jsonPreviewBox');
+      if (el) {
+        el.textContent = JSON.stringify(json, null, 2);
+      }
+    }
+
+    function copyJsonText() {
+      playStarSound();
+      const json = generateDiagnosticJson();
+      navigator.clipboard.writeText(JSON.stringify(json, null, 2));
+      alert('✅ JSON Diagnose Rapport is gekopieerd naar het klembord!');
+    }
+
+    function downloadJsonFile() {
+      playStarSound();
+      const json = generateDiagnosticJson();
+      const blob = new Blob([JSON.stringify(json, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Cito_Diagnose_${currentProfile}_${new Date().toISOString().slice(0,10)}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+  </script>
+</body>
+</html>

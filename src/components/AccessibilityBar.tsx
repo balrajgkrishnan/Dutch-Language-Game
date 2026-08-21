@@ -6,11 +6,15 @@ import { sound } from '../services/soundService';
 interface AccessibilityBarProps {
   settings: AccessibilitySettings;
   onChangeSettings: (updater: (prev: AccessibilitySettings) => AccessibilitySettings) => void;
+  onOpenVoiceModal?: () => void;
+  onOpenDictionaryModal?: () => void;
 }
 
 export const AccessibilityBar: React.FC<AccessibilityBarProps> = ({
   settings,
-  onChangeSettings
+  onChangeSettings,
+  onOpenVoiceModal,
+  onOpenDictionaryModal
 }) => {
   return (
     <div className="w-full max-w-5xl mx-auto px-3 sm:px-4 py-1.5 flex items-center justify-between gap-2 text-xs flex-wrap bg-white/70 backdrop-blur-xs rounded-2xl border border-slate-200 shadow-2xs mb-2">
@@ -20,6 +24,34 @@ export const AccessibilityBar: React.FC<AccessibilityBarProps> = ({
       </div>
 
       <div className="flex items-center gap-2 flex-wrap">
+        {/* Dictionary Button */}
+        {onOpenDictionaryModal && (
+          <button
+            onClick={() => {
+              sound.playPop();
+              onOpenDictionaryModal();
+            }}
+            className="px-2.5 py-1 rounded-xl text-[10px] font-black cursor-pointer transition-all bg-amber-50 hover:bg-amber-100 text-amber-900 shadow-2xs flex items-center gap-1 border border-amber-300 active:scale-95"
+            title="Open het interactieve Nederlandse woordenboek"
+          >
+            <span>📖 Woordenboek</span>
+          </button>
+        )}
+
+        {/* Voice Persona / Audio Tuning Button */}
+        {onOpenVoiceModal && (
+          <button
+            onClick={() => {
+              sound.playPop();
+              onOpenVoiceModal();
+            }}
+            className="px-2.5 py-1 rounded-xl text-[10px] font-black cursor-pointer transition-all bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white shadow-2xs flex items-center gap-1 border border-amber-600 active:scale-95"
+            title="Kies een vrolijke, vrouwelijke voorleesstem of stel de snelheid in"
+          >
+            <span>🎙️ Vrolijke Stem 🌸</span>
+          </button>
+        )}
+
         {/* Dyslexia Font Button */}
         <button
           onClick={() => {

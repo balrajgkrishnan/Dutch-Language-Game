@@ -1,4 +1,5 @@
 // Web Audio API & Speech Synthesis for kid-friendly interactive sounds
+import { speech } from './speechService';
 
 class SoundService {
   private ctx: AudioContext | null = null;
@@ -210,40 +211,24 @@ class SoundService {
     osc.stop(now + 0.45);
   }
 
-  // Spoken Dutch text-to-speech for young learners
-  speakDutch(text: string) {
-    if (!this.speechEnabled || typeof window === 'undefined' || !('speechSynthesis' in window)) {
+  // Spoken Dutch text-to-speech for young learners (routed via high-quality speechService)
+  speakDutch(text: string, options?: { rate?: number; pitch?: number }) {
+    if (!this.speechEnabled || typeof window === 'undefined') {
       return;
     }
-
     try {
-      window.speechSynthesis.cancel(); // cancel any active speech
-      const cleanText = text.replace(/<[^>]*>?/gm, ''); // strip HTML tags
-      const utterance = new SpeechSynthesisUtterance(cleanText);
-      utterance.lang = 'nl-NL';
-      utterance.rate = 0.92; // slightly slower for young learners
-      utterance.pitch = 1.1; // friendly, warm pitch
-
-      const voices = window.speechSynthesis.getVoices();
-      const dutchVoice = voices.find(v => v.lang.startsWith('nl') || v.lang.includes('NL'));
-      if (dutchVoice) {
-        utterance.voice = dutchVoice;
-      }
-
-      window.speechSynthesis.speak(utterance);
+      speech.speak(text, options);
     } catch {
       // ignore TTS errors safely
     }
   }
 
-  speak(text: string) {
-    this.speakDutch(text);
+  speak(text: string, options?: { rate?: number; pitch?: number }) {
+    this.speakDutch(text, options);
   }
 
   stopSpeaking() {
-    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-    }
+    speech.stop();
   }
 }
 

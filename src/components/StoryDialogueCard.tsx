@@ -5,6 +5,7 @@ import { Animal, BiomeType } from '../types';
 import { BIOMES } from '../data/biomeData';
 import { TessAvatar } from './TessAvatar';
 import { sound } from '../services/soundService';
+import { InteractiveDutchText } from './InteractiveDutchText';
 
 interface StoryDialogueCardProps {
   biome: BiomeType;
@@ -102,16 +103,16 @@ export const StoryDialogueCard: React.FC<StoryDialogueCardProps> = ({
         {/* Speech Bubble / Dialogue */}
         <div className="flex-1 bg-amber-50/70 border border-amber-200/80 rounded-2xl p-3.5 sm:p-4 text-slate-800 relative">
           {/* Dialogue text */}
-          <p className="text-xs sm:text-sm font-semibold leading-relaxed text-slate-700">
+          <div className="text-xs sm:text-sm font-semibold leading-relaxed text-slate-700">
             <span className="font-black text-emerald-800">"</span>
-            {storyText}
+            <InteractiveDutchText text={storyText} />
             <span className="font-black text-emerald-800">"</span>
-          </p>
+          </div>
 
           {/* Fun Fact snippet */}
           <div className="mt-2.5 pt-2 border-t border-amber-200/60 flex items-start gap-1.5 text-[11px] text-amber-900 font-medium">
             <span className="text-amber-600 font-bold flex-shrink-0">💡 Wist je dat:</span>
-            <span>{animal.funFact}</span>
+            <span><InteractiveDutchText text={animal.funFact} /></span>
           </div>
         </div>
       </div>
@@ -128,9 +129,9 @@ export const StoryDialogueCard: React.FC<StoryDialogueCardProps> = ({
               Begrijpend Lezen 📖
             </span>
           </div>
-          <p className="text-xs sm:text-sm font-medium leading-relaxed text-slate-700 italic bg-white/60 p-3 rounded-xl border border-emerald-100">
-            "{passage}"
-          </p>
+          <div className="text-xs sm:text-sm font-medium leading-relaxed text-slate-700 italic bg-white/60 p-3 rounded-xl border border-emerald-100">
+            "<InteractiveDutchText text={passage} />"
+          </div>
         </div>
       )}
     </div>
