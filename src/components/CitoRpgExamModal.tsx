@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   X, BookOpen, Sparkles, Volume2, ArrowRight, CheckCircle2, 
   RotateCcw, Award, Compass, HelpCircle, FileText, Download, 
-  Copy, Check, UserCheck, Flame, Star, Lightbulb, ExternalLink
+  Copy, Check, UserCheck, Flame, Star, Lightbulb, ExternalLink,
+  Maximize2, Minimize2
 } from 'lucide-react';
 import { 
   PROTAGONISTS, 
@@ -58,6 +59,61 @@ export const CitoRpgExamModal: React.FC<CitoRpgExamModalProps> = ({
 
   // JSON copy indicator
   const [hasCopiedJson, setHasCopiedJson] = useState<boolean>(false);
+
+  // Fullscreen state and ref
+  const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
+  const modalContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(Boolean(document.fullscreenElement));
+    };
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+    document.addEventListener('mozfullscreenchange', handleFullscreenChange);
+    document.addEventListener('MSFullscreenChange', handleFullscreenChange);
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
+      document.removeEventListener('webkitfullscreenchange', handleFullscreenChange);
+      document.removeEventListener('mozfullscreenchange', handleFullscreenChange);
+      document.removeEventListener('MSFullscreenChange', handleFullscreenChange);
+    };
+  }, []);
+
+  const toggleFullscreen = async () => {
+    sound.playPop();
+    try {
+      if (!document.fullscreenElement) {
+        if (modalContainerRef.current) {
+          const el = modalContainerRef.current as any;
+          if (el.requestFullscreen) {
+            await el.requestFullscreen();
+          } else if (el.webkitRequestFullscreen) {
+            await el.webkitRequestFullscreen();
+          } else if (el.msRequestFullscreen) {
+            await el.msRequestFullscreen();
+          } else {
+            setIsFullscreen(prev => !prev);
+          }
+        } else {
+          setIsFullscreen(prev => !prev);
+        }
+      } else {
+        const doc = document as any;
+        if (doc.exitFullscreen) {
+          await doc.exitFullscreen();
+        } else if (doc.webkitExitFullscreen) {
+          await doc.webkitExitFullscreen();
+        } else if (doc.msExitFullscreen) {
+          await doc.msExitFullscreen();
+        }
+        setIsFullscreen(false);
+      }
+    } catch (err) {
+      // Fallback for sandboxed iframe environments
+      setIsFullscreen(prev => !prev);
+    }
+  };
 
   if (!isOpen) return null;
 
@@ -208,12 +264,17 @@ export const CitoRpgExamModal: React.FC<CitoRpgExamModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-md flex items-center justify-center p-2 sm:p-4 overflow-y-auto">
+    <div className={`fixed inset-0 z-50 bg-slate-950/75 backdrop-blur-md flex items-center justify-center ${isFullscreen ? 'p-0' : 'p-2 sm:p-4'} overflow-y-auto`}>
       <motion.div
+        ref={modalContainerRef}
         initial={{ opacity: 0, scale: 0.95, y: 15 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 15 }}
-        className="bg-white rounded-3xl shadow-2xl border-2 border-emerald-300 w-full max-w-5xl max-h-[94vh] flex flex-col overflow-hidden text-slate-800"
+        className={`bg-white ${
+          isFullscreen 
+            ? 'w-full h-full max-w-none max-h-none rounded-none border-0' 
+            : 'rounded-3xl shadow-2xl border-2 border-emerald-300 w-full max-w-5xl max-h-[94vh]'
+        } flex flex-col overflow-hidden text-slate-800 transition-all duration-150`}
       >
         {/* Header Bar */}
         <div className="bg-gradient-to-r from-emerald-700 via-teal-700 to-indigo-800 text-white p-4 sm:p-5 flex items-center justify-between gap-3 flex-wrap">
@@ -237,6 +298,15 @@ export const CitoRpgExamModal: React.FC<CitoRpgExamModalProps> = ({
           </div>
 
           <div className="flex items-center gap-2">
+            <button
+              onClick={toggleFullscreen}
+              className="bg-white/15 hover:bg-white/25 border border-white/30 text-white px-3 py-1.5 rounded-xl text-xs font-black transition-all flex items-center gap-1.5 cursor-pointer shadow-xs active:scale-95"
+              title={isFullscreen ? 'Verlaat Volledig Scherm' : 'Volledig Scherm (Laptop / Cito Modus)'}
+            >
+              {isFullscreen ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}
+              <span className="hidden sm:inline">{isFullscreen ? 'Venster' : 'Volledig Scherm'}</span>
+            </button>
+
             <button
               onClick={handleDownloadStandaloneHtml}
               className="bg-emerald-500/20 hover:bg-emerald-500/35 border border-emerald-300/40 text-emerald-100 hover:text-white px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-xs"
