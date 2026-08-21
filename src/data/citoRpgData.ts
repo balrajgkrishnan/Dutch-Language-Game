@@ -249,6 +249,112 @@ export const PLACEMENT_QUESTIONS: PlacementQuestion[] = [
       }
     ]
   },
+  {
+    id: 'cito_r_5',
+    curriculumLevel: 'Groep 3-4 (M3-E4)',
+    skillTested: 'Begrijpend Lezen & Details Vinden',
+    contextHeader: '🩺 Het Onderzoek met de Stethoscoop',
+    passage: 'Ridheya zet haar glanzende stethoscoop op de borstkas van Kopi de hond. Ze luistert heel stil. **Boem-boem, boem-boem**. Zijn hartje klopt rustig en regelmatig. Ridheya knikt tevreden naar Mei-Ling.',
+    question: 'Hoe weet Ridheya dat het hondje niet meer bang is?',
+    options: [
+      'Omdat de hond begint te blaffen tegen de bakfiets',
+      'Omdat zijn hartje via de stethoscoop rustig en regelmatig klopt',
+      'Omdat het hondje wegrent naar het strand',
+      'Omdat Mei-Ling een pleister op haar vinger plakt'
+    ],
+    correctIndex: 1,
+    explanation: 'Ridheya hoort met haar stethoscoop dat zijn hartje rustig en regelmatig klopt.',
+    wordHelp: [
+      {
+        word: 'stethoscoop',
+        breakdown: 'stetho + scoop',
+        dutchMeaning: 'een medisch instrument waarmee een arts naar het hart en de longen luistert.',
+        englishMeaning: 'Stethoscope'
+      }
+    ]
+  },
+  {
+    id: 'cito_r_6',
+    curriculumLevel: 'Groep 3-4 (M3-E4)',
+    skillTested: 'Samengestelde woorden ontleden (wonder + zalf)',
+    contextHeader: '🌿 De Natuurlijke Medicijnen',
+    passage: 'Mei-Ling plukt verse aloë vera en mengt dit met kokosolie tot een zachte **wonderzalf**. Ridheya smeert het voorzichtig op het pootje van Kopi, **zodat** het wondje snel dichtgroeit.',
+    question: 'Wat is "wonderzalf" volgens de zin?',
+    options: [
+      'Een koude ijscoupe met fruit',
+      'Een speciale genezende zalf die wonden helpt herstellen',
+      'Verf om een schilderij mee te maken',
+      'Zeep om de straat mee schoon te schrobben'
+    ],
+    correctIndex: 1,
+    explanation: 'Wonderzalf is samengesteld uit wonder + zalf: een weldadige zalf die wonden bijzonder goed heelt.',
+    wordHelp: [
+      {
+        word: 'wonderzalf',
+        breakdown: 'wonder + zalf',
+        dutchMeaning: 'een zalf die wonden heel snel en zacht geneest.',
+        englishMeaning: 'Miracle ointment'
+      },
+      {
+        word: 'zodat',
+        dutchMeaning: 'geeft het doel aan (met het resultaat dat).',
+        englishMeaning: 'So that / in order that'
+      }
+    ]
+  },
+  {
+    id: 'cito_r_7',
+    curriculumLevel: 'Groep 3-4 (M3-E4)',
+    skillTested: 'Tijdsvolgorde & Stappenplan (eerst, daarna, tenslotte)',
+    contextHeader: '🩹 Het Stappenplan van Dierenarts Ridheya',
+    passage: '**Eerst** spoelt Ridheya het zand van het pootje met schoon water. **Daarna** smeert ze verzachtende zalf op de snee. **Tenslotte** wikkelt ze een wit verbandje om het pootje.',
+    question: 'Wat doet Ridheya als **tweede stap** (daarna)?',
+    options: [
+      'Ze wikkelt meteen het witte verbandje eromheen',
+      'Ze smeert verzachtende zalf op de snee',
+      'Ze spoelt het zand van het pootje',
+      'Ze fietst met Amir naar de markt'
+    ],
+    correctIndex: 1,
+    explanation: 'Het signaalwoord "Daarna" geeft de tweede stap aan: het smeren van de verzachtende zalf.',
+    wordHelp: [
+      {
+        word: 'daarna',
+        dutchMeaning: 'vervolgens, na de eerste stap.',
+        englishMeaning: 'After that / next'
+      },
+      {
+        word: 'tenslotte',
+        breakdown: 'ten + slotte',
+        dutchMeaning: 'als allerlaatste stap.',
+        englishMeaning: 'Finally / lastly'
+      }
+    ]
+  },
+  {
+    id: 'cito_r_8',
+    curriculumLevel: 'Groep 3-4 (M3-E4)',
+    skillTested: 'Emoties & Woordbetekenis (dankbaar / opgelucht)',
+    contextHeader: '🎉 De Blije Zwerfhond Kopi',
+    passage: 'Als Kopi een kommetje rijst met vis opheeft, geeft hij Ridheya een zacht likje over haar hand. Ridheya voelt zich intens **dankbaar** dat ze het diertje op tijd heeft kunnen helpen.',
+    question: 'Wat betekent het als Ridheya zich "**dankbaar**" voelt?',
+    options: [
+      'Ze is heel boos op de bakfiets',
+      'Ze is blij en heeft een warm gevoel over de goede afloop',
+      'Ze heeft heel veel dorst gekregen',
+      'Ze wil naar huis rennen'
+    ],
+    correctIndex: 1,
+    explanation: 'Dankbaar betekent dat je blij en voldaan bent met de hulp en het mooie resultaat.',
+    wordHelp: [
+      {
+        word: 'dankbaar',
+        breakdown: 'dank + baar',
+        dutchMeaning: 'vol dankbaarheid en vreugde.',
+        englishMeaning: 'Grateful / thankful'
+      }
+    ]
+  },
 
   // --- GROEP 5-6 (HEMALI) ---
   {
@@ -359,6 +465,99 @@ export const PLACEMENT_QUESTIONS: PlacementQuestion[] = [
         breakdown: 'een + dracht',
         dutchMeaning: 'harmonieus samenwerken voor een goed doel.',
         englishMeaning: 'Unity / solidarity'
+      }
+    ]
+  },
+  {
+    id: 'cito_h_5',
+    curriculumLevel: 'Groep 5-6 (M5-E6)',
+    skillTested: 'Signaalwoorden van opsomming (bovendien / tevens)',
+    contextHeader: '📜 Het Oude Perkament van de Tempel',
+    passage: 'De tempelwachters hadden een waarschuwing in het graniet gebeiteld. Het pad naar de bergtop was steil en bezaaid met losse keien. **Bovendien** veranderde de stand van de sterren elk uur, waardoor gewone kompassen nutteloos werden.',
+    question: 'Welke functie heeft het woord "**Bovendien**" in deze tekst?',
+    options: [
+      'Het geeft een tegenstelling aan met de stenen',
+      'Het voegt een extra moeilijkheid of argument toe aan de opsomming',
+      'Het legt uit waarom het pad naar beneden loopt',
+      'Het verklaart hoe laat het precies is'
+    ],
+    correctIndex: 1,
+    explanation: '"Bovendien" is een signaalwoord van opsomming: het voegt een extra belemmering toe aan de al genoemde gevaren.',
+    wordHelp: [
+      {
+        word: 'bovendien',
+        dutchMeaning: 'daarbovenop, ook nog eens.',
+        englishMeaning: 'Furthermore / moreover'
+      }
+    ]
+  },
+  {
+    id: 'cito_h_6',
+    curriculumLevel: 'Groep 5-6 (M5-E6)',
+    skillTested: 'Verwijswoorden & Voornaamwoorden (hetgeen / welk)',
+    contextHeader: '🐘 De Telepathische Boodschap van Raja',
+    passage: 'Raja sloot zijn ogen en stuurde een warme gedachte naar Hemali, **hetgeen** haar met hernieuwde moed vervulde. Zonder te twijfelen stapte zij op de gloeiende runensteen.',
+    question: 'Waar verwijst het woord "**hetgeen**" naar?',
+    options: [
+      'De gloeiende runensteen',
+      'Het feit dat Raja haar een warme gedachte stuurde',
+      'Haar saffieren toverstaf',
+      'De losse keien op het bergpad'
+    ],
+    correctIndex: 1,
+    explanation: '"Hetgeen" is een betrekkelijk voornaamwoord dat terugslaat op de gehele voorafgaande handeling: het sturen van de gedachte door Raja.',
+    wordHelp: [
+      {
+        word: 'hetgeen',
+        dutchMeaning: 'wat, datgene wat net genoemd is.',
+        englishMeaning: 'Which / that which'
+      }
+    ]
+  },
+  {
+    id: 'cito_h_7',
+    curriculumLevel: 'Groep 5-6 (M5-E6)',
+    skillTested: 'Conclusies trekken & Tekstverbanden (Cito Doorstroomtoets)',
+    contextHeader: '🦒 De Moessonstorm & De Redding van Appel',
+    passage: 'Girafje Appel rilde niet meer van de kou, maar dronk rustig van de verse kokosmelk. Haar unieke appelvormige vlekjes kleurden weer warm goudbruin in de opkomende zon. Hemali noteerde in haar expeditielogboek dat het herstel voorspoedig verliep.',
+    question: 'Welke conclusie kun je met zekerheid trekken uit deze passage?',
+    options: [
+      'Appel is bang voor de zon geworden',
+      'De toestand van het babygirafje is aanzienlijk verbeterd door Hemali’s goede verzorging',
+      'Hemali is haar logboek kwijtgeraakt in de moessonstorm',
+      'Raja heeft alle kokosmelk zelf opgedronken'
+    ],
+    correctIndex: 1,
+    explanation: 'Dat Appel niet meer rilt, rustig drinkt en haar vlekjes weer warm kleuren toont aan dat haar toestand sterk verbeterd is.',
+    wordHelp: [
+      {
+        word: 'voorspoedig',
+        breakdown: 'voor + spoedig',
+        dutchMeaning: 'zeer gunstig en vlot verlopend.',
+        englishMeaning: 'Prosperous / favorable / smooth'
+      }
+    ]
+  },
+  {
+    id: 'cito_h_8',
+    curriculumLevel: 'Groep 5-6 (M5-E6)',
+    skillTested: 'Tekstdoel & Toon van de Auteur',
+    contextHeader: '👑 Het Zegel van Harmonie',
+    passage: 'Wie de taal van de natuur begrijpt en signaalwoorden met logica weet te ontcijferen, kan elke betovering doorbreken. Taal is geen verzameling losse regels, maar een sleutel tot vriendschap tussen mens en dier.',
+    question: 'Wat is het belangrijkste **doel** van de schrijver met deze uitspraak?',
+    options: [
+      'Uitleggen hoe je een stethoscoop moet repareren',
+      'De lezer inspireren dat taalvaardigheid en logica waardevolle instrumenten zijn voor begrip en verbinding',
+      'Waarschuwen voor stormen in de jungle',
+      'Bewijzen dat runenstenen gevaarlijk zijn'
+    ],
+    correctIndex: 1,
+    explanation: 'De schrijver wil de lezer inspireren dat taalbegrip en logica de sleutel zijn tot empathie, vriendschap en probleemoplossing.',
+    wordHelp: [
+      {
+        word: 'harmonie',
+        dutchMeaning: 'een toestand waarin alles mooi en vredig met elkaar samenwerkt.',
+        englishMeaning: 'Harmony / peace'
       }
     ]
   }
@@ -616,9 +815,118 @@ Ridheya aait Kopi nog een laatste keer over zijn zachte oren. "Elk dier verdient
     },
     choices: [
       {
+        label: 'Ga op zoek naar de zeldzame dwerghertjes in het mangrovebos',
+        nextPage: 5,
+        skillBonus: '+30 Tropische Natuurkennis',
+        icon: '🦌'
+      },
+      {
+        label: 'Open een permanente Dierenredders-Post met Amir en Mei-Ling',
+        nextPage: 5,
+        skillBonus: '+30 Leiderschap & Woordenschat',
+        icon: '🏥'
+      }
+    ]
+  },
+  {
+    pageNumber: 5,
+    title: 'Het Geheim van de Mangrove Dwerghertjes (Kancil)',
+    biome: 'Betoverend Mangrovemoeras bij Eb',
+    storyText: `Met Kopi de hond vrolijk voorop varen Ridheya, Amir en Mei-Ling in een houten kano door het rustige mangrovebos. Tussen de grillige luchtwortels ontdekt Ridheya met haar vergrootglas een schuw mini-hertje: een Maleisische **dwerghert** oftewel *Sang Kancil*!
+    
+Het kleintje zit vast met zijn pootje in een achtergelaten visnet. "Rustig maar, dapper hertje," fluistert Ridheya. "Ik knip het net los met mijn botte medische schaar." 
+    
+Amir houdt de kano stabiel, terwijl Mei-Ling verse waterhyacinten aanbiedt om het hertje te kalmeren. Met een zachte knip is het diertje **bevrijd**! Het dwerghertje maakt een sierlijke vreugdesprong op de oever.`,
+    targetWords: [
+      {
+        word: 'dwerghert',
+        breakdown: 'dwerg + hert',
+        dutchMeaning: 'een heel klein, schattig tropisch hertje dat in Zuidoost-Azië leeft.',
+        englishMeaning: 'Lesser mouse-deer / Kancil'
+      },
+      {
+        word: 'bevrijd',
+        dutchMeaning: 'losgemaakt uit gevaar of gevangenschap.',
+        englishMeaning: 'Liberated / freed'
+      },
+      {
+        word: 'mangrovebos',
+        breakdown: 'mangrove + bos',
+        dutchMeaning: 'een bos van bomen met speciale wortels die in zout kustwater groeien.',
+        englishMeaning: 'Mangrove forest'
+      }
+    ],
+    mysteryQuestion: {
+      clueTitle: '🦌 Mangrove Natuur Clue #5',
+      question: 'Waarom zat het Maleisische dwerghertje (Sang Kancil) vast?',
+      options: [
+        'Het zat vast in een achtergelaten visnet tussen de wortels.',
+        'Het was in slaap gevallen op een boot.',
+        'Het wilde met Kopi de hond spelen.',
+        'Het was verdwaald in een drukke winkelstraat.'
+      ],
+      correctIndex: 0,
+      explanation: 'Ridheya zag dat het hertje vastzat in een oud visnet en knipte het voorzichtig los.'
+    },
+    choices: [
+      {
+        label: 'Plaats een waarschuwingsbord om de mangroven schoon te houden',
+        nextPage: 6,
+        skillBonus: '+35 Milieuzorg & Begrijpend Lezen',
+        icon: '🪧'
+      },
+      {
+        label: 'Keer terug naar de tuinkliniek voor de feestelijke diploma-uitreiking',
+        nextPage: 6,
+        skillBonus: '+35 Zelfvertrouwen & Woordenschat',
+        icon: '🎓'
+      }
+    ]
+  },
+  {
+    pageNumber: 6,
+    title: 'De Meester-Dierenarts van Maleisië',
+    biome: 'Gouden Zonsondergang aan de Straat van Malakka',
+    storyText: `De zon zakt als een vurige oranje bol in de oceaan. Kopi ligt tevreden aan Ridheya’s voeten, de blauwe ijsvogel zingt vanaf het dak en in de verte graast het geredde dwerghertje veilig aan de bosrand.
+    
+Mei-Ling en Amir overhandigen Ridheya een handgemaakt certificaat: *"Ridheya - Eerste Hoofd-Dierenarts van Maleisië"*. Ridheya kijkt door haar ronde bril naar haar vrienden en glimlacht met haar hele hart.
+    
+"Dieren verzorgen en de natuur beschermen is het mooiste wat er is," zegt Ridheya trots. Met haar dierenartstas over haar schouder is ze klaar voor elk nieuw reddingsavontuur ter wereld!`,
+    targetWords: [
+      {
+        word: 'zonsondergang',
+        breakdown: 'zon + s + ondergang',
+        dutchMeaning: 'het moment waarop de zon aan het einde van de dag achter de horizon verdwijnt.',
+        englishMeaning: 'Sunset'
+      },
+      {
+        word: 'beschermen',
+        dutchMeaning: 'ervoor zorgen dat iemand of iets veilig blijft voor gevaar.',
+        englishMeaning: 'To protect / safeguard'
+      },
+      {
+        word: 'certificaat',
+        dutchMeaning: 'een officieel bewijsdocument dat je iets heel goed hebt geleerd of volbracht.',
+        englishMeaning: 'Certificate / diploma'
+      }
+    ],
+    mysteryQuestion: {
+      clueTitle: '🏆 Grote Finale Clue #6',
+      question: 'Wat heeft Ridheya bewezen tijdens haar reis door Maleisië?',
+      options: [
+        'Dat ze met liefde, kennis en goede vrienden elk dier in nood kan helpen en beschermen.',
+        'Dat je beter niet in de buurt van mangroves kunt komen.',
+        'Dat fruitkramen gevaarlijk zijn.',
+        'Dat een stethoscoop alleen voor olifanten werkt.'
+      ],
+      correctIndex: 0,
+      explanation: 'Ridheya heeft bewezen dat dierenliefde, medische zorg en vriendschap alle dieren redden.'
+    },
+    choices: [
+      {
         label: '🩺 Start opnieuw of kies een ander Cito RPG Avontuur',
         nextPage: 1,
-        skillBonus: 'Maleisië Missie Voltooid!',
+        skillBonus: 'Maleisië Missie Volledig Voltooid! 🌟',
         icon: '🔄'
       }
     ]
@@ -835,9 +1143,118 @@ Babygiraf Appel huppelde vrolijk rondjes om Hemali heen, terwijl Zazu het aapje 
     },
     choices: [
       {
-        label: '✨ Voltooi dit avontuur of kies een nieuw Cito RPG hoofdstuk',
+        label: 'Treed binnen in het Heiligdom van de Zonnewijzer om het kosmische raadsel te lossen',
+        nextPage: 5,
+        skillBonus: '+30 Complexe Tekststructuren & Cito',
+        icon: '☀️'
+      },
+      {
+        label: 'Verken samen met Raja en Appel de Verborgen Kristallengrotten',
+        nextPage: 5,
+        skillBonus: '+30 Signaalwoorden & Oorzaak-Gevolg',
+        icon: '💎'
+      }
+    ]
+  },
+  {
+    pageNumber: 5,
+    title: 'Het Heiligdom van de Kosmische Zonnewijzer',
+    biome: 'Heiligdom van de Oude Zonnewijzer',
+    storyText: `Achter het tempelplateau doemt een eeuwenoud observatorium op. In het midden staat een reusachtige gouden zonnewijzer met glinsterende runen. "Kijk," wijst Hemali met haar saffieren staf, "de schaduw valt precies op het woord **evenwicht**."
+
+Raja de olifant knielt neer en legt zijn slurf op het marmer. "Alleen een ontdekkingsreiziger die zowel de kracht van logica als de warmte van empathie beheerst, kan het eeuwenoude geheim ontsluiten." Babygiraf Appel stoot zachtjes met haar neusje tegen een verborgen hendel.
+
+Plotseling klinkt er een harmonieuze klank door de vallei. Een stenen doorgang schuift geruisloos open, **waardoor** een glanzende bibliotheek vol historische perkamenten zichtbaar wordt. Hemali noteert de ontdekking zorgvuldig in haar magische logboek.`,
+    targetWords: [
+      {
+        word: 'evenwicht',
+        breakdown: 'even + wicht',
+        dutchMeaning: 'een toestand waarin alle krachten gelijk en in volmaakte rust zijn.',
+        englishMeaning: 'Balance / equilibrium'
+      },
+      {
+        word: 'waardoor',
+        dutchMeaning: 'met als gevolg dat (geeft een logisch gevolg aan).',
+        englishMeaning: 'As a result of which / whereby'
+      },
+      {
+        word: 'observatorium',
+        dutchMeaning: 'een gebouw speciaal ingericht om de sterren, zon en natuurverschijnselen te bestuderen.',
+        englishMeaning: 'Observatory'
+      }
+    ],
+    mysteryQuestion: {
+      clueTitle: '☀️ Clue #5: Oorzaak & Gevolg met "Waardoor"',
+      question: 'Wat gebeurde er als direct gevolg van het openen van de stenen doorgang?',
+      options: [
+        'Er ontstond een storm in de vallei.',
+        'Een glanzende bibliotheek vol historische perkamenten werd zichtbaar.',
+        'Raja de olifant viel in slaap.',
+        'Zazu het aapje raakte zijn bloemenkrans kwijt.'
+      ],
+      correctIndex: 1,
+      explanation: 'Het woord "waardoor" geeft aan dat door de geopende doorgang de historische bibliotheek tevoorschijn kwam.'
+    },
+    choices: [
+      {
+        label: 'Ontcijfer de eeuwenoude perkamenten van de junglebeschermers',
+        nextPage: 6,
+        skillBonus: '+35 Wetenschappelijk Begrip & Cito Woordenschat',
+        icon: '📜'
+      },
+      {
+        label: 'Beklim het hoogste torentje voor de ceremoniële kroning tot Meester-Mage',
+        nextPage: 6,
+        skillBonus: '+35 Academisch Zelfvertrouwen',
+        icon: '👑'
+      }
+    ]
+  },
+  {
+    pageNumber: 6,
+    title: 'De Meester-Mage van het Nevelwoud',
+    biome: 'Hemels Plateau van de Vredeswachters',
+    storyText: `Op het hoogste terras van het heiligdom staat Hemali tussen haar trouwe metgezellen. Zazu zit fier op haar schouder, babygiraf Appel vlijt zich knus tegen haar aan en Raja heft zijn slurf in een triomfantelijk saluut.
+
+De zachte bries draagt de geur van jasmijn en verse regen door het woud. Hemali opent haar toverboek en spreekt de ultieme spreuk van verbinding uit: *"Sciens et Fidelis"* — Kennis en Trouw. Boven het woud verschijnt een schitterende regenboog van magisch noorderlicht.
+
+Met een tevreden glimlach beseft Hemali dat echte kracht schuilt in doorzettingsvermogen, taalbeheersing en vriendschap. Haar naam staat nu voor eeuwig gegrift in de kronieken van de Jungle!`,
+    targetWords: [
+      {
+        word: 'triomfantelijk',
+        breakdown: 'triomf + antelijk',
+        dutchMeaning: 'vol trots en vreugde vanwege een grote overwinning.',
+        englishMeaning: 'Triumphant'
+      },
+      {
+        word: 'doorzettingsvermogen',
+        breakdown: 'doorzetting + s + vermogen',
+        dutchMeaning: 'de innerlijke kracht om vol te houden, ook als het moeilijk wordt.',
+        englishMeaning: 'Perseverance / grit'
+      },
+      {
+        word: 'kronieken',
+        dutchMeaning: 'geschiedenisboeken waarin belangrijke historische gebeurtenissen op volgorde worden opgeschreven.',
+        englishMeaning: 'Chronicles / annals'
+      }
+    ],
+    mysteryQuestion: {
+      clueTitle: '👑 Grote Finale Clue #6: Karakter & Thema',
+      question: 'Welke eigenschappen vormen volgens de tekst de bron van Hemali’s ware kracht?',
+      options: [
+        'Snelheid bij het wegrennen en hard schreeuwen.',
+        'Doorzettingsvermogen, taalbeheersing en trouwe vriendschap.',
+        'Het dragen van een gouden ring.',
+        'Alleen \'s nachts wakker blijven.'
+      ],
+      correctIndex: 1,
+      explanation: 'De tekst stelt uitdrukkelijk dat echte kracht schuilt in doorzettingsvermogen, taalbeheersing en vriendschap.'
+    },
+    choices: [
+      {
+        label: '✨ Voltooi dit avontuur of start een nieuwe Cito RPG campagne',
         nextPage: 1,
-        skillBonus: 'Oerwoud Missie Voltooid!',
+        skillBonus: 'Oerwoud Missie Volledig Voltooid! 🌟',
         icon: '🔄'
       }
     ]
@@ -1052,9 +1469,119 @@ De hoofdboswachter overhandigde beide meisjes een gouden onderscheiding: *"Voor 
     },
     choices: [
       {
-        label: '🎉 Start een nieuw RPG Avontuur of bekijk je Cito Diagnose Rapport',
+        label: 'Trek dieper de savanne in naar het Oude Leeuwenheiligdom',
+        nextPage: 5,
+        skillBonus: '+30 Samenwerking & Verhaalinzicht',
+        icon: '🦁'
+      },
+      {
+        label: 'Onderzoek samen de scheepsarchieven op het onderzoeksschip',
+        nextPage: 5,
+        skillBonus: '+30 Wetenschappelijke Teksten & Woordenschat',
+        icon: '🚢'
+      }
+    ]
+  },
+  {
+    pageNumber: 5,
+    title: 'Het Geheime Dagboek van het Onderzoeksschip',
+    biome: 'Kapiteins Kajuit van het Onderzoeksschip',
+    storyText: `Aan boord van het imposante **onderzoeksschip** worden Hemali en Ridheya verwelkomd door de hoofdonderzoeker. De schipper biedt zijn excuses aan voor zijn eerdere achterdocht: hij vreesde dat stropers het schip wilden kapen.
+
+Op de grote eikenhouten tafel ligt een historisch scheepsjournaal. Ridheya gebruikt haar vergrootglas om de kleine aantekeningen over zeldzame diersoorten te bestuderen. Hemali analyseert de zeekaarten en ontdekt een vergeten zoetwaterbron onder de zandduinen.
+
+"Als we deze ondergrondse bron aansluiten met de scheepspomp," legt Hemali uit, "krijgt het hele reservaat weer kristalhelder drinkwater!" Ridheya klapt enthousiast in haar handen.`,
+    targetWords: [
+      {
+        word: 'scheepsjournaal',
+        breakdown: 'schip + s + journaal',
+        dutchMeaning: 'een officieel dagboek waarin de kapitein alle gebeurtenissen op een schip opschrijft.',
+        englishMeaning: 'Ship logbook'
+      },
+      {
+        word: 'imposant',
+        dutchMeaning: 'heel indrukwekkend en groots om te zien.',
+        englishMeaning: 'Imposing / impressive'
+      },
+      {
+        word: 'zoetwaterbron',
+        breakdown: 'zoet + water + bron',
+        dutchMeaning: 'een natuurlijke plek waar schoon en drinkbaar water uit de aarde opborrelt.',
+        englishMeaning: 'Freshwater spring'
+      }
+    ],
+    mysteryQuestion: {
+      clueTitle: '🚢 Clue #5: Scheepsjournaal & Wetenschappelijke Taal',
+      question: 'Wat ontdekte Hemali door de zeekaarten en het scheepsjournaal te analyseren?',
+      options: [
+        'Dat het schip lekte.',
+        'Een vergeten ondergrondse zoetwaterbron die het hele reservaat van water kan voorzien.',
+        'Dat alle dieren naar een ander eiland waren gezwommen.',
+        'Dat het kompas kapot was.'
+      ],
+      correctIndex: 1,
+      explanation: 'Hemali ontdekte de ondergrondse zoetwaterbron en bedacht een plan om deze aan te sluiten.'
+    },
+    choices: [
+      {
+        label: 'Activeer de waterpomp en luid de scheepsbel van overwinning',
+        nextPage: 6,
+        skillBonus: '+35 Technisch Inzicht & Cito Leesvaardigheid',
+        icon: '🔔'
+      },
+      {
+        label: 'Organiseer een groot dierenfeest bij de herstelde oase',
+        nextPage: 6,
+        skillBonus: '+35 Empathie & Vreugde',
+        icon: '🌴'
+      }
+    ]
+  },
+  {
+    pageNumber: 6,
+    title: 'De Eeuwige Oase van de Twee Zussen',
+    biome: 'Bloeiende Oase bij Volle Maan',
+    storyText: `Het water spuit hoog de lucht in en vult de dorstige savannebekkens. Simba de leeuwenwelp drinkt gulzig naast zijn trotse moeder, terwijl zebra's en gazellen vrolijk door het frisse gras galopperen.
+
+Bovenop het dek van het schip kijken Hemali en Ridheya naar de sterrenhemel. De voltallige bemanning en alle dierenwachters applaudisseren voor de twee zussen.
+
+"We hebben bewezen dat we samen elk mysterie kunnen ontrafelen," zegt Hemali teder. Ridheya leunt met haar hoofdje tegen Hemali’s schouder: "Zolang we elkaars hand vasthouden, zijn we onverslaanbaar!" Het Zussen Team is klaar voor hun volgende grote ontdekkingsreis.`,
+    targetWords: [
+      {
+        word: 'onverslaanbaar',
+        breakdown: 'on + verslaan + baar',
+        dutchMeaning: 'zo sterk en eensgezind dat niemand van je kan winnen.',
+        englishMeaning: 'Invincible / unbeatable'
+      },
+      {
+        word: 'bemanning',
+        dutchMeaning: 'de groep mensen die samen op een schip werken en varen.',
+        englishMeaning: 'Crew'
+      },
+      {
+        word: 'eensgezind',
+        breakdown: 'eens + gezind',
+        dutchMeaning: 'als iedereen hetzelfde doel voor ogen heeft en in harmonie samenwerkt.',
+        englishMeaning: 'United / unanimous'
+      }
+    ],
+    mysteryQuestion: {
+      clueTitle: '🌟 Grote Finale Clue #6: De Kracht van Samenwerking',
+      question: 'Wat is de kernboodschap van het gezamenlijke zussenavontuur?',
+      options: [
+        'Dat schepen alleen op zee moeten blijven.',
+        'Dat zussenliefde, gecombineerde talenten en eensgezindheid elk probleem kunnen overwinnen.',
+        'Dat leeuwenwelpen niet van water houden.',
+        'Dat duinen te steil zijn om over te lopen.'
+      ],
+      correctIndex: 1,
+      explanation: 'De tekst toont dat de unieke talenten van beide zussen en hun hechte band hen onverslaanbaar maken.'
+    },
+    choices: [
+      {
+        label: '🎉 Sluit het avontuur af of start een nieuwe Cito RPG missie',
         nextPage: 1,
-        skillBonus: 'Avontuur Voltooid!',
+        skillBonus: 'Zussen Missie Volledig Voltooid! 🌟',
         icon: '🔄'
       }
     ]

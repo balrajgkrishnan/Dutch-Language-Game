@@ -47,15 +47,60 @@ export const CitoRpgExamModal: React.FC<CitoRpgExamModalProps> = ({
   const [rpgMysteryAnswer, setRpgMysteryAnswer] = useState<number | null>(null);
   const [isRpgClueChecked, setIsRpgClueChecked] = useState<boolean>(false);
 
+  // Helper functions for persistent storage
+  const getStorageKey = (protagonist: 'ridheya' | 'hemali') => `cito_rpg_diagnostic_state_v2_${protagonist}`;
+
+  const loadSavedState = (protagonist: 'ridheya' | 'hemali') => {
+    try {
+      const raw = localStorage.getItem(getStorageKey(protagonist));
+      if (raw) {
+        return JSON.parse(raw);
+      }
+    } catch (e) {
+      console.warn('Failed to load Cito diagnostic state', e);
+    }
+    return null;
+  };
+
   // Cito Diagnostic Placement State
-  const [currentPlacementIdx, setCurrentPlacementIdx] = useState<number>(0);
+  const initialSaved = loadSavedState(selectedProtagonist);
+  const [currentPlacementIdx, setCurrentPlacementIdx] = useState<number>(initialSaved?.currentPlacementIdx ?? 0);
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [isAnswerChecked, setIsAnswerChecked] = useState<boolean>(false);
-  const [scores, setScores] = useState<{ totalAnswered: number; totalCorrect: number }>({ totalAnswered: 0, totalCorrect: 0 });
-  const [userAnswersHistory, setUserAnswersHistory] = useState<Record<string, { chosen: number; correct: boolean }>>({});
+  const [scores, setScores] = useState<{ totalAnswered: number; totalCorrect: number }>(
+    initialSaved?.scores ?? { totalAnswered: 0, totalCorrect: 0 }
+  );
+  const [userAnswersHistory, setUserAnswersHistory] = useState<Record<string, { chosen: number; correct: boolean }>>(
+    initialSaved?.userAnswersHistory ?? {}
+  );
 
-  // Interest Quiz State
-  const [interestAnswers, setInterestAnswers] = useState<Record<string, string>>({});
+  // Interest Quiz State (supports multi-selection per question category)
+  const [interestAnswers, setInterestAnswers] = useState<Record<string, string[]>>(
+    initialSaved?.interestAnswers ?? {
+      int_1: ['malaysia_vet'],
+      int_2: ['city_malaysia'],
+      int_3: ['stray_dog_kopi'],
+      int_4: ['vet_toolkit'],
+      int_5: ['adopted_kopi'],
+      int_6: ['team_malaysia_friends']
+    }
+  );
+
+  // Save changes to localStorage whenever answers or scores change
+  useEffect(() => {
+    try {
+      const stateToSave = {
+        currentPlacementIdx,
+        scores,
+        userAnswersHistory,
+        interestAnswers,
+        lastUpdated: new Date().toISOString()
+      };
+      localStorage.setItem(getStorageKey(selectedProtagonist), JSON.stringify(stateToSave));
+    } catch (e) {
+      console.warn('Failed to save Cito diagnostic state', e);
+    }
+  }, [selectedProtagonist, currentPlacementIdx, scores, userAnswersHistory, interestAnswers]);
 
   // JSON copy indicator
   const [hasCopiedJson, setHasCopiedJson] = useState<boolean>(false);
@@ -782,12 +827,12 @@ export const CitoRpgExamModal: React.FC<CitoRpgExamModalProps> = ({
                     onClick={() => {
                       sound.playPop();
                       setInterestAnswers({
-                        int_1: 'malaysia_vet',
-                        int_2: 'city_malaysia',
-                        int_3: 'stray_dog_kopi',
-                        int_4: 'vet_toolkit',
-                        int_5: 'adopted_kopi',
-                        int_6: 'team_malaysia_friends'
+                        int_1: ['malaysia_vet'],
+                        int_2: ['city_malaysia'],
+                        int_3: ['stray_dog_kopi', 'kingfisher_stone'],
+                        int_4: ['vet_toolkit'],
+                        int_5: ['adopted_kopi'],
+                        int_6: ['team_malaysia_friends']
                       });
                     }}
                     className="bg-white/20 hover:bg-white/30 text-white text-xs font-bold px-3 py-1.5 rounded-xl border border-white/30 transition-all cursor-pointer shadow-xs whitespace-nowrap"
@@ -798,12 +843,12 @@ export const CitoRpgExamModal: React.FC<CitoRpgExamModalProps> = ({
                     onClick={() => {
                       sound.playPop();
                       setInterestAnswers({
-                        int_1: 'jungle_magic',
-                        int_2: 'night_jungle',
-                        int_3: 'zombie_monkey',
-                        int_4: 'teleportation',
-                        int_5: 'baby_giraffe_apple',
-                        int_6: 'talking_animals'
+                        int_1: ['jungle_magic'],
+                        int_2: ['night_jungle'],
+                        int_3: ['zombie_monkey'],
+                        int_4: ['teleportation', 'detective_book'],
+                        int_5: ['baby_giraffe_apple', 'talking_elephant_raja'],
+                        int_6: ['talking_animals', 'sisters_team']
                       });
                     }}
                     className="bg-white/20 hover:bg-white/30 text-white text-xs font-bold px-3 py-1.5 rounded-xl border border-white/30 transition-all cursor-pointer shadow-xs whitespace-nowrap"
@@ -814,7 +859,7 @@ export const CitoRpgExamModal: React.FC<CitoRpgExamModalProps> = ({
               </div>
 
               {/* Dynamic Recommendation Card if selections are made */}
-              {Object.keys(interestAnswers).length > 0 && (
+              {Object.keys(interestAnswers).some(k => (interestAnswers[k] || []).length > 0) && (
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -831,7 +876,7 @@ export const CitoRpgExamModal: React.FC<CitoRpgExamModalProps> = ({
                     <button
                       onClick={() => {
                         sound.playStar();
-                        const chosenValues = Object.values(interestAnswers) as string[];
+                        const chosenValues = Object.values(interestAnswers).flat() as string[];
                         const isMalaysia = chosenValues.some(v => ['malaysia_vet', 'city_malaysia', 'stray_dog_kopi', 'kingfisher_stone', 'vet_toolkit', 'adopted_kopi', 'team_malaysia_friends'].includes(v));
                         const isJungle = chosenValues.some(v => ['jungle_magic', 'night_jungle', 'zombie_monkey', 'teleportation', 'baby_giraffe_apple', 'talking_elephant_raja', 'guide_monkey_zazu', 'talking_animals'].includes(v));
                         
@@ -855,54 +900,79 @@ export const CitoRpgExamModal: React.FC<CitoRpgExamModalProps> = ({
                   </div>
 
                   <div className="flex flex-wrap gap-2 pt-1">
-                    {Object.entries(interestAnswers).map(([qId, val]) => {
+                    {Object.entries(interestAnswers).flatMap(([qId, valList]) => {
                       const questionObj = INTEREST_QUESTIONS.find(q => q.id === qId);
-                      const optObj = questionObj?.options.find(o => o.themeKey === val);
-                      if (!optObj) return null;
-                      return (
-                        <span key={qId} className="bg-white border border-emerald-200 text-emerald-900 text-xs font-bold px-2.5 py-1 rounded-xl shadow-2xs flex items-center gap-1.5">
-                          <span>{optObj.icon}</span>
-                          <span className="truncate max-w-[200px]">{optObj.text.split(':')[0]}</span>
-                        </span>
-                      );
+                      const list = Array.isArray(valList) ? valList : [valList];
+                      return list.map(val => {
+                        const optObj = questionObj?.options.find(o => o.themeKey === val);
+                        if (!optObj) return null;
+                        return (
+                          <span key={`${qId}-${val}`} className="bg-white border border-emerald-200 text-emerald-900 text-xs font-bold px-2.5 py-1 rounded-xl shadow-2xs flex items-center gap-1.5">
+                            <span>{optObj.icon}</span>
+                            <span className="truncate max-w-[200px]">{optObj.text.split(':')[0]}</span>
+                          </span>
+                        );
+                      });
                     })}
                   </div>
                 </motion.div>
               )}
 
-              {INTEREST_QUESTIONS.map((iq) => (
-                <div key={iq.id} className="bg-white rounded-3xl p-5 border-2 border-amber-100 shadow-xs space-y-3">
-                  <span className="text-[11px] font-black text-amber-800 bg-amber-100 px-2.5 py-0.5 rounded-full uppercase tracking-wider">
-                    {iq.category}
-                  </span>
-                  <h4 className="text-sm sm:text-base font-black text-slate-900">
-                    {iq.question}
-                  </h4>
+              {INTEREST_QUESTIONS.map((iq) => {
+                const currentSelectedKeys = interestAnswers[iq.id] || [];
+                return (
+                  <div key={iq.id} className="bg-white rounded-3xl p-5 border-2 border-amber-100 shadow-xs space-y-3">
+                    <div className="flex items-center justify-between gap-2 flex-wrap">
+                      <span className="text-[11px] font-black text-amber-800 bg-amber-100 px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+                        {iq.category}
+                      </span>
+                      <span className="text-[11px] font-bold text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-lg">
+                        ✨ Meerdere keuzes mogelijk ({currentSelectedKeys.length} gekozen)
+                      </span>
+                    </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                    {iq.options.map((opt, optIdx) => {
-                      const isSelected = interestAnswers[iq.id] === opt.themeKey;
-                      return (
-                        <button
-                          key={optIdx}
-                          onClick={() => {
-                            sound.playPop();
-                            setInterestAnswers(prev => ({ ...prev, [iq.id]: opt.themeKey }));
-                          }}
-                          className={`p-3.5 rounded-2xl border-2 text-xs sm:text-sm font-bold text-left transition-all cursor-pointer flex items-center gap-3 ${
-                            isSelected
-                              ? 'bg-amber-100 border-amber-500 text-amber-950 shadow-xs scale-101'
-                              : 'bg-slate-50 border-slate-200 text-slate-700 hover:border-amber-300'
-                          }`}
-                        >
-                          <span className="text-xl flex-shrink-0">{opt.icon}</span>
-                          <span className="leading-snug">{opt.text}</span>
-                        </button>
-                      );
-                    })}
+                    <h4 className="text-sm sm:text-base font-black text-slate-900">
+                      {iq.question}
+                    </h4>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                      {iq.options.map((opt, optIdx) => {
+                        const isSelected = currentSelectedKeys.includes(opt.themeKey);
+                        return (
+                          <button
+                            key={optIdx}
+                            onClick={() => {
+                              sound.playPop();
+                              setInterestAnswers(prev => {
+                                const prevList = prev[iq.id] || [];
+                                const nextList = isSelected
+                                  ? prevList.filter(k => k !== opt.themeKey)
+                                  : [...prevList, opt.themeKey];
+                                return { ...prev, [iq.id]: nextList };
+                              });
+                            }}
+                            className={`p-3.5 rounded-2xl border-2 text-xs sm:text-sm font-bold text-left transition-all cursor-pointer flex items-center justify-between gap-3 ${
+                              isSelected
+                                ? 'bg-amber-100 border-amber-500 text-amber-950 shadow-xs scale-101'
+                                : 'bg-slate-50 border-slate-200 text-slate-700 hover:border-amber-300'
+                            }`}
+                          >
+                            <div className="flex items-center gap-3">
+                              <span className="text-xl flex-shrink-0">{opt.icon}</span>
+                              <span className="leading-snug">{opt.text}</span>
+                            </div>
+                            <div className={`w-5 h-5 rounded-lg border-2 flex items-center justify-center flex-shrink-0 transition-colors ${
+                              isSelected ? 'bg-amber-600 border-amber-600 text-white' : 'border-slate-300 bg-white'
+                            }`}>
+                              {isSelected && <Check className="w-3.5 h-3.5 stroke-[3]" />}
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
 

@@ -1258,26 +1258,6 @@ export const DUTCH_DICTIONARY_DB: Record<string, DictionaryEntry> = {
     exampleNl: 'In de dierenkliniek in Maleisië stonden alle medicijnen netjes op de planken.',
     level: 'Groep 5-6 (AVI M5-E6)'
   },
-  'dierenarts': {
-    word: 'dierenarts',
-    wordType: 'Zelfstandig naamwoord',
-    meaningNl: 'Dokter die zieke en gewonde dieren onderzoekt, verzorgt en beter maakt.',
-    translationEn: 'Veterinarian, vet, animal doctor',
-    compound: 'dier + arts',
-    syllables: ['die', 'ren', 'arts'],
-    exampleNl: 'Ridheya droeg trots haar doktersjas als dappere dierenarts.',
-    citoCategory: 'Basisschool Kernwoord',
-    level: 'Groep 3-4 (AVI M3-E4)'
-  },
-  'teleporteren': {
-    word: 'teleporteren',
-    wordType: 'Werkwoord',
-    meaningNl: 'Je met behulp van magie of technologie in één flits van de ene naar de andere plek verplaatsen.',
-    translationEn: 'To teleport, to blink across space',
-    syllables: ['te', 'le', 'por', 'te', 'ren'],
-    exampleNl: 'Met een krachtige toverspreuk teleporteerde Hemali haar zusje weg voor de zombie-apen.',
-    level: 'Groep 5-6 (AVI M5-E6)'
-  },
   'telepathisch': {
     word: 'telepathisch',
     wordType: 'Bijvoeglijk naamwoord',
