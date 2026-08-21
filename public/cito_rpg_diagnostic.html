@@ -1629,7 +1629,7 @@ De hoofdboswachter overhandigde beide meisjes een gouden onderscheiding: *"Voor 
     });
 
     // ==========================================
-    // STATE MANAGEMENT
+    // STATE MANAGEMENT & LOCALSTORAGE PERSISTENCE
     // ==========================================
     let currentProfile = 'ridheya';
     let currentCampaignId = 'ridheya_malaysia';
@@ -1646,10 +1646,39 @@ De hoofdboswachter overhandigde beide meisjes een gouden onderscheiding: *"Voor 
       int_6: 'team_malaysia_friends'
     };
 
+    function loadSavedDiagnostic(profile) {
+      try {
+        const raw = localStorage.getItem('cito_diagnostic_save_' + profile);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (parsed.userAnswers) userAnswers = parsed.userAnswers;
+          if (parsed.clueAnswers) clueAnswers = parsed.clueAnswers;
+          if (parsed.interestSelections) interestSelections = parsed.interestSelections;
+        }
+      } catch (e) {
+        console.warn('Could not load diagnostic save', e);
+      }
+    }
+
+    function saveDiagnosticState() {
+      try {
+        const payload = {
+          userAnswers,
+          clueAnswers,
+          interestSelections,
+          lastUpdated: new Date().toISOString()
+        };
+        localStorage.setItem('cito_diagnostic_save_' + currentProfile, JSON.stringify(payload));
+      } catch (e) {
+        console.warn('Could not save diagnostic state', e);
+      }
+    }
+
     // ==========================================
     // INITIALIZATION & TAB SWITCHING
     // ==========================================
     window.addEventListener('DOMContentLoaded', () => {
+      loadSavedDiagnostic(currentProfile);
       initApp();
     });
 
@@ -1684,6 +1713,7 @@ De hoofdboswachter overhandigde beide meisjes een gouden onderscheiding: *"Voor 
     function setProfile(profileKey) {
       playPopSound();
       currentProfile = profileKey;
+      loadSavedDiagnostic(profileKey);
       const p = PROFILES[profileKey];
       
       document.getElementById('btnRidheya').className = 'protagonist-btn ' + (profileKey === 'ridheya' ? 'active-ridheya' : '');
@@ -1698,6 +1728,7 @@ De hoofdboswachter overhandigde beide meisjes een gouden onderscheiding: *"Voor 
       renderCampaignSelector();
       renderRpgPage();
       renderCitoQuestions();
+      renderInterestQuestions();
       updateJsonView();
     }
 
@@ -1982,6 +2013,7 @@ De hoofdboswachter overhandigde beide meisjes een gouden onderscheiding: *"Voor 
 
         btn.onclick = () => {
           userAnswers[q.id] = optIdx;
+          saveDiagnosticState();
           if (optIdx === q.correct) {
             playStarSound();
             triggerConfetti();

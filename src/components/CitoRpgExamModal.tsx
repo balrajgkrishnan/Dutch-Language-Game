@@ -4,7 +4,7 @@ import {
   X, BookOpen, Sparkles, Volume2, ArrowRight, CheckCircle2, 
   RotateCcw, Award, Compass, HelpCircle, FileText, Download, 
   Copy, Check, UserCheck, Flame, Star, Lightbulb, ExternalLink,
-  Maximize2, Minimize2
+  Maximize2, Minimize2, Eye
 } from 'lucide-react';
 import { 
   PROTAGONISTS, 
@@ -185,9 +185,37 @@ export const CitoRpgExamModal: React.FC<CitoRpgExamModalProps> = ({
     setCurrentRpgPageNumber(1);
     setRpgMysteryAnswer(null);
     setIsRpgClueChecked(false);
+
+    // Load saved diagnostic data for this protagonist
+    const saved = loadSavedState(id);
+    if (saved) {
+      setCurrentPlacementIdx(saved.currentPlacementIdx ?? 0);
+      setScores(saved.scores ?? { totalAnswered: 0, totalCorrect: 0 });
+      setUserAnswersHistory(saved.userAnswersHistory ?? {});
+      if (saved.interestAnswers) {
+        setInterestAnswers(saved.interestAnswers);
+      }
+    } else {
+      setCurrentPlacementIdx(0);
+      setScores({ totalAnswered: 0, totalCorrect: 0 });
+      setUserAnswersHistory({});
+    }
+    setSelectedOption(null);
+    setIsAnswerChecked(false);
+  };
+
+  const handleResetDiagnostic = () => {
+    sound.playPop();
     setCurrentPlacementIdx(0);
     setSelectedOption(null);
     setIsAnswerChecked(false);
+    setScores({ totalAnswered: 0, totalCorrect: 0 });
+    setUserAnswersHistory({});
+    try {
+      localStorage.removeItem(getStorageKey(selectedProtagonist));
+    } catch (e) {
+      console.warn('Failed to clear diagnostic state', e);
+    }
   };
 
   const handleSelectCampaign = (campaignId: string) => {
@@ -228,13 +256,86 @@ export const CitoRpgExamModal: React.FC<CitoRpgExamModalProps> = ({
     sound.playPop();
     setSelectedOption(null);
     setIsAnswerChecked(false);
-    if (currentPlacementIdx + 1 < filteredPlacementQuestions.length) {
+    if (currentPlacementIdx + 1 <= filteredPlacementQuestions.length) {
       setCurrentPlacementIdx(prev => prev + 1);
-    } else {
+    }
+    if (currentPlacementIdx + 1 === filteredPlacementQuestions.length) {
       sound.playLevelUp();
       confetti({ particleCount: 60, spread: 80 });
     }
   };
+
+  const isExamCompleted = currentPlacementIdx >= filteredPlacementQuestions.length;
+
+  const calculateDiagnosticReport = () => {
+    const totalQ = filteredPlacementQuestions.length;
+    let correctCount = 0;
+    let answeredCount = 0;
+
+    filteredPlacementQuestions.forEach(q => {
+      const ans = userAnswersHistory[q.id];
+      if (ans) {
+        answeredCount++;
+        if (ans.correct) correctCount++;
+      }
+    });
+
+    const percent = answeredCount > 0 ? Math.round((correctCount / answeredCount) * 100) : 0;
+
+    let diagnosedLevel = '';
+    let levelBadge = '';
+    let recommendation = '';
+    let aviCode = '';
+
+    if (selectedProtagonist === 'ridheya') {
+      if (percent >= 80) {
+        diagnosedLevel = 'Groep 4 (AVI E4) - Uitstekend';
+        levelBadge = '🌟 Bovenbouw Voorbereiding';
+        aviCode = 'AVI E4 / Groep 4';
+        recommendation = 'Ridheya heeft een sterke woordenschat en ontleedt samengestelde woorden moeiteloos. Ze is klaar voor langere zelfstandige RPG-hoofdstukken en boeken van niveau AVI E4/M5.';
+      } else if (percent >= 60) {
+        diagnosedLevel = 'Groep 3-4 (AVI M4) - Op Schema';
+        levelBadge = '🎯 Stevige Basis';
+        aviCode = 'AVI M4 / Groep 3-4';
+        recommendation = 'Ridheya begrijpt de hoofdlijnen van de verhalen goed. Blijf oefenen met tijdsvolgorde-signaalwoorden (eerst/daarna/tenslotte) en de ingebouwde woordenhulp.';
+      } else {
+        diagnosedLevel = 'Groep 3 (AVI M3-E3) - Begeleid Oefenen';
+        levelBadge = '🌱 Groeipotentieel';
+        aviCode = 'AVI M3 / Groep 3';
+        recommendation = 'Ondersteun Ridheya met de voorleesfunctie en de klikbare woordenhulp. Korte zinnen en gerichte pre-teaching in de RPG stimuleren haar zelfvertrouwen.';
+      }
+    } else {
+      if (percent >= 80) {
+        diagnosedLevel = 'Groep 6+ / Doorstroomtoets 1F-2F - Meesterlijk';
+        levelBadge = '👑 Eindtoets Klaar';
+        aviCode = 'Doorstroomtoets 1F/2F';
+        recommendation = 'Hemali beheerst complexe signaalwoorden (desondanks, bovendien, hetgeen) en abstracte oorzaak-gevolgrelaties uitstekend. Zij kan direct doorstromen naar onbewerkte jeugdliteratuur (Paul van Loon, Roald Dahl NL).';
+      } else if (percent >= 60) {
+        diagnosedLevel = 'Groep 5-6 (Cito M5-E5) - Vaardig';
+        levelBadge = '🔍 Doelgericht Oefenen';
+        aviCode = 'Cito M5-E5 / Groep 5-6';
+        recommendation = 'Hemali pikt de hoofdgedachte snel op. Versterk de subtiele verwijswoorden en meerkeuze-afleiders via de mysterieuze Cito-clues in de RPG.';
+      } else {
+        diagnosedLevel = 'Groep 5 (Cito M5) - Basisontwikkeling';
+        levelBadge = '📖 Extra Training';
+        aviCode = 'Cito M5 / Groep 5';
+        recommendation = 'Focus op signaalwoorden van tegenstelling en tijd. Laat Hemali de redenering achter haar keuzes hardop uitleggen.';
+      }
+    }
+
+    return {
+      totalQ,
+      answeredCount,
+      correctCount,
+      percent,
+      diagnosedLevel,
+      levelBadge,
+      aviCode,
+      recommendation
+    };
+  };
+
+  const diagnosticReport = calculateDiagnosticReport();
 
   const handleAnswerRpgClue = (idx: number) => {
     if (isRpgClueChecked) return;
@@ -690,118 +791,249 @@ export const CitoRpgExamModal: React.FC<CitoRpgExamModalProps> = ({
           {activeTab === 'cito_diagnostic' && (
             <div className="space-y-5 max-w-3xl mx-auto">
               
-              {/* Question Progress & Skill Badge */}
+              {/* Header Bar: Auto-save status & Mode Switcher */}
               <div className="flex items-center justify-between gap-3 bg-indigo-50 border border-indigo-200 rounded-2xl px-4 py-2.5 flex-wrap">
-                <div className="flex items-center gap-2">
-                  <span className="bg-indigo-600 text-white font-black text-xs px-2.5 py-1 rounded-xl uppercase tracking-wider shadow-xs">
-                    Vraag {currentPlacementIdx + 1} van {filteredPlacementQuestions.length}
-                  </span>
+                <div className="flex items-center gap-2 flex-wrap">
+                  {!isExamCompleted ? (
+                    <span className="bg-indigo-600 text-white font-black text-xs px-2.5 py-1 rounded-xl uppercase tracking-wider shadow-xs">
+                      Vraag {currentPlacementIdx + 1} van {filteredPlacementQuestions.length}
+                    </span>
+                  ) : (
+                    <span className="bg-emerald-600 text-white font-black text-xs px-2.5 py-1 rounded-xl uppercase tracking-wider shadow-xs flex items-center gap-1">
+                      <span>✓</span> Toets Voltooid
+                    </span>
+                  )}
                   <span className="text-xs font-bold text-indigo-950">
-                    🎯 {currentPlacementQ.skillTested}
+                    {!isExamCompleted ? `🎯 ${currentPlacementQ.skillTested}` : `🏆 ${diagnosticReport.diagnosedLevel}`}
                   </span>
                 </div>
 
-                <div className="text-xs font-black text-emerald-800 bg-white px-2.5 py-1 rounded-lg border border-emerald-200">
-                  Score: {scores.totalCorrect} / {scores.totalAnswered} ({scores.totalAnswered > 0 ? Math.round((scores.totalCorrect / scores.totalAnswered) * 100) : 100}%)
+                <div className="flex items-center gap-2">
+                  <span className="text-[11px] font-semibold text-indigo-700 bg-indigo-100/70 px-2 py-0.5 rounded-md flex items-center gap-1">
+                    <span>💾</span> Opgeslagen
+                  </span>
+                  <div className="text-xs font-black text-emerald-800 bg-white px-2.5 py-1 rounded-lg border border-emerald-200">
+                    Score: {diagnosticReport.correctCount} / {filteredPlacementQuestions.length} ({diagnosticReport.percent}%)
+                  </div>
                 </div>
               </div>
 
-              {/* Passage Box */}
-              <div className="bg-white rounded-3xl p-5 sm:p-6 border-2 border-indigo-100 shadow-sm space-y-4">
-                {currentPlacementQ.contextHeader && (
-                  <div className="text-xs font-black text-slate-500 uppercase tracking-wider flex items-center justify-between">
-                    <span>{currentPlacementQ.contextHeader}</span>
-                    <button
-                      onClick={() => handleSpeakText(currentPlacementQ.passage.replace(/\*\*/g, ''))}
-                      className="text-indigo-700 hover:text-indigo-900 font-bold text-xs flex items-center gap-1 cursor-pointer"
-                    >
-                      <Volume2 className="w-3.5 h-3.5" />
-                      <span>Lees tekst</span>
-                    </button>
-                  </div>
-                )}
-
-                <div className="bg-amber-50/60 border border-amber-200/80 rounded-2xl p-4 text-slate-800 text-sm sm:text-base leading-relaxed font-medium">
-                  <InteractiveDutchText text={currentPlacementQ.passage} highlightBold={true} />
-                </div>
-
-                {/* Vocabulary Help if available */}
-                {currentPlacementQ.wordHelp && currentPlacementQ.wordHelp.length > 0 && (
-                  <div className="bg-indigo-50/60 border border-indigo-200 rounded-xl p-3 text-xs space-y-1">
-                    <span className="font-black text-indigo-900">💡 Woordenhulp:</span>
-                    {currentPlacementQ.wordHelp.map((wh, wIdx) => (
-                      <div key={wIdx} className="text-slate-700">
-                        • <b>{wh.word}</b> {wh.breakdown && `[${wh.breakdown}]`}: {wh.dutchMeaning} <i>({wh.englishMeaning})</i>
+              {/* VIEW A: DIAGNOSTIC REPORT CARD (When completed or chosen) */}
+              {isExamCompleted ? (
+                <div className="bg-white rounded-3xl p-6 sm:p-7 border-2 border-indigo-200 shadow-lg space-y-6">
+                  
+                  {/* Hero Level Certificate */}
+                  <div className="bg-gradient-to-br from-indigo-900 via-indigo-800 to-purple-900 rounded-2xl p-5 sm:p-6 text-white space-y-3 relative overflow-hidden">
+                    <div className="flex items-start justify-between gap-4 flex-wrap">
+                      <div className="space-y-1">
+                        <span className="text-xs font-black text-amber-300 uppercase tracking-widest">
+                          {diagnosticReport.levelBadge}
+                        </span>
+                        <h3 className="text-xl sm:text-2xl font-black text-white">
+                          {currentProfile.name}’s Cito &amp; AVI Niveau:
+                        </h3>
+                        <p className="text-lg sm:text-xl font-extrabold text-amber-300">
+                          {diagnosticReport.diagnosedLevel}
+                        </p>
                       </div>
-                    ))}
-                  </div>
-                )}
 
-                {/* Question */}
-                <div className="flex items-center justify-between gap-2 pt-2">
-                  <h3 className="text-base sm:text-lg font-black text-slate-900">
-                    {currentPlacementQ.question}
-                  </h3>
-                  <button
-                    onClick={() => handleSpeakText(currentPlacementQ.question)}
-                    className="p-1.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 cursor-pointer transition-colors flex-shrink-0"
-                    title="Lees vraag voor"
-                  >
-                    <Volume2 className="w-4 h-4" />
-                  </button>
-                </div>
-
-                {/* Options Grid */}
-                <div className="grid grid-cols-1 gap-2.5">
-                  {currentPlacementQ.options.map((opt, oIdx) => {
-                    const isSelected = selectedOption === oIdx;
-                    const isCorrect = oIdx === currentPlacementQ.correctIndex;
-                    let style = 'bg-slate-50 hover:bg-indigo-50 border-slate-200 text-slate-800';
-
-                    if (isAnswerChecked) {
-                      if (isCorrect) style = 'bg-emerald-100 border-emerald-500 text-emerald-950 font-black';
-                      else if (isSelected) style = 'bg-rose-100 border-rose-400 text-rose-950';
-                      else style = 'bg-slate-100 border-slate-200 text-slate-400 opacity-60';
-                    }
-
-                    return (
-                      <button
-                        key={oIdx}
-                        disabled={isAnswerChecked}
-                        onClick={() => handleAnswerPlacement(oIdx)}
-                        className={`w-full text-left p-3.5 rounded-2xl border-2 text-xs sm:text-sm font-semibold transition-all cursor-pointer flex items-center justify-between gap-3 ${style}`}
-                      >
-                        <span>{opt}</span>
-                        {isAnswerChecked && isCorrect && <Check className="w-4 h-4 text-emerald-700 flex-shrink-0" />}
-                      </button>
-                    );
-                  })}
-                </div>
-
-                {/* Feedback & Next Button */}
-                {isAnswerChecked && (
-                  <div className="pt-2 space-y-3">
-                    <div className={`p-4 rounded-2xl text-xs sm:text-sm font-bold border ${
-                      selectedOption === currentPlacementQ.correctIndex
-                        ? 'bg-emerald-50 text-emerald-950 border-emerald-300'
-                        : 'bg-rose-50 text-rose-950 border-rose-300'
-                    }`}>
-                      <div className="flex items-center gap-2 mb-1 font-black">
-                        {selectedOption === currentPlacementQ.correctIndex ? '🎉 Helemaal Goed!' : '💡 Uitleg & Hulp:'}
+                      <div className="bg-white/10 backdrop-blur-md rounded-2xl p-3 sm:p-4 border border-white/20 text-center min-w-[110px]">
+                        <div className="text-2xl sm:text-3xl font-black text-emerald-300">
+                          {diagnosticReport.percent}%
+                        </div>
+                        <div className="text-[10px] text-indigo-200 font-bold uppercase tracking-wider">
+                          Nauwkeurigheid
+                        </div>
                       </div>
-                      <p>{currentPlacementQ.explanation}</p>
                     </div>
 
+                    <p className="text-xs sm:text-sm text-indigo-100/90 leading-relaxed font-medium bg-black/20 p-3.5 rounded-xl border border-white/10">
+                      💡 <b>Pedagogisch Inzicht:</b> {diagnosticReport.recommendation}
+                    </p>
+                  </div>
+
+                  {/* Skills Grid */}
+                  <div className="space-y-3">
+                    <h4 className="text-xs sm:text-sm font-black text-slate-800 uppercase tracking-wider flex items-center gap-2">
+                      <span>📊</span>
+                      <span>Toetsresultaten per Cito Leesvaardigheid:</span>
+                    </h4>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      {filteredPlacementQuestions.map((q, qIdx) => {
+                        const ans = userAnswersHistory[q.id];
+                        const isCorrect = ans?.correct;
+                        return (
+                          <div 
+                            key={q.id}
+                            className={`p-3.5 rounded-2xl border text-xs space-y-1.5 ${
+                              isCorrect 
+                                ? 'bg-emerald-50/70 border-emerald-300 text-emerald-950' 
+                                : ans ? 'bg-rose-50/70 border-rose-300 text-rose-950' : 'bg-slate-50 border-slate-200 text-slate-700'
+                            }`}
+                          >
+                            <div className="flex items-center justify-between font-black">
+                              <span>Vraag {qIdx + 1}: {q.skillTested}</span>
+                              <span className={`px-2 py-0.5 rounded-md text-[10px] ${isCorrect ? 'bg-emerald-200 text-emerald-900' : 'bg-rose-200 text-rose-900'}`}>
+                                {isCorrect ? '✓ Goed' : '✗ Verbeterpunt'}
+                              </span>
+                            </div>
+                            <p className="text-[11px] text-slate-700 font-medium line-clamp-2">
+                              {q.question}
+                            </p>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-slate-100">
                     <button
-                      onClick={handleNextPlacementQuestion}
-                      className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-black py-3 px-4 rounded-2xl text-sm transition-all cursor-pointer flex items-center justify-center gap-2 shadow-md shadow-indigo-600/20"
+                      onClick={handleResetDiagnostic}
+                      className="w-full sm:w-auto bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-4 py-2.5 rounded-xl text-xs transition-all cursor-pointer flex items-center justify-center gap-2"
                     >
-                      <span>{currentPlacementIdx + 1 < filteredPlacementQuestions.length ? 'Volgende Vraag' : 'Toets Voltooid! Bekijk Rapport'}</span>
-                      <ArrowRight className="w-4 h-4" />
+                      <RotateCcw className="w-4 h-4" />
+                      <span>Toets Opnieuw Maken (Reset)</span>
+                    </button>
+
+                    <div className="flex items-center gap-2 w-full sm:w-auto">
+                      <button
+                        onClick={() => {
+                          sound.playPop();
+                          setCurrentPlacementIdx(0);
+                        }}
+                        className="w-full sm:w-auto bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold px-4 py-2.5 rounded-xl text-xs transition-all cursor-pointer flex items-center justify-center gap-2"
+                      >
+                        <Eye className="w-4 h-4" />
+                        <span>Bekijk Vragen</span>
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          sound.playPop();
+                          setActiveTab('rpg_story');
+                        }}
+                        className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white font-black px-5 py-2.5 rounded-xl text-xs transition-all cursor-pointer flex items-center justify-center gap-2 shadow-md shadow-emerald-600/20"
+                      >
+                        <span>Start {currentProfile.name}’s RPG Campagne</span>
+                        <ArrowRight className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+
+                </div>
+              ) : (
+                /* VIEW B: ACTIVE QUESTION PASSAGE */
+                <div className="bg-white rounded-3xl p-5 sm:p-6 border-2 border-indigo-100 shadow-sm space-y-4">
+                  {currentPlacementQ.contextHeader && (
+                    <div className="text-xs font-black text-slate-500 uppercase tracking-wider flex items-center justify-between">
+                      <span>{currentPlacementQ.contextHeader}</span>
+                      <button
+                        onClick={() => handleSpeakText(currentPlacementQ.passage.replace(/\*\*/g, ''))}
+                        className="text-indigo-700 hover:text-indigo-900 font-bold text-xs flex items-center gap-1 cursor-pointer"
+                      >
+                        <Volume2 className="w-3.5 h-3.5" />
+                        <span>Lees tekst</span>
+                      </button>
+                    </div>
+                  )}
+
+                  <div className="bg-amber-50/60 border border-amber-200/80 rounded-2xl p-4 text-slate-800 text-sm sm:text-base leading-relaxed font-medium">
+                    <InteractiveDutchText text={currentPlacementQ.passage} highlightBold={true} />
+                  </div>
+
+                  {/* Vocabulary Help if available */}
+                  {currentPlacementQ.wordHelp && currentPlacementQ.wordHelp.length > 0 && (
+                    <div className="bg-indigo-50/60 border border-indigo-200 rounded-xl p-3 text-xs space-y-1">
+                      <span className="font-black text-indigo-900">💡 Woordenhulp:</span>
+                      {currentPlacementQ.wordHelp.map((wh, wIdx) => (
+                        <div key={wIdx} className="text-slate-700">
+                          • <b>{wh.word}</b> {wh.breakdown && `[${wh.breakdown}]`}: {wh.dutchMeaning} <i>({wh.englishMeaning})</i>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Question */}
+                  <div className="flex items-center justify-between gap-2 pt-2">
+                    <h3 className="text-base sm:text-lg font-black text-slate-900">
+                      {currentPlacementQ.question}
+                    </h3>
+                    <button
+                      onClick={() => handleSpeakText(currentPlacementQ.question)}
+                      className="p-1.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 cursor-pointer transition-colors flex-shrink-0"
+                      title="Lees vraag voor"
+                    >
+                      <Volume2 className="w-4 h-4" />
                     </button>
                   </div>
-                )}
-              </div>
+
+                  {/* Options Grid */}
+                  <div className="grid grid-cols-1 gap-2.5">
+                    {currentPlacementQ.options.map((opt, oIdx) => {
+                      const isSelected = selectedOption === oIdx;
+                      const isCorrect = oIdx === currentPlacementQ.correctIndex;
+                      let style = 'bg-slate-50 hover:bg-indigo-50 border-slate-200 text-slate-800';
+
+                      if (isAnswerChecked) {
+                        if (isCorrect) style = 'bg-emerald-100 border-emerald-500 text-emerald-950 font-black';
+                        else if (isSelected) style = 'bg-rose-100 border-rose-400 text-rose-950';
+                        else style = 'bg-slate-100 border-slate-200 text-slate-400 opacity-60';
+                      }
+
+                      return (
+                        <button
+                          key={oIdx}
+                          disabled={isAnswerChecked}
+                          onClick={() => handleAnswerPlacement(oIdx)}
+                          className={`w-full text-left p-3.5 rounded-2xl border-2 text-xs sm:text-sm font-semibold transition-all cursor-pointer flex items-center justify-between gap-3 ${style}`}
+                        >
+                          <span>{opt}</span>
+                          {isAnswerChecked && isCorrect && <Check className="w-4 h-4 text-emerald-700 flex-shrink-0" />}
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {/* Feedback & Next Button */}
+                  {isAnswerChecked && (
+                    <div className="pt-2 space-y-3">
+                      <div className={`p-4 rounded-2xl text-xs sm:text-sm font-bold border ${
+                        selectedOption === currentPlacementQ.correctIndex
+                          ? 'bg-emerald-50 text-emerald-950 border-emerald-300'
+                          : 'bg-rose-50 text-rose-950 border-rose-300'
+                      }`}>
+                        <div className="flex items-center gap-2 mb-1 font-black">
+                          {selectedOption === currentPlacementQ.correctIndex ? '🎉 Helemaal Goed!' : '💡 Uitleg & Hulp:'}
+                        </div>
+                        <p>{currentPlacementQ.explanation}</p>
+                      </div>
+
+                      <button
+                        onClick={handleNextPlacementQuestion}
+                        className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-black py-3 px-4 rounded-2xl text-sm transition-all cursor-pointer flex items-center justify-center gap-2 shadow-md shadow-indigo-600/20"
+                      >
+                        <span>{currentPlacementIdx + 1 < filteredPlacementQuestions.length ? 'Volgende Vraag' : 'Toets Voltooid! Bekijk Diagnose Rapport'}</span>
+                        <ArrowRight className="w-4 h-4" />
+                      </button>
+                    </div>
+                  )}
+
+                  {/* Option to skip to report if previously answered */}
+                  {diagnosticReport.answeredCount > 0 && !isAnswerChecked && (
+                    <div className="pt-2 flex justify-end">
+                      <button
+                        onClick={() => setCurrentPlacementIdx(filteredPlacementQuestions.length)}
+                        className="text-xs text-indigo-700 hover:text-indigo-900 font-bold flex items-center gap-1 cursor-pointer"
+                      >
+                        <span>Bekijk Huidig Diagnose Rapport ({diagnosticReport.percent}%)</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
 
             </div>
           )}
