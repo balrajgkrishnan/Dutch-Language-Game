@@ -5,174 +5,273 @@ export const RIDHEYA_CORAL_REEF_CAMPAIGN: RpgPage[] = [
     pageNumber: 1,
     title: 'De Noodoproep van de Schildpaddenbaai',
     biome: 'Koraalstrand van Pulau Tioman',
-    storyText: `Ridheya stond met haar witte **dierenartskit** op de steiger van Pulau Tioman. De warme zeewind blies door haar haren en haar ronde bril glansde in het zonlicht. Plotseling zag ze een jonge groene **zeeschildpad** die moeizaam over het koraalzand kroop.
+    storyText: `Ridheya stond met haar witte **dierenartskit** op de houten steiger van Pulau Tioman. De warme zeewind blies zachtjes door haar bruine haren en haar ronde bril glansde helder in het felle zonlicht. In haar hand hield ze haar favoriete vergrootglas, waarmee ze kleine schelpjes en zanddiertjes bestudeerde.
 
-Het diertje zat vast in een stuk aangespoeld visnet. "Rustig maar, dapper schildpadje," fluisterde Ridheya liefdevol. Ze pakte haar stompe medische schaartje om de touwen voorzichtig los te knippen.`,
+Plotseling zag ze bij de vloedlijn een jonge groene **zeeschildpad** die moeizaam over het koraalzand kroop. Het diertje kon bijna niet vooruitkomen, want een aangespoeld visnet zat strak om zijn rechtervoorpoot gewikkeld. 
+
+"Rustig maar, dapper schildpadje, dokter Ridheya is hier om je te helpen," fluisterde ze op geruststellende toon. Behoedzaam knielde ze in het warme zand. Uit haar medische tas haalde ze een stomp verbandknippertje om de strakke nylon draden millimeter voor millimeter los te knippen zonder de schubben te beschadigen.`,
     targetWords: [
       {
         word: 'dierenartskit',
         breakdown: 'dieren + arts + kit',
-        dutchMeaning: 'een tas met medische spullen en verband om dieren te behandelen.',
+        dutchMeaning: 'een draagbare tas met medische hulpmiddelen, schaartjes en zalf om dieren in nood te behandelen.',
         englishMeaning: 'Veterinary medical kit'
       },
       {
         word: 'zeeschildpad',
         breakdown: 'zee + schildpad',
-        dutchMeaning: 'een groot reptiel met een schild en flipperpoten dat in warme zeeën zwemt.',
+        dutchMeaning: 'een groot zeereptiel met peddelvormige flippers en een gestroomlijnd schild dat door tropische oceanen zwemt.',
         englishMeaning: 'Sea turtle'
       },
       {
-        word: 'aangespoeld',
-        breakdown: 'aan + gespoeld',
-        dutchMeaning: 'door de golven van de zee op het droge strand geworpen.',
-        englishMeaning: 'Washed ashore'
+        word: 'behoedzaam',
+        breakdown: 'behoed + zaam',
+        dutchMeaning: 'uiterst voorzichtig, aandachtig en rustig te werk gaand om geen pijn of schade te veroorzaken.',
+        englishMeaning: 'Cautiously / gently'
       }
     ],
     mysteryQuestion: {
-      clueTitle: '🐢 Eerste Hulp #1',
-      question: 'Waarom heeft de jonge zeeschildpad hulp nodig van Ridheya?',
+      clueTitle: '🐢 Eerste Hulp Diagnostiek #1',
+      question: 'Waarom kon de jonge zeeschildpad zich nauwelijks voortbewegen op het strand?',
       options: [
-        'Hij wil een ijsje eten',
-        'Hij zit verstrikt in een stuk aangespoeld visnet',
-        'Hij zoekt zijn zonnebril',
-        'Hij wil leren vliegen'
+        'Zijn schild was te zwaar geworden door het zand',
+        'Zijn rechtervoorpoot zat strak verstrikt in aangespoelde visnetten',
+        'Hij zocht zijn zonnebril tussen de rotsen',
+        'Hij had te veel water gedronken'
       ],
       correctIndex: 1,
-      explanation: 'De schildpad zit vast in touwen van een visnet en Ridheya knipt deze voorzichtig los.'
+      explanation: 'De schildpad zat vast in visnetten en Ridheya knipt deze voorzichtig los met haar stompe schaartje.'
     },
     choices: [
-      { label: 'Smeer een verzachtende aloë-zalf op de flipper en geef het schildpadje de naam Sam', nextPage: 2, skillBonus: '+15 Wondverzorging', icon: '🐢' },
-      { label: 'Onderzoek met je vergrootglas de sporen naar het koraalrif', nextPage: 2, skillBonus: '+15 Spoorzoeken', icon: '🔍' }
+      { label: 'Smeer een verzachtende aloë vera zalf op het pootje en noem het schildpadje Sam', nextPage: 2, skillBonus: '+15 Wondverzorging', icon: '🐢' },
+      { label: 'Onderzoek met je vergrootglas de sporen van het visnet naar het koraalrif', nextPage: 2, skillBonus: '+15 Spoorzoeken', icon: '🔍' }
     ]
   },
   {
     pageNumber: 2,
-    title: 'De Geheime Onderwatergrot met Lichtkoraal',
+    title: 'De Geheime Lagune met Lichtgevend Koraal',
     biome: 'Onderwaterlagune vol Zacht Koraal',
-    storyText: `Met haar duikbril en snorkeltas zwom Ridheya samen met Sam het heldere water in. Tussen het felroze en goudgele koraal zag ze een kleine, verborgen **onderwatergrot**. 
+    storyText: `Met haar duikbril en snorkeltas zwom Ridheya samen met de herstelde schildpad Sam de azuurblauwe lagune in. De zeebodem leek wel een magische onderwatertuin vol waaierkoralen. Tussen twee grote rotsformaties ontdekte ze een verborgen **onderwatergrot** waaruit een zacht, betoverend schijnsel kwam.
 
-Binnenin dreef een geschrokken **clownvisje** rondom een bleke zeeanemoon. "De anemoon heeft te weinig zonlicht door het drijvende puin," zag Ridheya direct door haar heldere duikglas. Met zachte hand ruimde ze de bladeren en takjes weg zodat het lichtkoraal weer kon ademen.`,
+Binnenin dreef een geschrokken **clownvisje** rusteloos rondom een bleke zeeanemoon. Ridheya boog zich voorover en bekeek de situatie aandachtig door haar duikglas. Een dikke laag drijvend oerwoudpuin en aangespoelde palmbladeren blokkeerde de opening, waardoor er geen zonnestralen meer bij de anemoon konden komen.
+
+"Zonder zonlicht verliest koraal zijn voedingsstoffen en kleur," dacht Ridheya scherp na. Met haar handschoenen verwijderde ze voorzichtig alle rottende takjes en liet ze het heldere, voedzame zeewater weer vrij door de grot stromen.`,
     targetWords: [
       {
         word: 'onderwatergrot',
         breakdown: 'onder + water + grot',
-        dutchMeaning: 'een holle ruimte in een rots onder het oppervlak van de zee.',
+        dutchMeaning: 'een natuurlijke holle ruimte in een rif of rots onder het oppervlak van de zee.',
         englishMeaning: 'Underwater cave'
       },
       {
         word: 'clownvisje',
         breakdown: 'clown + vis + je',
-        dutchMeaning: 'een klein oranje visje met witte strepen dat veilig tussen anemonen leeft.',
-        englishMeaning: 'Little clownfish'
+        dutchMeaning: 'een klein oranje tropisch visje met witte banden dat bescherming zoekt tussen giftige tentakels van anemonen.',
+        englishMeaning: 'Little clownfish / anemonefish'
       },
       {
-        word: 'zeeanemoon',
-        breakdown: 'zee + anemoon',
-        dutchMeaning: 'een kleurrijk zeedier met zachte tentakels dat vastzit op een rots.',
-        englishMeaning: 'Sea anemone'
+        word: 'voedingsstoffen',
+        breakdown: 'voeding + s + stoffen',
+        dutchMeaning: 'belangrijke bouwstoffen en mineralen die levende wezens en planten nodig hebben om gezond te groeien.',
+        englishMeaning: 'Nutrients'
       }
     ],
     mysteryQuestion: {
-      clueTitle: '🐠 Koraal Biologie #2',
-      question: 'Waarom was de zeeanemoon bleek geworden?',
+      clueTitle: '🐠 Koraal Ecologie #2',
+      question: 'Wat was de directe oorzaak dat de zeeanemoon in de grot zo bleek en zwak was geworden?',
       options: [
-        'Omdat hij moe was van het zwemmen',
-        'Omdat drijvend puin het zonlicht blokkeerde',
-        'Omdat de vissen te hard zongen',
-        'Omdat het water bevroren was'
+        'Het water in de lagune was te zout',
+        'Drijvend oerwoudpuin en bladeren blokkeerden het noodzakelijke zonlicht',
+        'De clownvissen maakten te veel lawaai',
+        'Er zwommen te veel dolfijnen rond'
       ],
       correctIndex: 1,
-      explanation: 'Het drijvende puin hield het zonlicht tegen, waardoor het koraal en de anemoon verzwakten.'
+      explanation: 'Zonlicht is onmisbaar voor koraal en anemonen; het blokkerende puin maakte het koraal ziek.'
     },
     choices: [
-      { label: 'Plant een stekje van zeldzaam blauw sterrenkoraal', nextPage: 3, skillBonus: '+15 Koraalherstel', icon: '🪸' },
-      { label: 'Volg de clownvis naar de diepere zandbank', nextPage: 3, skillBonus: '+15 Navigatie', icon: '🌊' }
+      { label: 'Plant een stekje van zeldzaam blauw sterrenkoraal om het rif te versterken', nextPage: 3, skillBonus: '+15 Koraalherstel', icon: '🪸' },
+      { label: 'Volg het vrolijke clownvisje naar de diepere zeegrasweide', nextPage: 3, skillBonus: '+15 Navigatie', icon: '🌊' }
     ]
   },
   {
     pageNumber: 3,
-    title: 'De Gevangen Baby Dolfijn in de Zeegrasweide',
-    biome: 'Uitgestrekte Zeegrasweide',
-    storyText: `Op de zanderige bodem golfde een weelderige **zeegrasweide**. Daar hoorde Ridheya een zacht, klikkend geluidje. Een jonge **zeedolfijn** zat met zijn staartvin vast onder een zware schelpenkrans.
+    title: 'De Verdwaalde Spinnerdolfijn in het Zeegras',
+    biome: 'Uitgestrekte Zeegrasweide bij de Koraalbank',
+    storyText: `Aan de rand van het rif strekte zich een weelderige, zacht deinende **zeegrasweide** uit. Het leek wel een groene onderwaterweide waar zeeschildpadden graasden. Plotseling ving Ridheya een reeks zachte, klikkende noodsignalen op die door het water weerkaatsten.
 
-Ridheya zwom behoedzaam dichterbij. Ze gebruikte een houten hefboompje uit haar duiktas om de schelpenkrans voorzichtig op te tillen. "Geen zorgen kleintje, ik help je!" Met een sierlijke salto sprong de jonge dolfijn vrij door het water en gaf Ridheya een vrolijke neusduw.`,
+Dicht bij de bodem zag ze een jonge **spinnerdolfijn** die met zijn staartvin klem zat onder een zware formatie aaneengegroeide oesterschelpen. Het jonge dier probeerde wanhopig naar de oppervlakte te zwemmen om adem te halen door zijn **blaasgat**.
+
+Ridheya wist dat elke seconde telde. Ze zwom snel maar beheerst naar de dolfijn toe. Uit haar duikgordel pakte ze een lichtgewicht hefboompje van drijfhout. Met een slimme hefboombeweging tilde ze de schelpenkrans een paar centimeter op, waarna de baby dolfijn met een krachtige vinbeweging loskwam en samen met Ridheya naar boven schoot voor een diepe teug frisse lucht!`,
     targetWords: [
       {
         word: 'zeegrasweide',
         breakdown: 'zee + gras + weide',
-        dutchMeaning: 'een grote onderwaterweide vol groen gras waar zeedieren grazen en schuilen.',
+        dutchMeaning: 'een uitgestrekt onderwaterlandschap vol waterplanten dat als kraamkamer en voedselbron dient voor zeedieren.',
         englishMeaning: 'Seagrass meadow'
       },
       {
-        word: 'zeedolfijn',
-        breakdown: 'zee + dolfijn',
-        dutchMeaning: 'een heel intelligent en sociaal zoogdier dat in de oceaan leeft en ademt met een blaasgat.',
-        englishMeaning: 'Marine dolphin'
+        word: 'spinnerdolfijn',
+        breakdown: 'spinner + dolfijn',
+        dutchMeaning: 'een sierlijke dolfijnensoort die bekend staat om acrobatische draaisprongen boven het water.',
+        englishMeaning: 'Spinner dolphin'
       },
       {
-        word: 'behoedzaam',
-        breakdown: 'behoed + zaam',
-        dutchMeaning: 'heel voorzichtig en aandachtig om niets kapot te maken of te laten schrikken.',
-        englishMeaning: 'Cautiously / gently'
+        word: 'blaasgat',
+        breakdown: 'blaas + gat',
+        dutchMeaning: 'de ademopening bovenop de kop van een dolfijn of walvis waarmee lucht wordt in- en uitgeblazen.',
+        englishMeaning: 'Blowhole'
       }
     ],
     mysteryQuestion: {
-      clueTitle: '🐬 Dierenredding #3',
-      question: 'Hoe bevrijdt Ridheya de jonge dolfijn?',
+      clueTitle: '🐬 Zoogdieren EHBO #3',
+      question: 'Waarom was het voor de spinnerdolfijn van levensbelang om snel bevrijd te worden?',
       options: [
-        'Ze trekt hard aan zijn staart',
-        'Ze tilt de zware schelpenkrans behoedzaam op met een houten hefboompje',
-        'Ze roept een haai om hulp',
-        'Ze zwemt weg naar het strand'
+        'Dolfijnen zijn zoogdieren die met hun blaasgat regelmatig aan de oppervlakte lucht moeten inademen',
+        'Dolfijnen kunnen niet tegen zout water',
+        'Hij had dorst en wilde limonade drinken',
+        'Zijn vinnen zouden anders oplossen in het zeegras'
       ],
-      correctIndex: 1,
-      explanation: 'Ridheya gebruikt een hefboompje om de schelpenkrans voorzichtig op te lichten zonder het dier pijn te doen.'
+      correctIndex: 0,
+      explanation: 'Dolfijnen hebben longen en ademen lucht via hun blaasgat aan het wateroppervlak.'
     },
     choices: [
-      { label: 'Zwem samen met de dolfijn en schildpad Sam naar het Koninginnenrif', nextPage: 4, skillBonus: '+20 Dolfijnenvriendschap', icon: '🐬' },
-      { label: 'Verzamel geneeskrachtig parelpoeder van de zeebodem', nextPage: 4, skillBonus: '+20 Natuurgeneeskunde', icon: '✨' }
+      { label: 'Onderzoek de staartvin van de dolfijn en breng een waterbestendige beschermfolie aan', nextPage: 4, skillBonus: '+20 Dolfijnenverzorging', icon: '🐬' },
+      { label: 'Volg de dolfijnenfamilie naar het geheimzinnige scheepswrak bij de diepe trog', nextPage: 4, skillBonus: '+20 Onderwaterverkenning', icon: '🧭' }
     ]
   },
   {
     pageNumber: 4,
-    title: 'De Feestelijke Kroning tot Dokter van de Zee',
-    biome: 'Het Stralende Koninginnenrif',
-    storyText: `Bij het Koninginnenrif straalde het water in alle kleuren van de regenboog. Schildpad Sam, het clownvisje en de baby dolfijn cirkelden vrolijk om Ridheya heen. 
+    title: 'Het Gezonken Onderzoeksschip en de Oktopus in Nood',
+    biome: 'Historisch Scheepswrak op 15 Meter Diepte',
+    storyText: `De jonge dolfijn leidde Ridheya en schildpad Sam naar de rand van het rifplateau. Daar lag de houten romp van een oud **onderzoeksschip** dat tientallen jaren geleden tijdens een storm was gezonken. Het wrak was nu begroeid met kleurrijke buissponzen en zacht koraal.
 
-De oudste zeeschildpad van het rif overhandigde Ridheya een schitterende **parelketting** gemaakt van glanzend parelmoer. "Dankzij jouw moed en zachte zorg zijn onze jongen veilig," ruisten de golven. Ridheya zette haar bril recht en glimlachte trots: het koraalrif was weer een veilig thuis voor iedereen!`,
+Bij het roer hoorde Ridheya een dof getik. Met haar waterdichte duiklamp scheen ze door een patrijspoort. Binnenin zat een slimme blauwgeringde **oktopus** vast in een glazen pot die door oude stormwinden was omgevallen en geblokkeerd raakte.
+
+De oktopus keek haar met grote, nieuwsgierige ogen aan en veranderde van kleur om zijn emotie te tonen. Ridheya schoof haar hand voorzichtig door de spleet en draaide de klem zachtjes opzij. De dankbare oktopus gleed soepel naar buiten en spoot een wolkje onschuldige bubbels om haar te bedanken.`,
     targetWords: [
       {
-        word: 'parelketting',
-        breakdown: 'parel + ketting',
-        dutchMeaning: 'een sieraad gemaakt van ronde, glanzende parels uit oesterschelpen.',
-        englishMeaning: 'Pearl necklace'
+        word: 'onderzoeksschip',
+        breakdown: 'onderzoek + s + schip',
+        dutchMeaning: 'een speciaal vaartuig dat door mariene biologen wordt gebruikt om de oceaan en zeedieren te bestuderen.',
+        englishMeaning: 'Research vessel'
       },
       {
-        word: 'parelmoer',
-        dutchMeaning: 'de glanzende, regenboogachtige binnenlaag van schelpen.',
-        englishMeaning: 'Mother-of-pearl'
+        word: 'patrijspoort',
+        breakdown: 'patrijspoort',
+        dutchMeaning: 'een rond, waterdicht scheepsraam met dik glas in de romp van een boot.',
+        englishMeaning: 'Porthole'
       },
       {
-        word: 'veiligheid',
-        breakdown: 'veilig + heid',
-        dutchMeaning: 'de toestand waarin er geen gevaar of pijn dreigt.',
-        englishMeaning: 'Safety'
+        word: 'emotie',
+        dutchMeaning: 'een innerlijk gevoel zoals vreugde, angst, opluchting of nieuwsgierigheid.',
+        englishMeaning: 'Emotion / feeling'
       }
     ],
     mysteryQuestion: {
-      clueTitle: '🌟 Eindoverwinning #4',
-      question: 'Welke les leert Ridheya van haar avontuur op het koraalrif?',
+      clueTitle: '🐙 Zeebiologie Inzicht #4',
+      question: 'Hoe maakte de oktopus in het scheepswrak zijn gevoelens en toestand kenbaar aan Ridheya?',
       options: [
-        'Dat zeedieren nooit hulp nodig hebben',
-        'Dat met geduld, zachtheid en medische zorg zelfs de kleinste zeedieren gered kunnen worden',
-        'Dat vissen niet in het water kunnen zwemmen',
-        'Dat koraal van plastic is gemaakt'
+        'Hij blies op een scheepshoorn',
+        'Hij paste zijn huidskleur aan en keek met expressieve ogen',
+        'Hij schreef een brief op perkament',
+        'Hij zong een liedje onder water'
       ],
       correctIndex: 1,
-      explanation: 'Met liefdevolle zorg, geduld en een EHBO-kit heeft Ridheya het hele rif beschermd.'
+      explanation: 'Oktopussen gebruiken kleurveranderingen van hun huidcellen om te communiceren en hun toestand te tonen.'
     },
     choices: [
-      { label: 'Vier het feest op het strand met vers kokoswater en Kopi de hond', nextPage: 1, skillBonus: '🌟 Grote Koraaldokter Medaille!', icon: '🥥' }
+      { label: 'Verzamel eeuwenoude rifkristallen uit de scheepskajuit voor het rifheiligdom', nextPage: 5, skillBonus: '+20 Archeologie', icon: '💎' },
+      { label: 'Zwem samen in formatie met de oktopus, Sam en de dolfijn naar de Koraaltempel', nextPage: 5, skillBonus: '+20 Teamgeest', icon: '🤝' }
+    ]
+  },
+  {
+    pageNumber: 5,
+    title: 'Het Heiligdom van de Koraalkoningin',
+    biome: 'Kristalheldere Koraaltempel in het Diepe Rif',
+    storyText: `In het hart van het nationale zeepark rezen majestueuze torens van levend kalkkoraal omhoog. Dit was het legendarische heiligdom van de **koraalkoningin**. Het water fonkelde in alle tinten van smaragd, turkoois en goud.
+
+In het midden rustte de reusachtige Moederschildpad, een wijze reus van meer dan honderd jaar oud. Ze bekeek Ridheya met een blik vol warmte en respect. Rondom haar zwommen scholen papegaaivissen, zeepaardjes en manta\'s die allemaal geholpen waren door Ridheya\'s snelle en zorgvuldige medische ingrepen.
+
+"Jij hebt bewezen dat ware geneeskunde begint met geduld, een zuiver hart en liefde voor elk klein wezen," klonk het harmonieuze lied van de zeedieren. De Moederschildpad overhandigde Ridheya met haar flipper een zeldzame **schelpenamulet** gevuld met magisch lichtgevend parelpoeder dat het rif voor altijd gezond zal houden.`,
+    targetWords: [
+      {
+        word: 'heiligdom',
+        breakdown: 'heilig + dom',
+        dutchMeaning: 'een gewijde, beschermde plek van grote rust en bijzondere natuurwaarde.',
+        englishMeaning: 'Sanctuary / shrine'
+      },
+      {
+        word: 'schelpenamulet',
+        breakdown: 'schelpen + amulet',
+        dutchMeaning: 'een beschermend siervoorwerp gemaakt van glanzende zeeschelpen met helende krachten.',
+        englishMeaning: 'Shell amulet / talisman'
+      },
+      {
+        word: 'respect',
+        dutchMeaning: 'eerbied en grote waardering voor iemands goede daden of wijsheid.',
+        englishMeaning: 'Respect / esteem'
+      }
+    ],
+    mysteryQuestion: {
+      clueTitle: '🪸 Didactische Synthese #5',
+      question: 'Waarom overhandigt de oude Moederschildpad de schelpenamulet aan dokter Ridheya?',
+      options: [
+        'Omdat Ridheya het snelste kon zwemmen',
+        'Als eerbetoon voor haar onvermoeibare geduld, zachte wondzorg en toewijding aan alle rifdieren',
+        'Omdat de amulet te zwaar was voor de schildpad',
+        'Omdat ze de weg naar huis zocht'
+      ],
+      correctIndex: 1,
+      explanation: 'Ridheya heeft door haar diergeneeskundige zorg en liefde voor de natuur het hele rif gered.'
+    },
+    choices: [
+      { label: 'Strooi het helende parelpoeder uit over de hele koraalbank', nextPage: 6, skillBonus: '+25 Rifbescherming', icon: '✨' },
+      { label: 'Zet de schelpenamulet op je dierenartskit als officieel keurmerk', nextPage: 6, skillBonus: '+25 Medische Ereorde', icon: '🏅' }
+    ]
+  },
+  {
+    pageNumber: 6,
+    title: 'De Feestelijke Kroning tot Opper-Marienedokter',
+    biome: 'Feeststrand van Tioman bij Zonsondergang',
+    storyText: `Toen Ridheya weer boven water kwam en het witte zandstrand opliep, ging de tropische zon langzaam onder in een gloed van oranje en dieppaars. Op de steiger stonden haar zus Hemali, hond Kopi en boswachter Amir al vrolijk te zwaaien.
+
+Schildpad Sam en de baby dolfijn deden synchrone vreugdesprongen in de branding. Amir overhandigde Ridheya een prachtig houten certificaat met een gouden lakzegel: *'Officiële Opper-Marienedokter van Pulau Tioman'*.
+
+Ridheya zette haar ronde bril recht, aaide Kopi over zijn zachte oren en glimlachte stralend naar haar zus Hemali. Haar droom om alle dieren in nood te redden was werkelijkheid geworden. Het koraalrif was gered, en een nieuw avontuur in de jungle wachtte alweer op haar!`,
+    targetWords: [
+      {
+        word: 'marienedokter',
+        breakdown: 'mariene + dokter',
+        dutchMeaning: 'een gespecialiseerde dierenarts die zieke en gewonde zeedieren in de oceaan behandelt.',
+        englishMeaning: 'Marine veterinarian'
+      },
+      {
+        word: 'lakzegel',
+        breakdown: 'lak + zegel',
+        dutchMeaning: 'een officiële stempel van rode was die op een belangrijk diploma of perkament wordt gedrukt.',
+        englishMeaning: 'Wax seal'
+      },
+      {
+        word: 'werkelijkheid',
+        breakdown: 'werkelijk + heid',
+        dutchMeaning: 'dat wat echt gebeurt en waar is; het tegendeel van een verzinsel of droom.',
+        englishMeaning: 'Reality'
+      }
+    ],
+    mysteryQuestion: {
+      clueTitle: '🌟 Eindoverwinning #6',
+      question: 'Welke overkoepelende hoofdgedachte heeft Ridheya bewezen tijdens haar koraalavontuur?',
+      options: [
+        'Dat mensen beter nooit de zee in kunnen gaan',
+        'Dat gerichte wetenschappelijke kennis, observatievermogen en empathie samen elk ecosysteem kunnen herstellen',
+        'Dat schildpadden liever op het land blijven',
+        'Dat duikbrillen van glas moeten zijn'
+      ],
+      correctIndex: 1,
+      explanation: 'Met kennis, observatie en liefdevolle zorg kan een dierenarts een compleet rif redden.'
+    },
+    choices: [
+      { label: 'Vier het feest op het strand met vers kokoswater en Kopi de hond', nextPage: 1, skillBonus: '👑 Grote Gouden Marienedokter Bokaal!', icon: '🥥' }
     ]
   }
 ];
@@ -180,175 +279,274 @@ De oudste zeeschildpad van het rif overhandigde Ridheya een schitterende **parel
 export const RIDHEYA_TREEHOUSE_CLINIC_CAMPAIGN: RpgPage[] = [
   {
     pageNumber: 1,
-    title: 'De Geheime Boomhuttendokterij in de Jungle',
-    biome: 'Grote Banyanboomhut in Taman Negara',
-    storyText: `Hoog in de kruin van een eeuwenoude banyanboom had Ridheya haar eigen **boomhutkliniek** ingericht. Met houten plankjes, zachte mosbedjes en schone glazen potjes vol kruidenbalsem was ze klaar voor elke patiënt.
+    title: 'De Geheime Boomhuttendokterij in de Oerwoudkruin',
+    biome: 'Eeuwenoude Banyanboom in Taman Negara',
+    storyText: `Hoog in de reusachtige takken van een eeuwenoude banyanboom in Taman Negara had Ridheya haar eigen **boomhutkliniek** gebouwd. De hut rook heerlijk naar vers geschaafd cederhout en gedroogde eucalyptus. Binnen stonden potjes vol zelfgemaakte kruidenbalsem, steriele verbandrolletjes en een zacht mosbedje voor kleine patiënten.
 
-Onder aan de touwladder hoorde ze een zacht gepiep. Kopi de hond blafte vrolijk. Daar stond een klein **eekhoorntje** met een bezeerd pootje na een val uit een mangoboom.`,
+Aan haar schouderriem hing haar glanzende stethoscoop en haar vergrootglas. Buiten ritselde het bladerdak in de warme bries. Hond Kopi zat waakzaam op het balkon en sloeg een zacht waarschuwingsblafje.
+
+Onder aan de touwladder hoorde Ridheya een aandoenlijk gepiep. Daar zat een klein **boomeekhoorntje** met een bezeerd voorpootje na een mislukte sprong tussen twee mangotakken. Ridheya liet direct het mandje met zachte doeken naar beneden zakken om het diertje veilig omhoog te hijsen.`,
     targetWords: [
       {
         word: 'boomhutkliniek',
         breakdown: 'boomhut + kliniek',
-        dutchMeaning: 'een speciaal ingerichte behandelplek in een boom voor gewonde bosdieren.',
+        dutchMeaning: 'een speciaal ingerichte medische behandelplek hoog in een boom voor zieke en gewonde woudbewoners.',
         englishMeaning: 'Treehouse clinic'
       },
       {
         word: 'kruidenbalsem',
         breakdown: 'kruiden + balsem',
-        dutchMeaning: 'een zachte, geurige zalf gemaakt van planten om schrammen te verzorgen.',
+        dutchMeaning: 'een zachte, geurige zalf gemaakt van geneeskrachtige plantenbladeren om schrammen te verzachten.',
         englishMeaning: 'Herbal balm'
       },
       {
-        word: 'mangoboom',
-        breakdown: 'mango + boom',
-        dutchMeaning: 'een tropische boom waaraan zoete, sappige mangovruchten groeien.',
-        englishMeaning: 'Mango tree'
+        word: 'boomeekhoorntje',
+        breakdown: 'boom + eekhoorn + tje',
+        dutchMeaning: 'een klein behendig knaagdier met een pluimstaart dat in boomtoppen leeft en noten verzamelt.',
+        englishMeaning: 'Little tree squirrel'
       }
     ],
     mysteryQuestion: {
-      clueTitle: '🐿️ Diagnostiek #1',
-      question: 'Wat is er aan de hand met het jonge eekhoorntje?',
+      clueTitle: '🐿️ Diagnostiek & Observatie #1',
+      question: 'Waarom heeft het jonge boomeekhoorntje de hulp van dokter Ridheya nodig?',
       options: [
-        'Hij heeft honger naar kaas',
-        'Hij heeft een bezeerd pootje na een val uit een mangoboom',
-        'Hij wil vliegen met een vlieger',
-        'Hij is zijn schoenen kwijt'
+        'Hij heeft honger naar pinda\'s',
+        'Hij heeft zijn voorpootje bezeerd bij een val uit een mangoboom',
+        'Hij is zijn zonnebril kwijtgeraakt in het mos',
+        'Hij wil leren blaffen zoals Kopi'
       ],
       correctIndex: 1,
-      explanation: 'Het eekhoorntje heeft zijn pootje bezeerd door een val en zoekt hulp bij dokter Ridheya.'
+      explanation: 'Het eekhoorntje heeft zijn pootje bezeerd tijdens een sprong en Ridheya hijst hem voorzichtig omhoog.'
     },
     choices: [
-      { label: 'Leg het eekhoorntje op een zacht mosbedje en breng kruidenbalsem aan', nextPage: 2, skillBonus: '+15 Eerste Hulp', icon: '🌿' },
-      { label: 'Vraag Kopi om de omgeving van de boomhut te bewaken', nextPage: 2, skillBonus: '+15 Waakzaamheid', icon: '🐕' }
+      { label: 'Leg het eekhoorntje op het mosbedje en leg een zacht bamboespalkje aan', nextPage: 2, skillBonus: '+15 Eerste Hulp', icon: '🌿' },
+      { label: 'Geef het diertje wat zoet papajasap om op krachten te komen', nextPage: 2, skillBonus: '+15 Voedingsleer', icon: '🫐' }
     ]
   },
   {
     pageNumber: 2,
-    title: 'De Vleermuis met de Verstuikte Vleugel',
-    biome: 'Schaduwrijk Prieel onder het Bladerdak',
-    storyText: `Terwijl het eekhoorntje rustig lag te knabbelen op een stukje banaan, fladderde een kleine **vruchtenvleermuis** onhandig naar binnen. Het diertje heette Pipit en had een scheurtje in zijn dunne **vleugelvlies**.
+    title: 'Pipit de Vleermuis met de Gescheurde Vleugel',
+    biome: 'Schaduwrijk Prieel in de Boomhut',
+    storyText: `Terwijl het eekhoorntje tevreden lag te rusten op zijn moskussen, fladderde een kleine **vruchtenvleermuis** wankelend door het open raam naar binnen. Het diertje heette Pipit en was verstrikt geraakt in doornige rotanranken.
 
-Ridheya pakte een steriel stukje gaasverband en haar speciale kamillewater. "Heel stil blijven liggen, Pipit," zei ze met zachte stem. Met uiterste precisie bracht ze een ademend pleistertje aan op de vleugeltop.`,
+Ridheya pakte direct haar loep en onderzocht de vleugel. Tussen de fijne vingerbotjes zat een klein scheurtje in het elastische **vleugelvlies**. "Heel stil blijven liggen, dapper vriendje," sprak Ridheya fluisterzacht om het diertje gerust te stellen.
+
+Met een druppeltje zuiverend kamillewater reinigde ze het wondje zorgvuldig. Vervolgens bracht ze met uiterste precisie een flinterdun, ademend **gaasverbandje** aan met natuurlijke harslijm. Pipit spreidde zijn vleugel voorzichtig uit en slaakte een piepje van pure opluchting!`,
     targetWords: [
       {
         word: 'vruchtenvleermuis',
         breakdown: 'vruchten + vleermuis',
-        dutchMeaning: 'een nuttige vliegende zoogdiersoort die leeft van zoete vruchten en bloesem.',
+        dutchMeaning: 'een vliegend zoogdier dat leeft van nectar en rijp tropisch fruit en helpt bij het bestuiven van het regenwoud.',
         englishMeaning: 'Fruit bat'
       },
       {
         word: 'vleugelvlies',
         breakdown: 'vleugel + vlies',
-        dutchMeaning: 'het dunne, elastische velletje tussen de vingers van een vleermuis waarmee hij vliegt.',
+        dutchMeaning: 'het dunne, elastische huidmembraan tussen de vingers van een vleermuis waarmee hij kan zweven en vliegen.',
         englishMeaning: 'Wing membrane'
       },
       {
-        word: 'steriel',
-        dutchMeaning: 'volledig schoon en vrij van bacteriën of vuil.',
-        englishMeaning: 'Sterile / germ-free'
+        word: 'gaasverbandje',
+        breakdown: 'gaas + verband + je',
+        dutchMeaning: 'een luchtig geweven medisch lapje stof dat wonden beschermt tegen vuil en bacteriën.',
+        englishMeaning: 'Gauze dressing'
       }
     ],
     mysteryQuestion: {
-      clueTitle: '🦇 Medische Zorg #2',
-      question: 'Waarmee verzorgt Ridheya het scheurtje in het vleugelvlies van Pipit?',
+      clueTitle: '🦇 Vleugelanatomie #2',
+      question: 'Hoe zorgt Ridheya ervoor dat het scheurtje in het vleugelvlies van Pipit veilig kan genezen?',
       options: [
-        'Met plakband uit een kantoor',
-        'Met kamillewater en een steriel ademend pleistertje',
-        'Met een stuk krantenpapier',
-        'Met koud ijs'
+        'Ze knipt de hele vleugel af met een schaar',
+        'Ze reinigt de wond met kamillewater en plakt een ademend, dun gaasverbandje',
+        'Ze plakt er een zware stenen pleister op',
+        'Ze legt de vleermuis in een emmer koud water'
       ],
       correctIndex: 1,
-      explanation: 'Ridheya reinigt het wondje met kamillewater en plakt een steriel pleistertje.'
+      explanation: 'Ridheya ontsmet de wond zacht met kamillewater en brengt een ademend gaasverbandje aan.'
     },
     choices: [
-      { label: 'Voer Pipit wat zoet papajasap met een pipetje', nextPage: 3, skillBonus: '+15 Voeding & Herstel', icon: '🫐' },
-      { label: 'Maak een slaapnestje van donker vilt in de hoek van de hut', nextPage: 3, skillBonus: '+15 Dierenwelzijn', icon: '🛖' }
+      { label: 'Maak een donker hangnestje van vilt in de rusthoek van de kliniek', nextPage: 3, skillBonus: '+15 Dierenwelzijn', icon: '🛖' },
+      { label: 'Meng een versterkend nectardrankje van wilde orchideeën', nextPage: 3, skillBonus: '+15 Kruidengeneeskunde', icon: '🌸' }
     ]
   },
   {
     pageNumber: 3,
-    title: 'Het Verloren Nevelpantertje in de Regenbui',
-    biome: 'Bamboebos bij de Boomhut tijdens een Tropische Buit',
-    storyText: `Buiten begon een warme tropische regenbui zachtjes op de bladeren te tikken. Onder de veranda van de kliniek zagen Ridheya en Kopi een kletsnat **nevelpantertje** bibberen. Het beestje was de weg naar zijn moeder kwijtgeraakt.
+    title: 'Het Bibberende Nevelpantertje in de Moessonregen',
+    biome: 'Bamboeterras tijdens een Tropische Stortbui',
+    storyText: `Buiten begon de lucht plotseling donkerblauw te kleuren en barstte een warme tropische regenbui los. Zware regendruppels roffelden als trommels op de brede palmbladeren. Kopi spitste zijn oren en liep naar de veranda van de boomhut.
 
-Ridheya wikkelde het welpje in een grote warme handdoek en zette een kommetje warme geitenmelk klaar. Met haar **stethoscoop** luisterde ze naar het hartje: regelmatig en krachtig! Het pantertje begon luid te spinnen tegen haar schouder.`,
+Daar zat een kletsnat, bibberend **nevelpantertje** ineengedoken onder een groot bananenblad. Het welpje was tijdens de onweersbui gescheiden geraakt van zijn moeder en rilde van de kou.
+
+Ridheya handelde bliksemsnel: ze wikkelde het welpje in een dikke flanellen handdoek en wreef zijn vachtje zachtjes droog bij het warme kruidenkacheltje. Met haar **stethoscoop** luisterde ze naar de ademhaling: de longetjes klonken zuiver en het hartje klopte snel maar krachtig. Binnen een paar minuten begon het pantertje luid spinnend tegen haar arm aan te kruipen.`,
     targetWords: [
       {
         word: 'nevelpantertje',
         breakdown: 'nevel + panter + tje',
-        dutchMeaning: 'een zeldzame kleine roofkat uit het regenwoud met mooie vlekken.',
+        dutchMeaning: 'een zeldzame en behendige gevlekte boskat uit Zuidoost-Azië die uitstekend in bomen kan klimmen.',
         englishMeaning: 'Clouded leopard cub'
       },
       {
         word: 'stethoscoop',
-        dutchMeaning: 'een medisch luisterinstrument om het kloppen van het hart en de longen te horen.',
+        dutchMeaning: 'een medisch luisterinstrument waarmee een arts naar het kloppen van het hart en het suizen van de longen luistert.',
         englishMeaning: 'Stethoscope'
       },
       {
-        word: 'regelmatig',
-        breakdown: 'regel + matig',
-        dutchMeaning: 'in een gelijkmatig, rustig en gezond tempo achter elkaar doorgaand.',
-        englishMeaning: 'Regular / steady'
+        word: 'ademhaling',
+        breakdown: 'adem + haling',
+        dutchMeaning: 'het proces van lucht inademen voor zuurstof en weer uitademen.',
+        englishMeaning: 'Breathing / respiration'
       }
     ],
     mysteryQuestion: {
-      clueTitle: '🩺 Dierenonderzoek #3',
-      question: 'Wat stelt Ridheya vast wanneer ze met haar stethoscoop naar het pantertje luistert?',
+      clueTitle: '🩺 Klinisch Onderzoek #3',
+      question: 'Wat stelt dokter Ridheya vast wanneer ze met haar stethoscoop naar het pantertje luistert?',
       options: [
-        'Dat het hartje regelmatig en krachtig klopt',
-        'Dat het pantertje kan praten',
-        'Dat de stethoscoop kapot is',
-        'Dat het pantertje trek heeft in pizza'
+        'Het dier heeft een ernstige longontsteking',
+        'Zijn longetjes klinken zuiver en zijn hartslag is regelmatig en gezond',
+        'De stethoscoop werkt niet bij katachtigen',
+        'Het pantertje kan praten'
       ],
       correctIndex: 1,
-      explanation: 'Ridheya hoort dat het hartje van het jonge welpje gezond en regelmatig klopt.'
+      explanation: 'Het onderzoek toont aan dat het welpje alleen koud was, maar verder gezonde longen en een sterk hartje heeft.'
     },
     choices: [
-      { label: 'Blaas op de bamboefluit om de moederspoorlijn te volgen', nextPage: 4, skillBonus: '+20 Gezinshereniging', icon: '🪈' },
-      { label: 'Droog het vachtje voorzichtig met de zachte handdoek', nextPage: 4, skillBonus: '+20 Verzorging', icon: '🐆' }
+      { label: 'Geef het pantertje een kommetje lauwe geitenmelk met vitaminen', nextPage: 4, skillBonus: '+20 Welpenzorg', icon: '🥛' },
+      { label: 'Luister met Kopi naar het verre gebrul van de moederpanter in het dal', nextPage: 4, skillBonus: '+20 Spoorzoeken', icon: '👂' }
     ]
   },
   {
     pageNumber: 4,
-    title: 'De Grote Jungle Hereniging & Dokterdiploma',
-    biome: 'Verlichte Open Plek onder de Regenboog',
-    storyText: `De regen hield op en een gouden zonnestraal brak door het bladerdak. Tussen het bamboe verscheen de moederpanter, die haar jong met een diep geruststellend gebrul begroette. Het eekhoorntje en vleermuisje Pipit zwaaiden vrolijk vanuit de boomhut.
+    title: 'De Geheime Receptuur tegen Junglekoorts',
+    biome: 'Kruidentuin en Apothekershoek van de Boomhut',
+    storyText: `Terwijl de regen langzaam overging in een lichte nevel, klom een bezorgde brillangur-aap de veranda op. Hij droeg zijn kleine jong op de rug, dat gloeide van de **junglekoorts**. Het aapje lag slap in de armen van zijn vader en wilde niet eten.
 
-Amir de fietskoerier arriveerde met een houten bordje: *'Officiële Hoofdkliniek Dokter Ridheya'*. Alle bosdieren bogen dankbaar. Ridheya voelde zich de gelukkigste dierenarts van heel Maleisië!`,
+Ridheya wist dat ze geen tijd mocht verliezen. Ze raadpleegde haar handgeschreven kruidenencyclopedie. "Voor tropische koorts hebben we verse gemberwortel, citroengras en fijngestampte kurkuma nodig," legde ze uit aan Kopi.
+
+Met een stenen vijzel vermaalde ze de geneeskrachtige planten tot een goudgeel siroopje. Met een zacht pipetje gaf ze het jonge aapje een paar druppels. Binnen een half uur zakte de koorts merkbaar, dronk het aapje wat vers kokoswater en greep het vrolijk naar Ridheya\'s ronde bril!`,
     targetWords: [
       {
-        word: 'geruststellend',
-        breakdown: 'gerust + stellend',
-        dutchMeaning: 'zodanig dat de angst of zorgen helemaal verdwijnen.',
-        englishMeaning: 'Reassuring'
+        word: 'junglekoorts',
+        breakdown: 'jungle + koorts',
+        dutchMeaning: 'een verhoogde lichaamstemperatuur bij bosdieren veroorzaakt door infecties of tropische muggenbeten.',
+        englishMeaning: 'Jungle fever'
       },
       {
-        word: 'bladerdak',
-        breakdown: 'blader + dak',
-        dutchMeaning: 'de dichte laag van takken en bladeren hoog in de toppen van de bomen.',
-        englishMeaning: 'Canopy / foliage roof'
+        word: 'geneeskrachtige',
+        breakdown: 'genees + krachtige',
+        dutchMeaning: 'eigenschappen van bepaalde planten en kruiden die ziektes helpen genezen en pijn wegnemen.',
+        englishMeaning: 'Medicinal / healing'
       },
       {
-        word: 'hereniging',
-        breakdown: 'her + eniging',
-        dutchMeaning: 'het moment waarop mensen of dieren na een scheiding weer fijn bij elkaar komen.',
-        englishMeaning: 'Reunion'
+        word: 'vijzel',
+        dutchMeaning: 'een zware stenen schaal met een stamper om kruiden, zaden en medicijnen fijn te wrijven.',
+        englishMeaning: 'Mortar and pestle'
       }
     ],
     mysteryQuestion: {
-      clueTitle: '🏆 Grote Uitkomst #4',
-      question: 'Waarom is dit een gedenkwaardige dag voor Ridheya?',
+      clueTitle: '🌿 Farmacie & Plantkunde #4',
+      question: 'Hoe bereidt Ridheya het effectieve koortsverlagende drankje voor het jonge aapje?',
       options: [
-        'Omdat ze haar schoenen heeft verloren',
-        'Omdat alle patiëntjes genezen zijn, het pantertje herenigd is met zijn moeder en haar kliniek officieel erkend is',
-        'Omdat het de hele dag geregend heeft',
-        'Omdat ze geen bomen meer hoeft te zien'
+        'Ze mengt suikerwater met zand',
+        'Ze vermaalt gemberwortel, citroengras en kurkuma in een stenen vijzel tot een geneeskrachtig siroopje',
+        'Ze belt een pizza koerier',
+        'Ze geeft het aapje ijsblokjes'
       ],
       correctIndex: 1,
-      explanation: 'Alle diertjes zijn geholpen, het pantertje is veilig bij zijn moeder en Ridheya ontvangt haar officiële kliniekbord.'
+      explanation: 'Door de natuurlijke ontstekingsremmende kruiden te vermalen in de vijzel maakt ze een effectief drankje.'
     },
     choices: [
-      { label: 'Hang het houten bordje aan de voordeur van de boomhut', nextPage: 1, skillBonus: '🎓 Officiële Jungle Dierenarts Diploma!', icon: '🌟' }
+      { label: 'Wikkel het aapje in een verkoelend blad van de wilde gemberplant', nextPage: 5, skillBonus: '+20 Natuurtherapie', icon: '🍃' },
+      { label: 'Noteer het succesvolle recept in je officiële dierenartsenlogboek', nextPage: 5, skillBonus: '+20 Farmacie', icon: '📝' }
+    ]
+  },
+  {
+    pageNumber: 5,
+    title: 'De Neushoornvogel met de Gekneusde Vleugel',
+    biome: 'Kruin van de Reuzen-Dipterocarpboom',
+    storyText: `Hoog boven de boomhut klonk een zware slag van vleugels. Een imposante Maleisische **neushoornvogel** met een prachtige goudgele snavelhoorn landde moeizaam op de leuning. Zijn rechtervleugel hing slap naar beneden na een botsing met een zware liaan.
+
+Ridheya naderde de grote vogel met het volste respect. De vogel boog zijn kop zodat Ridheya de slagpennen en het ellebooggewricht kon betasten. Er was geen breuk, maar wel een pijnlijke **gewrichtskneuzing**.
+
+Ridheya pakte twee lichte spalklatjes van soepel rotanhout en omwikkelde het vleugelgewricht met een elastische vogelspalk. "Over drie dagen is je spier weer helemaal hersteld en vlieg je weer als een koning door het woud," beloofde Ridheya met een glimlach. De vogel klakte zachtjes met zijn snavel als dankbetuiging.`,
+    targetWords: [
+      {
+        word: 'neushoornvogel',
+        breakdown: 'neushoorn + vogel',
+        dutchMeaning: 'een grote tropische woudvogel met een opvallende gebogen helmhoorn bovenop zijn reusachtige snavel.',
+        englishMeaning: 'Hornbill'
+      },
+      {
+        word: 'gewrichtskneuzing',
+        breakdown: 'gewricht + s + kneuzing',
+        dutchMeaning: 'een pijnlijke beschadiging van spieren en pezen rond een botverbinding zonder dat het bot zelf gebroken is.',
+        englishMeaning: 'Joint contusion / sprain'
+      },
+      {
+        word: 'dankbetuiging',
+        breakdown: 'dank + betuiging',
+        dutchMeaning: 'een gebaar, woord of uiting waarmee iemand laat merken hoe dankbaar hij is voor bewezen hulp.',
+        englishMeaning: 'Expression of gratitude'
+      }
+    ],
+    mysteryQuestion: {
+      clueTitle: '🦜 Vogelgeneeskunde #5',
+      question: 'Welke diagnose stelt dokter Ridheya na het betasten van de vleugel van de neushoornvogel?',
+      options: [
+        'De vogel heeft een gebroken snavel',
+        'Er is geen botbreuk, maar een pijnlijke gewrichtskneuzing die ondersteund moet worden met een soepele spalk',
+        'De vogel is te zwaar om te vliegen',
+        'De vogel heeft een bril nodig'
+      ],
+      correctIndex: 1,
+      explanation: 'Het bot is intact; een elastische spalk van rotanhout geeft het gekneusde gewricht rust om te herstellen.'
+    },
+    choices: [
+      { label: 'Geef de neushoornvogel wat sappige wilde vijgen ter versterking', nextPage: 6, skillBonus: '+25 Vogelherstel', icon: '🫐' },
+      { label: 'Inspecteer samen met Kopi de hele boomhutkliniek voor de officiële inspectie', nextPage: 6, skillBonus: '+25 Organisatie', icon: '🔍' }
+    ]
+  },
+  {
+    pageNumber: 6,
+    title: 'Het Grote Woudfeest & Het Officiële Keurmerk',
+    biome: 'Feestelijke Verlichte Open Plek onder de Regenboog',
+    storyText: `Toen de avond viel, verlichtten duizenden vuurvliegjes de takken rond de boomhut als fonkelende lantaarns. Tussen de bamboestengels verscheen de trotse moederpanter, die haar herstelde welpje met diep spinnend gebrul tegen zich aandrukte. Het eekhoorntje sprong weer lenig van tak naar tak en vleermuis Pipit vloog sierlijke rondjes door de lucht.
+
+Boswachter Amir en Hemali arriveerden via de hangbrug. Amir overhandigde Ridheya een handgesneden teakhouten uithangbord: *'Officiële Koninklijke Dierenkliniek van Taman Negara - Hoofdarts Ridheya'*.
+
+Alle dieren van het woud bogen eerbiedig hun kop. Ridheya voelde een golf van trots door haar hart stromen. Haar passie voor dierenverzorging, haar scherpe observatiekracht en haar onwankelbare liefde voor de natuur hadden van de boomhut het veiligste toevluchtsoord van heel Maleisië gemaakt!`,
+    targetWords: [
+      {
+        word: 'toevluchtsoord',
+        breakdown: 'toevlucht + s + oord',
+        dutchMeaning: 'een veilige, beschermde plek waar dieren en mensen in gevaar rust, zorg en onderdak vinden.',
+        englishMeaning: 'Haven / sanctuary / refuge'
+      },
+      {
+        word: 'observatiekracht',
+        breakdown: 'observatie + kracht',
+        dutchMeaning: 'het vermogen om heel nauwkeurig, geduldig en opmerkzaam details waar te nemen.',
+        englishMeaning: 'Power of observation'
+      },
+      {
+        word: 'passie',
+        dutchMeaning: 'een diepe, enthousiaste liefde en toewijding voor een vak of activiteit.',
+        englishMeaning: 'Passion / dedication'
+      }
+    ],
+    mysteryQuestion: {
+      clueTitle: '🏆 Hoofddiploma & Synthese #6',
+      question: 'Wat is de voornaamste didactische les die Ridheya leert tijdens haar werk in de boomhutkliniek?',
+      options: [
+        'Dat wilde dieren liever in kooien worden opgesloten',
+        'Dat geduldige observatie, kennis van natuurlijke medicijnen en echte toewijding elk gewond dier weer gezond kunnen maken',
+        'Dat regenwouden te lawaaierig zijn voor dokters',
+        'Dat boomhutten alleen voor vakanties zijn'
+      ],
+      correctIndex: 1,
+      explanation: 'Ridheya heeft bewezen dat observatievermogen, kruidenkennis en empathie de sleutel zijn tot genezing.'
+    },
+    choices: [
+      { label: 'Hang het teakhouten bordje trots aan de voordeur van de boomhut', nextPage: 1, skillBonus: '👑 Officiële Koninklijke Opperdierenarts Trofee!', icon: '🌟' }
     ]
   }
 ];

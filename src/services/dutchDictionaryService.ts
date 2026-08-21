@@ -1,4 +1,5 @@
 import { DUTCH_DICTIONARY_DB, COMPOUND_PREFIXES, COMPOUND_SUFFIXES, DictionaryEntry } from '../data/dutchDictionaryData';
+import { WERKWOORDEN_DATA } from '../data/werkwoorden';
 
 // Massive High-Frequency Dutch-English Vocabulary & Grammar Index
 const MASSIVE_TRANSLATION_MAP: Record<string, { en: string; nl: string; type: DictionaryEntry['wordType']; level?: DictionaryEntry['level'] }> = {
@@ -113,7 +114,6 @@ const MASSIVE_TRANSLATION_MAP: Record<string, { en: string; nl: string; type: Di
   'stapsteen': { en: 'Stepping stone', nl: 'Steen in het water om overheen te stappen.', type: 'Zelfstandig naamwoord', level: 'Groep 3-4 (AVI M3-E4)' },
   'brilglas': { en: 'Eyeglass lens', nl: 'Glas in een brilmontuur.', type: 'Zelfstandig naamwoord', level: 'Groep 3-4 (AVI M3-E4)' },
   'bril': { en: 'Glasses, spectacles', nl: 'Montuur met glazen om scherper te kunnen kijken.', type: 'Zelfstandig naamwoord', level: 'Groep 3-4 (AVI M3-E4)' },
-  'haar': { en: 'Hair / Her', nl: 'Haren op het hoofd, of verwijswoord voor een meisje.', type: 'Verwijswoord', level: 'Groep 3-4 (AVI M3-E4)' },
   'ogen': { en: 'Eyes', nl: 'Organen in het gezicht waarmee je kijkt.', type: 'Zelfstandig naamwoord', level: 'Groep 3-4 (AVI M3-E4)' },
   'oog': { en: 'Eye', nl: 'Orgaan waarmee je ziet.', type: 'Zelfstandig naamwoord', level: 'Groep 3-4 (AVI M3-E4)' },
   'oren': { en: 'Ears', nl: 'Organen aan de zijkant van het hoofd om mee te horen.', type: 'Zelfstandig naamwoord', level: 'Groep 3-4 (AVI M3-E4)' },
@@ -160,20 +160,93 @@ const MASSIVE_TRANSLATION_MAP: Record<string, { en: string; nl: string; type: Di
   'brug': { en: 'Bridge', nl: 'Bouwwerk om een rivier of ravijn over te steken.', type: 'Zelfstandig naamwoord', level: 'Groep 3-4 (AVI M3-E4)' },
   'touwbrug': { en: 'Rope bridge', nl: 'Hangende brug van touwen en planken.', type: 'Zelfstandig naamwoord', level: 'Groep 3-4 (AVI M3-E4)' },
 
+  // Articles & Demonstratives (Lidwoorden & Aanwijzende voornaamwoorden)
+  'de': { en: 'The (for masculine/feminine & plural nouns)', nl: 'Bepalend lidwoord voor mannelijke en vrouwelijke woorden en voor alle meervouden (bijv. de schildpad, de grotten).', type: 'Lidwoord', level: 'Groep 3-4 (AVI M3-E4)' },
+  'het': { en: 'The (for neuter nouns) / It', nl: 'Bepalend lidwoord voor onzijdige woorden (bijv. het rif, het boek) of persoonlijk voornaamwoord (het regent).', type: 'Lidwoord', level: 'Groep 3-4 (AVI M3-E4)' },
+  'een': { en: 'A, an, one', nl: 'Onbepaald lidwoord dat een willekeurig persoon, dier of ding aanduidt.', type: 'Lidwoord', level: 'Groep 3-4 (AVI M3-E4)' },
+  'die': { en: 'That, those / who, which', nl: 'Aanwijzend of betrekkelijk voornaamwoord dat verwijst naar de-woorden of meervouden verder weg (bijv. die boom, de kinderen die zingen).', type: 'Verwijswoord', level: 'Groep 3-4 (AVI M3-E4)' },
+  'dat': { en: 'That / which', nl: 'Aanwijzend voornaamwoord dat verwijst naar het-woorden verder weg (bijv. dat schip), of voegwoord (ik weet dat...).', type: 'Verwijswoord', level: 'Groep 3-4 (AVI M3-E4)' },
+  'deze': { en: 'This, these', nl: 'Aanwijzend voornaamwoord dat verwijst naar de-woorden of meervouden dichtbij (bijv. deze kliniek, deze kristallen).', type: 'Verwijswoord', level: 'Groep 3-4 (AVI M3-E4)' },
+  'dit': { en: 'This', nl: 'Aanwijzend voornaamwoord dat verwijst naar het-woorden dichtbij (bijv. dit avontuur, dit raadsel).', type: 'Verwijswoord', level: 'Groep 3-4 (AVI M3-E4)' },
+  'degene': { en: 'The one who / that person', nl: 'Aanwijzend voornaamwoord dat verwijst naar een bepaalde persoon.', type: 'Verwijswoord', level: 'Groep 5-6 (AVI M5-E6)' },
+  'diegene': { en: 'The one who / those who', nl: 'Aanwijzend voornaamwoord voor een specifieke persoon of groep.', type: 'Verwijswoord', level: 'Groep 5-6 (AVI M5-E6)' },
+  'hetgeen': { en: 'That which, which', nl: 'Betrekkelijk voornaamwoord: dat wat eerder is genoemd.', type: 'Verwijswoord', level: 'Groep 5-6 (AVI M5-E6)' },
+  'hetwelk': { en: 'Which', nl: 'Betrekkelijk voornaamwoord voor een het-woord.', type: 'Verwijswoord', level: 'Groep 5-6 (AVI M5-E6)' },
+  'zulk': { en: 'Such, like that', nl: 'Aanwijzend voornaamwoord: van die aard of soort.', type: 'Verwijswoord', level: 'Groep 5-6 (AVI M5-E6)' },
+  'zulke': { en: 'Such (plural/inflected)', nl: 'Aanwijzend voornaamwoord voor meervouden of de-woorden: van die soort.', type: 'Verwijswoord', level: 'Groep 5-6 (AVI M5-E6)' },
+
+  // Personal & Possessive Pronouns (Persoonlijke & Bezittelijke voornaamwoorden)
+  'ik': { en: 'I', nl: 'Persoonlijk voornaamwoord: de spreker zelf (1e persoon enkelvoud).', type: 'Verwijswoord', level: 'Groep 3-4 (AVI M3-E4)' },
+  'jij': { en: 'You (singular, informal)', nl: 'Persoonlijk voornaamwoord: de aangesproken persoon met nadruk.', type: 'Verwijswoord', level: 'Groep 3-4 (AVI M3-E4)' },
+  'je': { en: 'You / your', nl: 'Persoonlijk of bezittelijk voornaamwoord (ongenaakt/informeel).', type: 'Verwijswoord', level: 'Groep 3-4 (AVI M3-E4)' },
+  'jou': { en: 'You (object form)', nl: 'Persoonlijk voornaamwoord voorwerp (bijv. ik help jou).', type: 'Verwijswoord', level: 'Groep 3-4 (AVI M3-E4)' },
+  'jouw': { en: 'Your (possessive)', nl: 'Bezittelijk voornaamwoord: van jou (bijv. jouw toverstaf).', type: 'Verwijswoord', level: 'Groep 3-4 (AVI M3-E4)' },
+  'u': { en: 'You (formal / polite)', nl: 'Beleefde aanspreekvorm voor volwassenen.', type: 'Verwijswoord', level: 'Groep 3-4 (AVI M3-E4)' },
+  'uw': { en: 'Your (formal / polite possessive)', nl: 'Bezittelijk voornaamwoord van u (bijv. uw mantel).', type: 'Verwijswoord', level: 'Groep 3-4 (AVI M3-E4)' },
+  'hij': { en: 'He', nl: 'Persoonlijk voornaamwoord voor een man, jongen of mannelijk dier/woord.', type: 'Verwijswoord', level: 'Groep 3-4 (AVI M3-E4)' },
+  'hem': { en: 'Him / it (masculine object)', nl: 'Voorwerpsvorm van hij (bijv. Ridheya verzorgde hem).', type: 'Verwijswoord', level: 'Groep 3-4 (AVI M3-E4)' },
+  'zijn': { en: 'His / its / To be', nl: 'Bezittelijk voornaamwoord (van hem) of onbepaalde wijs van zijn.', type: 'Verwijswoord', level: 'Groep 3-4 (AVI M3-E4)' },
+  'zij': { en: 'She / They', nl: 'Persoonlijk voornaamwoord voor een vrouw/meisje of meerdere personen met nadruk.', type: 'Verwijswoord', level: 'Groep 3-4 (AVI M3-E4)' },
+  'ze': { en: 'She / They / Them', nl: 'Persoonlijk voornaamwoord voor een vrouw/meisje of meervoud.', type: 'Verwijswoord', level: 'Groep 3-4 (AVI M3-E4)' },
+  'haar': { en: 'Her / hair', nl: 'Bezittelijk/persoonlijk voornaamwoord voor een meisje/vrouw (haar boek) of lokken op het hoofd.', type: 'Verwijswoord', level: 'Groep 3-4 (AVI M3-E4)' },
+  'wij': { en: 'We', nl: 'Persoonlijk voornaamwoord meervoud: de groep inclusief de spreker met nadruk.', type: 'Verwijswoord', level: 'Groep 3-4 (AVI M3-E4)' },
+  'we': { en: 'We', nl: 'Persoonlijk voornaamwoord meervoud: de groep inclusief de spreker.', type: 'Verwijswoord', level: 'Groep 3-4 (AVI M3-E4)' },
+  'ons': { en: 'Us / our', nl: 'Persoonlijk voornaamwoord (voorwerp) of bezittelijk voornaamwoord voor het-woorden.', type: 'Verwijswoord', level: 'Groep 3-4 (AVI M3-E4)' },
+  'onze': { en: 'Our (for de-words & plurals)', nl: 'Bezittelijk voornaamwoord voor de-woorden en meervouden (onze boomhut).', type: 'Verwijswoord', level: 'Groep 3-4 (AVI M3-E4)' },
+  'jullie': { en: 'You all / your (plural)', nl: 'Persoonlijk of bezittelijk voornaamwoord voor meerdere aangesproken personen.', type: 'Verwijswoord', level: 'Groep 3-4 (AVI M3-E4)' },
+  'hen': { en: 'Them (direct object / after preposition)', nl: 'Persoonlijk voornaamwoord meervoud als lijdend voorwerp of na een voorzetsel (bijv. aan hen).', type: 'Verwijswoord', level: 'Groep 5-6 (AVI M5-E6)' },
+  'hun': { en: 'Their / them (indirect object)', nl: 'Bezittelijk voornaamwoord (hun schip) of meewerkend voorwerp zonder voorzetsel.', type: 'Verwijswoord', level: 'Groep 5-6 (AVI M5-E6)' },
+  'zich': { en: 'Oneself, himself, herself, themselves', nl: 'Wederkerend voornaamwoord (bijv. hij vergiste zich).', type: 'Verwijswoord', level: 'Groep 5-6 (AVI M5-E6)' },
+  'zichzelf': { en: 'Themself, himself, herself', nl: 'Versterkt wederkerend voornaamwoord.', type: 'Verwijswoord', level: 'Groep 5-6 (AVI M5-E6)' },
+  'elkaar': { en: 'Each other, one another', nl: 'Wederkerig voornaamwoord: de een de ander en omgekeerd.', type: 'Verwijswoord', level: 'Groep 3-4 (AVI M3-E4)' },
+  'mekaar': { en: 'Each other (informal)', nl: 'Informele vorm van elkaar.', type: 'Verwijswoord', level: 'Groep 3-4 (AVI M3-E4)' },
+  'iemand': { en: 'Someone, somebody', nl: 'Onbepaald voornaamwoord voor een onbekend persoon.', type: 'Verwijswoord', level: 'Groep 3-4 (AVI M3-E4)' },
+  'niemand': { en: 'No one, nobody', nl: 'Geen enkel persoon.', type: 'Verwijswoord', level: 'Groep 3-4 (AVI M3-E4)' },
+  'iets': { en: 'Something, anything', nl: 'Onbepaald voornaamwoord voor een niet nader genoemd ding.', type: 'Verwijswoord', level: 'Groep 3-4 (AVI M3-E4)' },
+  'niets': { en: 'Nothing', nl: 'Helemaal geen enkel ding.', type: 'Verwijswoord', level: 'Groep 3-4 (AVI M3-E4)' },
+  'niks': { en: 'Nothing (informal)', nl: 'Spreektaalvorm voor niets.', type: 'Verwijswoord', level: 'Groep 3-4 (AVI M3-E4)' },
+  'alles': { en: 'Everything, all', nl: 'Het geheel van alle dingen zonder uitzondering.', type: 'Verwijswoord', level: 'Groep 3-4 (AVI M3-E4)' },
+  'iedereen': { en: 'Everyone, everybody', nl: 'Elk mens afzonderlijk; alle personen tezamen.', type: 'Verwijswoord', level: 'Groep 3-4 (AVI M3-E4)' },
+  'sommige': { en: 'Some, certain', nl: 'Een beperkt aantal van een geheel.', type: 'Verwijswoord', level: 'Groep 5-6 (AVI M5-E6)' },
+  'sommigen': { en: 'Some people', nl: 'Bepaalde mensen uit een groep.', type: 'Verwijswoord', level: 'Groep 5-6 (AVI M5-E6)' },
+  'beide': { en: 'Both (things/animals)', nl: 'Alle twee de genoemde zaken of dieren.', type: 'Verwijswoord', level: 'Groep 3-4 (AVI M3-E4)' },
+  'beiden': { en: 'Both (people)', nl: 'Alle twee de personen (bijv. Ridheya en Hemali deden beiden mee).', type: 'Verwijswoord', level: 'Groep 5-6 (AVI M5-E6)' },
+
   // Prepositions & Connectives
   'over': { en: 'Over, across, about', nl: 'Voorzetsel: boven iets langs of aangaande een onderwerp.', type: 'Voorzetsel', level: 'Groep 3-4 (AVI M3-E4)' },
   'naar': { en: 'To, towards', nl: 'In de richting van een plek.', type: 'Voorzetsel', level: 'Groep 3-4 (AVI M3-E4)' },
   'in': { en: 'In, inside', nl: 'Binnenin een ruimte of voorwerp.', type: 'Voorzetsel', level: 'Groep 3-4 (AVI M3-E4)' },
   'op': { en: 'On, upon', nl: 'Bovenop een oppervlak.', type: 'Voorzetsel', level: 'Groep 3-4 (AVI M3-E4)' },
   'bij': { en: 'At, near, with', nl: 'In de nabijheid van.', type: 'Voorzetsel', level: 'Groep 3-4 (AVI M3-E4)' },
+  'van': { en: 'Of, from', nl: 'Voorzetsel dat bezit, afkomst of materiaal aangeeft (bijv. het schip van de kapitein).', type: 'Voorzetsel', level: 'Groep 3-4 (AVI M3-E4)' },
+  'aan': { en: 'At, to, on, attached to', nl: 'Voorzetsel dat contact, nabijheid of richting aangeeft (bijv. aan de steiger).', type: 'Voorzetsel', level: 'Groep 3-4 (AVI M3-E4)' },
+  'uit': { en: 'Out of, from', nl: 'Van binnen naar buiten, of afkomstig van een plek.', type: 'Voorzetsel', level: 'Groep 3-4 (AVI M3-E4)' },
   'voor': { en: 'In front of, for, before', nl: 'Aan de voorkant of ten behoeve van.', type: 'Voorzetsel', level: 'Groep 3-4 (AVI M3-E4)' },
   'achter': { en: 'Behind', nl: 'Aan de rugzijde van.', type: 'Voorzetsel', level: 'Groep 3-4 (AVI M3-E4)' },
   'onder': { en: 'Under, below', nl: 'Aan de onderzijde van.', type: 'Voorzetsel', level: 'Groep 3-4 (AVI M3-E4)' },
+  'boven': { en: 'Above, over', nl: 'Hoger dan; aan de bovenzijde.', type: 'Voorzetsel', level: 'Groep 3-4 (AVI M3-E4)' },
   'met': { en: 'With', nl: 'Samen met of met behulp van.', type: 'Voorzetsel', level: 'Groep 3-4 (AVI M3-E4)' },
   'zonder': { en: 'Without', nl: 'Waarbij iets ontbreekt.', type: 'Voorzetsel', level: 'Groep 3-4 (AVI M3-E4)' },
   'door': { en: 'Through, by means of', nl: 'Van de ene naar de andere kant doorheen gaand.', type: 'Voorzetsel', level: 'Groep 3-4 (AVI M3-E4)' },
   'langs': { en: 'Along, past', nl: 'Evenwijdig aan een lijn of route.', type: 'Voorzetsel', level: 'Groep 3-4 (AVI M3-E4)' },
   'tussen': { en: 'Between, among', nl: 'In het midden van twee of meer dingen.', type: 'Voorzetsel', level: 'Groep 3-4 (AVI M3-E4)' },
+  'naast': { en: 'Next to, beside', nl: 'Direct aan de zijkant van iets of iemand.', type: 'Voorzetsel', level: 'Groep 3-4 (AVI M3-E4)' },
+  'tegen': { en: 'Against, into', nl: 'In contact met of in strijd met.', type: 'Voorzetsel', level: 'Groep 3-4 (AVI M3-E4)' },
+  'tegenover': { en: 'Opposite, facing, across from', nl: 'Aan de overkant van; recht voor elkaar.', type: 'Voorzetsel', level: 'Groep 5-6 (AVI M5-E6)' },
+  'rond': { en: 'Around, round', nl: 'In een cirkel om iets heen.', type: 'Voorzetsel', level: 'Groep 3-4 (AVI M3-E4)' },
+  'rondom': { en: 'All around, surrounding', nl: 'Aan alle kanten om iets heen.', type: 'Voorzetsel', level: 'Groep 3-4 (AVI M3-E4)' },
+  'omheen': { en: 'Around, about', nl: 'In de nabije omtrek eromheen.', type: 'Voorzetsel', level: 'Groep 3-4 (AVI M3-E4)' },
+  'om': { en: 'At, around, because of', nl: 'Rondom of aanduiding van een tijdstip / doel.', type: 'Voorzetsel', level: 'Groep 3-4 (AVI M3-E4)' },
+  'tot': { en: 'Until, up to', nl: 'Reikend aan het einde of tijdstip.', type: 'Voorzetsel', level: 'Groep 3-4 (AVI M3-E4)' },
+  'sinds': { en: 'Since', nl: 'Vanaf een bepaald moment in het verleden.', type: 'Voorzetsel', level: 'Groep 5-6 (AVI M5-E6)' },
+  'tijdens': { en: 'During', nl: 'Gedurende de periode dat iets plaatsvindt.', type: 'Voorzetsel', level: 'Groep 3-4 (AVI M3-E4)' },
+  'gedurende': { en: 'During, throughout', nl: 'In de loop van de hele tijd.', type: 'Voorzetsel', level: 'Groep 5-6 (AVI M5-E6)' },
+  'dankzij': { en: 'Thanks to', nl: 'Door de gunstige hulp of werking van.', type: 'Voorzetsel', level: 'Groep 5-6 (AVI M5-E6)' },
+  'ondanks': { en: 'Despite, in spite of', nl: 'Zonder dat het belemmerd wordt door iets anders.', type: 'Voorzetsel', level: 'Groep 5-6 (AVI M5-E6)' },
+  'wegens': { en: 'Because of, on account of', nl: 'Vanwege, op grond van.', type: 'Voorzetsel', level: 'Groep 5-6 (AVI M5-E6)' },
+  'volgens': { en: 'According to', nl: 'Overeenkomstig de regels of de mening van.', type: 'Voorzetsel', level: 'Groep 5-6 (AVI M5-E6)' },
+  'binnen': { en: 'Inside, within', nl: 'In het inwendige van een ruimte of tijd.', type: 'Voorzetsel', level: 'Groep 3-4 (AVI M3-E4)' },
+  'buiten': { en: 'Outside, beyond', nl: 'Niet binnenin de ruimte; in de open lucht.', type: 'Voorzetsel', level: 'Groep 3-4 (AVI M3-E4)' },
   'richting': { en: 'Direction, heading towards', nl: 'De koers waar je naartoe gaat.', type: 'Voorzetsel', level: 'Groep 3-4 (AVI M3-E4)' },
   'terwijl': { en: 'While, whilst, whereas', nl: 'Op hetzelfde moment dat iets anders gebeurt.', type: 'Voegwoord', level: 'Groep 3-4 (AVI M3-E4)' },
   'voordat': { en: 'Before, prior to', nl: 'Voor het tijdstip dat.', type: 'Voegwoord', level: 'Groep 3-4 (AVI M3-E4)' },
@@ -206,9 +279,39 @@ const MASSIVE_TRANSLATION_MAP: Record<string, { en: string; nl: string; type: Di
   'wel': { en: 'Indeed, certainly', nl: 'Bevestiging: wel degelijk.', type: 'Bijwoord', level: 'Groep 3-4 (AVI M3-E4)' },
   'en': { en: 'And', nl: 'Voegwoord dat woorden verbindt.', type: 'Voegwoord', level: 'Groep 3-4 (AVI M3-E4)' },
   'maar': { en: 'But, however', nl: 'Tegenstellend voegwoord.', type: 'Voegwoord', level: 'Groep 3-4 (AVI M3-E4)' },
+  'want': { en: 'Because, for', nl: 'Redengevend voegwoord dat een verklaring of reden inleidt (bijv. ze lachte, want ze was blij).', type: 'Voegwoord', level: 'Groep 3-4 (AVI M3-E4)' },
+  'dus': { en: 'So, therefore, thus', nl: 'Voegwoord of bijwoord dat een logische conclusie of gevolg aangeeft.', type: 'Signaalwoord (Cito)', level: 'Groep 3-4 (AVI M3-E4)' },
   'of': { en: 'Or / Whether', nl: 'Keuze tussen twee zaken.', type: 'Voegwoord', level: 'Groep 3-4 (AVI M3-E4)' },
   'als': { en: 'If / When / As', nl: 'Voorwaarde of vergelijking.', type: 'Voegwoord', level: 'Groep 3-4 (AVI M3-E4)' },
   'dan': { en: 'Then / Than', nl: 'Daarna, of bij vergelijkingen.', type: 'Voegwoord', level: 'Groep 3-4 (AVI M3-E4)' },
+  'omdat': { en: 'Because, since', nl: 'Onderschikkend voegwoord dat een reden of oorzaak aangeeft.', type: 'Signaalwoord (Cito)', level: 'Groep 3-4 (AVI M3-E4)' },
+  'doordat': { en: 'Because of the fact that, as a result of', nl: 'Signaalwoord dat een zuivere oorzaak buiten menselijke wil aangeeft.', type: 'Signaalwoord (Cito)', level: 'Groep 5-6 (AVI M5-E6)' },
+  'zodat': { en: 'So that, in order that', nl: 'Signaalwoord dat een gevolg of doel aangeeft.', type: 'Signaalwoord (Cito)', level: 'Groep 5-6 (AVI M5-E6)' },
+  'hoewel': { en: 'Although, even though', nl: 'Signaalwoord van tegenstelling/inconcessie.', type: 'Signaalwoord (Cito)', level: 'Groep 5-6 (AVI M5-E6)' },
+  'aangezien': { en: 'Since, seeing that', nl: 'Redengevend voegwoord: op grond van het feit dat.', type: 'Signaalwoord (Cito)', level: 'Groep 5-6 (AVI M5-E6)' },
+  'mits': { en: 'Provided that, on condition that', nl: 'Signaalwoord van voorwaarde: alleen als aan de eis voldaan is.', type: 'Signaalwoord (Cito)', level: 'Groep 5-6 (AVI M5-E6)' },
+  'tenzij': { en: 'Unless, except if', nl: 'Signaalwoord van ontkennende voorwaarde: behalve wanneer.', type: 'Signaalwoord (Cito)', level: 'Groep 5-6 (AVI M5-E6)' },
+  'indien': { en: 'If, in case that', nl: 'Formeel voegwoord van voorwaarde (als/wanneer).', type: 'Signaalwoord (Cito)', level: 'Groep 5-6 (AVI M5-E6)' },
+  'alsof': { en: 'As if, as though', nl: 'Voegwoord dat een schijnbare situatie vergelijkt.', type: 'Voegwoord', level: 'Groep 5-6 (AVI M5-E6)' },
+  'daardoor': { en: 'Therefore, as a result of that', nl: 'Signaalwoord van gevolg / causaliteit.', type: 'Signaalwoord (Cito)', level: 'Groep 5-6 (AVI M5-E6)' },
+  'desondanks': { en: 'Nevertheless, despite that', nl: 'Signaalwoord van tegenstelling: toch, ondanks de omstandigheden.', type: 'Signaalwoord (Cito)', level: 'Groep 5-6 (AVI M5-E6)' },
+  'echter': { en: 'However, yet', nl: 'Signaalwoord van tegenstelling: maar, desalniettemin.', type: 'Signaalwoord (Cito)', level: 'Groep 5-6 (AVI M5-E6)' },
+  'bovendien': { en: 'Moreover, furthermore, besides', nl: 'Signaalwoord van opsomming: ook nog eens extra daarbij.', type: 'Signaalwoord (Cito)', level: 'Groep 5-6 (AVI M5-E6)' },
+  'daarnaast': { en: 'In addition, besides that', nl: 'Signaalwoord van opsomming: tevens, behalve dat.', type: 'Signaalwoord (Cito)', level: 'Groep 5-6 (AVI M5-E6)' },
+  'vervolgens': { en: 'Subsequently, next, then', nl: 'Signaalwoord van tijd en volgorde: daarna.', type: 'Signaalwoord (Cito)', level: 'Groep 5-6 (AVI M5-E6)' },
+  'kortom': { en: 'In short, in brief, in summary', nl: 'Signaalwoord van samenvatting / hoofdgedachte.', type: 'Signaalwoord (Cito)', level: 'Groep 5-6 (AVI M5-E6)' },
+  'uiteindelijk': { en: 'Eventually, ultimately, in the end', nl: 'Signaalwoord van conclusie of tijd: aan het eind van alles.', type: 'Signaalwoord (Cito)', level: 'Groep 5-6 (AVI M5-E6)' },
+  'namelijk': { en: 'Namely, that is to say', nl: 'Signaalwoord van toelichting of uitleg.', type: 'Signaalwoord (Cito)', level: 'Groep 5-6 (AVI M5-E6)' },
+  'immers': { en: 'After all, indeed', nl: 'Signaalwoord dat een bekend geacht feit of argument onderstreept.', type: 'Signaalwoord (Cito)', level: 'Groep 5-6 (AVI M5-E6)' },
+  'trouwens': { en: 'By the way, besides', nl: 'Signaalwoord van terloopse toevoeging.', type: 'Signaalwoord (Cito)', level: 'Groep 5-6 (AVI M5-E6)' },
+  'daarentegen': { en: 'On the other hand, in contrast', nl: 'Signaalwoord van scherpe tegenstelling.', type: 'Signaalwoord (Cito)', level: 'Groep 5-6 (AVI M5-E6)' },
+  'desalniettemin': { en: 'Nonetheless, nevertheless', nl: 'Formeel signaalwoord van tegenstelling (ondanks dat alles toch).', type: 'Signaalwoord (Cito)', level: 'Groep 5-6 (AVI M5-E6)' },
+  'niettemin': { en: 'Nonetheless, still', nl: 'Signaalwoord van tegenstelling.', type: 'Signaalwoord (Cito)', level: 'Groep 5-6 (AVI M5-E6)' },
+  'enerzijds': { en: 'On the one hand', nl: 'Signaalwoord van vergelijkende tegenstelling.', type: 'Signaalwoord (Cito)', level: 'Groep 5-6 (AVI M5-E6)' },
+  'anderzijds': { en: 'On the other hand', nl: 'Signaalwoord van de andere kant van een tegenstelling.', type: 'Signaalwoord (Cito)', level: 'Groep 5-6 (AVI M5-E6)' },
+  'ten eerste': { en: 'Firstly, in the first place', nl: 'Signaalwoord van geordende opsomming.', type: 'Signaalwoord (Cito)', level: 'Groep 5-6 (AVI M5-E6)' },
+  'ten tweede': { en: 'Secondly', nl: 'Signaalwoord van geordende opsomming.', type: 'Signaalwoord (Cito)', level: 'Groep 5-6 (AVI M5-E6)' },
+  'ten slotte': { en: 'Finally, lastly', nl: 'Signaalwoord van het laatste punt in een opsomming.', type: 'Signaalwoord (Cito)', level: 'Groep 5-6 (AVI M5-E6)' },
   'ook': { en: 'Also, too, as well', nl: 'Eveneens.', type: 'Bijwoord', level: 'Groep 3-4 (AVI M3-E4)' },
   'nog': { en: 'Still, yet, another', nl: 'Blijvend of extra.', type: 'Bijwoord', level: 'Groep 3-4 (AVI M3-E4)' },
   'al': { en: 'Already / All', nl: 'Reeds, of alles.', type: 'Bijwoord', level: 'Groep 3-4 (AVI M3-E4)' },
@@ -317,6 +420,15 @@ const VERB_STEM_MAP: Record<string, { infinitive: string; en: string; nl: string
   'sloten': { infinitive: 'sluiten', en: 'Closed, shut / Ditches', nl: 'Verleden tijd van sluiten, of watergreppels.', tense: 'verleden tijd meervoud' },
   'sluit': { infinitive: 'sluiten', en: 'Closes, shuts', nl: 'Tegenwoordige tijd van sluiten.', tense: 'derde persoon' },
   'gesloten': { infinitive: 'sluiten', en: 'Closed, shut', nl: 'Voltooid deelwoord van sluiten.', tense: 'voltooid deelwoord' },
+  'adopteerde': { infinitive: 'adopteren', en: 'Adopted', nl: 'Verleden tijd van adopteren: nam een jong dier liefdevol op.', tense: 'verleden tijd' },
+  'adopteerden': { infinitive: 'adopteren', en: 'Adopted', nl: 'Verleden tijd van adopteren.', tense: 'verleden tijd meervoud' },
+  'adopteert': { infinitive: 'adopteren', en: 'Adopts', nl: 'Tegenwoordige tijd van adopteren.', tense: 'derde persoon' },
+  'geadopteerd': { infinitive: 'adopteren', en: 'Adopted', nl: 'Voltooid deelwoord van adopteren: officieel opgenomen in de familie.', tense: 'voltooid deelwoord' },
+  'geadopteerde': { infinitive: 'adopteren', en: 'Adopted (adjective form)', nl: 'Verbogen voltooid deelwoord van adopteren (bijv. het geadopteerde girafje).', tense: 'verbogen deelwoord' },
+  'aangespoeld': { infinitive: 'aanspoelen', en: 'Washed ashore', nl: 'Voltooid deelwoord van aanspoelen: door de golven op het strand gebracht.', tense: 'voltooid deelwoord' },
+  'aangespoelde': { infinitive: 'aanspoelen', en: 'Washed ashore (adjective form)', nl: 'Verbogen voltooid deelwoord van aanspoelen (bijv. de aangespoelde dolfijn).', tense: 'verbogen deelwoord' },
+  'beschadigd': { infinitive: 'beschadigen', en: 'Damaged, injured', nl: 'Voltooid deelwoord van beschadigen: kapot of bezeerd gemaakt.', tense: 'voltooid deelwoord' },
+  'beschadigde': { infinitive: 'beschadigen', en: 'Damaged (adjective/past)', nl: 'Verleden tijd of verbogen vorm van beschadigen.', tense: 'verleden tijd / verbogen' },
   'zag': { infinitive: 'zien', en: 'Saw (past tense of see)', nl: 'Verleden tijd van zien: met de ogen waargenomen.', tense: 'verleden tijd enkelvoud' },
   'zagen': { infinitive: 'zien', en: 'Saw (past tense of see)', nl: 'Verleden tijd van zien: namen met de ogen waar.', tense: 'verleden tijd meervoud' },
   'ziet': { infinitive: 'zien', en: 'Sees', nl: 'Tegenwoordige tijd van zien.', tense: 'derde persoon' },
@@ -414,6 +526,32 @@ const VERB_STEM_MAP: Record<string, { infinitive: string; en: string; nl: string
   'heb': { infinitive: 'hebben', en: 'Have', nl: 'Eerste persoon van hebben.', tense: 'tegenwoordige tijd' },
   'gehad': { infinitive: 'hebben', en: 'Had', nl: 'Voltooid deelwoord van hebben.', tense: 'voltooid deelwoord' }
 };
+
+// Dynamically integrate all 100+ verbs and their conjugated tenses from WERKWOORDEN_DATA
+if (Array.isArray(WERKWOORDEN_DATA)) {
+  WERKWOORDEN_DATA.forEach(verb => {
+    const inf = verb.infinitief.toLowerCase();
+    const ev = verb.imperfectum_ev?.toLowerCase();
+    const mv = verb.imperfectum_mv?.toLowerCase();
+    const part = verb.perfectum?.toLowerCase();
+    const eng = verb.english || inf;
+
+    if (ev && !VERB_STEM_MAP[ev]) {
+      VERB_STEM_MAP[ev] = { infinitive: inf, en: `${eng} (past tense)`, nl: `Verleden tijd enkelvoud van ${inf}.`, tense: 'verleden tijd enkelvoud' };
+    }
+    if (mv && !VERB_STEM_MAP[mv]) {
+      VERB_STEM_MAP[mv] = { infinitive: inf, en: `${eng} (past plural)`, nl: `Verleden tijd meervoud van ${inf}.`, tense: 'verleden tijd meervoud' };
+    }
+    if (part && !VERB_STEM_MAP[part]) {
+      VERB_STEM_MAP[part] = { infinitive: inf, en: `${eng} (past participle)`, nl: `Voltooid deelwoord van ${inf}.`, tense: 'voltooid deelwoord' };
+      // Also add adjectival inflected form: part + 'e'
+      const partE = part + 'e';
+      if (!VERB_STEM_MAP[partE]) {
+        VERB_STEM_MAP[partE] = { infinitive: inf, en: `${eng} (adjectival form)`, nl: `Verbogen voltooid deelwoord van ${inf} (als bijvoeglijk naamwoord).`, tense: 'verbogen deelwoord' };
+      }
+    }
+  });
+}
 
 // Curated Story-Grounded Example Sentences for Kids (Ridheya & Hemali Adventures)
 const CURATED_EXAMPLE_SENTENCES: Record<string, string> = {
@@ -856,7 +994,18 @@ function extractStemCandidates(word: string): { candidate: string; rule: string;
     list.push({ candidate: dimMatch[1], rule: `verkleinwoord (+${dimMatch[2]})`, type: 'Zelfstandig naamwoord' });
   }
 
-  // 6. Regular Verb Tenses (-te, -ten, -de, -den, -t, -end, -ende)
+  // 6. Present participles used as adjectives (glimlachend / glimlachende -> glimlachen, stralend / stralende -> stralen)
+  if (word.endsWith('ende') && word.length > 5) {
+    const baseVerb = word.slice(0, -2); // e.g. glimlachend -> glimlachen
+    list.push({ candidate: baseVerb, rule: 'tegenwoordig deelwoord als bijvoeglijk naamwoord (-ende)', type: 'Bijvoeglijk naamwoord' });
+    list.push({ candidate: word.slice(0, -4) + 'en', rule: 'tegenwoordig deelwoord van werkwoord', type: 'Werkwoord' });
+  } else if (word.endsWith('end') && word.length > 4) {
+    const baseVerb = word.slice(0, -1);
+    list.push({ candidate: baseVerb, rule: 'tegenwoordig deelwoord (-end)', type: 'Werkwoord' });
+    list.push({ candidate: word.slice(0, -3) + 'en', rule: 'tegenwoordig deelwoord van werkwoord', type: 'Werkwoord' });
+  }
+
+  // 7. Regular Verb Tenses & Adjectival Participles (-te, -ten, -de, -den, -t, -e)
   if (word.endsWith('ten') && word.length > 5) {
     const base = word.slice(0, -3);
     list.push({ candidate: base, rule: 'verleden tijd meervoud (-ten)', type: 'Werkwoord' });
@@ -879,13 +1028,32 @@ function extractStemCandidates(word: string): { candidate: string; rule: string;
     list.push({ candidate: base + 'en', rule: 'tegenwoordige tijd (stam+t)', type: 'Werkwoord' });
   }
 
-  // 7. Past participle (ge-...-d / ge-...-t / ge-...-en)
+  // 8. Past participle forms and inflected adjectival participles (ge-...-d / ge-...-t / ge-...-e / ver-...-de / ont-...-te)
   if (word.startsWith('ge') && word.length > 5) {
     const inner = word.slice(2);
-    if (inner.endsWith('d') || inner.endsWith('t')) {
+    if (inner.endsWith('e')) {
+      const trimmed = inner.slice(0, -1);
+      list.push({ candidate: 'ge' + trimmed, rule: 'verbogen voltooid deelwoord als bijvoeglijk naamwoord', type: 'Bijvoeglijk naamwoord' });
+      if (trimmed.endsWith('d') || trimmed.endsWith('t')) {
+        const verbStem = trimmed.slice(0, -1);
+        list.push({ candidate: verbStem + 'en', rule: 'voltooid deelwoord van werkwoord', type: 'Werkwoord' });
+      }
+    } else if (inner.endsWith('d') || inner.endsWith('t')) {
       const stem = inner.slice(0, -1);
       list.push({ candidate: stem, rule: 'voltooid deelwoord (ge-+-d/t)', type: 'Werkwoord' });
       list.push({ candidate: stem + 'en', rule: 'voltooid deelwoord (ge-+-d/t)', type: 'Werkwoord' });
+    }
+  }
+
+  // Prefixed verbs (ont-, ver-, be-, her-, aan-, af-, uit-, in-, op-)
+  const prefixMatch = word.match(/^(ont|ver|be|her|aan|af|uit|in|op)(.+)$/);
+  if (prefixMatch && word.length > 5) {
+    const pfx = prefixMatch[1];
+    const body = prefixMatch[2];
+    if (body.endsWith('de') || body.endsWith('te')) {
+      const baseStem = body.slice(0, -2);
+      list.push({ candidate: pfx + baseStem, rule: 'verleden tijd / voltooid deelwoord', type: 'Werkwoord' });
+      list.push({ candidate: pfx + baseStem + 'en', rule: 'verleden tijd / infinitief', type: 'Werkwoord' });
     }
   }
 
@@ -988,11 +1156,11 @@ export function lookupDutchWord(rawWord: string): DictionaryEntry {
 
       let inflectionDesc = `Vorm van "${item.candidate}" (${item.rule})`;
       if (item.type === 'Bijvoeglijk naamwoord') {
-        inflectionDesc = `Verbogen bijvoeglijk naamwoord van "${item.candidate}": zegt iets over een zelfstandig naamwoord (bijv. een ${clean} pad).`;
+        inflectionDesc = `Verbogen bijvoeglijk naamwoord van "${item.candidate}": beschrijft een eigenschap (bijv. een ${clean} pad).`;
       } else if (item.rule.includes('meervoud')) {
-        inflectionDesc = `Meervoud van "${item.candidate}": meerdere ${item.candidate}en/s.`;
+        inflectionDesc = `Meervoud van "${item.candidate}": meerdere exemplaren van ${item.candidate}.`;
       } else if (item.rule.includes('verkleinwoord')) {
-        inflectionDesc = `Verkleinwoord van "${item.candidate}": een klein of schattig ${item.candidate}.`;
+        inflectionDesc = `Verkleinwoord van "${item.candidate}": een klein of lief ${item.candidate}.`;
       } else if (item.rule.includes('verleden tijd')) {
         inflectionDesc = `Verleden tijdsvorm van het werkwoord "${item.candidate}".`;
       }
@@ -1076,22 +1244,54 @@ export function lookupDutchWord(rawWord: string): DictionaryEntry {
     }
   }
 
-  // 7. Morphological Suffix & Part-of-Speech Analyzer
+  // 7. Morphological Suffix & Part-of-Speech Educational Analyzer
   let derivedType: DictionaryEntry['wordType'] = 'Zelfstandig naamwoord';
-  let derivedMeaning = `Nederlands woord (${clean}) met klankgroepen: ${syllabifyDutch(clean).join(' • ')}.`;
-  let derivedEn = `Dutch word: ${clean}`;
+  let derivedMeaning = `Educatief Nederlands woord (${clean}) voor begrijpend lezen en Cito woordenschat.`;
+  let derivedEn = `${clean.charAt(0).toUpperCase() + clean.slice(1)}`;
 
-  if (clean.endsWith('heid') || clean.endsWith('ing') || clean.endsWith('schap')) {
+  if (clean.endsWith('heid')) {
     derivedType = 'Zelfstandig naamwoord';
-    derivedMeaning = `Een zelfstandig naamwoord gevormd met het achtervoegsel -${clean.slice(-4)}, dat een eigenschap, toestand of handeling aanduidt.`;
-    derivedEn = `${clean.slice(0, -4)} (state / condition / activity)`;
-  } else if (clean.endsWith('ig') || clean.endsWith('lijk') || clean.endsWith('baar') || clean.endsWith('loos')) {
+    const base = clean.slice(0, -4);
+    derivedMeaning = `Zelfstandig naamwoord dat de eigenschap of toestand van '${base}' aangeeft.`;
+    derivedEn = `${base}-ness / condition of being ${base}`;
+  } else if (clean.endsWith('ing')) {
+    derivedType = 'Zelfstandig naamwoord';
+    const base = clean.slice(0, -3);
+    derivedMeaning = `Zelfstandig naamwoord dat de handeling of het resultaat van '${base}' beschrijft.`;
+    derivedEn = `Action or result of ${base}ing`;
+  } else if (clean.endsWith('schap')) {
+    derivedType = 'Zelfstandig naamwoord';
+    const base = clean.slice(0, -5);
+    derivedMeaning = `Zelfstandig naamwoord dat een toestand, relatie of gebied van '${base}' aanduidt.`;
+    derivedEn = `State / relationship / area of ${base}`;
+  } else if (clean.endsWith('ig') || clean.endsWith('ige')) {
     derivedType = 'Bijvoeglijk naamwoord';
-    derivedMeaning = `Een bijvoeglijk naamwoord dat een eigenschap of toestand beschrijft.`;
-    derivedEn = `Adjective describing quality of ${clean.slice(0, -4)}`;
+    const base = clean.replace(/e?$/, '').slice(0, -2);
+    derivedMeaning = `Bijvoeglijk naamwoord dat aangeeft dat iets gekenmerkt wordt door '${base}'.`;
+    derivedEn = `Characterized by ${base}`;
+  } else if (clean.endsWith('lijk') || clean.endsWith('lijke')) {
+    derivedType = 'Bijvoeglijk naamwoord';
+    const base = clean.replace(/e?$/, '').slice(0, -4);
+    derivedMeaning = `Bijvoeglijk naamwoord dat aangeeft dat iets passend bij of gelijkend op '${base}' is.`;
+    derivedEn = `Like or relating to ${base}`;
+  } else if (clean.endsWith('baar') || clean.endsWith('bare')) {
+    derivedType = 'Bijvoeglijk naamwoord';
+    const base = clean.replace(/e?$/, '').slice(0, -4);
+    derivedMeaning = `Bijvoeglijk naamwoord dat aangeeft dat iets gedaan kán worden met betrekking tot '${base}'.`;
+    derivedEn = `Capable of being ${base}ed (-able)`;
+  } else if (clean.endsWith('loos') || clean.endsWith('loze')) {
+    derivedType = 'Bijvoeglijk naamwoord';
+    const base = clean.replace(/loze$/, 'loos').slice(0, -4);
+    derivedMeaning = `Bijvoeglijk naamwoord dat aangeeft dat iets ontbreekt of zonder '${base}' is.`;
+    derivedEn = `Without ${base} (-less)`;
+  } else if (clean.endsWith('vol') || clean.endsWith('volle')) {
+    derivedType = 'Bijvoeglijk naamwoord';
+    const base = clean.replace(/e?$/, '').replace(/l$/, '').slice(0, -3);
+    derivedMeaning = `Bijvoeglijk naamwoord dat aangeeft dat iets vol is van '${base}'.`;
+    derivedEn = `Full of ${base} (-ful)`;
   } else if (clean.endsWith('en') && clean.length > 4) {
     derivedType = 'Werkwoord';
-    derivedMeaning = `Een werkwoord (hele werkwoord / infinitief) dat een handeling of toestand aangeeft.`;
+    derivedMeaning = `Werkwoord (infinitief / hele werkwoord) dat een handeling of toestand uitdrukt.`;
     derivedEn = `To ${clean.slice(0, -2)} (action verb)`;
   }
 

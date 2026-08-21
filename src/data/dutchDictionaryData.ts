@@ -3,7 +3,7 @@
 
 export interface DictionaryEntry {
   word: string; // The canonical / base word
-  wordType: 'Zelfstandig naamwoord' | 'Werkwoord' | 'Bijvoeglijk naamwoord' | 'Signaalwoord (Cito)' | 'Verwijswoord' | 'Voegwoord' | 'Bijwoord' | 'Voorzetsel' | 'Telwoord' | 'Tussenwerpsel';
+  wordType: 'Zelfstandig naamwoord' | 'Werkwoord' | 'Bijvoeglijk naamwoord' | 'Signaalwoord (Cito)' | 'Verwijswoord' | 'Voegwoord' | 'Bijwoord' | 'Voorzetsel' | 'Telwoord' | 'Tussenwerpsel' | 'Lidwoord';
   meaningNl: string;
   translationEn: string;
   compound?: string; // e.g. "onderzoek + schip"
@@ -14,6 +14,148 @@ export interface DictionaryEntry {
 }
 
 export const DUTCH_DICTIONARY_DB: Record<string, DictionaryEntry> = {
+  // === ARTICLES & PRONOUNS (LIDWOORDEN & VOORNAAMWOORDEN) ===
+  'de': {
+    word: 'de',
+    wordType: 'Lidwoord',
+    meaningNl: 'Bepalend lidwoord voor mannelijke en vrouwelijke zelfstandige naamwoorden en voor alle meervouden (bijv. de schildpad, de grotten).',
+    translationEn: 'The (for masculine, feminine, and plural nouns)',
+    syllables: ['de'],
+    exampleNl: 'De wijze uil vloog door het dichte woud.',
+    citoCategory: 'Basisschool Kernwoord',
+    level: 'Groep 3-4 (AVI M3-E4)'
+  },
+  'het': {
+    word: 'het',
+    wordType: 'Lidwoord',
+    meaningNl: 'Bepalend lidwoord voor onzijdige zelfstandige naamwoorden (bijv. het koraalrif, het toverboek).',
+    translationEn: 'The (for neuter nouns) / It',
+    syllables: ['het'],
+    exampleNl: 'Het magische kasteel reikte tot aan de wolken.',
+    citoCategory: 'Basisschool Kernwoord',
+    level: 'Groep 3-4 (AVI M3-E4)'
+  },
+  'een': {
+    word: 'een',
+    wordType: 'Lidwoord',
+    meaningNl: 'Onbepaald lidwoord dat een willekeurig persoon, dier of ding aanduidt.',
+    translationEn: 'A, an, one',
+    syllables: ['een'],
+    exampleNl: 'Ridheya vond een schitterende schelp op het strand.',
+    citoCategory: 'Basisschool Kernwoord',
+    level: 'Groep 3-4 (AVI M3-E4)'
+  },
+  'die': {
+    word: 'die',
+    wordType: 'Verwijswoord',
+    meaningNl: 'Aanwijzend of betrekkelijk voornaamwoord: verwijst naar de-woorden of meervouden verder weg (bijv. die boot, de kinderen die meedoen).',
+    translationEn: 'That, those / who, which',
+    syllables: ['die'],
+    exampleNl: 'In de verte zagen de meisjes die oude vuurtoren staan.',
+    citoCategory: 'Verwijswoord',
+    level: 'Groep 3-4 (AVI M3-E4)'
+  },
+  'dat': {
+    word: 'dat',
+    wordType: 'Verwijswoord',
+    meaningNl: 'Aanwijzend voornaamwoord: verwijst naar het-woorden verder weg (bijv. dat diertje), of voegwoord.',
+    translationEn: 'That, which',
+    syllables: ['dat'],
+    exampleNl: 'Hemali wist dat het raadsel een slimme oplossing had.',
+    citoCategory: 'Verwijswoord',
+    level: 'Groep 3-4 (AVI M3-E4)'
+  },
+  'deze': {
+    word: 'deze',
+    wordType: 'Verwijswoord',
+    meaningNl: 'Aanwijzend voornaamwoord: verwijst naar de-woorden of meervouden dichtbij de spreker.',
+    translationEn: 'This, these',
+    syllables: ['de', 'ze'],
+    exampleNl: 'Deze bijzondere vlinder heeft prachtige blauwe vleugels.',
+    citoCategory: 'Verwijswoord',
+    level: 'Groep 3-4 (AVI M3-E4)'
+  },
+  'dit': {
+    word: 'dit',
+    wordType: 'Verwijswoord',
+    meaningNl: 'Aanwijzend voornaamwoord: verwijst naar het-woorden dichtbij de spreker.',
+    translationEn: 'This',
+    syllables: ['dit'],
+    exampleNl: 'Dit spannende avontuur vergeet Ridheya nooit meer.',
+    citoCategory: 'Verwijswoord',
+    level: 'Groep 3-4 (AVI M3-E4)'
+  },
+  'zij': {
+    word: 'zij',
+    wordType: 'Verwijswoord',
+    meaningNl: 'Persoonlijk voornaamwoord: verwijst naar een vrouw/meisje of naar een groep personen met nadruk.',
+    translationEn: 'She / They',
+    syllables: ['zij'],
+    exampleNl: 'Zij ontcijferde het oude perkament in enkele seconden.',
+    citoCategory: 'Verwijswoord',
+    level: 'Groep 3-4 (AVI M3-E4)'
+  },
+  'ze': {
+    word: 'ze',
+    wordType: 'Verwijswoord',
+    meaningNl: 'Persoonlijk voornaamwoord (onbeklemtoond): verwijst naar een vrouw, meisje of meervoud.',
+    translationEn: 'She / They / Them',
+    syllables: ['ze'],
+    exampleNl: 'Als ze goed luisterden, hoorden ze de dolfijnen zingen.',
+    citoCategory: 'Verwijswoord',
+    level: 'Groep 3-4 (AVI M3-E4)'
+  },
+  'hij': {
+    word: 'hij',
+    wordType: 'Verwijswoord',
+    meaningNl: 'Persoonlijk voornaamwoord: verwijst naar een mannelijk persoon, dier of de-woord.',
+    translationEn: 'He, it',
+    syllables: ['hij'],
+    exampleNl: 'Hij sprong met een grote boog over de beek.',
+    citoCategory: 'Verwijswoord',
+    level: 'Groep 3-4 (AVI M3-E4)'
+  },
+  'hem': {
+    word: 'hem',
+    wordType: 'Verwijswoord',
+    meaningNl: 'Persoonlijk voornaamwoord voorwerp: verwijst naar een man of mannelijk dier (bijv. we hielpen hem).',
+    translationEn: 'Him, it',
+    syllables: ['hem'],
+    exampleNl: 'Ridheya wikkelde hem in een warme, zachte doek.',
+    citoCategory: 'Verwijswoord',
+    level: 'Groep 3-4 (AVI M3-E4)'
+  },
+  'haar': {
+    word: 'haar',
+    wordType: 'Verwijswoord',
+    meaningNl: 'Bezittelijk of persoonlijk voornaamwoord: van een meisje/vrouw (haar boek) of lokken op het hoofd.',
+    translationEn: 'Her / Hair',
+    syllables: ['haar'],
+    exampleNl: 'Haar ronde bril glinsterde in de warme middagzon.',
+    citoCategory: 'Verwijswoord',
+    level: 'Groep 3-4 (AVI M3-E4)'
+  },
+  'hun': {
+    word: 'hun',
+    wordType: 'Verwijswoord',
+    meaningNl: 'Bezittelijk voornaamwoord: van hen (bijv. hun queeste) of meewerkend voorwerp.',
+    translationEn: 'Their / Them',
+    syllables: ['hun'],
+    exampleNl: 'Hun dappere tocht leidde hen diep het regenwoud in.',
+    citoCategory: 'Verwijswoord',
+    level: 'Groep 5-6 (AVI M5-E6)'
+  },
+  'hen': {
+    word: 'hen',
+    wordType: 'Verwijswoord',
+    meaningNl: 'Persoonlijk voornaamwoord als lijdend voorwerp meervoud of na een voorzetsel (bijv. naar hen).',
+    translationEn: 'Them',
+    syllables: ['hen'],
+    exampleNl: 'De wijze uil keek vriendelijk naar hen.',
+    citoCategory: 'Verwijswoord',
+    level: 'Groep 5-6 (AVI M5-E6)'
+  },
+
   // === ADJECTIVES (BIJVOEGLIJKE NAAMWOORDEN) & INFLECTIONS ===
   'smal': {
     word: 'smal',
@@ -1284,6 +1426,326 @@ export const DUTCH_DICTIONARY_DB: Record<string, DictionaryEntry> = {
     syllables: ['mys', 'te', 'rieus'],
     exampleNl: 'Een mysterieuze gloed verlichtte de eeuwenoude tempelruïne.',
     level: 'Groep 5-6 (AVI M5-E6)'
+  },
+  'adopteren': {
+    word: 'adopteren',
+    wordType: 'Werkwoord',
+    meaningNl: 'Een kind of dier zonder ouders officieel en liefdevol in je gezin of beschermde zorg opnemen.',
+    translationEn: 'To adopt (a child or animal)',
+    syllables: ['a', 'dop', 'te', 'ren'],
+    exampleNl: 'Hemali adopteerde een lief babygirafje en noemde haar Appel.',
+    level: 'Groep 5-6 (AVI M5-E6)'
+  },
+  'geadopteerd': {
+    word: 'geadopteerd',
+    wordType: 'Bijvoeglijk naamwoord',
+    meaningNl: 'Liefdevol opgenomen in een nieuw gezin of veilig opvangcentrum; voorzien van een warm thuis.',
+    translationEn: 'Adopted (past participle / adjective)',
+    syllables: ['ge', 'a', 'dop', 'teerd'],
+    exampleNl: 'Het geadopteerde babygirafje Appel dronk dankbaar van de verse melk.',
+    level: 'Groep 5-6 (AVI M5-E6)'
+  },
+  'geadopteerde': {
+    word: 'geadopteerde',
+    wordType: 'Bijvoeglijk naamwoord',
+    meaningNl: 'Verbogen vorm van geadopteerd: zegt iets over een zelfstandig naamwoord (zoals de geadopteerde babygiraf die liefdevol verzorgd wordt).',
+    translationEn: 'Adopted (inflected adjectival form)',
+    syllables: ['ge', 'a', 'dop', 'teer', 'de'],
+    exampleNl: 'De geadopteerde babygiraf Appel liep vrolijk achter Hemali aan over de savanne.',
+    level: 'Groep 5-6 (AVI M5-E6)'
+  },
+  'adoptie': {
+    word: 'adoptie',
+    wordType: 'Zelfstandig naamwoord',
+    meaningNl: 'De officiële en liefdevolle opname van een weeskind of gered dier in een nieuw gezin of reservaat.',
+    translationEn: 'Adoption',
+    syllables: ['a', 'dop', 'tie'],
+    exampleNl: 'De adoptie van het gewonde girafje werd gevierd met verse sappige appels.',
+    level: 'Groep 5-6 (AVI M5-E6)'
+  },
+  'reddingsavontuur': {
+    word: 'reddingsavontuur',
+    wordType: 'Zelfstandig naamwoord',
+    meaningNl: 'Een spannende tocht of missie waarbij dieren of mensen uit gevaar worden bevrijd en geholpen.',
+    translationEn: 'Rescue adventure',
+    compound: 'redding + avontuur',
+    syllables: ['red', 'dings', 'a', 'von', 'tuur'],
+    exampleNl: 'Tijdens hun reddingsavontuur in Maleisië hielpen Ridheya en Hemali talloze dieren in nood.',
+    level: 'Groep 5-6 (AVI M5-E6)'
+  },
+  'boomhutkliniek': {
+    word: 'boomhutkliniek',
+    wordType: 'Zelfstandig naamwoord',
+    meaningNl: 'Een hoog in de bomen gebouwde dierenkliniek vol medische spulletjes om jungle-dieren te genezen.',
+    translationEn: 'Treehouse clinic',
+    compound: 'boomhut + kliniek',
+    syllables: ['boom', 'hut', 'kli', 'niek'],
+    exampleNl: 'Hoog in de mangoboom richtte Ridheya haar Geheime Boomhutkliniek in.',
+    level: 'Groep 3-4 (AVI M3-E4)'
+  },
+  'zeeschildpad': {
+    word: 'zeeschildpad',
+    wordType: 'Zelfstandig naamwoord',
+    meaningNl: 'Een groot reptiel met vinnen en een hard schild dat in warme zeeën en koraalriffen zwemt.',
+    translationEn: 'Sea turtle',
+    compound: 'zee + schildpad',
+    syllables: ['zee', 'schild', 'pad'],
+    exampleNl: 'De zeeschildpad zwom rustig tussen het kleurrijke koraal.',
+    level: 'Groep 3-4 (AVI M3-E4)'
+  },
+  'onderwatergrot': {
+    word: 'onderwatergrot',
+    wordType: 'Zelfstandig naamwoord',
+    meaningNl: 'Een geheimzinnige grot die zich diep onder het wateroppervlak van de zee bevindt.',
+    translationEn: 'Underwater cave',
+    compound: 'onderwater + grot',
+    syllables: ['on', 'der', 'wa', 'ter', 'grot'],
+    exampleNl: 'Ridheya dook behoedzaam de verlichte onderwatergrot binnen.',
+    level: 'Groep 5-6 (AVI M5-E6)'
+  },
+  'zeeanemoon': {
+    word: 'zeeanemoon',
+    wordType: 'Zelfstandig naamwoord',
+    meaningNl: 'Een zacht zeedier met wuivende tentakels waarin kleine visjes zoals clownvisjes veilig schuilen.',
+    translationEn: 'Sea anemone',
+    compound: 'zee + anemoon',
+    syllables: ['zee', 'a', 'ne', 'moon'],
+    exampleNl: 'Het oranje clownvisje verstopte zich tussen de tentakels van de zeeanemoon.',
+    level: 'Groep 5-6 (AVI M5-E6)'
+  },
+  'zeegrasweide': {
+    word: 'zeegrasweide',
+    wordType: 'Zelfstandig naamwoord',
+    meaningNl: 'Onderzeese grasvlakte op de zeebodem waar vissen en schildpadden grazen en rusten.',
+    translationEn: 'Seagrass meadow',
+    compound: 'zeegras + weide',
+    syllables: ['zee', 'gras', 'wei', 'de'],
+    exampleNl: 'Een school jonge zeedolfijnen speelde vrolijk boven de weelderige zeegrasweide.',
+    level: 'Groep 5-6 (AVI M5-E6)'
+  },
+  'zeedolfijn': {
+    word: 'zeedolfijn',
+    wordType: 'Zelfstandig naamwoord',
+    meaningNl: 'Een slim en speels zeezoogdier dat sierlijk door de golven springt en klikgeluidjes maakt.',
+    translationEn: 'Sea dolphin',
+    compound: 'zee + dolfijn',
+    syllables: ['zee', 'dol', 'fijn'],
+    exampleNl: 'De nieuwsgierige zeedolfijn zwom een ererondje om de duikboot.',
+    level: 'Groep 3-4 (AVI M3-E4)'
+  },
+  'behoedzaam': {
+    word: 'behoedzaam',
+    wordType: 'Bijvoeglijk naamwoord',
+    meaningNl: 'Heel voorzichtig, op je hoede en aandachtig om niets te beschadigen of te laten schrikken.',
+    translationEn: 'Cautious, watchful, careful',
+    syllables: ['be', 'hoed', 'zaam'],
+    exampleNl: 'Ridheya zwom behoedzaam dichterbij om het koraal niet te raken.',
+    citoCategory: 'Moeilijk Cito Woord',
+    level: 'Groep 5-6 (AVI M5-E6)'
+  },
+  'parelketting': {
+    word: 'parelketting',
+    wordType: 'Zelfstandig naamwoord',
+    meaningNl: 'Een glanzend halssnoer geregen van echte parels uit de diepzee.',
+    translationEn: 'Pearl necklace',
+    compound: 'parel + ketting',
+    syllables: ['pa', 'rel', 'ket', 'ting'],
+    exampleNl: 'In de antieke schelp lag een fonkelende parelketting te schitteren.',
+    level: 'Groep 3-4 (AVI M3-E4)'
+  },
+  'parelmoer': {
+    word: 'parelmoer',
+    wordType: 'Zelfstandig naamwoord',
+    meaningNl: 'De glanzende, regenboogkleurige binnenlaag van bepaalde zeeschelpen.',
+    translationEn: 'Mother-of-pearl, nacre',
+    syllables: ['pa', 'rel', 'moer'],
+    exampleNl: 'Het doosje was ingelegd met prachtig glinsterend parelmoer.',
+    level: 'Groep 5-6 (AVI M5-E6)'
+  },
+  'aangespoeld': {
+    word: 'aangespoeld',
+    wordType: 'Bijvoeglijk naamwoord',
+    meaningNl: 'Door de golven en de stroming van de zee op het strand of de oever terechtgekomen.',
+    translationEn: 'Washed ashore, stranded',
+    syllables: ['aan', 'ge', 'spoeld'],
+    exampleNl: 'De meisjes vonden een aangespoelde fles met een oude schatkaart.',
+    level: 'Groep 3-4 (AVI M3-E4)'
+  },
+  'aangespoelde': {
+    word: 'aangespoelde',
+    wordType: 'Bijvoeglijk naamwoord',
+    meaningNl: 'Verbogen vorm van aangespoeld: zegt iets over een zelfstandig naamwoord (zoals een aangespoelde kist).',
+    translationEn: 'Washed ashore (inflected form)',
+    syllables: ['aan', 'ge', 'spoel', 'de'],
+    exampleNl: 'Ridheya inspecteerde de aangespoelde fles met haar vergrootglas.',
+    level: 'Groep 3-4 (AVI M3-E4)'
+  },
+  'kruidenbalsem': {
+    word: 'kruidenbalsem',
+    wordType: 'Zelfstandig naamwoord',
+    meaningNl: 'Een verzorgende zalf gemaakt van geneeskrachtige planten en junglebloemen.',
+    translationEn: 'Herbal balm, soothing ointment',
+    compound: 'kruiden + balsem',
+    syllables: ['krui', 'den', 'bal', 'sem'],
+    exampleNl: 'Met een beetje zachte kruidenbalsem was het vleugeltje snel gekalmeerd.',
+    level: 'Groep 5-6 (AVI M5-E6)'
+  },
+  'mangoboom': {
+    word: 'mangoboom',
+    wordType: 'Zelfstandig naamwoord',
+    meaningNl: 'Een grote tropische boom waaraan zoete, sappige oranje mango\'s groeien.',
+    translationEn: 'Mango tree',
+    compound: 'mango + boom',
+    syllables: ['man', 'go', 'boom'],
+    exampleNl: 'Bovenin de oude mangoboom genoten de zusjes van het uitzicht over het oerwoud.',
+    level: 'Groep 3-4 (AVI M3-E4)'
+  },
+  'vruchtenvleermuis': {
+    word: 'vruchtenvleermuis',
+    wordType: 'Zelfstandig naamwoord',
+    meaningNl: 'Een grote, ongevaarlijke vleermuis die \'s nachts zoete vruchten en nectar eet.',
+    translationEn: 'Fruit bat, flying fox',
+    compound: 'vruchten + vleermuis',
+    syllables: ['vruch', 'ten', 'vleer', 'muis'],
+    exampleNl: 'De zachtaardige vruchtenvleermuis hing ondersteboven aan een tak.',
+    level: 'Groep 3-4 (AVI M3-E4)'
+  },
+  'vleugelvlies': {
+    word: 'vleugelvlies',
+    wordType: 'Zelfstandig naamwoord',
+    meaningNl: 'Het dunne, elastische huidlaagje tussen de vingers van een vleermuis waarmee hij vliegt.',
+    translationEn: 'Wing membrane, patagium',
+    compound: 'vleugel + vlies',
+    syllables: ['vleu', 'gel', 'vlies'],
+    exampleNl: 'Ridheya controleerde het vleugelvlies nauwkeurig op kleine scheurtjes.',
+    level: 'Groep 5-6 (AVI M5-E6)'
+  },
+  'nevelpantertje': {
+    word: 'nevelpantertje',
+    wordType: 'Zelfstandig naamwoord',
+    meaningNl: 'Een jong katachtig roofdier uit het Aziatische regenwoud met een prachtige wolkenvacht.',
+    translationEn: 'Clouded leopard cub',
+    compound: 'nevel + pantertje',
+    syllables: ['ne', 'vel', 'pan', 'ter', 'tje'],
+    exampleNl: 'Het speelse nevelpantertje spinde zachtjes toen Ridheya hem aaide.',
+    level: 'Groep 3-4 (AVI M3-E4)'
+  },
+  'geruststellend': {
+    word: 'geruststellend',
+    wordType: 'Bijvoeglijk naamwoord',
+    meaningNl: 'Iets wat je kalmeert, angst wegneemt en een veilig gevoel geeft.',
+    translationEn: 'Reassuring, comforting',
+    syllables: ['ge', 'rust', 'stel', 'lend'],
+    exampleNl: 'Ridheya sprak met een geruststellende stem tegen het bibberende diertje.',
+    level: 'Groep 5-6 (AVI M5-E6)'
+  },
+  'bladerdak': {
+    word: 'bladerdak',
+    wordType: 'Zelfstandig naamwoord',
+    meaningNl: 'De aaneengesloten laag van boomkruinen en bladeren hoog bovenin het bos of regenwoud.',
+    translationEn: 'Canopy, treetops',
+    compound: 'bladeren + dak',
+    syllables: ['bla', 'der', 'dak'],
+    exampleNl: 'Het zonlicht filterde in gouden stralen door het dichte groene bladerdak.',
+    level: 'Groep 5-6 (AVI M5-E6)'
+  },
+  'hereniging': {
+    word: 'hereniging',
+    wordType: 'Zelfstandig naamwoord',
+    meaningNl: 'Het moment waarop familieleden of vrienden na een scheiding weer samen worden gebracht.',
+    translationEn: 'Reunion, being reunited',
+    syllables: ['her', 'e', 'ni', 'ging'],
+    exampleNl: 'De hereniging tussen de moederpanter en haar welpje was hartverwarmend.',
+    level: 'Groep 5-6 (AVI M5-E6)'
+  },
+  'resonantiekamer': {
+    word: 'resonantiekamer',
+    wordType: 'Zelfstandig naamwoord',
+    meaningNl: 'Een akoestische ruimte waarin geluidstrillingen weerkaatsen en versterkt worden.',
+    translationEn: 'Resonance chamber',
+    compound: 'resonantie + kamer',
+    syllables: ['re', 'so', 'nan', 'tie', 'ka', 'mer'],
+    exampleNl: 'In de magische resonantiekamer van de grot klonk elke klank als kristalheldere muziek.',
+    level: 'Groep 7-8 (Doorstroomtoets)'
+  },
+  'stalagmieten': {
+    word: 'stalagmieten',
+    wordType: 'Zelfstandig naamwoord',
+    meaningNl: 'Kalksteenpilaren die vanaf de bodem van een druipsteengrot omhoog groeien door vallende druppels.',
+    translationEn: 'Stalagmites',
+    syllables: ['sta', 'lag', 'mie', 'ten'],
+    exampleNl: 'De stalagmieten reikten vanaf de grond omhoog naar de hangende stalactieten.',
+    citoCategory: 'Moeilijk Cito Woord',
+    level: 'Groep 7-8 (Doorstroomtoets)'
+  },
+  'hexagonale': {
+    word: 'hexagonale',
+    wordType: 'Bijvoeglijk naamwoord',
+    meaningNl: 'Met een zeshoekige vorm of meetkundige structuur (zoals een honingraat of kwartskristal).',
+    translationEn: 'Hexagonal, six-sided',
+    syllables: ['hex', 'a', 'go', 'na', 'le'],
+    exampleNl: 'De hexagonale kristallen weerkaatsten het lantaarnlicht in zes schitterende bundels.',
+    level: 'Groep 7-8 (Doorstroomtoets)'
+  },
+  'onlosmakelijk': {
+    word: 'onlosmakelijk',
+    wordType: 'Bijvoeglijk naamwoord',
+    meaningNl: 'Zodanig met elkaar verbonden dat het niet gescheiden of losgemaakt kan worden.',
+    translationEn: 'Inextricable, inseparably linked',
+    syllables: ['on', 'los', 'ma', 'ke', 'lijk'],
+    exampleNl: 'De bescherming van het koraalrif is onlosmakelijk verbonden met een schone oceaan.',
+    citoCategory: 'Moeilijk Cito Woord',
+    level: 'Groep 7-8 (Doorstroomtoets)'
+  },
+  'expeditiejournaal': {
+    word: 'expeditiejournaal',
+    wordType: 'Zelfstandig naamwoord',
+    meaningNl: 'Een officieel dagboek waarin ontdekkingsreizigers dagelijks hun waarnemingen en kaarten noteren.',
+    translationEn: 'Expedition journal / logbook',
+    compound: 'expeditie + journaal',
+    syllables: ['ex', 'pe', 'di', 'tie', 'jour', 'naal'],
+    exampleNl: 'Hemali noteerde haar deducties en theorieën in haar leren expeditiejournaal.',
+    level: 'Groep 7-8 (Doorstroomtoets)'
+  },
+  'tijdsbibliotheek': {
+    word: 'tijdsbibliotheek',
+    wordType: 'Zelfstandig naamwoord',
+    meaningNl: 'Een oneindige magische bibliotheek waarin de geschiedenis en toekomst van het universum bewaard worden.',
+    translationEn: 'Time library, Chronos archives',
+    compound: 'tijd + bibliotheek',
+    syllables: ['tijds', 'bi', 'blio', 'theek'],
+    exampleNl: 'Tussen de zwevende boekenplanken van de Tijdsbibliotheek zocht Hemali naar de verloren tijdsrol.',
+    level: 'Groep 7-8 (Doorstroomtoets)'
+  },
+  'astrolabium': {
+    word: 'astrolabium',
+    wordType: 'Zelfstandig naamwoord',
+    meaningNl: 'Een historisch wetenschappelijk instrument waarmee astronomen en zeevaarders de stand van sterren berekenden.',
+    translationEn: 'Astrolabe',
+    syllables: ['as', 'tro', 'la', 'bi', 'um'],
+    exampleNl: 'Met het koperen astrolabium berekende Hemali de exacte positie van de poolster.',
+    level: 'Groep 7-8 (Doorstroomtoets)'
+  },
+  'tijdwachters': {
+    word: 'tijdwachters',
+    wordType: 'Zelfstandig naamwoord',
+    meaningNl: 'De eeuwenoude bewakers die waken over het verloop van de tijd en de magische tijdsrollen beschermen.',
+    translationEn: 'Timekeepers, guardians of time',
+    compound: 'tijd + wachters',
+    syllables: ['tijd', 'wach', 'ters'],
+    exampleNl: 'De wijze tijdwachters overhandigden Hemali een gouden zandloper.',
+    level: 'Groep 5-6 (AVI M5-E6)'
+  },
+  'communicatiemiddel': {
+    word: 'communicatiemiddel',
+    wordType: 'Zelfstandig naamwoord',
+    meaningNl: 'Een instrument, apparaat of medium waarmee informatie en berichten worden uitgewisseld.',
+    translationEn: 'Communication medium / tool',
+    compound: 'communicatie + middel',
+    syllables: ['com', 'mu', 'ni', 'ca', 'tie', 'mid', 'del'],
+    exampleNl: 'De magische kristallen spiegel diende als betrouwbaar communicatiemiddel tussen de zussen.',
+    citoCategory: 'Moeilijk Cito Woord',
+    level: 'Groep 7-8 (Doorstroomtoets)'
   }
 };
 
