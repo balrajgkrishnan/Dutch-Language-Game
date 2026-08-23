@@ -269,6 +269,22 @@ export const DutchDictionaryModal: React.FC<DutchDictionaryModalProps> = ({
                     </button>
                   </div>
 
+                  {/* Root Lemma Badge */}
+                  {selectedWord.lemma && selectedWord.lemma !== selectedWord.word && (
+                    <div className="p-2.5 rounded-2xl bg-indigo-50 border border-indigo-200 text-indigo-950 text-xs flex items-center justify-between">
+                      <div className="flex items-center gap-1">
+                        <span className="font-bold text-indigo-700">Grondwoord:</span>
+                        <span className="font-black text-indigo-900">{selectedWord.lemma}</span>
+                      </div>
+                      <button
+                        onClick={() => handleLookupCustomWord(selectedWord.lemma!)}
+                        className="text-[11px] font-bold text-indigo-600 hover:text-indigo-800 hover:underline flex items-center gap-1 cursor-pointer"
+                      >
+                        Bekijk grondwoord <ArrowRight className="w-3 h-3" />
+                      </button>
+                    </div>
+                  )}
+
                   {/* Compound Breakdown */}
                   {selectedWord.compound && (
                     <div className="p-3 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-950 text-xs flex items-center gap-2">
@@ -309,6 +325,46 @@ export const DutchDictionaryModal: React.FC<DutchDictionaryModalProps> = ({
                       {selectedWord.translationEn}
                     </p>
                   </div>
+
+                  {/* Synonyms (If Present) */}
+                  {selectedWord.synonyms && selectedWord.synonyms.length > 0 && (
+                    <div>
+                      <span className="text-xs font-black uppercase text-slate-500 block mb-1">
+                        🔄 Synoniemen & Verwante Woorden:
+                      </span>
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        {selectedWord.synonyms.map((s, idx) => (
+                          <button
+                            key={idx}
+                            onClick={() => handleLookupCustomWord(s)}
+                            className="px-2.5 py-1 rounded-xl bg-white hover:bg-amber-100 text-slate-800 border border-amber-200 text-xs font-semibold cursor-pointer transition-colors shadow-2xs"
+                          >
+                            {s}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Suggestions / "Did you mean?" */}
+                  {selectedWord.suggestions && selectedWord.suggestions.length > 0 && (
+                    <div className="p-3 rounded-2xl bg-amber-50 border border-amber-300">
+                      <span className="text-xs font-black uppercase text-amber-900 block mb-1">
+                        💡 Bedoelde je wellicht:
+                      </span>
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        {selectedWord.suggestions.map((s, idx) => (
+                          <button
+                            key={idx}
+                            onClick={() => handleLookupCustomWord(s)}
+                            className="px-2.5 py-1 rounded-xl bg-white hover:bg-amber-100 text-amber-900 border border-amber-300 text-xs font-bold cursor-pointer transition-colors shadow-2xs"
+                          >
+                            {s}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
 
                   {/* Example Sentence */}
                   {selectedWord.exampleNl && (

@@ -11,6 +11,11 @@ export interface DictionaryEntry {
   exampleNl: string;
   citoCategory?: 'Signaalwoord Tegenstelling' | 'Signaalwoord Oorzaak/Gevolg' | 'Signaalwoord Tijd/Volgorde' | 'Signaalwoord Samenvatting' | 'Verwijswoord' | 'Moeilijk Cito Woord' | 'Basisschool Kernwoord';
   level?: 'Groep 3-4 (AVI M3-E4)' | 'Groep 5-6 (AVI M5-E6)' | 'Groep 7-8 (Doorstroomtoets)';
+  lemma?: string; // Base form / root word (e.g. "oneindig" for "oneindigheid")
+  variants?: string[]; // Morphological forms (e.g. ["oneindige", "oneindigheden"])
+  synonyms?: string[]; // Synonyms (e.g. ["grenzeloos", "onmetelijk"])
+  suggestions?: string[]; // Fallback suggestions / "Did you mean?"
+  isGenerated?: boolean;
 }
 
 export const DUTCH_DICTIONARY_DB: Record<string, DictionaryEntry> = {

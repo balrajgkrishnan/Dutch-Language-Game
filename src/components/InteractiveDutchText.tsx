@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { lookupDutchWord } from '../services/dutchDictionaryService';
+import { lookupDutchWord, normalizeDutchWord } from '../services/dutchDictionaryService';
 import { DictionaryEntry } from '../data/dutchDictionaryData';
 import { DutchDictionaryTooltip } from './DutchDictionaryTooltip';
 
@@ -90,11 +90,17 @@ export const InteractiveDutchText: React.FC<InteractiveDutchTextProps> = ({
     }
   };
 
-  // Parse text into tokens (bold words vs regular words vs whitespace)
+  const handleSelectSuggestionOrLemma = (word: string) => {
+    const entry = lookupDutchWord(word);
+    setActiveEntry(entry);
+    setIsPinned(true);
+  };
+
+  // Parse text into tokens (bold words vs regular words vs whitespace vs punctuation)
   const parseTokens = () => {
     if (!text) return [];
 
-    // Split by markdown bold (**...**) and whitespace/punctuation
+    // Split by markdown bold (**...**) and newlines / whitespace
     const parts = text.split(/(\*\*.*?\*\*|\n+|\s+)/g);
 
     return parts.map((part, index) => {
@@ -114,8 +120,8 @@ export const InteractiveDutchText: React.FC<InteractiveDutchTextProps> = ({
       const isBold = part.startsWith('**') && part.endsWith('**');
       const cleanWord = isBold ? part.slice(2, -2) : part;
 
-      // Split into words and punctuation
-      const subTokens = cleanWord.split(/([a-zA-Z0-9áéíóúäëïöüÁÉÍÓÚÄËÏÖÜ-]+|[.,!?:;'"”’»)_*`~]+)/g);
+      // Tokenizer: accurately matches words including hyphens (zee-oorlog, ad-hoc) and contractions (baby's, zo'n, m'n)
+      const subTokens = cleanWord.split(/([a-zA-Z0-9áéíóúäëïöüÁÉÍÓÚÄËÏÖÜ]+(?:(?:-|['’])[a-zA-Z0-9áéíóúäëïöüÁÉÍÓÚÄËÏÖÜ]+)*|[.,!?:;'"”’»«„()[\]{}#*_~`–—…•·\/\\+]+)/g);
 
       return (
         <span key={index} className={isBold && highlightBold ? 'font-bold' : ''}>
@@ -166,6 +172,7 @@ export const InteractiveDutchText: React.FC<InteractiveDutchTextProps> = ({
           setTooltipPosition(null);
           setIsPinned(false);
         }}
+        onSelectWord={handleSelectSuggestionOrLemma}
         isPinned={isPinned}
       />
     </>
