@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { VerbItem, Animal, BiomeType } from '../types';
 import { sound } from '../services/soundService';
-import { getImperfectumOptions, checkAux, checkParticiple, WERKWOORDEN_DATA } from '../data/werkwoorden';
-import { Volume2, Sparkles, CheckCircle2, XCircle, ArrowRight, Lightbulb, Zap } from 'lucide-react';
+import { getImperfectumOptions, getParticipleOptions, checkAux, checkParticiple, WERKWOORDEN_DATA } from '../data/werkwoorden';
+import { Volume2, Sparkles, CheckCircle2, XCircle, ArrowRight, Lightbulb, Zap, HelpCircle } from 'lucide-react';
 import { AnimalAvatar } from './AnimalAvatar';
 import { StoryDialogueCard } from './StoryDialogueCard';
 import confetti from 'canvas-confetti';
@@ -16,8 +16,8 @@ interface VerbQuizCardProps {
   animal?: Animal;
   mascotAnimal?: Animal;
   tierName?: string;
-  selectedTier?: 'all' | 'A1' | 'A2' | 'B1' | 'B2';
-  onSelectTier?: (tier: 'all' | 'A1' | 'A2' | 'B1' | 'B2') => void;
+  selectedTier?: 'all' | 'beginner' | 'intermediate' | 'advanced' | 'A1' | 'A2' | 'B1' | 'B2';
+  onSelectTier?: (tier: any) => void;
   playerName?: string;
   avatarEmoji?: string;
   questionNumber?: number;
@@ -55,7 +55,10 @@ export const VerbQuizCard: React.FC<VerbQuizCardProps> = ({
   const activeAnimal = animal || mascotAnimal || ALL_BIOME_ANIMALS[0];
   const activeQNum = questionNumber || (currentVerbIndex !== undefined ? currentVerbIndex + 1 : 1);
   const activeTotal = totalQuestions || totalVerbsAvailable || WERKWOORDEN_DATA.length;
+  const isRidheya = (playerName || '').toLowerCase().includes('ridheya');
+  const isHemali = (playerName || '').toLowerCase().includes('hemali');
   const activeTierLabel = tierName || (selectedTier ? `Niveau ${selectedTier.toUpperCase()}` : `Niveau ${activeVerb.tier}`);
+  
   const handleNext = () => {
     if (onNextQuestion) onNextQuestion();
     else if (onNextVerb) onNextVerb();
@@ -63,6 +66,7 @@ export const VerbQuizCard: React.FC<VerbQuizCardProps> = ({
 
   const [step, setStep] = useState<'step_mc' | 'step_participle' | 'feedback'>('step_mc');
   const [mcOptions, setMcOptions] = useState<string[]>([]);
+  const [participleOptions, setParticipleOptions] = useState<string[]>([]);
   const [selectedMcOption, setSelectedMcOption] = useState<string | null>(null);
   const [isMcCorrect, setIsMcCorrect] = useState<boolean | null>(null);
   
@@ -82,8 +86,12 @@ export const VerbQuizCard: React.FC<VerbQuizCardProps> = ({
     setParticipleResult(null);
     setAuxResult(null);
 
+    // Shuffle options using Fisher-Yates so the correct option is uniformly distributed
     const opts = getImperfectumOptions(activeVerb, WERKWOORDEN_DATA, 4);
     setMcOptions(opts);
+
+    const partOpts = getParticipleOptions(activeVerb, WERKWOORDEN_DATA, 4);
+    setParticipleOptions(partOpts);
   }, [activeVerb]);
 
   const handleSpeak = () => {
@@ -107,7 +115,7 @@ export const VerbQuizCard: React.FC<VerbQuizCardProps> = ({
 
     setTimeout(() => {
       setStep('step_participle');
-    }, 700);
+    }, 650);
   };
 
   const handleParticipleSubmit = (e?: React.FormEvent) => {
@@ -157,7 +165,11 @@ export const VerbQuizCard: React.FC<VerbQuizCardProps> = ({
         biome={biome}
         animal={activeAnimal}
         chapterTitle={`Werkwoord Training: ${activeTierLabel}`}
-        storyText={`Onderzoek samen met Boerin Tess de verleden tijd en het voltooid deelwoord van '${activeVerb.infinitief}'!`}
+        storyText={
+          isRidheya
+            ? `Boerin Tess en ${activeAnimal.name} helpen Ridheya met het ontdekken van het werkwoord '${activeVerb.infinitief}'!`
+            : `Professor Ollie en ${activeAnimal.name} trainen met Hemali de Cito werkwoordspelling van '${activeVerb.infinitief}'!`
+        }
         onPetAnimal={() => sound.playAnimalHappy(activeAnimal.soundName)}
       />
 
@@ -167,7 +179,7 @@ export const VerbQuizCard: React.FC<VerbQuizCardProps> = ({
         <div className="md:col-span-5 bg-white/95 backdrop-blur-md rounded-3xl p-5 sm:p-6 shadow-xl shadow-emerald-950/5 border border-emerald-100 flex flex-col items-center justify-between text-center min-h-[300px]">
           <div className="w-full flex items-center justify-between">
             <span className="text-[11px] font-black uppercase tracking-wider text-emerald-800 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-full">
-              Groep 6-7-8 Werkwoorden
+              {isRidheya ? 'Groep 4-5 • Sterke Werkwoorden' : 'Groep 6-8 • Cito & Doorstroom'}
             </span>
             <span className="text-xs font-black text-amber-700 bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-full uppercase">
               {activeTierLabel}
@@ -189,10 +201,12 @@ export const VerbQuizCard: React.FC<VerbQuizCardProps> = ({
           <div className="w-full bg-amber-50/80 border border-amber-200/80 rounded-2xl p-3 text-left">
             <div className="flex items-center gap-1.5 text-[11px] font-black text-amber-800 uppercase mb-1">
               <Lightbulb className="w-3.5 h-3.5 text-amber-600" />
-              <span>Taalweetje van Tess</span>
+              <span>{isRidheya ? 'Tips van Boerin Tess' : 'Grammatica-Inzicht van Ollie'}</span>
             </div>
             <p className="text-xs font-medium text-slate-700 leading-relaxed">
-              Sterke werkwoorden veranderen van klank in de verleden tijd! Oefen mee met {activeAnimal.name}.
+              {isRidheya
+                ? `Let op de klankverandering! Zoals 'ik loop' ➔ 'ik liep'. ${activeAnimal.name} kijkt trots mee!`
+                : `Klankveranderend werkwoord: controleer de klinkerwissel en of het voltooid deelwoord 'heeft' of 'is' krijgt.`}
             </p>
           </div>
         </div>
@@ -245,7 +259,7 @@ export const VerbQuizCard: React.FC<VerbQuizCardProps> = ({
               >
                 <div className="flex items-center justify-between">
                   <p className="text-xs sm:text-sm font-black text-emerald-900 uppercase tracking-wide">
-                    Stap 1: Kies de verleden tijd (imperfectum)
+                    Stap 1: Kies de verleden tijd (enkelvoud)
                   </p>
                   <span className="text-[11px] text-slate-400 font-bold">1/2</span>
                 </div>
@@ -335,10 +349,10 @@ export const VerbQuizCard: React.FC<VerbQuizCardProps> = ({
                   </p>
                 )}
 
-                {/* Participle text input */}
+                {/* Participle text input & Quick-Select Word Chips */}
                 <div className="flex flex-col gap-1.5 mt-1">
                   <label className="text-xs font-bold text-slate-500 text-center">
-                    Typ het voltooid deelwoord (bijv. <i>gebakken</i>):
+                    Typ of klik op het juiste voltooid deelwoord (bijv. <i>{activeVerb.perfectum}</i>):
                   </label>
                   <input
                     type="text"
@@ -348,6 +362,27 @@ export const VerbQuizCard: React.FC<VerbQuizCardProps> = ({
                     placeholder={`bijv. ge...`}
                     className="w-full bg-slate-50 text-slate-800 font-black text-lg py-3 px-4 rounded-2xl border-2 border-emerald-300 text-center outline-none focus:ring-2 focus:ring-emerald-500"
                   />
+
+                  {/* Word chips helper */}
+                  <div className="flex flex-wrap items-center justify-center gap-1.5 mt-1.5">
+                    {participleOptions.map((opt, i) => (
+                      <button
+                        key={i}
+                        type="button"
+                        onClick={() => {
+                          setParticipleInput(opt);
+                          sound.playPop();
+                        }}
+                        className={`text-xs font-bold px-3 py-1.5 rounded-xl border transition-all cursor-pointer ${
+                          participleInput.toLowerCase() === opt.toLowerCase()
+                            ? 'bg-emerald-600 text-white border-emerald-700 shadow-xs'
+                            : 'bg-slate-100 hover:bg-emerald-50 text-slate-700 border-slate-200'
+                        }`}
+                      >
+                        {opt}
+                      </button>
+                    ))}
+                  </div>
                 </div>
 
                 <button
@@ -421,3 +456,4 @@ export const VerbQuizCard: React.FC<VerbQuizCardProps> = ({
     </div>
   );
 };
+

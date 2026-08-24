@@ -49,8 +49,15 @@ export const QuizCard: React.FC<QuizCardProps> = ({
   const activeLevelNum = levelNumber || (level && level.id) || 1;
   const activeQNum = questionNumber || (currentQuestionIndex !== undefined ? currentQuestionIndex + 1 : 1);
   const activeTotalQ = totalQuestionsInLevel || (level && level.questions ? level.questions.length : 1);
+  const isRidheya = (playerName || '').toLowerCase().includes('ridheya');
+  const isHemali = (playerName || '').toLowerCase().includes('hemali');
+
+  const defaultStory = isRidheya
+    ? `Boerin Tess, puppy Kopi en ${activeAnimal.name} helpen Ridheya met het ontdekken van het juiste antwoord!`
+    : `Professor Ollie en ${activeAnimal.name} onderzoeken met Hemali deze Cito vraagstelling!`;
+
   const activeChapter = chapterTitle || (level && level.title) || `Level ${activeLevelNum}: ${activeAnimal.name}`;
-  const activeIntroStory = introStory || (level && level.introStory) || question.shortStory || `Boerin Tess en ${activeAnimal.name} zijn op zoek naar het juiste woord!`;
+  const activeIntroStory = introStory || (level && level.introStory) || question.shortStory || defaultStory;
 
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [spelledLetters, setSpelledLetters] = useState<string[]>([]);
@@ -60,6 +67,30 @@ export const QuizCard: React.FC<QuizCardProps> = ({
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
   const [showHintAfterError, setShowHintAfterError] = useState(false);
   const [failedAttempts, setFailedAttempts] = useState(0);
+
+  // Keyboard navigation support for laptop use
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Ignore if user is in an input field
+      if (['INPUT', 'TEXTAREA'].includes((e.target as HTMLElement)?.tagName)) return;
+
+      if (!isAnswered && (question.type === 'choice' || question.type === 'comprehension')) {
+        const key = e.key.toUpperCase();
+        if (key === 'A' || key === '1') handleChoiceClick(0);
+        else if (key === 'B' || key === '2') handleChoiceClick(1);
+        else if (key === 'C' || key === '3') handleChoiceClick(2);
+        else if (key === 'D' || key === '4') handleChoiceClick(3);
+      } else if (isAnswered && (e.key === 'Enter' || e.key === ' ')) {
+        e.preventDefault();
+        sound.playPop();
+        onNextQuestion();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isAnswered, shuffledOptions, question]);
+
 
   // Helper to thoroughly scramble letters
   const scrambleLetters = (letters: string[], targetWord?: string): string[] => {

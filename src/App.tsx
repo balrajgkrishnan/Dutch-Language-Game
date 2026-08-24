@@ -104,6 +104,16 @@ export default function App() {
     setActiveUsername(newUsername);
     setCurrentUsername(newUsername);
     const loaded = loadUserProfile(newUsername);
+    const isNewRidheya = newUsername.toLowerCase() === 'ridheya';
+    
+    if (isNewRidheya) {
+      loaded.selectedGrade = 'group_4_5';
+      setSelectedVerbTier('beginner');
+    } else {
+      loaded.selectedGrade = 'group_6_7_8';
+      setSelectedVerbTier('all');
+    }
+    
     setProfile(loaded);
     setSelectedBiome(loaded.selectedBiome || 'farm');
     setCurrentQuestionIndex(0);
@@ -175,21 +185,43 @@ export default function App() {
     };
   });
 
-  // Active Biome Config & Levels depending on Selected Grade
+  // Active Biome Config & Levels depending on Selected Grade & User Profile
   const activeBiomeConfig = BIOMES.find(b => b.id === selectedBiome) || BIOMES[0];
-  const levelsByGrade = profile.selectedGrade === 'group_4_5'
+  const isRidheya = currentUsername.toLowerCase() === 'ridheya';
+  const isHemali = currentUsername.toLowerCase() === 'hemali';
+
+  // Ensure appropriate grade level defaults for each sister
+  const effectiveGrade = profile.selectedGrade || (isRidheya ? 'group_4_5' : 'group_6_7_8');
+  const levelsByGrade = effectiveGrade === 'group_4_5'
     ? BIOME_LEVELS_GROEP_4_5
     : BIOME_LEVELS_GROEP_6_8;
   const biomeLevels = levelsByGrade[selectedBiome] || levelsByGrade.farm;
   const currentBiomeLevelIdx = profile.biomeProgress?.[selectedBiome] ?? (profile.currentLevelIndex % biomeLevels.length);
   const currentLevel = biomeLevels[currentBiomeLevelIdx % biomeLevels.length] || biomeLevels[0];
-  const currentQuestion = currentLevel.questions[currentQuestionIndex % currentLevel.questions.length] || currentLevel.questions[0];
 
-  // Group 6-8 Extra Verb Trainer
-  const filteredVerbs = selectedVerbTier === 'all'
-    ? WERKWOORDEN_DATA
-    : WERKWOORDEN_DATA.filter(v => v.tier === selectedVerbTier);
-  const currentVerb: VerbItem = filteredVerbs[currentVerbIndex % filteredVerbs.length] || filteredVerbs[0];
+  // Prioritize unseen questions in the current level for cross-session freshness
+  const levelQuestions = currentLevel.questions;
+  const seenSet = new Set(profile.seenQuestionIds || []);
+  const unseenQuestions = levelQuestions.filter(q => !seenSet.has(q.id));
+  const prioritizedQuestions = unseenQuestions.length > 0
+    ? [...unseenQuestions, ...levelQuestions.filter(q => seenSet.has(q.id))]
+    : levelQuestions;
+  const currentQuestion = prioritizedQuestions[currentQuestionIndex % prioritizedQuestions.length] || levelQuestions[0];
+
+  // Sterke Werkwoorden: Differentiated pools for Hemali vs Ridheya
+  const effectiveVerbTier = isRidheya
+    ? 'beginner'
+    : (selectedVerbTier || 'all');
+  const filteredVerbs = effectiveVerbTier === 'all'
+    ? (isHemali ? WERKWOORDEN_DATA.filter(v => v.tier !== 'beginner' || v.school_priority) : WERKWOORDEN_DATA)
+    : WERKWOORDEN_DATA.filter(v => v.tier === effectiveVerbTier);
+  
+  // Prioritize unseen verbs
+  const unseenVerbs = (filteredVerbs.length > 0 ? filteredVerbs : WERKWOORDEN_DATA).filter(v => !seenSet.has(`verb-${v.infinitief}`));
+  const prioritizedVerbs = unseenVerbs.length > 0
+    ? [...unseenVerbs, ...(filteredVerbs.length > 0 ? filteredVerbs : WERKWOORDEN_DATA).filter(v => seenSet.has(`verb-${v.infinitief}`))]
+    : (filteredVerbs.length > 0 ? filteredVerbs : WERKWOORDEN_DATA);
+  const currentVerb: VerbItem = prioritizedVerbs[currentVerbIndex % prioritizedVerbs.length] || WERKWOORDEN_DATA[0];
 
   // Mascot animal for current interaction
   const verbMascotAnimal = animals[currentVerbIndex % animals.length] || animals[0];
@@ -250,6 +282,10 @@ export default function App() {
       const totalStars = prev.stars + (pointsEarned * bonusMultiplier);
       const totalCoins = prev.score + (pointsEarned * bonusMultiplier);
 
+      const qId = currentQuestion.id || `q-${currentQuestion.category}-${currentQuestion.question}`;
+      const seenSet = new Set<string>(prev.seenQuestionIds || []);
+      seenSet.add(qId);
+
       const logged = addActivityLog(prev, {
         question: currentQuestion.question,
         category: currentQuestion.category,
@@ -266,6 +302,7 @@ export default function App() {
         highestStreak: Math.max(prev.highestStreak, newStreak),
         totalCorrect: prev.totalCorrect + 1,
         totalAnswered: prev.totalAnswered + 1,
+        seenQuestionIds: Array.from(seenSet),
         mastery: {
           ...prev.mastery,
           spelling: Math.min(100, prev.mastery.spelling + 1),
@@ -281,6 +318,10 @@ export default function App() {
   // Handler: Answer Incorrect
   const handleAnswerIncorrect = () => {
     setProfile(prev => {
+      const qId = currentQuestion.id || `q-${currentQuestion.category}-${currentQuestion.question}`;
+      const seenSet = new Set<string>(prev.seenQuestionIds || []);
+      seenSet.add(qId);
+
       const logged = addActivityLog(prev, {
         question: currentQuestion.question,
         category: currentQuestion.category,
@@ -292,7 +333,8 @@ export default function App() {
       return {
         ...logged,
         streak: 0,
-        totalAnswered: prev.totalAnswered + 1
+        totalAnswered: prev.totalAnswered + 1,
+        seenQuestionIds: Array.from(seenSet)
       };
     });
   };
@@ -368,6 +410,10 @@ export default function App() {
 
   // Handler: Next Verb in Arena Mode
   const handleNextVerb = () => {
+    const verbKey = `verb-${currentVerb.infinitief}`;
+    const seenSet = new Set<string>(profile.seenQuestionIds || []);
+    seenSet.add(verbKey);
+
     const nextIdx = currentVerbIndex + 1;
     if (nextIdx % 4 === 0) {
       const nextLockedAnimal = ALL_BIOME_ANIMALS.find(a => !profile.unlockedAnimals.includes(a.id));
@@ -376,11 +422,22 @@ export default function App() {
           ...prev,
           stars: prev.stars + 50,
           score: prev.score + 50,
+          seenQuestionIds: Array.from(seenSet),
           unlockedAnimals: [...prev.unlockedAnimals, nextLockedAnimal.id]
         }));
         setJustUnlockedAnimal(nextLockedAnimal);
         setShowRewardModal(true);
+      } else {
+        setProfile(prev => ({
+          ...prev,
+          seenQuestionIds: Array.from(seenSet)
+        }));
       }
+    } else {
+      setProfile(prev => ({
+        ...prev,
+        seenQuestionIds: Array.from(seenSet)
+      }));
     }
     setCurrentVerbIndex(nextIdx);
   };

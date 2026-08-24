@@ -77,8 +77,18 @@ const BUBBLE_MISSIONS = [
   }
 ];
 
-const CITO_TURBO_QUESTIONS = [
+export interface CitoTurboQuestionItem {
+  id: string;
+  sentence: string;
+  options: string[];
+  correctIndex: number;
+  rule: string;
+  points: number;
+}
+
+const CITO_TURBO_RAW_QUESTIONS: CitoTurboQuestionItem[] = [
   {
+    id: 'ct-echter-1',
     sentence: "Ridheya zocht naar haar vergrootglas, [...] vond ze een oud geheim kompas.",
     options: ["echter", "zodat", "omdat", "waardoor"],
     correctIndex: 0,
@@ -86,6 +96,7 @@ const CITO_TURBO_QUESTIONS = [
     points: 150
   },
   {
+    id: 'ct-daardoor-2',
     sentence: "Het begon hevig te onweren in het oerwoud, [...] moesten de zussen snel schuilen.",
     options: ["daardoor", "desondanks", "hoewel", "tenzij"],
     correctIndex: 0,
@@ -93,6 +104,7 @@ const CITO_TURBO_QUESTIONS = [
     points: 150
   },
   {
+    id: 'ct-zodat-3',
     sentence: "Hemali bestudeerde de oude kaart, [...] ze precies wist waar de tempel lag.",
     options: ["zodat", "maar", "hoewel", "ondanks"],
     correctIndex: 0,
@@ -100,6 +112,7 @@ const CITO_TURBO_QUESTIONS = [
     points: 150
   },
   {
+    id: 'ct-desondanks-4',
     sentence: "De tocht was zwaar en steil, [...] gaven de twee zussen de moed niet op.",
     options: ["desondanks", "daarom", "want", "mits"],
     correctIndex: 0,
@@ -107,6 +120,7 @@ const CITO_TURBO_QUESTIONS = [
     points: 200
   },
   {
+    id: 'ct-omdat-5',
     sentence: "Ridheya hielp het kleine vosje, [...] het diertje verstrikt zat in de struiken.",
     options: ["omdat", "daardoor", "zodat", "echter"],
     correctIndex: 0,
@@ -114,6 +128,7 @@ const CITO_TURBO_QUESTIONS = [
     points: 150
   },
   {
+    id: 'ct-aangezien-6',
     sentence: "De zussen namen warme jassen mee, [...] het 's avonds erg koud werd op de savanne.",
     options: ["aangezien", "ondanks", "daarentegen", "hoewel"],
     correctIndex: 0,
@@ -121,20 +136,104 @@ const CITO_TURBO_QUESTIONS = [
     points: 150
   },
   {
-    sentence: "Hemali zag een uil in de boom. **Zij** keek **hem** recht in de ogen. Wie is 'hem'?",
+    id: 'ct-verwijs-uil-7',
+    sentence: "Hemali zag een wijze uil in de boom. **Zij** keek **hem** recht in de ogen. Wie is 'hem'?",
     options: ["de uil", "Hemali", "de boom", "de nacht"],
     correctIndex: 0,
     rule: "Verwijswoord: 'hem' verwijst naar de mannelijke uil.",
     points: 150
   },
   {
+    id: 'ct-verwijs-water-8',
     sentence: "Ridheya gaf de leeuwin vers water. **Het dier** dronk **ervan** met grote teugen. Wat is 'ervan'?",
     options: ["van het water", "van de leeuwin", "van Ridheya", "van de beker"],
     correctIndex: 0,
     rule: "Verwijswoord: 'ervan' vervangt 'van het verse water'.",
     points: 150
+  },
+  {
+    id: 'ct-daarentegen-9',
+    sentence: "Ridheya rent graag door de regen. Hemali [...] leest liever een boek bij het haardvuur.",
+    options: ["daarentegen", "daardoor", "zodoende", "bovendien"],
+    correctIndex: 0,
+    rule: "Contrast / Vergelijking: 'daarentegen' markeert het verschil tussen de twee zussen.",
+    points: 175
+  },
+  {
+    id: 'ct-immers-10',
+    sentence: "De boot mocht niet uitvaren; de golven waren [...] metershoog door de noorderstorm.",
+    options: ["immers", "desondanks", "hoewel", "tenzij"],
+    correctIndex: 0,
+    rule: "Redengevend: 'immers' betekent 'want' of 'zoals bekend'.",
+    points: 175
+  },
+  {
+    id: 'ct-tenzij-11',
+    sentence: "We kunnen vanmiddag naar het strand, [...] het straks alsnog begint te stormen.",
+    options: ["tenzij", "zodat", "omdat", "waardoor"],
+    correctIndex: 0,
+    rule: "Voorwaarde (ontkennend): 'tenzij' betekent 'behalve als'.",
+    points: 200
+  },
+  {
+    id: 'ct-mits-12',
+    sentence: "Je mag het eeuwenoude manuscript vasthouden, [...] je eerst witte handschoenen aandoet.",
+    options: ["mits", "echter", "hoewel", "desondanks"],
+    correctIndex: 0,
+    rule: "Voorwaarde (bevestigend): 'mits' betekent 'op voorwaarde dat'.",
+    points: 200
+  },
+  {
+    id: 'ct-bovendien-13',
+    sentence: "Het museum was gratis toegankelijk. [...], kregen alle kinderen een speurtochtkaart mee.",
+    options: ["Bovendien", "Daarentegen", "Desondanks", "Noch"],
+    correctIndex: 0,
+    rule: "Opsomming: 'bovendien' voegt extra informatie toe.",
+    points: 150
+  },
+  {
+    id: 'ct-hoewel-14',
+    sentence: "[...] de zon fel scheen, voelde de poolwind ijzig koud aan.",
+    options: ["Hoewel", "Doordat", "Zodat", "Aangezien"],
+    correctIndex: 0,
+    rule: "Toegevend / Tegenstellend: 'hoewel' verbindt twee tegengestelde feiten.",
+    points: 175
+  },
+  {
+    id: 'ct-verwijs-sleutel-15',
+    sentence: "Hemali vond een antieke sleutel. Ze opende de kist **waarmee** het mysterie werd opgelost. Wat is 'waarmee'?",
+    options: ["met de sleutel", "met het mysterie", "met de kist", "met Hemali"],
+    correctIndex: 0,
+    rule: "Verwijswoord: 'waarmee' verwijst naar 'met de sleutel'.",
+    points: 175
+  },
+  {
+    id: 'ct-verwijs-dokters-16',
+    sentence: "De dierenartsen verzorgden het gewonde hertje. **Zij** gaven **het** vers hooi en medicijnen. Wie is 'het'?",
+    options: ["het hertje", "de dierenartsen", "het medicijn", "het hooi"],
+    correctIndex: 0,
+    rule: "Verwijswoord: 'het' (onzijdig enkelvoud) verwijst naar 'het hertje'.",
+    points: 150
   }
 ];
+
+function prepareShuffledTurboItem(rawQ: CitoTurboQuestionItem): CitoTurboQuestionItem {
+  const correctAnswer = rawQ.options[rawQ.correctIndex];
+  const shuffledOptions = [...rawQ.options];
+  
+  for (let i = shuffledOptions.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffledOptions[i], shuffledOptions[j]] = [shuffledOptions[j], shuffledOptions[i]];
+  }
+  
+  const newCorrectIndex = shuffledOptions.indexOf(correctAnswer);
+  
+  return {
+    ...rawQ,
+    options: shuffledOptions,
+    correctIndex: newCorrectIndex
+  };
+}
 
 export const DutchArcadeArenaModal: React.FC<DutchArcadeArenaModalProps> = ({
   isOpen,
@@ -186,7 +285,12 @@ export const DutchArcadeArenaModal: React.FC<DutchArcadeArenaModalProps> = ({
   // -------------------------------------------------------------
   // GAME 2: SYLLABLE BLITZ STATE
   // -------------------------------------------------------------
-  const [blitzQuestions, setBlitzQuestions] = useState(COMPREHENSIVE_SPELLING_FACTORY_ITEMS);
+  const [blitzQuestions, setBlitzQuestions] = useState(() => 
+    COMPREHENSIVE_SPELLING_FACTORY_ITEMS.map(item => ({
+      ...item,
+      options: [...item.options].sort(() => Math.random() - 0.5)
+    }))
+  );
   const [blitzIdx, setBlitzIdx] = useState(0);
   const [blitzTimeLeft, setBlitzTimeLeft] = useState(15);
   const [blitzSelectedOpt, setBlitzSelectedOpt] = useState<string | null>(null);
@@ -197,6 +301,9 @@ export const DutchArcadeArenaModal: React.FC<DutchArcadeArenaModalProps> = ({
   // -------------------------------------------------------------
   // GAME 3: CITO TURBO DASH STATE
   // -------------------------------------------------------------
+  const [turboQuestions, setTurboQuestions] = useState<CitoTurboQuestionItem[]>(() => 
+    CITO_TURBO_RAW_QUESTIONS.map(prepareShuffledTurboItem)
+  );
   const [turboIdx, setTurboIdx] = useState(0);
   const [turboTimeLeft, setTurboTimeLeft] = useState(15);
   const [turboSelectedOpt, setTurboSelectedOpt] = useState<number | null>(null);
@@ -431,8 +538,13 @@ export const DutchArcadeArenaModal: React.FC<DutchArcadeArenaModalProps> = ({
     setBlitzTimedOut(false);
     setBlitzTimeLeft(15);
 
-    // Shuffle questions
-    const shuffled = [...COMPREHENSIVE_SPELLING_FACTORY_ITEMS].sort(() => Math.random() - 0.5);
+    // Shuffle questions AND shuffle the 4 options for each question so correct answer is randomly placed
+    const shuffled = [...COMPREHENSIVE_SPELLING_FACTORY_ITEMS]
+      .sort(() => Math.random() - 0.5)
+      .map(item => ({
+        ...item,
+        options: [...item.options].sort(() => Math.random() - 0.5)
+      }));
     setBlitzQuestions(shuffled);
 
     sound.playArcadePowerup();
@@ -546,7 +658,7 @@ export const DutchArcadeArenaModal: React.FC<DutchArcadeArenaModalProps> = ({
   // -------------------------------------------------------------
   // CITO TURBO DASH LOGIC
   // -------------------------------------------------------------
-  const currentTurboItem = CITO_TURBO_QUESTIONS[turboIdx % CITO_TURBO_QUESTIONS.length];
+  const currentTurboItem = turboQuestions[turboIdx % turboQuestions.length] || turboQuestions[0];
 
   const startCitoTurbo = () => {
     setActiveGame('cito_turbo');
@@ -561,6 +673,20 @@ export const DutchArcadeArenaModal: React.FC<DutchArcadeArenaModalProps> = ({
     setIsTurboRevealing(false);
     setTurboTimedOut(false);
     setTurboTimeLeft(15);
+
+    // Prioritize unseen questions from profile.seenQuestionIds across sessions
+    const seenSet = new Set(profile.seenQuestionIds || []);
+    const unseen = CITO_TURBO_RAW_QUESTIONS.filter(q => !seenSet.has(q.id));
+    const seen = CITO_TURBO_RAW_QUESTIONS.filter(q => seenSet.has(q.id));
+    
+    const shuffledCombined = [
+      ...[...unseen].sort(() => Math.random() - 0.5),
+      ...[...seen].sort(() => Math.random() - 0.5)
+    ];
+
+    // For EACH question, Fisher-Yates shuffle the options so the correct answer is randomly distributed
+    const prepared = shuffledCombined.map(prepareShuffledTurboItem);
+    setTurboQuestions(prepared);
 
     sound.playArcadePowerup();
   };
@@ -625,6 +751,18 @@ export const DutchArcadeArenaModal: React.FC<DutchArcadeArenaModalProps> = ({
     const rect = e.currentTarget.getBoundingClientRect();
     const clickX = rect.left + rect.width / 2;
     const clickY = rect.top;
+
+    // Record answered question in profile seenQuestionIds for cross-session progression
+    if (currentTurboItem?.id) {
+      onUpdateProfile(prev => {
+        const currentSeen = prev.seenQuestionIds || [];
+        if (currentSeen.includes(currentTurboItem.id)) return prev;
+        return {
+          ...prev,
+          seenQuestionIds: [...currentSeen, currentTurboItem.id]
+        };
+      });
+    }
 
     if (isCorrect) {
       const nextCombo = combo + 1;

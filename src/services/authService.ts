@@ -247,6 +247,8 @@ export function getDefaultProfileForUser(username: string): PlayerProfile {
       'kofschip_dt': 1,
       'langermaakregel': 2
     },
+    seenQuestionIds: [],
+    questionHistory: {},
     confidenceMetrics: {
       speakingMissionsCount: lower === 'hemali' ? 6 : 4,
       voluntaryExplanationsCount: lower === 'hemali' ? 8 : 12,
@@ -276,6 +278,8 @@ export function loadUserProfile(username: string): PlayerProfile {
         masteredWords: parsed.masteredWords || def.masteredWords,
         wordsNeedingReview: parsed.wordsNeedingReview || def.wordsNeedingReview,
         spellingMistakePatterns: parsed.spellingMistakePatterns || def.spellingMistakePatterns,
+        seenQuestionIds: parsed.seenQuestionIds || [],
+        questionHistory: parsed.questionHistory || {},
         confidenceMetrics: { ...def.confidenceMetrics, ...(parsed.confidenceMetrics || {}) },
         activityLogs: parsed.activityLogs || []
       };

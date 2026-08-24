@@ -1627,18 +1627,28 @@ export function normalizeWord(str: string): string {
     .replace(/[.,!?]+$/g, '');
 }
 
-// Generate smart multiple choice options for imperfectum
+// Fisher-Yates in-place shuffle helper
+export function fisherYatesShuffle<T>(array: T[]): T[] {
+  const result = [...array];
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+  return result;
+}
+
+// Generate smart multiple choice options for imperfectum with Fisher-Yates
 export function getImperfectumOptions(targetVerb: VerbItem, pool: VerbItem[], count: number = 4): string[] {
   const correct = targetVerb.imperfectum_ev;
   const sameTierPool = pool.filter(v => v.infinitief !== targetVerb.infinitief && v.tier === targetVerb.tier);
   const fallbackPool = pool.filter(v => v.infinitief !== targetVerb.infinitief);
   const source = sameTierPool.length >= count - 1 ? sameTierPool : fallbackPool;
 
-  const shuffled = [...source].sort(() => Math.random() - 0.5);
+  const shuffledSource = fisherYatesShuffle(source);
   const picked: string[] = [];
   const seen = new Set<string>([normalizeWord(correct)]);
 
-  for (const v of shuffled) {
+  for (const v of shuffledSource) {
     const norm = normalizeWord(v.imperfectum_ev);
     if (!seen.has(norm)) {
       seen.add(norm);
@@ -1647,7 +1657,31 @@ export function getImperfectumOptions(targetVerb: VerbItem, pool: VerbItem[], co
     }
   }
 
-  return [correct, ...picked].sort(() => Math.random() - 0.5);
+  // Combine and perform thorough Fisher-Yates shuffle so correct answer is randomly positioned
+  return fisherYatesShuffle([correct, ...picked]);
+}
+
+// Generate smart multiple choice options for voltooid deelwoord (Participle)
+export function getParticipleOptions(targetVerb: VerbItem, pool: VerbItem[], count: number = 4): string[] {
+  const correct = targetVerb.perfectum;
+  const sameTierPool = pool.filter(v => v.infinitief !== targetVerb.infinitief && v.tier === targetVerb.tier);
+  const fallbackPool = pool.filter(v => v.infinitief !== targetVerb.infinitief);
+  const source = sameTierPool.length >= count - 1 ? sameTierPool : fallbackPool;
+
+  const shuffledSource = fisherYatesShuffle(source);
+  const picked: string[] = [];
+  const seen = new Set<string>([normalizeWord(correct)]);
+
+  for (const v of shuffledSource) {
+    const norm = normalizeWord(v.perfectum);
+    if (!seen.has(norm)) {
+      seen.add(norm);
+      picked.push(v.perfectum);
+      if (picked.length === count - 1) break;
+    }
+  }
+
+  return fisherYatesShuffle([correct, ...picked]);
 }
 
 // Check auxiliary verb
@@ -1664,3 +1698,4 @@ export function checkParticiple(typed: string, targetVerb: VerbItem): boolean {
   if (targetVerb.accept_alt?.perfectum?.some(alt => normalizeWord(alt) === t)) return true;
   return false;
 }
+

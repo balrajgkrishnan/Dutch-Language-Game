@@ -411,6 +411,8 @@ export interface PlayerProfile {
   masteredWords: string[];
   wordsNeedingReview: string[];
   spellingMistakePatterns: Record<string, number>; // e.g. { "dubbelzetters": 3, "kofschip_dt": 2 }
+  seenQuestionIds?: string[]; // IDs of questions already encountered across sessions to prioritize new questions
+  questionHistory?: Record<string, { count: number; lastSeen: number; wasCorrect?: boolean }>;
   confidenceMetrics: {
     speakingMissionsCount: number;
     voluntaryExplanationsCount: number;
