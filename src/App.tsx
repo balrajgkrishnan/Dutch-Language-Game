@@ -838,42 +838,35 @@ export default function App() {
                       </div>
                     </div>
 
-                    {/* Card 2: Game Arena (Werkwoorden Boss Battle of Spelling Fabriek) */}
+                    {/* Card 2: Poké-Boss Duel Arena */}
                     <div
                       id="bento-boss-card"
                       onClick={() => {
                         sound.playPop();
-                        if (currentUsername.toLowerCase() === 'hemali') {
-                          setShowBossArenaModal(true);
-                        } else {
-                          setShowSpellingFactoryModal(true);
-                        }
+                        setShowBossArenaModal(true);
                       }}
-                      className="bg-gradient-to-br from-slate-900 to-indigo-950 border border-indigo-500/40 rounded-2xl p-3.5 text-white flex flex-col justify-between gap-3 shadow-md hover:border-amber-400/60 transition-all hover:scale-[1.02] cursor-pointer group"
+                      className="bg-gradient-to-br from-slate-900 via-indigo-950 to-purple-950 border border-amber-500/40 rounded-2xl p-3.5 text-white flex flex-col justify-between gap-3 shadow-md hover:border-amber-400/80 transition-all hover:scale-[1.02] cursor-pointer group"
                     >
                       <div className="space-y-1.5">
                         <div className="flex items-center justify-between">
-                          <span className="text-xl p-1.5 rounded-xl bg-indigo-500/20 border border-indigo-400/30 group-hover:rotate-6 transition-transform">
+                          <span className="text-xl p-1.5 rounded-xl bg-amber-500/20 border border-amber-400/30 group-hover:rotate-6 transition-transform">
                             ⚔️
                           </span>
-                          <span className="text-[10px] font-black uppercase bg-indigo-500/30 text-indigo-200 px-2 py-0.5 rounded-full">
-                            {currentUsername.toLowerCase() === 'hemali' ? '\'t Kofschip' : 'Klanken'}
+                          <span className="text-[10px] font-black uppercase bg-amber-500/30 text-amber-200 px-2 py-0.5 rounded-full flex items-center gap-1">
+                            <span>🔴</span>
+                            <span>Poké-Duel</span>
                           </span>
                         </div>
                         <h4 className="text-sm font-black text-white group-hover:text-amber-300 transition-colors">
-                          {currentUsername.toLowerCase() === 'hemali'
-                            ? 'DT-Draak Boss Battle'
-                            : 'Spelling Fabriek'}
+                          Poké-Boss Duel Arena
                         </h4>
                         <p className="text-xs text-slate-300 font-medium">
-                          {currentUsername.toLowerCase() === 'hemali'
-                            ? 'Vecht tegen de DT-Draak met d/t/dt en verleden tijd!'
-                            : 'Breek klankblokken, dubbelzetters & lettergrepen!'}
+                          Vecht tegen de DT-Draak, 't Kofschip &amp; de Klanken-Golem!
                         </p>
                       </div>
                       
                       <div className="pt-2 flex items-center justify-between text-xs font-black text-amber-300 border-t border-white/10">
-                        <span>Start Gevecht</span>
+                        <span>Start Poké-Gevecht</span>
                         <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                       </div>
                     </div>

@@ -344,6 +344,105 @@ class SoundService {
     this.playFanfare();
   }
 
+  // Pokémon Battle Sound Effects
+  playPokemonAttack() {
+    const ctx = this.getAudioContext();
+    if (!ctx) return;
+
+    const now = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(400, now);
+    osc.frequency.exponentialRampToValueAtTime(1200, now + 0.15);
+    osc.frequency.exponentialRampToValueAtTime(300, now + 0.3);
+
+    gain.gain.setValueAtTime(0.18, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.32);
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc.start(now);
+    osc.stop(now + 0.32);
+  }
+
+  playPokemonSuperEffective() {
+    const ctx = this.getAudioContext();
+    if (!ctx) return;
+
+    const now = ctx.currentTime;
+    // Dramatic multi-pitch impact boom
+    const frequencies = [180, 360, 540, 720, 1080];
+    frequencies.forEach((f, i) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = i % 2 === 0 ? 'square' : 'sawtooth';
+      osc.frequency.setValueAtTime(f, now + i * 0.03);
+      osc.frequency.exponentialRampToValueAtTime(f * 1.6, now + i * 0.03 + 0.12);
+
+      gain.gain.setValueAtTime(0, now + i * 0.03);
+      gain.gain.linearRampToValueAtTime(0.15, now + i * 0.03 + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.03 + 0.3);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start(now + i * 0.03);
+      osc.stop(now + i * 0.03 + 0.3);
+    });
+  }
+
+  playPokemonHit() {
+    const ctx = this.getAudioContext();
+    if (!ctx) return;
+
+    const now = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(220, now);
+    osc.frequency.exponentialRampToValueAtTime(80, now + 0.18);
+
+    gain.gain.setValueAtTime(0.16, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc.start(now);
+    osc.stop(now + 0.2);
+  }
+
+  playPokemonFaint() {
+    const ctx = this.getAudioContext();
+    if (!ctx) return;
+
+    const now = ctx.currentTime;
+    const notes = [600, 520, 440, 370, 290, 200, 120];
+    notes.forEach((freq, idx) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(freq, now + idx * 0.07);
+
+      gain.gain.setValueAtTime(0.14, now + idx * 0.07);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.07 + 0.15);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start(now + idx * 0.07);
+      osc.stop(now + idx * 0.07 + 0.15);
+    });
+  }
+
+  playPokemonMenuSelect() {
+    this.playPop();
+  }
+
   // Spoken Dutch text-to-speech for young learners (routed via high-quality speechService)
   speakDutch(text: string, options?: { rate?: number; pitch?: number }) {
     if (!this.speechEnabled || typeof window === 'undefined') {
