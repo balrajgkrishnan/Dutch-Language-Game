@@ -25,6 +25,7 @@ interface TopBarProps {
   onOpenCitoRpgModal?: () => void;
   onOpenVoiceModal?: () => void;
   onOpenDictionaryModal?: () => void;
+  onOpenArcadeModal?: () => void;
   stars: number;
   score: number;
   streak: number;
@@ -55,6 +56,7 @@ export const TopBar: React.FC<TopBarProps> = ({
   onOpenCitoRpgModal,
   onOpenVoiceModal,
   onOpenDictionaryModal,
+  onOpenArcadeModal,
   stars,
   score,
   streak,
@@ -263,6 +265,20 @@ export const TopBar: React.FC<TopBarProps> = ({
 
       {/* Special Learning Adventures & Missions Quick Bar */}
       <div className="flex items-center gap-2 overflow-x-auto pb-1">
+        {onOpenArcadeModal && (
+          <button
+            id="arcade-arena-launch-btn"
+            onClick={() => {
+              sound.playPop();
+              onOpenArcadeModal();
+            }}
+            className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-purple-600 via-pink-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-black text-xs uppercase tracking-wider flex items-center gap-1.5 cursor-pointer shadow-md shadow-purple-600/25 whitespace-nowrap transition-all active:scale-95 border-2 border-pink-400 animate-pulse"
+            title="Speel arcade mini-games: Ballon Popper, Woord Sprint & Cito Turbo!"
+          >
+            <span>🕹️ Safari Arcade ⚡</span>
+          </button>
+        )}
+
         {onOpenCitoRpgModal && (
           <button
             onClick={() => {

@@ -218,6 +218,10 @@ export interface SpellingFactoryItem {
   options: string[];
   soundRule: string;
   exampleSentence: string;
+  category?: 'dubbelzetter' | 'klinkerdief' | 'langermaak' | 'luchtwoord' | 't-kofschip' | 'ij-ei-au-ou' | 'achtervoegsel' | 'samengesteld' | 'all';
+  categoryLabel?: string;
+  difficulty?: 'groep3-4' | 'groep5-6' | 'groep7-8';
+  emoji?: string;
 }
 
 export interface Question {

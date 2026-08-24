@@ -327,10 +327,11 @@ export const DutchDictionaryModal: React.FC<DutchDictionaryModalProps> = ({
                   </div>
 
                   {/* Synonyms (If Present) */}
+                  {/* Synonyms (Semantically Related Words Only) */}
                   {selectedWord.synonyms && selectedWord.synonyms.length > 0 && (
                     <div>
                       <span className="text-xs font-black uppercase text-slate-500 block mb-1">
-                        🔄 Synoniemen & Verwante Woorden:
+                        🔄 Synoniemen & Betekenisverwanten:
                       </span>
                       <div className="flex items-center gap-1.5 flex-wrap">
                         {selectedWord.synonyms.map((s, idx) => (
@@ -338,26 +339,6 @@ export const DutchDictionaryModal: React.FC<DutchDictionaryModalProps> = ({
                             key={idx}
                             onClick={() => handleLookupCustomWord(s)}
                             className="px-2.5 py-1 rounded-xl bg-white hover:bg-amber-100 text-slate-800 border border-amber-200 text-xs font-semibold cursor-pointer transition-colors shadow-2xs"
-                          >
-                            {s}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Suggestions / "Did you mean?" */}
-                  {selectedWord.suggestions && selectedWord.suggestions.length > 0 && (
-                    <div className="p-3 rounded-2xl bg-amber-50 border border-amber-300">
-                      <span className="text-xs font-black uppercase text-amber-900 block mb-1">
-                        💡 Bedoelde je wellicht:
-                      </span>
-                      <div className="flex items-center gap-1.5 flex-wrap">
-                        {selectedWord.suggestions.map((s, idx) => (
-                          <button
-                            key={idx}
-                            onClick={() => handleLookupCustomWord(s)}
-                            className="px-2.5 py-1 rounded-xl bg-white hover:bg-amber-100 text-amber-900 border border-amber-300 text-xs font-bold cursor-pointer transition-colors shadow-2xs"
                           >
                             {s}
                           </button>

@@ -120,8 +120,8 @@ export const InteractiveDutchText: React.FC<InteractiveDutchTextProps> = ({
       const isBold = part.startsWith('**') && part.endsWith('**');
       const cleanWord = isBold ? part.slice(2, -2) : part;
 
-      // Tokenizer: accurately matches words including hyphens (zee-oorlog, ad-hoc) and contractions (baby's, zo'n, m'n)
-      const subTokens = cleanWord.split(/([a-zA-Z0-9áéíóúäëïöüÁÉÍÓÚÄËÏÖÜ]+(?:(?:-|['’])[a-zA-Z0-9áéíóúäëïöüÁÉÍÓÚÄËÏÖÜ]+)*|[.,!?:;'"”’»«„()[\]{}#*_~`–—…•·\/\\+]+)/g);
+      // Tokenizer: accurately matches Dutch words including leading apostrophe expressions ('s, 't, 'k), internal contractions (baby's, zo'n, m'n), and hyphens (zee-oorlog, ad-hoc)
+      const subTokens = cleanWord.split(/((?:['’‘][a-zA-Z0-9áéíóúäëïöüÁÉÍÓÚÄËÏÖÜ]+|[a-zA-Z0-9áéíóúäëïöüÁÉÍÓÚÄËÏÖÜ]+)(?:(?:-|['’‘])[a-zA-Z0-9áéíóúäëïöüÁÉÍÓÚÄËÏÖÜ]+)*|[.,!?:;'"”’»«„()[\]{}#*_~`–—…•·\/\\+]+)/g);
 
       return (
         <span key={index} className={isBold && highlightBold ? 'font-bold' : ''}>

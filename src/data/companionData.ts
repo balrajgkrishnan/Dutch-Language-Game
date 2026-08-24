@@ -77,7 +77,7 @@ export const ALL_PETS: PetDefinition[] = [
     name: 'Mimi het Knuffelkittentje',
     species: 'Kittentje',
     emoji: '🐱',
-    avatarBg: 'from-pink-300 to-rose-400',
+    avatarBg: 'from-amber-300 via-orange-400 to-amber-500',
     recommendedFor: 'all',
     focusSkill: 'Zachte Klanken & Ritmisch Lezen',
     personality: 'Spint luidkeels van geluk als je rustig en vloeiend leest, dol op bolletjes wol en aaitjes!',

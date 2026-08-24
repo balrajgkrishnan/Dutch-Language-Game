@@ -54,6 +54,18 @@ export interface VoiceSettings {
   pitch: number;
   rate: number;
   selectedVoiceURI: string;
+  femaleOnly: boolean;
+}
+
+export interface VoiceMetadata {
+  voice: SpeechSynthesisVoice;
+  name: string;
+  gender: 'female' | 'male' | 'unknown';
+  isNeural: boolean;
+  isCompact: boolean;
+  isPreferred: boolean;
+  qualityBadge: string;
+  platform: string;
 }
 
 export interface SpeechScoreResult {
@@ -65,7 +77,23 @@ export interface SpeechScoreResult {
   feedback: string;
 }
 
-const STORAGE_KEY = 'DUTCH_VOICE_SETTINGS_V2';
+const STORAGE_KEY = 'DUTCH_VOICE_SETTINGS_V3';
+
+// Known voice lists for robust gender detection
+const KNOWN_FEMALE_DUTCH_NAMES = [
+  'fenna', 'colette', 'claire', 'saskia', 'fleur', 'laura', 'ellen', 
+  'lotte', 'maaike', 'sanne', 'sofie', 'emma', 'eva', 'tess', 'anouk',
+  'inge', 'marieke', 'roos', 'lisa', 'femke', 'amber', 'diewertje',
+  'siri stem 2', 'siri voice 2', 'stem 2', 'voice 2', 'female', 'vrouw',
+  'wavenet-a', 'wavenet-c', 'wavenet-d', 'wavenet-e', 'standard-a', 'standard-c', 'standard-d'
+];
+
+const KNOWN_MALE_DUTCH_NAMES = [
+  'frank', 'bart', 'ruben', 'xander', 'stefan', 'maarten', 'paul', 
+  'jan', 'willem', 'daan', 'geert', 'bram', 'arjan', 'thijs', 'koen', 
+  'lucas', 'arthur', 'dirk', 'siri stem 1', 'siri voice 1', 'stem 1', 
+  'voice 1', 'male', 'man', 'mannelijk', 'wavenet-b', 'standard-b'
+];
 
 class SpeechService {
   private synth: SpeechSynthesis | null = null;
@@ -75,7 +103,8 @@ class SpeechService {
     presetId: 'tess_excited',
     pitch: 1.22,
     rate: 0.96,
-    selectedVoiceURI: ''
+    selectedVoiceURI: '',
+    femaleOnly: true
   };
   public isListening: boolean = false;
   private recognition: any = null;
@@ -148,7 +177,56 @@ class SpeechService {
     }
   }
 
-  public getAvailableDutchVoices(): SpeechSynthesisVoice[] {
+  public classifyVoiceGender(v: SpeechSynthesisVoice): 'female' | 'male' | 'unknown' {
+    const name = (v.name || '').toLowerCase();
+    const uri = (v.voiceURI || '').toLowerCase();
+    const full = `${name} ${uri}`;
+
+    if (KNOWN_FEMALE_DUTCH_NAMES.some(fn => full.includes(fn))) {
+      return 'female';
+    }
+    if (KNOWN_MALE_DUTCH_NAMES.some(mn => full.includes(mn))) {
+      return 'male';
+    }
+    // Google TTS voices often default to female when nl-NL unless marked otherwise
+    if (full.includes('google nederlands') || full.includes('google dutch')) {
+      return 'female';
+    }
+    return 'unknown';
+  }
+
+  public getVoiceMetadata(v: SpeechSynthesisVoice): VoiceMetadata {
+    const name = v.name;
+    const lower = (name + ' ' + (v.voiceURI || '')).toLowerCase();
+    const gender = this.classifyVoiceGender(v);
+    const isNeural = lower.includes('natural') || lower.includes('online') || lower.includes('premium') || lower.includes('enhanced') || lower.includes('neural') || lower.includes('google');
+    const isCompact = lower.includes('compact');
+    
+    let qualityBadge = 'Standaard Stem';
+    if (isNeural) {
+      qualityBadge = '✨ Natuurlijke HD Stem';
+    } else if (isCompact) {
+      qualityBadge = '📱 Compacte Systeemstem';
+    }
+
+    let platform = 'Algemeen';
+    if (lower.includes('microsoft')) platform = 'Windows / Edge';
+    else if (lower.includes('apple') || lower.includes('siri') || lower.includes('claire') || lower.includes('xander')) platform = 'Apple (iOS/macOS)';
+    else if (lower.includes('google')) platform = 'Google / Chrome / Android';
+
+    return {
+      voice: v,
+      name,
+      gender,
+      isNeural,
+      isCompact,
+      isPreferred: gender === 'female' && isNeural,
+      qualityBadge,
+      platform
+    };
+  }
+
+  public getAvailableDutchVoices(forceAll: boolean = false): SpeechSynthesisVoice[] {
     if (!this.synth) return [];
     const allVoices = this.synth.getVoices();
 
@@ -165,60 +243,77 @@ class SpeechService {
       );
     });
 
+    // If femaleOnly setting is on and we are not forcing all, filter out strict male voices if female voices exist
+    if (this.settings.femaleOnly && !forceAll) {
+      const femaleOrUnknown = dutchVoices.filter(v => this.classifyVoiceGender(v) !== 'male');
+      if (femaleOrUnknown.length > 0) {
+        return femaleOrUnknown.sort((a, b) => this.scoreVoice(b) - this.scoreVoice(a));
+      }
+    }
+
     // Score voices: prioritize high quality natural female Dutch voices
     return dutchVoices.sort((a, b) => this.scoreVoice(b) - this.scoreVoice(a));
   }
 
-  // Scoring function: Rewards natural female Dutch voices, heavily penalizes robotic / eSpeak / German-sounding voices
+  // Scoring function: High priority on natural female Dutch voices, severely demotes male voices
   private scoreVoice(v: SpeechSynthesisVoice): number {
     let score = 0;
     const name = (v.name || '').toLowerCase();
     const lang = (v.lang || '').toLowerCase();
+    const uri = (v.voiceURI || '').toLowerCase();
+    const full = `${name} ${uri}`;
+    const gender = this.classifyVoiceGender(v);
 
     // nl-NL preferred over nl-BE
     if (lang === 'nl-nl' || lang === 'nl_nl') score += 30;
-    else if (lang.startsWith('nl')) score += 20;
+    else if (lang.startsWith('nl')) score += 15;
 
-    // Top tier premium online / neural female voices (Microsoft, Apple, Google)
-    const topFemaleNames = [
-      'fenna', 'colette', 'fleur', 'laura', 'claire', 'saskia', 
-      'lotte', 'ellen', 'maaike', 'sanne', 'sofie', 'emma', 'eva', 'tess'
-    ];
-
-    if (topFemaleNames.some(fn => name.includes(fn))) {
-      score += 60;
+    // Female voice boost
+    if (gender === 'female') {
+      score += 120;
+    } else if (gender === 'male') {
+      // Heavily penalize male voices when user prefers female storytelling
+      score -= 300;
     }
 
-    if (name.includes('natural') || name.includes('online')) score += 40;
-    if (name.includes('google nederlands') || name.includes('google dutch')) score += 35;
-    if (name.includes('premium') || name.includes('enhanced') || name.includes('neural')) score += 35;
-    if (name.includes('female') || name.includes('vrouw')) score += 30;
-
-    // Siri / Apple Claire
-    if (name.includes('claire') || name.includes('siri')) score += 45;
-
-    // Penalize robotic / eSpeak / male voices
-    if (name.includes('espeak') || name.includes('mbrola')) score -= 80;
-    if (name.includes('compact')) score -= 15;
-    if (name.includes('xander') || name.includes('ruben') || name.includes('stefan') || name.includes('male') || name.includes('man')) {
-      score -= 20;
+    // Top tier premium online / neural female voices (Microsoft Fenna/Colette, Apple Claire/Saskia/Siri 2, Google Nederlands)
+    const topFemaleNeural = ['fenna', 'colette', 'claire', 'saskia', 'fleur', 'laura', 'ellen', 'lotte', 'siri stem 2', 'siri voice 2'];
+    if (topFemaleNeural.some(fn => full.includes(fn))) {
+      score += 80;
     }
+
+    if (full.includes('natural') || full.includes('online')) score += 60;
+    if (full.includes('google nederlands') || full.includes('google dutch')) score += 45;
+    if (full.includes('premium') || full.includes('enhanced') || full.includes('neural')) score += 45;
+    if (full.includes('female') || full.includes('vrouw')) score += 40;
+
+    // Penalize robotic / eSpeak / compact voices
+    if (full.includes('espeak') || full.includes('mbrola')) score -= 200;
+    if (full.includes('compact')) score -= 25;
 
     return score;
   }
 
   private initVoice() {
     if (!this.synth) return;
-    const voices = this.getAvailableDutchVoices();
+    const voices = this.getAvailableDutchVoices(true);
     this.availableVoices = voices;
 
     this.applySelectedVoice();
   }
 
+  public getActiveVoice(): SpeechSynthesisVoice | null {
+    if (!this.dutchVoice) {
+      this.applySelectedVoice();
+    }
+    return this.dutchVoice;
+  }
+
   private applySelectedVoice() {
     const voices = this.getAvailableDutchVoices();
     if (voices.length === 0) {
-      this.dutchVoice = null;
+      const allDutch = this.getAvailableDutchVoices(true);
+      this.dutchVoice = allDutch[0] || null;
       return;
     }
 

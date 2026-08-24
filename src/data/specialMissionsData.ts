@@ -1,4 +1,5 @@
 import { ReporterMission, SpellingFactoryItem } from '../types';
+import { COMPREHENSIVE_SPELLING_FACTORY_ITEMS } from './comprehensiveSpellingData';
 
 export const HEMALI_REPORTER_MISSIONS: ReporterMission[] = [
   {
@@ -48,62 +49,7 @@ export const HEMALI_REPORTER_MISSIONS: ReporterMission[] = [
   }
 ];
 
-export const RIDHEYA_SPELLING_FACTORY_ITEMS: SpellingFactoryItem[] = [
-  {
-    id: 'spf-1',
-    word: 'olifanten',
-    syllables: ['o', 'li', 'fan', 'ten'],
-    missingIndex: 1,
-    options: ['li', 'lie', 'lee', 'ly'],
-    soundRule: 'Korte klank / i / in een open lettergreep schrijf je met één letter i.',
-    exampleSentence: 'De grote olifanten wandelen rustig naar het water.'
-  },
-  {
-    id: 'spf-2',
-    word: 'klimmen',
-    syllables: ['klim', 'men'],
-    missingIndex: 1,
-    options: ['men', 'en', 'man', 'nem'],
-    soundRule: 'Korte klank / i / aan het einde van de klankgroep krijgt een dubbele medeklinker (dubbelzetter -mm-).',
-    exampleSentence: 'De speelse aapjes klimmen snel in de hoge bomen.'
-  },
-  {
-    id: 'spf-3',
-    word: 'bomen',
-    syllables: ['bo', 'men'],
-    missingIndex: 0,
-    options: ['bo', 'boo', 'bou', 'bu'],
-    soundRule: 'Lange klank / oo / aan het einde van de klankgroep verliest een letter (klankvoet / klankteen -o-).',
-    exampleSentence: 'In het regenwoud groeien reusachtige bomen.'
-  },
-  {
-    id: 'spf-4',
-    word: 'schildpad',
-    syllables: ['schild', 'pad'],
-    missingIndex: 1,
-    options: ['pad', 'pat', 'padd', 'path'],
-    soundRule: 'Langermaakregel: schildpad -> schildpadden, dus je hoort een / d / en schrijft een d.',
-    exampleSentence: 'De oude schildpad zwemt sierlijk door de oceaan.'
-  },
-  {
-    id: 'spf-5',
-    word: 'nachtegaal',
-    syllables: ['nach', 'te', 'gaal'],
-    missingIndex: 0,
-    options: ['nach', 'nagt', 'nak', 'nah'],
-    soundRule: 'Luchtwoord: korte klank + / cht / met de ch van lucht, behalve bij hij ligt, hij legt, hij zegt.',
-    exampleSentence: 'De nachtegaal zingt het mooiste lied van het bos.'
-  },
-  {
-    id: 'spf-6',
-    word: 'savanne',
-    syllables: ['sa', 'van', 'ne'],
-    missingIndex: 1,
-    options: ['van', 'vaan', 'fan', 'ven'],
-    soundRule: 'Korte klank / a / gevolgd door dubbelzetter -nn-.',
-    exampleSentence: 'De leeuwen rusten uit op de warme savanne.'
-  }
-];
+export const RIDHEYA_SPELLING_FACTORY_ITEMS: SpellingFactoryItem[] = COMPREHENSIVE_SPELLING_FACTORY_ITEMS;
 
 export interface SisterTeamQuest {
   id: string;

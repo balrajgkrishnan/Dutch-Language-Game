@@ -21,8 +21,10 @@ import { TamagotchiPetRoomModal } from './components/TamagotchiPetRoomModal';
 import { VersionFlashModal } from './components/VersionFlashModal';
 import { VeterinarianHospitalModal } from './components/VeterinarianHospitalModal';
 import { CitoRpgExamModal } from './components/CitoRpgExamModal';
+import { WerkwoordBossArenaModal } from './components/WerkwoordBossArenaModal';
 import { VoiceSettingsModal } from './components/VoiceSettingsModal';
 import { DutchDictionaryModal } from './components/DutchDictionaryModal';
+import { DutchArcadeArenaModal } from './components/DutchArcadeArenaModal';
 import { AccessibilityBar } from './components/AccessibilityBar';
 import { BiomeSelector } from './components/BiomeSelector';
 import { AmbientParticles } from './components/AmbientParticles';
@@ -40,7 +42,11 @@ import {
   saveUserProfile, 
   addActivityLog 
 } from './services/authService';
-import { Map, RotateCcw, Sparkles, Zap, BookOpen, Compass, Download, User, BarChart3, Users } from 'lucide-react';
+import { 
+  Map, RotateCcw, Sparkles, Zap, BookOpen, Compass, Download, 
+  User, BarChart3, Users, Swords, Flame, Heart, Shield, Trophy, 
+  FileText, ArrowRight, Play, CheckCircle2 
+} from 'lucide-react';
 
 export default function App() {
   // Current active user (Hemali or Ridheya)
@@ -75,8 +81,10 @@ export default function App() {
   const [showVetHospitalModal, setShowVetHospitalModal] = useState(false);
   const [showTamagotchiModal, setShowTamagotchiModal] = useState(false);
   const [showCitoRpgModal, setShowCitoRpgModal] = useState(false);
+  const [showBossArenaModal, setShowBossArenaModal] = useState(false);
   const [showVoiceModal, setShowVoiceModal] = useState(false);
   const [showDictionaryModal, setShowDictionaryModal] = useState(false);
+  const [showArcadeModal, setShowArcadeModal] = useState(false);
 
   const [justUnlockedAnimal, setJustUnlockedAnimal] = useState<Animal>(ALL_BIOME_ANIMALS[0]);
   const [justUnlockedBadges, setJustUnlockedBadges] = useState<Badge[]>([]);
@@ -494,6 +502,7 @@ export default function App() {
         onOpenCitoRpgModal={() => setShowCitoRpgModal(true)}
         onOpenVoiceModal={() => setShowVoiceModal(true)}
         onOpenDictionaryModal={() => setShowDictionaryModal(true)}
+        onOpenArcadeModal={() => setShowArcadeModal(true)}
         stars={profile.stars}
         score={profile.score}
         streak={profile.streak}
@@ -507,81 +516,247 @@ export default function App() {
       />
 
       {/* Main Content Area */}
-      <div className="flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-2 sm:py-3 space-y-3">
+      <div className="flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-2 sm:py-3 space-y-4">
         
-        {/* Game Versie 8 Status Flash Bar */}
-        <div 
-          onClick={() => {
-            sound.playPop();
-            setShowVersionModal(true);
-          }}
-          className="bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-500 hover:to-teal-500 text-white rounded-2xl px-4 py-2 shadow-md shadow-emerald-950/10 flex items-center justify-between gap-3 cursor-pointer transition-all hover:scale-[1.01] active:scale-99 border border-emerald-400/40"
-          title="Klik voor meer info over Game Versie 8"
-        >
-          <div className="flex items-center gap-2 flex-wrap">
-            <span className="bg-amber-300 text-emerald-950 text-[10px] sm:text-xs font-black px-2.5 py-0.5 rounded-full uppercase tracking-wider shadow-xs flex items-center gap-1">
-              <Sparkles className="w-3.5 h-3.5 text-amber-900" />
-              Game Versie 8 Actief
-            </span>
-            <span className="text-xs sm:text-sm font-black tracking-tight">
-              ✨ Nieuwste Update Geladen: Onbeperkt Dierenpark &amp; Huisdier-XP
+        {/* 1. Quick Sister Switcher Banner (1-tap between Ridheya Gr 5 & Hemali Gr 8) */}
+        <div className="bg-slate-900/90 backdrop-blur-md rounded-2xl p-2 sm:p-2.5 border border-white/15 shadow-md flex items-center justify-between gap-2 flex-wrap">
+          <div className="flex items-center gap-2 pl-1">
+            <span className="text-xs font-black uppercase text-amber-400 tracking-wider flex items-center gap-1.5">
+              <span>👑</span>
+              <span>Speler Keuze:</span>
             </span>
           </div>
-          <span className="text-[11px] font-black underline decoration-amber-300 underline-offset-2 flex-shrink-0 text-amber-200 hidden sm:inline">
-            Bekijk Details ➔
-          </span>
+
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => {
+                if (currentUsername.toLowerCase() !== 'ridheya') {
+                  sound.playPop();
+                  handleSwitchUser('ridheya');
+                }
+              }}
+              className={`px-3 py-1.5 rounded-xl text-xs font-black transition-all flex items-center gap-1.5 cursor-pointer ${
+                currentUsername.toLowerCase() === 'ridheya'
+                  ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-md scale-105 ring-2 ring-emerald-300'
+                  : 'bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white'
+              }`}
+            >
+              <span>🩺</span>
+              <span>Ridheya (Groep 5 • Dierenarts &amp; Speurheld)</span>
+            </button>
+
+            <button
+              onClick={() => {
+                if (currentUsername.toLowerCase() !== 'hemali') {
+                  sound.playPop();
+                  handleSwitchUser('hemali');
+                }
+              }}
+              className={`px-3 py-1.5 rounded-xl text-xs font-black transition-all flex items-center gap-1.5 cursor-pointer ${
+                currentUsername.toLowerCase() === 'hemali'
+                  ? 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-md scale-105 ring-2 ring-indigo-300'
+                  : 'bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white'
+              }`}
+            >
+              <span>✨</span>
+              <span>Hemali (Groep 8 • Schrandere Magiër &amp; Cito Master)</span>
+            </button>
+          </div>
         </div>
 
-        {/* Cito RPG Adventure & Diagnostic Interactive Card */}
+        {/* 2. Hero Interactive Comic & Cutscene Story Quest Card */}
         <div 
           onClick={() => {
             sound.playPop();
             setShowCitoRpgModal(true);
           }}
-          className="bg-gradient-to-r from-emerald-800 via-teal-800 to-indigo-900 hover:from-emerald-700 hover:to-indigo-800 text-white rounded-3xl p-4 sm:p-5 shadow-lg shadow-emerald-950/15 flex flex-col sm:flex-row items-center justify-between gap-4 cursor-pointer transition-all hover:scale-[1.01] active:scale-99 border-2 border-emerald-400/50 group"
-          title="Klik om het Cito RPG Avontuur en de Doorstroomtoets Vragen te openen"
+          className={`rounded-3xl p-5 sm:p-6 shadow-xl border-2 text-white flex flex-col sm:flex-row items-center justify-between gap-5 cursor-pointer transition-all hover:scale-[1.01] active:scale-99 group relative overflow-hidden ${
+            currentUsername.toLowerCase() === 'ridheya'
+              ? 'bg-gradient-to-r from-emerald-900 via-teal-900 to-slate-950 border-emerald-400/50 shadow-emerald-950/30'
+              : 'bg-gradient-to-r from-indigo-950 via-purple-950 to-slate-950 border-purple-400/50 shadow-purple-950/30'
+          }`}
         >
-          <div className="flex items-center gap-3.5">
-            <div className="w-13 h-13 rounded-2xl bg-white/10 border border-white/30 flex items-center justify-center text-3xl shadow-inner flex-shrink-0 group-hover:rotate-6 transition-transform">
-              🗺️
+          <div className="flex items-center gap-4">
+            <div className="w-16 h-16 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center text-4xl shadow-inner flex-shrink-0 group-hover:scale-110 transition-transform">
+              {currentUsername.toLowerCase() === 'ridheya' ? '🩺' : '✨'}
             </div>
             <div>
-              <div className="flex items-center gap-2 flex-wrap">
-                <span className="bg-amber-400 text-slate-950 text-[10px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider shadow-xs">
-                  Nieuw • Cito &amp; RPG
+              <div className="flex items-center gap-2 flex-wrap mb-1">
+                <span className="bg-amber-400 text-slate-950 text-[10px] sm:text-xs font-black px-2.5 py-0.5 rounded-full uppercase tracking-wider shadow-xs flex items-center gap-1">
+                  <Sparkles className="w-3 h-3 text-slate-950" />
+                  Interactief RPG Avontuur met Cutscenes
                 </span>
-                <span className="text-xs text-emerald-200 font-bold">
-                  Voor Ridheya (Gr 3-4) &amp; Hemali (Gr 5-6)
+                <span className="text-xs text-amber-200 font-bold">
+                  {currentUsername.toLowerCase() === 'ridheya' ? 'Groep 5 • Dierenredding Avontuur' : 'Groep 8 • Doorstroomtoets & Cito'}
                 </span>
               </div>
-              <h3 className="text-base sm:text-lg font-black text-white mt-0.5 tracking-tight">
-                Cito RPG Avontuur: Het Mysterie van het Onderzoeksschip 📜
+              <h3 className="text-lg sm:text-xl font-black text-white tracking-tight">
+                {currentUsername.toLowerCase() === 'ridheya'
+                  ? 'Het Geheim van de Boomhut Dierenkliniek & De Dierenvallei 🐾'
+                  : 'Het Verloren Astrolabium & Het Mysterie van de Cito Tijdwachters 📜'}
               </h3>
-              <p className="text-xs text-emerald-100/90 font-medium line-clamp-1">
-                Beantwoord begrijpend lezen vragen, signaalwoorden &amp; kies je eigen avonturenpad!
+              <p className="text-xs sm:text-sm text-slate-200/90 font-medium line-clamp-2 mt-1">
+                {currentUsername.toLowerCase() === 'ridheya'
+                  ? 'Reis met Ridheya en hondje Kopi door het oerwoud, ontdek moeilijke woorden met het pop-up woordenboek en genees dieren!'
+                  : 'Ontrafel cryptische manuscripten, kraak moeilijke signaalwoorden (desondanks, daarentegen) en kies je eigen verhaalroute!'}
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
-            <button className="bg-emerald-400 hover:bg-emerald-300 text-slate-950 font-black text-xs sm:text-sm px-4 py-2.5 rounded-2xl shadow-md transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap">
-              <span>Start Vragen ➔</span>
+          <div className="flex items-center gap-2 w-full sm:w-auto justify-end flex-shrink-0">
+            <button className="w-full sm:w-auto bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950 font-black text-sm px-5 py-3 rounded-2xl shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer whitespace-nowrap">
+              <Play className="w-4 h-4 fill-current" />
+              <span>Speel Verhaal ➔</span>
             </button>
           </div>
         </div>
 
-        {/* Companion Pet Interactive Card (🦉 Professor Ollie or 🐒 Max) */}
+        {/* 3. The 4 Core Game Bento Modules */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+          
+          {/* Card 1: Safari Arcade Arena (Ballon Popper, Syllable Sprint, Cito Turbo) */}
+          <div
+            id="bento-arcade-card"
+            onClick={() => {
+              sound.playPop();
+              setShowArcadeModal(true);
+            }}
+            className="bg-gradient-to-br from-slate-900 via-purple-950 to-indigo-950 border-2 border-pink-500/50 rounded-3xl p-4 text-white flex flex-col justify-between gap-3 shadow-lg hover:border-pink-300 transition-all hover:scale-[1.02] cursor-pointer group relative overflow-hidden"
+          >
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-2xl p-2 rounded-2xl bg-pink-500/20 border border-pink-400/30 group-hover:rotate-6 transition-transform">
+                  🕹️
+                </span>
+                <span className="text-[10px] font-black uppercase bg-pink-500/30 text-pink-200 px-2 py-0.5 rounded-full animate-pulse">
+                  ⚡ Arcade Games
+                </span>
+              </div>
+              <h4 className="text-base font-black text-white group-hover:text-pink-300 transition-colors">
+                Safari Arcade Arena
+              </h4>
+              <p className="text-xs text-slate-300 font-medium">
+                Klank Ballon Popper, Woord Meteor Sprint &amp; Cito Turbo Dash met combo's en highscores!
+              </p>
+            </div>
+            
+            <div className="pt-2 flex items-center justify-between text-xs font-black text-pink-300 border-t border-white/10">
+              <span>Speel Arcade ➔</span>
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </div>
+          </div>
+
+          {/* Card 2: Game Arena (Werkwoorden Boss Battle of Spelling Fabriek) */}
+          <div
+            id="bento-boss-card"
+            onClick={() => {
+              sound.playPop();
+              if (currentUsername.toLowerCase() === 'hemali') {
+                setShowBossArenaModal(true);
+              } else {
+                setShowSpellingFactoryModal(true);
+              }
+            }}
+            className="bg-gradient-to-br from-slate-900 to-indigo-950 border-2 border-indigo-500/40 rounded-3xl p-4 text-white flex flex-col justify-between gap-3 shadow-lg hover:border-amber-400/60 transition-all hover:scale-[1.02] cursor-pointer group"
+          >
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-2xl p-2 rounded-2xl bg-indigo-500/20 border border-indigo-400/30 group-hover:rotate-6 transition-transform">
+                  ⚔️
+                </span>
+                <span className="text-[10px] font-black uppercase bg-indigo-500/30 text-indigo-200 px-2 py-0.5 rounded-full">
+                  Boss Arena
+                </span>
+              </div>
+              <h4 className="text-base font-black text-white group-hover:text-amber-300 transition-colors">
+                {currentUsername.toLowerCase() === 'hemali'
+                  ? '\'t Kofschip Boss Battle'
+                  : 'Spelling Fabriek'}
+              </h4>
+              <p className="text-xs text-slate-300 font-medium">
+                {currentUsername.toLowerCase() === 'hemali'
+                  ? 'Vecht tegen de DT-Draak met d/t/dt en verleden tijd!'
+                  : 'Breek klankblokken, dubbelzetters & open/gesloten lettergrepen!'}
+              </p>
+            </div>
+            
+            <div className="pt-2 flex items-center justify-between text-xs font-black text-amber-300 border-t border-white/10">
+              <span>Start Gevecht</span>
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </div>
+          </div>
+
+          {/* Card 3: Tamagotchi Pet Sanctuary */}
+          <div
+            id="bento-tamagotchi-card"
+            onClick={() => {
+              sound.playPop();
+              setShowTamagotchiModal(true);
+            }}
+            className="bg-gradient-to-br from-slate-900 to-emerald-950 border-2 border-emerald-500/40 rounded-3xl p-4 text-white flex flex-col justify-between gap-3 shadow-lg hover:border-emerald-400/60 transition-all hover:scale-[1.02] cursor-pointer group"
+          >
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-2xl p-2 rounded-2xl bg-emerald-500/20 border border-emerald-400/30 group-hover:rotate-6 transition-transform">
+                  🐾
+                </span>
+                <span className="text-[10px] font-black uppercase bg-emerald-500/30 text-emerald-200 px-2 py-0.5 rounded-full">
+                  Pet Care
+                </span>
+              </div>
+              <h4 className="text-base font-black text-white group-hover:text-emerald-300 transition-colors">
+                Dierenkamer
+              </h4>
+              <p className="text-xs text-slate-300 font-medium">
+                Verzorg, train en voer Professor Ollie 🦉 en Max 🐒 in 7 biomen!
+              </p>
+            </div>
+
+            <div className="pt-2 flex items-center justify-between text-xs font-black text-emerald-300 border-t border-white/10">
+              <span>Dierenkamer</span>
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </div>
+          </div>
+
+          {/* Card 4: Interactive Dutch Dictionary & Cito Lab */}
+          <div
+            id="bento-dict-card"
+            onClick={() => {
+              sound.playPop();
+              setShowDictionaryModal(true);
+            }}
+            className="bg-gradient-to-br from-slate-900 to-amber-950 border-2 border-amber-500/40 rounded-3xl p-4 text-white flex flex-col justify-between gap-3 shadow-lg hover:border-amber-400/60 transition-all hover:scale-[1.02] cursor-pointer group"
+          >
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-2xl p-2 rounded-2xl bg-amber-500/20 border border-amber-400/30 group-hover:rotate-6 transition-transform">
+                  📚
+                </span>
+                <span className="text-[10px] font-black uppercase bg-amber-500/30 text-amber-200 px-2 py-0.5 rounded-full">
+                  Woordenboek
+                </span>
+              </div>
+              <h4 className="text-base font-black text-white group-hover:text-amber-300 transition-colors">
+                Woordenboek
+              </h4>
+              <p className="text-xs text-slate-300 font-medium">
+                7-traps morphologische analyse, samengestelde woordontleding &amp; synoniemen!
+              </p>
+            </div>
+
+            <div className="pt-2 flex items-center justify-between text-xs font-black text-amber-300 border-t border-white/10">
+              <span>Woordenboek</span>
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </div>
+          </div>
+
+        </div>
+
+        {/* 4. Compact Companion Bar */}
         <CompanionCard
           profile={profile}
           onUpdateProfile={(updater) => setProfile(updater)}
           onOpenTamagotchiRoom={() => setShowTamagotchiModal(true)}
-        />
-
-        {/* Prominent Grade Switcher Bar with Description */}
-        <GradeSwitcherBar
-          selectedGrade={profile.selectedGrade}
-          onSelectGrade={handleSelectGrade}
-          onOpenModal={() => setShowGradeModal(true)}
         />
 
         <main className="space-y-4">
@@ -903,6 +1078,14 @@ export default function App() {
         }}
       />
 
+      {/* Werkwoord Boss Arena Modal for Hemali & Groep 8 ('t Kofschip, d/t/dt, leenwoorden) */}
+      <WerkwoordBossArenaModal
+        isOpen={showBossArenaModal}
+        onClose={() => setShowBossArenaModal(false)}
+        profile={profile}
+        onUpdateProfile={(updater) => setProfile(updater)}
+      />
+
       {/* Voice Persona & Audio Settings Modal */}
       <VoiceSettingsModal
         isOpen={showVoiceModal}
@@ -913,6 +1096,14 @@ export default function App() {
       <DutchDictionaryModal
         isOpen={showDictionaryModal}
         onClose={() => setShowDictionaryModal(false)}
+      />
+
+      {/* Safari Dutch Arcade Arena Modal (Bubble Pop, Syllable Sprint, Cito Turbo) */}
+      <DutchArcadeArenaModal
+        isOpen={showArcadeModal}
+        onClose={() => setShowArcadeModal(false)}
+        profile={profile}
+        onUpdateProfile={(updater) => setProfile(updater)}
       />
 
       {/* Level Complete / Animal Unlock Reward Modal */}

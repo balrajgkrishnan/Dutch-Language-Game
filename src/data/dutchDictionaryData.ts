@@ -1,5 +1,7 @@
+import { DUTCH_VOCABULARY_BANK } from './dutchVocabularyBank';
+
 // Comprehensive Curated Dutch Educational Dictionary for Kids (Groep 3-8 & Cito Prep)
-// Includes Cito signal words, high-frequency verbs, compound stems, adjectives, and adventure vocabulary.
+// Includes Cito signal words, high-frequency verbs, compound stems, adjectives, household words, and adventure vocabulary.
 
 export interface DictionaryEntry {
   word: string; // The canonical / base word
@@ -19,6 +21,7 @@ export interface DictionaryEntry {
 }
 
 export const DUTCH_DICTIONARY_DB: Record<string, DictionaryEntry> = {
+  ...DUTCH_VOCABULARY_BANK,
   // === ARTICLES & PRONOUNS (LIDWOORDEN & VOORNAAMWOORDEN) ===
   'de': {
     word: 'de',
@@ -1751,11 +1754,420 @@ export const DUTCH_DICTIONARY_DB: Record<string, DictionaryEntry> = {
     exampleNl: 'De magische kristallen spiegel diende als betrouwbaar communicatiemiddel tussen de zussen.',
     citoCategory: 'Moeilijk Cito Woord',
     level: 'Groep 7-8 (Doorstroomtoets)'
+  },
+  // === EVERYDAY OBJECTS, SCHOOL & HOUSEHOLD VOCABULARY ===
+  'tafel': {
+    word: 'tafel',
+    wordType: 'Zelfstandig naamwoord',
+    meaningNl: 'Een meubelstuk dat bestaat uit een plat blad op een of meer poten, waaraan je kunt zitten om te eten, lezen of werken.',
+    translationEn: 'Table, desk',
+    syllables: ['ta', 'fel'],
+    exampleNl: 'Ridheya en Hemali legden de oude landkaart op de houten tafel.',
+    level: 'Groep 3-4 (AVI M3-E4)'
+  },
+  'leestafel': {
+    word: 'leestafel',
+    wordType: 'Zelfstandig naamwoord',
+    meaningNl: 'Een tafel die speciaal is ingericht om rustig aan te lezen of waarop tijdschriften en boeken uitgestald liggen.',
+    translationEn: 'Reading table, reading desk',
+    compound: 'lees + tafel',
+    syllables: ['lees', 'ta', 'fel'],
+    exampleNl: 'In de gezellige bibliotheekhoek namen de zussen plaats aan de grote houten leestafel.',
+    level: 'Groep 3-4 (AVI M3-E4)'
+  },
+  'schrijftafel': {
+    word: 'schrijftafel',
+    wordType: 'Zelfstandig naamwoord',
+    meaningNl: 'Een tafel of bureau dat bedoeld is om aan te schrijven, studeren of tekenen.',
+    translationEn: 'Writing desk, bureau',
+    compound: 'schrijf + tafel',
+    syllables: ['schrijf', 'ta', 'fel'],
+    exampleNl: 'Aan haar schrijftafel noteerde Hemali alle geheimzinnige aanwijzingen in haar notitieboek.',
+    level: 'Groep 3-4 (AVI M3-E4)'
+  },
+  'eettafel': {
+    word: 'eettafel',
+    wordType: 'Zelfstandig naamwoord',
+    meaningNl: 'De tafel waaraan het gezin samen maaltijden eet.',
+    translationEn: 'Dining table',
+    compound: 'eet + tafel',
+    syllables: ['eet', 'ta', 'fel'],
+    exampleNl: 'Rondom de gedekte eettafel vertelden de meisjes over hun ontdekkingstocht.',
+    level: 'Groep 3-4 (AVI M3-E4)'
+  },
+  'stoel': {
+    word: 'stoel',
+    wordType: 'Zelfstandig naamwoord',
+    meaningNl: 'Een meubelstuk met een zitting, poten en een rugleuning voor één persoon.',
+    translationEn: 'Chair, seat',
+    syllables: ['stoel'],
+    exampleNl: 'Ridheya trok een zachte stoel naar voren om het prentenboek te bekijken.',
+    level: 'Groep 3-4 (AVI M3-E4)'
+  },
+  'bank': {
+    word: 'bank',
+    wordType: 'Zelfstandig naamwoord',
+    meaningNl: 'Een breed zitmeubel voor meerdere personen, of een instelling waar geld bewaard wordt.',
+    translationEn: 'Couch, sofa, bench / Bank',
+    syllables: ['bank'],
+    exampleNl: 'Samen ploften de zussen neer op de comfortabele fluwelen bank.',
+    level: 'Groep 3-4 (AVI M3-E4)'
+  },
+  'kast': {
+    word: 'kast',
+    wordType: 'Zelfstandig naamwoord',
+    meaningNl: 'Een meubel met planken of laden en deuren om spullen in op te bergen.',
+    translationEn: 'Cupboard, wardrobe, cabinet',
+    syllables: ['kast'],
+    exampleNl: 'Achterin de oude houten kast vonden ze een geheime doorgang.',
+    level: 'Groep 3-4 (AVI M3-E4)'
+  },
+  'boekenkast': {
+    word: 'boekenkast',
+    wordType: 'Zelfstandig naamwoord',
+    meaningNl: 'Een kast met open planken waarop boeken netjes geordend staan.',
+    translationEn: 'Bookcase, bookshelf',
+    compound: 'boeken + kast',
+    syllables: ['boe', 'ken', 'kast'],
+    exampleNl: 'De reusachtige boekenkast reikte van de vloer tot aan het plafond.',
+    level: 'Groep 3-4 (AVI M3-E4)'
+  },
+  'bord': {
+    word: 'bord',
+    wordType: 'Zelfstandig naamwoord',
+    meaningNl: 'Een plat serviesgoed om eten van te eten, of een schoolbord waarop geschreven wordt.',
+    translationEn: 'Plate, dish / Blackboard, sign',
+    syllables: ['bord'],
+    exampleNl: 'De meester schreef de raadselachtige rekensom met krijt op het bord.',
+    level: 'Groep 3-4 (AVI M3-E4)'
+  },
+  'schoolbord': {
+    word: 'schoolbord',
+    wordType: 'Zelfstandig naamwoord',
+    meaningNl: 'Het grote zwarte of witte bord voor in de klas waarop lesstof wordt geschreven.',
+    translationEn: 'School blackboard, chalkboard',
+    compound: 'school + bord',
+    syllables: ['school', 'bord'],
+    exampleNl: 'Op het schoolbord stonden de signalen en opdrachten voor de dag.',
+    level: 'Groep 3-4 (AVI M3-E4)'
+  },
+  'klas': {
+    word: 'klas',
+    wordType: 'Zelfstandig naamwoord',
+    meaningNl: 'Een groep leerlingen die samen in hetzelfde lokaal les krijgt.',
+    translationEn: 'Class, classroom group',
+    syllables: ['klas'],
+    exampleNl: 'De hele klas luisterde ademloos naar het spannende verhaal.',
+    level: 'Groep 3-4 (AVI M3-E4)'
+  },
+  'klaslokaal': {
+    word: 'klaslokaal',
+    wordType: 'Zelfstandig naamwoord',
+    meaningNl: 'De kamer in een schoolgebouw waar de lessen plaatsvinden.',
+    translationEn: 'Classroom',
+    compound: 'klas + lokaal',
+    syllables: ['klas', 'lo', 'kaal'],
+    exampleNl: 'Het zonlicht scheen vrolijk door de grote ramen van het klaslokaal.',
+    level: 'Groep 3-4 (AVI M3-E4)'
+  },
+  'schrift': {
+    word: 'schrift',
+    wordType: 'Zelfstandig naamwoord',
+    meaningNl: 'Een dun boekje met gelinieerde of geruite pagina\'s om in te schrijven.',
+    translationEn: 'Notebook, exercise book',
+    syllables: ['schrift'],
+    exampleNl: 'Met een vulpen schreef Ridheya keurig haar antwoorden in het schrift.',
+    level: 'Groep 3-4 (AVI M3-E4)'
+  },
+  'potlood': {
+    word: 'potlood',
+    wordType: 'Zelfstandig naamwoord',
+    meaningNl: 'Een houten schrijf- en tekenstift gevuld met een grafietkern.',
+    translationEn: 'Pencil',
+    syllables: ['pot', 'lood'],
+    exampleNl: 'Met een scherp potlood tekende Hemali een schets van de plattegrond.',
+    level: 'Groep 3-4 (AVI M3-E4)'
+  },
+  'pen': {
+    word: 'pen',
+    wordType: 'Zelfstandig naamwoord',
+    meaningNl: 'Een schrijfvoorwerp gevuld met inkt.',
+    translationEn: 'Pen',
+    syllables: ['pen'],
+    exampleNl: 'De gouden veerpen gleed soepel over het perkament.',
+    level: 'Groep 3-4 (AVI M3-E4)'
+  },
+  'gum': {
+    word: 'gum',
+    wordType: 'Zelfstandig naamwoord',
+    meaningNl: 'Een stukje zacht rubber waarmee je potloodstrepen kunt wegvegen.',
+    translationEn: 'Eraser, rubber',
+    syllables: ['gum'],
+    exampleNl: 'Met haar roze gum wiste ze het foutje voorzichtig uit.',
+    level: 'Groep 3-4 (AVI M3-E4)'
+  },
+  'liniaal': {
+    word: 'liniaal',
+    wordType: 'Zelfstandig naamwoord',
+    meaningNl: 'Een platte houten of plastic lat met maatverdeling om rechte lijnen mee te trekken.',
+    translationEn: 'Ruler',
+    syllables: ['li', 'ni', 'aal'],
+    exampleNl: 'Met de liniaal maten ze de afstand op de schatkaart in centimeters.',
+    level: 'Groep 3-4 (AVI M3-E4)'
+  },
+  'schooltas': {
+    word: 'schooltas',
+    wordType: 'Zelfstandig naamwoord',
+    meaningNl: 'Een tas waarin schoolboeken, schriften en een etui worden meegenomen.',
+    translationEn: 'Schoolbag, backpack',
+    compound: 'school + tas',
+    syllables: ['school', 'tas'],
+    exampleNl: 'Ridheya stopte haar leesboek en lunchbox zorgvuldig in haar schooltas.',
+    level: 'Groep 3-4 (AVI M3-E4)'
+  },
+  'rugzak': {
+    word: 'rugzak',
+    wordType: 'Zelfstandig naamwoord',
+    meaningNl: 'Een stevige tas met schouderbanden die je op je rug draagt tijdens tochten.',
+    translationEn: 'Backpack, rucksack',
+    compound: 'rug + zak',
+    syllables: ['rug', 'zak'],
+    exampleNl: 'In haar rugzak bewaarde Hemali een kompas, een waterfles en een toverlantaarn.',
+    level: 'Groep 3-4 (AVI M3-E4)'
+  },
+  'zaklamp': {
+    word: 'zaklamp',
+    wordType: 'Zelfstandig naamwoord',
+    meaningNl: 'Een kleine draagbare lamp op batterijen die je met de hand vasthoudt.',
+    translationEn: 'Flashlight, torch',
+    compound: 'zak + lamp',
+    syllables: ['zak', 'lamp'],
+    exampleNl: 'De heldere bundel van de zaklamp verlichtte de donkere gang van de kasteelruïne.',
+    level: 'Groep 3-4 (AVI M3-E4)'
+  },
+  'sleutel': {
+    word: 'sleutel',
+    wordType: 'Zelfstandig naamwoord',
+    meaningNl: 'Een gevormd stuk metaal waarmee je een slot kunt openen of sluiten.',
+    translationEn: 'Key',
+    syllables: ['sleu', 'tel'],
+    exampleNl: 'De zware koperen sleutel paste precies in het eeuwenoude sleutelgat.',
+    level: 'Groep 3-4 (AVI M3-E4)'
+  },
+  'slot': {
+    word: 'slot',
+    wordType: 'Zelfstandig naamwoord',
+    meaningNl: 'Een mechanisme om een deur of kist te vergrendelen, of een middeleeuws kasteel.',
+    translationEn: 'Lock / Castle',
+    syllables: ['slot'],
+    exampleNl: 'Met een zachte klik sprong het magische slot van de schatkist open.',
+    level: 'Groep 3-4 (AVI M3-E4)'
+  },
+  'schatkist': {
+    word: 'schatkist',
+    wordType: 'Zelfstandig naamwoord',
+    meaningNl: 'Een zware houten of ijzeren kist waarin kostbaarheden en goudstukken bewaard worden.',
+    translationEn: 'Treasure chest',
+    compound: 'schat + kist',
+    syllables: ['schat', 'kist'],
+    exampleNl: 'Binnenin de schatkist glinsterden robijnen en een geheim perkament.',
+    level: 'Groep 3-4 (AVI M3-E4)'
+  },
+  'verhaal': {
+    word: 'verhaal',
+    wordType: 'Zelfstandig naamwoord',
+    meaningNl: 'Een vertelling over gebeurtenissen, belevenissen of verzonnen avonturen.',
+    translationEn: 'Story, tale, narrative',
+    syllables: ['ver', 'haal'],
+    exampleNl: 'Het spannende verhaal over de magische kristallen sprak enorm tot de verbeelding.',
+    level: 'Groep 3-4 (AVI M3-E4)'
+  },
+  'leesboek': {
+    word: 'leesboek',
+    wordType: 'Zelfstandig naamwoord',
+    meaningNl: 'Een boek met verhalen of teksten dat bedoeld is om in te lezen.',
+    translationEn: 'Reading book, storybook',
+    compound: 'lees + boek',
+    syllables: ['lees', 'boek'],
+    exampleNl: 'Voor het slapengaan las Ridheya een hoofdstuk uit haar favoriete leesboek.',
+    level: 'Groep 3-4 (AVI M3-E4)'
+  },
+  'kookboek': {
+    word: 'kookboek',
+    wordType: 'Zelfstandig naamwoord',
+    meaningNl: 'Een boek met recepten en aanwijzingen voor het bereiden van gerechten.',
+    translationEn: 'Cookbook, recipe book',
+    compound: 'kook + boek',
+    syllables: ['kook', 'boek'],
+    exampleNl: 'In het toverkookboek vonden ze een recept voor sprankelend elfenbrood.',
+    level: 'Groep 3-4 (AVI M3-E4)'
+  },
+  'speeltuin': {
+    word: 'speeltuin',
+    wordType: 'Zelfstandig naamwoord',
+    meaningNl: 'Een buitenruimte met speeltoestellen zoals schommels, glijbanen en klimrekken.',
+    translationEn: 'Playground',
+    compound: 'speel + tuin',
+    syllables: ['speel', 'tuin'],
+    exampleNl: 'In de grote speeltuin klommen de kinderen vol energie in het houten klimkasteel.',
+    level: 'Groep 3-4 (AVI M3-E4)'
+  },
+  'slaapzak': {
+    word: 'slaapzak',
+    wordType: 'Zelfstandig naamwoord',
+    meaningNl: 'Een gewatteerde, warme zak waarin je kunt slapen tijdens het kamperen.',
+    translationEn: 'Sleeping bag',
+    compound: 'slaap + zak',
+    syllables: ['slaap', 'zak'],
+    exampleNl: 'Warm ingepakt in haar slaapzak luisterde Hemali naar het ruisen van het woud.',
+    level: 'Groep 3-4 (AVI M3-E4)'
+  },
+  'zoektocht': {
+    word: 'zoektocht',
+    wordType: 'Zelfstandig naamwoord',
+    meaningNl: 'Een tocht of expeditie waarbij men naar iets verborgens of speciaals speurt.',
+    translationEn: 'Quest, search, expedition',
+    compound: 'zoek + tocht',
+    syllables: ['zoek', 'tocht'],
+    exampleNl: 'Hun zoektocht naar de geheimzinnige kristallen leidde diep onder de aarde.',
+    level: 'Groep 5-6 (AVI M5-E6)'
+  },
+  'wandelpad': {
+    word: 'wandelpad',
+    wordType: 'Zelfstandig naamwoord',
+    meaningNl: 'Een pad dat speciaal is aangelegd om rustig over te wandelen door de natuur.',
+    translationEn: 'Walking trail, footpath',
+    compound: 'wandel + pad',
+    syllables: ['wan', 'del', 'pad'],
+    exampleNl: 'Het kronkelende wandelpad voerde langs bloeiende heide en hoge dennen.',
+    level: 'Groep 3-4 (AVI M3-E4)'
+  },
+  'bladzijde': {
+    word: 'bladzijde',
+    wordType: 'Zelfstandig naamwoord',
+    meaningNl: 'Eén kant van een blad papier in een boek of tijdschrift; pagina.',
+    translationEn: 'Page',
+    syllables: ['blad', 'zij', 'de'],
+    exampleNl: 'Op de volgende bladzijde stond een gedetailleerde kaart van het kasteel.',
+    level: 'Groep 3-4 (AVI M3-E4)'
+  },
+  'hoofdstuk': {
+    word: 'hoofdstuk',
+    wordType: 'Zelfstandig naamwoord',
+    meaningNl: 'Een genummerd of van een titel voorzien deel van een boek.',
+    translationEn: 'Chapter',
+    syllables: ['hoofd', 'stuk'],
+    exampleNl: 'Het derde hoofdstuk van het avontuur heette "Het Verloren Kristal".',
+    level: 'Groep 3-4 (AVI M3-E4)'
+  },
+  'lezer': {
+    word: 'lezer',
+    wordType: 'Zelfstandig naamwoord',
+    meaningNl: 'Iemand die een tekst, boek of verhaal leest.',
+    translationEn: 'Reader',
+    syllables: ['le', 'zer'],
+    exampleNl: 'Als nieuwsgierige lezer wilde Ridheya meteen weten hoe het verhaal afliep.',
+    level: 'Groep 3-4 (AVI M3-E4)'
+  },
+  'lezers': {
+    word: 'lezers',
+    wordType: 'Zelfstandig naamwoord',
+    meaningNl: 'Meervoud van lezer: meerdere personen die een boek of verhaal lezen.',
+    translationEn: 'Readers',
+    syllables: ['le', 'zers'],
+    exampleNl: 'De lezers werden meegenomen op een magische reis door de tijd.',
+    level: 'Groep 3-4 (AVI M3-E4)'
+  },
+  'luipaardje': {
+    word: 'luipaardje',
+    wordType: 'Zelfstandig naamwoord',
+    meaningNl: 'Verkleinwoord van luipaard: een jong of klein gevlekt roofdier van de savanne.',
+    translationEn: 'Little leopard / leopard cub',
+    compound: 'luipaard + je',
+    syllables: ['lui', 'paard', 'je'],
+    exampleNl: 'Het kleine luipaardje stoeide vrolijk tussen de hoge grassprieten.',
+    level: 'Groep 3-4 (AVI M3-E4)'
+  },
+  'panter': {
+    word: 'panter',
+    wordType: 'Zelfstandig naamwoord',
+    meaningNl: 'Een lenig en krachtig wild roofdier met een gevlekte of zwarte vacht; luipaard.',
+    translationEn: 'Panther, leopard',
+    syllables: ['pan', 'ter'],
+    exampleNl: 'Geruisloos sloop de zwarte panter door het schemerige oerwoud.',
+    level: 'Groep 5-6 (AVI M5-E6)'
+  },
+  'kruidenvrouwtje': {
+    word: 'kruidenvrouwtje',
+    wordType: 'Zelfstandig naamwoord',
+    meaningNl: 'Een wijze vrouw die geneeskrachtige kruiden en magische theetjes brouwt.',
+    translationEn: 'Herbalist woman, herb healer',
+    compound: 'kruiden + vrouwtje',
+    syllables: ['krui', 'den', 'vrouw', 'tje'],
+    exampleNl: 'Het vriendelijke kruidenvrouwtje gaf de zussen een helende lavendelzalf.',
+    level: 'Groep 5-6 (AVI M5-E6)'
+  },
+  'tovenaar': {
+    word: 'tovenaar',
+    wordType: 'Zelfstandig naamwoord',
+    meaningNl: 'Een man of wezen dat magie beheerst en toverspreuken kan uitspreken.',
+    translationEn: 'Wizard, sorcerer, magician',
+    syllables: ['to', 've', 'naar'],
+    exampleNl: 'De oude tovenaar droeg een lange mantel versierd met zilveren sterren.',
+    level: 'Groep 3-4 (AVI M3-E4)'
+  },
+  'tovenaarsleerling': {
+    word: 'tovenaarsleerling',
+    wordType: 'Zelfstandig naamwoord',
+    meaningNl: 'Iemand die het tovervak leert bij een meester-tovenaar.',
+    translationEn: "Wizard's apprentice / sorcerer's apprentice",
+    compound: 'tovenaars + leerling',
+    syllables: ['to', 've', 'naars', 'leer', 'ling'],
+    exampleNl: 'Als leergierige tovenaarsleerling oefende Hemali haar eerste zweefspreuk.',
+    level: 'Groep 5-6 (AVI M5-E6)'
   }
 };
 
 // Common compound component roots for dynamic morphological composition
 export const COMPOUND_PREFIXES: Record<string, { meaning: string; en: string }> = {
+  // Nouns & Stems
+  'lees': { meaning: 'betrekking hebbend op het lezen van teksten', en: 'reading' },
+  'schrijf': { meaning: 'betrekking hebbend op het schrijven of noteren', en: 'writing' },
+  'speel': { meaning: 'plezier maken met spelletjes of speelgoed', en: 'play / playing' },
+  'kook': { meaning: 'voedsel klaarmaken en bereiden', en: 'cooking' },
+  'slaap': { meaning: 'rusten met gesloten ogen in bed', en: 'sleep / sleeping' },
+  'wandel': { meaning: 'wandelen en stappen te voet in de natuur', en: 'walking / hiking' },
+  'zoek': { meaning: 'speuren en proberen te vinden', en: 'search / quest' },
+  'fiets': { meaning: 'rijden op een tweewieler met trappers', en: 'bicycle / cycling' },
+  'zwem': { meaning: 'voortbewegen in het water', en: 'swimming' },
+  'loop': { meaning: 'stappen of rennen met je benen', en: 'running / walking' },
+  'rij': { meaning: 'rijden met een voertuig of paard', en: 'driving / riding' },
+  'rijd': { meaning: 'rijden met een voertuig', en: 'driving' },
+  'vlieg': { meaning: 'voortbewegen door de lucht met vleugels', en: 'flying' },
+  'vaar': { meaning: 'varen over het water met een schip', en: 'sailing / boating' },
+  'graaf': { meaning: 'aarde verplaatsen met een schep', en: 'digging' },
+  'kijk': { meaning: 'kijken met je ogen naar iets moois', en: 'viewing / looking' },
+  'denk': { meaning: 'nadenken met je verstand over een raadsel', en: 'thinking' },
+  'bouw': { meaning: 'iets in elkaar zetten of oprichten', en: 'building / construction' },
+  'leer': { meaning: 'kennis of vaardigheden opdoen in de klas', en: 'learning / teach' },
+  'werk': { meaning: 'arbeid verrichten of een taak uitvoeren', en: 'work / working' },
+  'teken': { meaning: 'tekenen met potlood of krijt op papier', en: 'drawing' },
+  'luister': { meaning: 'aandachtig horen met je oren', en: 'listening' },
+  'spring': { meaning: 'jezelf omhoog werpen met je benen', en: 'jumping / bouncing' },
+  'zing': { meaning: 'melodieuze klanken maken met je stem', en: 'singing' },
+  'dans': { meaning: 'ritmisch bewegen op muziek', en: 'dancing' },
+  'reis': { meaning: 'een tocht maken naar verre plekken', en: 'travel / journey' },
+  'eet': { meaning: 'voedsel tot je nemen', en: 'eating' },
+  'drink': { meaning: 'vloeistof tot je nemen', en: 'drinking' },
+  'bad': { meaning: 'wassen in een badkuip met water en zeep', en: 'bath / bathing' },
+  'was': { meaning: 'schoonmaken met water en zeep', en: 'washing / laundry' },
+  'zit': { meaning: 'plaatsnemen op een stoel of bank', en: 'sitting' },
+  'sta': { meaning: 'overeind staan op je voeten', en: 'standing' },
+  'duik': { meaning: 'onder water gaan met een duikbril', en: 'diving' },
+  'klim': { meaning: 'naar boven klauteren in een boom of berg', en: 'climbing' },
+  'red': { meaning: 'iemand in nood helpen en in veiligheid brengen', en: 'rescuing' },
+  
+  // Existing & Nature/Adventure prefixes
   'onderzoek': { meaning: 'speurwerk om nieuwe kennis te ontdekken', en: 'research' },
   'safari': { meaning: 'tocht om wilde dieren in de vrije natuur te bekijken', en: 'safari' },
   'zee': { meaning: 'grote zoutwatermassa', en: 'sea / marine' },
@@ -1777,11 +2189,11 @@ export const COMPOUND_PREFIXES: Record<string, { meaning: string; en: string }> 
   'tuin': { meaning: 'stukje grond bij een huis met planten en bloemen', en: 'garden' },
   'school': { meaning: 'plek waar kinderen les krijgen en leren', en: 'school' },
   'boek': { meaning: 'bedrukte bladzijden bijeengebonden met een kaft', en: 'book' },
+  'boeken': { meaning: 'meerdere boeken bij elkaar', en: 'books' },
   'brief': { meaning: 'geschreven bericht aan iemand', en: 'letter / note' },
   'kaart': { meaning: 'getekende weergave van een gebied of speelkaart', en: 'map / card' },
   'kind': { meaning: 'jonge mens', en: 'child' },
-  'speel': { meaning: 'plezier maken met spelletjes of speelgoed', en: 'play' },
-  'leer': { meaning: 'kennis of vaardigheden opdoen', en: 'learning / teach' },
+  'kinder': { meaning: 'betrekking hebbend op kinderen', en: 'children' },
   'speur': { meaning: 'zoeken naar sporen en aanwijzingen', en: 'detective / sleuth' },
   'nacht': { meaning: 'het donkere deel van het etmaal', en: 'night' },
   'dag': { meaning: 'het lichte deel van het etmaal', en: 'day' },
@@ -1793,10 +2205,10 @@ export const COMPOUND_PREFIXES: Record<string, { meaning: string; en: string }> 
   'koning': { meaning: 'gekroonde heerser van een koninkrijk', en: 'king' },
   'ridder': { meaning: 'middeleeuwse strijder in een harnas', en: 'knight' },
   'tover': { meaning: 'magie beoefenen met een toverstok', en: 'magic' },
+  'tovenaars': { meaning: 'behorend aan een tovenaar', en: 'wizard' },
   'draak': { meaning: 'sprookjesachtig vuurspuwend monster', en: 'dragon' },
   'vergroot': { meaning: 'groter maken met een bolle lens', en: 'magnifying' },
   'rots': { meaning: 'grote harde steenmassa', en: 'rock / stone' },
-  'wandel': { meaning: 'wandelen te voet', en: 'walking / hiking' },
   'stap': { meaning: 'voetstap', en: 'stepping / step' },
   'klets': { meaning: 'heel erg / kledder', en: 'soaking / dripping' },
   'glim': { meaning: 'zachtjes glanzend of vriendelijk stralend', en: 'gleam / glimmer / smile' },
@@ -1807,6 +2219,19 @@ export const COMPOUND_PREFIXES: Record<string, { meaning: string; en: string }> 
 };
 
 export const COMPOUND_SUFFIXES: Record<string, { meaning: string; en: string; type: DictionaryEntry['wordType'] }> = {
+  'tafel': { meaning: 'meubelstuk met een plat blad op poten waaraan je zit of werkt', en: 'table / desk', type: 'Zelfstandig naamwoord' },
+  'stoel': { meaning: 'meubelstuk met een rugleuning voor één persoon', en: 'chair / seat', type: 'Zelfstandig naamwoord' },
+  'bord': { meaning: 'plat serviesgoed of een paneel om op te schrijven', en: 'plate / board', type: 'Zelfstandig naamwoord' },
+  'kast': { meaning: 'opbergmeubel met planken of deuren', en: 'cabinet / bookcase / cupboard', type: 'Zelfstandig naamwoord' },
+  'tas': { meaning: 'draagbaar voorwerp van stof of leer om spullen in mee te nemen', en: 'bag / satchel', type: 'Zelfstandig naamwoord' },
+  'zak': { meaning: 'omhulsel van stof of plastic voor het bewaren van spullen', en: 'bag / sack', type: 'Zelfstandig naamwoord' },
+  'kist': { meaning: 'stevige afsluitbare houten of metalen doos', en: 'chest / box / crate', type: 'Zelfstandig naamwoord' },
+  'mand': { meaning: 'gevlochten bak om dingen in te dragen of bewaren', en: 'basket', type: 'Zelfstandig naamwoord' },
+  'doos': { meaning: 'kartonnen of plastic verpakking met een deksel', en: 'box', type: 'Zelfstandig naamwoord' },
+  'bank': { meaning: 'breed zitmeubel voor meerdere personen', en: 'bench / couch', type: 'Zelfstandig naamwoord' },
+  'lokaal': { meaning: 'afgesloten ruimte in een schoolgebouw', en: 'room / hall', type: 'Zelfstandig naamwoord' },
+  'les': { meaning: 'onderwijs waarin een leraar uitleg geeft', en: 'lesson / class', type: 'Zelfstandig naamwoord' },
+  'tocht': { meaning: 'reis of expeditie over een bepaalde route', en: 'trip / quest / trek', type: 'Zelfstandig naamwoord' },
   'lach': { meaning: 'vriendelijke glimlach of geluid van vreugde', en: 'smile / laugh', type: 'Zelfstandig naamwoord' },
   'schip': { meaning: 'groot vaartuig op het water', en: 'ship / vessel', type: 'Zelfstandig naamwoord' },
   'boot': { meaning: 'vaartuig om mee over het water te varen', en: 'boat', type: 'Zelfstandig naamwoord' },
@@ -1836,7 +2261,6 @@ export const COMPOUND_SUFFIXES: Record<string, { meaning: string; en: string; ty
   'hond': { meaning: 'trouw viervoetig huisdier', en: 'dog', type: 'Zelfstandig naamwoord' },
   'kat': { meaning: 'katachtig dier of poesje', en: 'cat', type: 'Zelfstandig naamwoord' },
   'aap': { meaning: 'klimmend dier in bomen', en: 'monkey / ape', type: 'Zelfstandig naamwoord' },
-  'kast': { meaning: 'meubelstuk met planken of deuren om spullen in op te bergen', en: 'cupboard / cabinet', type: 'Zelfstandig naamwoord' },
   'kamer': { meaning: 'afgesloten ruimte in een gebouw', en: 'room / chamber', type: 'Zelfstandig naamwoord' },
   'hol': { meaning: 'ondergrondse schuilplaats van een dier', en: 'burrow / den', type: 'Zelfstandig naamwoord' },
   'nest': { meaning: 'bouwsel waarin vogels of dieren hun eieren leggen of slapen', en: 'nest', type: 'Zelfstandig naamwoord' },

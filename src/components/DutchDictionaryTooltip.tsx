@@ -142,57 +142,41 @@ export const DutchDictionaryTooltip: React.FC<DutchDictionaryTooltipProps> = ({
 
           {/* Meaning (Dutch Definition) */}
           <div className="text-xs font-semibold leading-relaxed text-slate-700 mb-2">
-            <span className="font-bold text-amber-900 block mb-0.5">Betekenis:</span>
-            <p className="bg-amber-50/60 p-2 rounded-xl border border-amber-100/80">
+            <span className="font-bold text-amber-900 block mb-0.5">📖 Betekenis:</span>
+            <p className="bg-amber-50/70 p-2 rounded-xl border border-amber-200/80 shadow-2xs text-slate-800">
               {entry.meaningNl}
             </p>
           </div>
 
           {/* English Translation */}
-          <div className="text-xs text-slate-600 mb-2 flex items-baseline gap-1">
-            <span className="font-bold text-slate-900 flex-shrink-0">Engels:</span>
-            <span className="font-semibold text-emerald-800 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">
+          <div className="text-xs text-slate-600 mb-2 flex items-baseline gap-1.5 flex-wrap">
+            <span className="font-bold text-slate-900 flex-shrink-0">🇬🇧 Engels:</span>
+            <span className="font-bold text-emerald-900 bg-emerald-50 px-2 py-0.5 rounded-lg border border-emerald-200 text-xs italic">
               {entry.translationEn}
             </span>
           </div>
 
-          {/* Synonyms (If Present) */}
-          {entry.synonyms && entry.synonyms.length > 0 && (
-            <div className="text-[11px] text-slate-600 mb-2 flex items-center gap-1.5 flex-wrap">
-              <span className="font-bold text-slate-700">Synoniemen:</span>
-              {entry.synonyms.map((s, sIdx) => (
-                <button
-                  key={sIdx}
-                  onClick={() => onSelectWord && onSelectWord(s)}
-                  className="bg-slate-100 hover:bg-amber-100 px-1.5 py-0.5 rounded text-slate-700 text-[10px] font-medium border border-slate-200 cursor-pointer transition-colors"
-                >
-                  {s}
-                </button>
-              ))}
-            </div>
-          )}
-
-          {/* Example Sentence */}
+          {/* Natural Example Sentence */}
           {entry.exampleNl && (
-            <div className="text-[11px] bg-slate-50 border border-slate-200 rounded-xl p-2 text-slate-600 italic mb-2">
-              <span className="font-bold not-italic text-slate-700 block mb-0.5">Voorbeeldzin:</span>
+            <div className="text-[11px] bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-slate-700 italic mb-2">
+              <span className="font-bold not-italic text-slate-800 block mb-0.5">🌟 Voorbeeld in een zin:</span>
               "{entry.exampleNl}"
             </div>
           )}
 
-          {/* Suggestions / "Did you mean?" */}
-          {entry.suggestions && entry.suggestions.length > 0 && (
-            <div className="mb-2 p-2 rounded-xl bg-amber-50/70 border border-amber-200 text-xs">
-              <div className="flex items-center gap-1 text-[10px] font-bold text-amber-800 mb-1">
-                <Lightbulb className="w-3 h-3 text-amber-600" />
-                <span>Bedoelde je of verwant:</span>
+          {/* Semantically Related Words & Synonyms Only */}
+          {entry.synonyms && entry.synonyms.length > 0 && (
+            <div className="mb-2 p-2 rounded-xl bg-amber-50/60 border border-amber-200/80 text-xs">
+              <div className="flex items-center gap-1 text-[10px] font-bold text-amber-900 mb-1">
+                <Sparkles className="w-3 h-3 text-amber-600" />
+                <span>🔄 Synoniemen & betekenisverwanten:</span>
               </div>
               <div className="flex items-center gap-1.5 flex-wrap">
-                {entry.suggestions.map((s, idx) => (
+                {entry.synonyms.map((s, sIdx) => (
                   <button
-                    key={idx}
+                    key={sIdx}
                     onClick={() => onSelectWord && onSelectWord(s)}
-                    className="px-2 py-0.5 rounded-lg bg-white hover:bg-amber-100 text-amber-900 border border-amber-300 text-[10px] font-bold cursor-pointer transition-colors shadow-2xs"
+                    className="px-2 py-0.5 rounded-lg bg-white hover:bg-amber-100 text-slate-800 border border-amber-300 text-[10px] font-bold cursor-pointer transition-colors shadow-2xs"
                   >
                     {s}
                   </button>

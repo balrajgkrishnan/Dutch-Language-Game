@@ -19,6 +19,7 @@ import {
 import { sound } from '../services/soundService';
 import { speech } from '../services/speechService';
 import { InteractiveDutchText } from './InteractiveDutchText';
+import { StoryCutsceneStage } from './StoryCutsceneStage';
 import confetti from 'canvas-confetti';
 
 interface CitoRpgExamModalProps {
@@ -289,37 +290,37 @@ export const CitoRpgExamModal: React.FC<CitoRpgExamModalProps> = ({
 
     if (selectedProtagonist === 'ridheya') {
       if (percent >= 80) {
-        diagnosedLevel = 'Groep 4 (AVI E4) - Uitstekend';
-        levelBadge = '🌟 Bovenbouw Voorbereiding';
-        aviCode = 'AVI E4 / Groep 4';
-        recommendation = 'Ridheya heeft een sterke woordenschat en ontleedt samengestelde woorden moeiteloos. Ze is klaar voor langere zelfstandige RPG-hoofdstukken en boeken van niveau AVI E4/M5.';
+        diagnosedLevel = 'Groep 5 (AVI E5) - Uitstekend';
+        levelBadge = '🌟 Zelfstandig Lezer';
+        aviCode = 'AVI E5 / Groep 5';
+        recommendation = 'Ridheya heeft een uitstekende woordenschat en ontleedt samengestelde woorden en open/gesloten lettergrepen moeiteloos. Ze is klaar voor langere zelfstandige verhalen en avontuurlijke teksten.';
       } else if (percent >= 60) {
-        diagnosedLevel = 'Groep 3-4 (AVI M4) - Op Schema';
+        diagnosedLevel = 'Groep 5 (AVI M5) - Op Schema';
         levelBadge = '🎯 Stevige Basis';
-        aviCode = 'AVI M4 / Groep 3-4';
-        recommendation = 'Ridheya begrijpt de hoofdlijnen van de verhalen goed. Blijf oefenen met tijdsvolgorde-signaalwoorden (eerst/daarna/tenslotte) en de ingebouwde woordenhulp.';
+        aviCode = 'AVI M5 / Groep 5';
+        recommendation = 'Ridheya begrijpt dialogen en contextaanwijzingen goed. Blijf oefenen met verkleinwoorden (-pje, -tje), voegwoorden en de ingebouwde woordenhulp.';
       } else {
-        diagnosedLevel = 'Groep 3 (AVI M3-E3) - Begeleid Oefenen';
+        diagnosedLevel = 'Groep 4-5 (AVI E4-M5) - Begeleid Oefenen';
         levelBadge = '🌱 Groeipotentieel';
-        aviCode = 'AVI M3 / Groep 3';
-        recommendation = 'Ondersteun Ridheya met de voorleesfunctie en de klikbare woordenhulp. Korte zinnen en gerichte pre-teaching in de RPG stimuleren haar zelfvertrouwen.';
+        aviCode = 'AVI E4 / Groep 4-5';
+        recommendation = 'Ondersteun Ridheya met de voorleesfunctie en de klikbare woordenhulp. Korte dialogen en gerichte pre-teaching in de RPG stimuleren haar leesvloeiendheid.';
       }
     } else {
       if (percent >= 80) {
-        diagnosedLevel = 'Groep 6+ / Doorstroomtoets 1F-2F - Meesterlijk';
-        levelBadge = '👑 Eindtoets Klaar';
-        aviCode = 'Doorstroomtoets 1F/2F';
-        recommendation = 'Hemali beheerst complexe signaalwoorden (desondanks, bovendien, hetgeen) en abstracte oorzaak-gevolgrelaties uitstekend. Zij kan direct doorstromen naar onbewerkte jeugdliteratuur (Paul van Loon, Roald Dahl NL).';
+        diagnosedLevel = 'Groep 8 (Doorstroomtoets 1F-2F) - Meesterlijk';
+        levelBadge = '👑 Doorstroomtoets Klaar';
+        aviCode = 'Doorstroomtoets 1F/2F (Groep 8)';
+        recommendation = 'Hemali beheerst complexe signaalwoorden (desondanks, desalniettemin, hetgeen) en logische tekststructuren uitstekend. Zij scoort optimaal op de Doorstroomtoets!';
       } else if (percent >= 60) {
-        diagnosedLevel = 'Groep 5-6 (Cito M5-E5) - Vaardig';
+        diagnosedLevel = 'Groep 7-8 (Cito E7-M8) - Vaardig';
         levelBadge = '🔍 Doelgericht Oefenen';
-        aviCode = 'Cito M5-E5 / Groep 5-6';
-        recommendation = 'Hemali pikt de hoofdgedachte snel op. Versterk de subtiele verwijswoorden en meerkeuze-afleiders via de mysterieuze Cito-clues in de RPG.';
+        aviCode = 'Cito M8 / Groep 8';
+        recommendation = 'Hemali pikt de hoofdgedachte en humor snel op. Versterk de subtiele verwijswoorden en meerkeuze-afleiders via de mysterieuze Cito-clues in de RPG.';
       } else {
-        diagnosedLevel = 'Groep 5 (Cito M5) - Basisontwikkeling';
+        diagnosedLevel = 'Groep 7 (Cito M7) - Basisontwikkeling';
         levelBadge = '📖 Extra Training';
-        aviCode = 'Cito M5 / Groep 5';
-        recommendation = 'Focus op signaalwoorden van tegenstelling en tijd. Laat Hemali de redenering achter haar keuzes hardop uitleggen.';
+        aviCode = 'Cito M7 / Groep 7';
+        recommendation = 'Focus op signaalwoorden van tegenstelling en tijd en \'t kofschip werkwoordregels. Laat Hemali haar antwoorden hardop beredeneren.';
       }
     }
 
@@ -632,6 +633,27 @@ export const CitoRpgExamModal: React.FC<CitoRpgExamModalProps> = ({
                   })}
                 </div>
               </div>
+
+              {/* Interactive Visual Animated Cutscene Stage */}
+              <StoryCutsceneStage
+                protagonist={selectedProtagonist}
+                pageTitle={currentRpgPage.title}
+                biomeName={currentRpgPage.biome}
+                characterDialogue={
+                  selectedProtagonist === 'ridheya'
+                    ? (currentRpgPage.pageNumber === 1
+                        ? "Kijk Kopi, door mijn ronde bril zie ik een gewond diertje! Snel mijn dierenartstas erbij pakken!"
+                        : "Met deze wonderzalf en mijn vergrootglas genezen we de wondjes in een handomdraai!")
+                    : (currentRpgPage.pageNumber === 1
+                        ? "Dit kristalraadsel herinnert me aan een geniale scène uit mijn dagboek! Laten we het signaalwoord ontleden!"
+                        : "Haha, met mijn saffieren amulet en logisch denkwerk kraken we elke Cito-puzzel!")
+                }
+                characterEmote={
+                  currentRpgPage.pageNumber % 4 === 1 ? 'curious' :
+                  currentRpgPage.pageNumber % 4 === 2 ? 'caring' :
+                  currentRpgPage.pageNumber % 4 === 3 ? 'clever' : 'excited'
+                }
+              />
 
               {/* Page Number & Biome Location */}
               <div className="flex items-center justify-between gap-3 bg-emerald-50 border border-emerald-200 rounded-2xl px-4 py-2.5">

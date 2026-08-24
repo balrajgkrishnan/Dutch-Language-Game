@@ -123,6 +123,57 @@ export const GROEP_6_8_SPELLING_QUESTIONS: Question[] = [
     hint: "Denk aan: 's ochtends (met kleine 's en hoofdletter O) en baby's (apostrof-s na y)!",
     explanation: "Geweldig meesterschap! 's Ochtends en woorden op y (baby's, hobby's, pony's) krijgen apostrof-s!"
   },
+  {
+    id: 'g68-sp-8',
+    category: '⚡ Werkwoordspelling (Voltooid Deelwoord als Bijvoeglijk Naamwoord)',
+    categoryIcon: '⚡',
+    gradeBadge: 'Groep 7-8',
+    shortStory: 'De ranger onderzoekt het vergrendelde hek.',
+    question: "Welke zin is correct gespeld?",
+    type: 'choice',
+    options: [
+      'Het pas geverfde hek van het safarikamp beschermt de dieren.',
+      'Het pas geverfte hek van het safarikamp beschermt de dieren.',
+      'Het pas geverfdd hek van het safarikamp beschermt de dieren.'
+    ],
+    correctOptionIndex: 0,
+    hint: "Als een voltooid deelwoord een bijvoeglijk naamwoord wordt (het geverfde hek), maak je het zo kort mogelijk!",
+    explanation: "Uitstekend! Verf -> verfde -> geverfde hek (zo kort mogelijk geschreven)."
+  },
+  {
+    id: 'g68-sp-9',
+    category: '🔤 Spelling (Tussen-N Regel)',
+    categoryIcon: '🔤',
+    gradeBadge: 'Groep 7-8',
+    shortStory: 'In de dierenkliniek bereiden ze het voer voor.',
+    question: "Kies de juiste spelling van de samenstellingen:",
+    type: 'choice',
+    options: [
+      'paardenbloem & apenkooi (alleen -en als het eerste woord alleen een meervoud op -en heeft)',
+      'paardebloem & apenkooi',
+      'paardenbloem & apekooi'
+    ],
+    correctOptionIndex: 0,
+    hint: "Paard heeft alleen meervoud 'paarden' -> paardenbloem! Aap heeft alleen 'apen' -> apenkooi!",
+    explanation: "Heel goed! De tussen-n regel: als het eerste deel alleen een meervoud op -en heeft, schrijf je -en."
+  },
+  {
+    id: 'g68-sp-10',
+    category: '🔤 Spelling (Koppelteken bij Aardrijkskundige Namen)',
+    categoryIcon: '🔤',
+    gradeBadge: 'Groep 7-8',
+    shortStory: 'De expeditie reist naar Zuid-Amerika.',
+    question: "Wat is de juiste spelling?",
+    type: 'choice',
+    options: [
+      'Zuid-Amerikaanse savanne (met koppelteken en twee hoofdletters)',
+      'Zuidamerikaanse savanne',
+      'zuid-amerikaanse savanne'
+    ],
+    correctOptionIndex: 0,
+    hint: "Aardrijkskundige samenstellingen met Zuid/Noord/Oost/West behouden een koppelteken en hoofdletters!",
+    explanation: "Precies! Zuid-Amerikaanse krijgt een koppelteken en hoofdletters Z en A."
+  },
 
   // BEGRIJPEND LEZEN (GROEP 6-7-8 ARTIKELEN)
   {

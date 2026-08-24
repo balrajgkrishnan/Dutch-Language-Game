@@ -25,28 +25,40 @@ export const PROTAGONISTS: Record<'ridheya' | 'hemali', ProtagonistProfile> = {
   ridheya: {
     id: 'ridheya',
     name: 'Ridheya',
-    ageDesc: 'Jongere zus (Groep 3–4 / Dierenarts in opleiding)',
-    gradeLevel: 'Groep 3–4',
-    aviLevel: 'AVI M3–E4',
-    persona: 'Dappere jonge dierenarts in Maleisië & Borneo, nieuwsgierig, zorgzaam, beschermt gewonde zwerfdieren, vogels en jonge dieren in het oerwoud.',
+    ageDesc: 'Jongere zus (Groep 5 • Dierenarts & Dappere Speurheld)',
+    gradeLevel: 'Groep 5',
+    aviLevel: 'AVI M5–E5',
+    persona: 'Dappere jonge dierenarts & speurder, nieuwsgierig, vrolijk en zorgzaam. Ze beschermt dieren in nood en lost oerwoud-mysteries op met haar stethoscoop en vergrootglas.',
     visuals: 'Jong meisje met bruin haar, warme bruine ogen en een heldere ronde bril.',
-    gear: 'Witte dierenartskit, stethoscoop, verbandgaas-tas, pincet en vergrootglas.',
-    readingFocus: ['Korte frequente woorden', 'Eenvoudige voegwoorden (want, maar, zodat, omdat)', 'Woorden ontleden (wonder + zalf)', 'Context raden'],
+    gear: 'Witte dierenartskit, stethoscoop, vergrootglas, notitieboekje en wonderzalf.',
+    readingFocus: [
+      'Open & gesloten lettergrepen (jager/bakker)',
+      'Verkleinwoorden (-pje, -tje, -etje)',
+      'Samengestelde woorden (wonder + zalf)',
+      'Voegwoorden & Oorzaak (want, maar, omdat, zodat)',
+      'Begrijpend lezen & verhaallogica'
+    ],
     emoji: '🩺',
-    currentMission: 'De Geheime Dierenvallei van Borneo: red de zonnepapegaai, dwerghoefhertje Pip, zonnebeer Baloe en baby orang-oetan Bintang!'
+    currentMission: 'Het Geheim van de Boomhut Dierenkliniek & De Dierenvallei van Borneo!'
   },
   hemali: {
     id: 'hemali',
     name: 'Hemali',
-    ageDesc: 'Oudere zus (Groep 5–6 / Magische Ontdekkingsreiziger & Cito Prep)',
-    gradeLevel: 'Groep 5–6',
-    aviLevel: 'AVI M5–E6',
-    persona: 'Schrandere ontdekkingsreiziger met teleportatiekracht, spreekt met wijze jungledieren en beschermer van baby giraf Appel en het universum.',
+    ageDesc: 'Oudere zus (Groep 8 • Schrandere Magiër & Cito Master)',
+    gradeLevel: 'Groep 8',
+    aviLevel: 'AVI E8 / Doorstroomtoets',
+    persona: 'Schrandere jonge magiër met een scherpzinnig gevoel voor humor, magische teleportatiekracht en vlijmscherpe deductievaardigheden voor complexe raadsels.',
     visuals: 'Ouder meisje met lang steil donker haar, warme bruine ogen en een schrandere glimlach.',
-    gear: 'Ontdekkingsreizigersjas, saffieren teleportatie-amulet, tovernotitieboek en gouden ganzenveer.',
-    readingFocus: ['Signaalwoorden (daardoor, desondanks, bovendien, echter, mits, tenzij)', 'Verwijswoorden (deze, waarmee, hetgeen)', 'Hoofdgedachte vinden', 'Oorzaak en gevolg'],
+    gear: 'Ontdekkingsreizigerscape, saffieren teleportatie-amulet, tovernotitieboek en gouden ganzenveer.',
+    readingFocus: [
+      'Werkwoordspelling (d/t/dt, o.v.t. met \'t kofschip, voltooid deelwoord, leenwoorden)',
+      'Signaalwoorden (desondanks, desalniettemin, daarentegen, immers, derhalve)',
+      'Verwijswoorden (hetgeen, degene, waarmee)',
+      'Hoofdgedachte, tekstdoelen & dieper begrip',
+      'Cito Doorstroomtoets leesstrategieën'
+    ],
     emoji: '✨',
-    currentMission: 'Het Verloren Astrolabium van de Tijdwachters: ontcijfer de sterrenkaarten van Mount Kinabalu met wijze olifant Raja en girafje Appel!'
+    currentMission: 'Het Verloren Astrolabium & Het Mysterie van de Cito Tijdwachters!'
   }
 };
 

@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   X, Volume2, Sparkles, Mic, Check, RotateCcw, 
-  Play, Sliders, Info, Heart, Star, Music, Settings
+  Play, Sliders, Info, Heart, Star, Music, Settings,
+  Tablet, Smartphone, Laptop, HelpCircle, ChevronDown, ChevronUp
 } from 'lucide-react';
-import { speech, VOICE_PRESETS, VoicePreset } from '../services/speechService';
+import { speech, VOICE_PRESETS, VoicePreset, VoiceMetadata } from '../services/speechService';
 import { sound } from '../services/soundService';
 
 interface VoiceSettingsModalProps {
@@ -20,13 +21,15 @@ export const VoiceSettingsModal: React.FC<VoiceSettingsModalProps> = ({
   const [pitch, setPitch] = useState<number>(speech.settings.pitch);
   const [rate, setRate] = useState<number>(speech.settings.rate);
   const [selectedVoiceURI, setSelectedVoiceURI] = useState<string>(speech.settings.selectedVoiceURI);
+  const [femaleOnly, setFemaleOnly] = useState<boolean>(speech.settings.femaleOnly ?? true);
   const [availableVoices, setAvailableVoices] = useState<SpeechSynthesisVoice[]>([]);
   const [customTestPhrase, setCustomTestPhrase] = useState<string>('Hoi Ridheya en Hemali! Wauw, wat een spannend avontuur!');
   const [isPlayingTest, setIsPlayingTest] = useState<boolean>(false);
+  const [showDeviceGuide, setShowDeviceGuide] = useState<boolean>(false);
 
   useEffect(() => {
     const refreshVoices = () => {
-      const v = speech.getAvailableDutchVoices();
+      const v = speech.getAvailableDutchVoices(!femaleOnly);
       setAvailableVoices(v);
       if (speech.settings.selectedVoiceURI) {
         setSelectedVoiceURI(speech.settings.selectedVoiceURI);
@@ -35,7 +38,7 @@ export const VoiceSettingsModal: React.FC<VoiceSettingsModalProps> = ({
 
     refreshVoices();
     speech.onVoicesLoaded(refreshVoices);
-  }, [isOpen]);
+  }, [isOpen, femaleOnly]);
 
   if (!isOpen) return null;
 
@@ -68,13 +71,22 @@ export const VoiceSettingsModal: React.FC<VoiceSettingsModalProps> = ({
     speech.saveSettings({ rate: newRate, presetId: 'custom' });
   };
 
+  const handleFemaleOnlyToggle = (checked: boolean) => {
+    sound.playPop();
+    setFemaleOnly(checked);
+    speech.saveSettings({ femaleOnly: checked });
+    const v = speech.getAvailableDutchVoices(!checked);
+    setAvailableVoices(v);
+  };
+
   const handleVoiceChange = (uri: string) => {
     sound.playPop();
     setSelectedVoiceURI(uri);
     speech.saveSettings({ selectedVoiceURI: uri });
-    const chosenVoice = availableVoices.find(v => v.voiceURI === uri);
+    const allVoices = speech.getAvailableDutchVoices(true);
+    const chosenVoice = allVoices.find(v => v.voiceURI === uri);
     const voiceName = chosenVoice ? chosenVoice.name.split(' ')[0] : 'deze stem';
-    speech.speak(`Dit is een test met ${voiceName}. Klink ik zo leuk en gezellig?`);
+    speech.speak(`Dit is een test met ${voiceName}. Klink ik zo leuk en gezellig voor Ridheya en Hemali?`);
   };
 
   const handlePlayTest = (phrase?: string) => {
@@ -90,9 +102,16 @@ export const VoiceSettingsModal: React.FC<VoiceSettingsModalProps> = ({
     sound.playPop();
     handleSelectPreset('tess_excited');
     setSelectedVoiceURI('');
-    speech.saveSettings({ selectedVoiceURI: '', presetId: 'tess_excited', pitch: 1.22, rate: 0.96 });
+    speech.saveSettings({ 
+      selectedVoiceURI: '', 
+      presetId: 'tess_excited', 
+      pitch: 1.22, 
+      rate: 0.96,
+      femaleOnly: true
+    });
     setPitch(1.22);
     setRate(0.96);
+    setFemaleOnly(true);
   };
 
   return (
@@ -116,12 +135,12 @@ export const VoiceSettingsModal: React.FC<VoiceSettingsModalProps> = ({
                   <h2 className="text-lg sm:text-xl font-black tracking-tight">
                     Vrolijke Stem &amp; Audio Instellingen
                   </h2>
-                  <span className="bg-amber-300 text-slate-950 text-[10px] font-black uppercase px-2 py-0.5 rounded-full shadow-xs">
-                    Vrouwelijk &amp; Enthousiast
+                  <span className="bg-pink-200 text-pink-950 text-[10px] font-black uppercase px-2 py-0.5 rounded-full shadow-xs flex items-center gap-1">
+                    👩 Alleen Vrouwelijk
                   </span>
                 </div>
                 <p className="text-xs text-amber-100 font-medium mt-0.5">
-                  Kies de leukste voorleesstem voor <b>Ridheya</b> en <b>Hemali</b>!
+                  Gezellige, warme voorleesstemmen voor <b>Ridheya</b> en <b>Hemali</b>!
                 </p>
               </div>
             </div>
@@ -139,6 +158,30 @@ export const VoiceSettingsModal: React.FC<VoiceSettingsModalProps> = ({
 
           {/* Modal Body */}
           <div className="p-4 sm:p-6 overflow-y-auto space-y-6 flex-1 text-slate-800">
+
+            {/* Female-Only Mode Banner */}
+            <div className="p-3.5 rounded-2xl bg-pink-50/90 border-2 border-pink-200 flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2.5">
+                <span className="text-xl">👩‍🌾</span>
+                <div>
+                  <h4 className="text-xs font-black text-pink-950">
+                    Vrouwelijke Voorleesstemmen Forceren
+                  </h4>
+                  <p className="text-[11px] text-pink-800 font-medium">
+                    Filtert automatisch mannelijke en lage stemmen weg voor de leukste kindervriendelijke ervaring.
+                  </p>
+                </div>
+              </div>
+              <label className="relative inline-flex items-center cursor-pointer flex-shrink-0">
+                <input
+                  type="checkbox"
+                  checked={femaleOnly}
+                  onChange={(e) => handleFemaleOnlyToggle(e.target.checked)}
+                  className="sr-only peer"
+                />
+                <div className="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-pink-500"></div>
+              </label>
+            </div>
             
             {/* Section 1: Character Voice Presets */}
             <div>
@@ -146,7 +189,7 @@ export const VoiceSettingsModal: React.FC<VoiceSettingsModalProps> = ({
                 <div className="flex items-center gap-2">
                   <span className="text-lg">🎭</span>
                   <h3 className="text-sm sm:text-base font-black text-slate-900">
-                    Kies een Stem Persona:
+                    Kies een Vrouwelijke Stem Persona:
                   </h3>
                 </div>
                 <span className="text-[11px] font-bold text-slate-500">
@@ -249,7 +292,7 @@ export const VoiceSettingsModal: React.FC<VoiceSettingsModalProps> = ({
               <div className="flex items-center justify-between gap-2">
                 <h4 className="text-xs font-black uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
                   <Sliders className="w-3.5 h-3.5 text-slate-600" />
-                  <span>Toonhoogte &amp; Snelheid Fijnstellen:</span>
+                  <span>Vrolijkheid &amp; Snelheid Instellen:</span>
                 </h4>
                 <button
                   onClick={handleResetDefaults}
@@ -263,24 +306,24 @@ export const VoiceSettingsModal: React.FC<VoiceSettingsModalProps> = ({
               {/* Pitch Slider */}
               <div className="space-y-1.5">
                 <div className="flex items-center justify-between text-xs font-bold text-slate-700">
-                  <span>Vrolijkheid / Toonhoogte (Pitch):</span>
+                  <span>Toonhoogte / Vrouwelijke Klank (Pitch):</span>
                   <span className="text-amber-800 font-black bg-amber-100 px-2 py-0.5 rounded-md">
-                    {pitch > 1.15 ? '✨ Super Vrolijk & Jeugdig' : pitch >= 1.05 ? '🌸 Warm & Vriendelijk' : '🦉 Rustig'} ({pitch.toFixed(2)})
+                    {pitch > 1.15 ? '✨ Super Vrolijk & Vrouwelijk' : pitch >= 1.05 ? '🌸 Warm & Vriendelijk' : '🦉 Neutraal'} ({pitch.toFixed(2)})
                   </span>
                 </div>
                 <input
                   type="range"
-                  min="0.8"
-                  max="1.4"
+                  min="0.9"
+                  max="1.45"
                   step="0.02"
                   value={pitch}
                   onChange={(e) => handlePitchChange(parseFloat(e.target.value))}
                   className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-amber-500"
                 />
                 <div className="flex justify-between text-[10px] text-slate-400 font-semibold">
-                  <span>Diepere Stem (0.8)</span>
-                  <span className="text-amber-600 font-bold">Aanbevolen voor kids (1.20 - 1.25)</span>
-                  <span>Heel Hoog &amp; Speels (1.4)</span>
+                  <span>Neutraal (0.9)</span>
+                  <span className="text-amber-600 font-bold">Ideaal voor meiden (1.20 - 1.25)</span>
+                  <span>Speels Hoog (1.45)</span>
                 </div>
               </div>
 
@@ -289,7 +332,7 @@ export const VoiceSettingsModal: React.FC<VoiceSettingsModalProps> = ({
                 <div className="flex items-center justify-between text-xs font-bold text-slate-700">
                   <span>Voorleessnelheid (Tempo):</span>
                   <span className="text-indigo-800 font-black bg-indigo-100 px-2 py-0.5 rounded-md">
-                    {rate <= 0.85 ? '🐢 Rustig (Groep 3)' : rate <= 1.0 ? '🎯 Duidelijk' : '⚡ Vlot (Groep 6)'} ({rate.toFixed(2)})
+                    {rate <= 0.85 ? '🐢 Rustig (Groep 3 - Ridheya)' : rate <= 1.0 ? '🎯 Duidelijk' : '⚡ Vlot (Groep 6 - Hemali)'} ({rate.toFixed(2)})
                   </span>
                 </div>
                 <input
@@ -302,7 +345,7 @@ export const VoiceSettingsModal: React.FC<VoiceSettingsModalProps> = ({
                   className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-500"
                 />
                 <div className="flex justify-between text-[10px] text-slate-400 font-semibold">
-                  <span>Rustig voor beginnende lezers (0.7)</span>
+                  <span>Rustig (0.7)</span>
                   <span>Standaard (0.95)</span>
                   <span>Vlot (1.25)</span>
                 </div>
@@ -312,9 +355,14 @@ export const VoiceSettingsModal: React.FC<VoiceSettingsModalProps> = ({
             {/* Section 4: Device Voice Selection Dropdown */}
             {availableVoices.length > 0 && (
               <div className="space-y-2">
-                <label className="block text-xs font-black uppercase tracking-wider text-slate-700">
-                  Gedetecteerde Stem op jouw Apparaat (Browser):
-                </label>
+                <div className="flex items-center justify-between">
+                  <label className="block text-xs font-black uppercase tracking-wider text-slate-700">
+                    Gedetecteerde Stem op jouw Apparaat:
+                  </label>
+                  <span className="text-[11px] font-bold text-indigo-600">
+                    {availableVoices.length} stem(men) beschikbaar
+                  </span>
+                </div>
                 <select
                   value={selectedVoiceURI}
                   onChange={(e) => handleVoiceChange(e.target.value)}
@@ -322,22 +370,70 @@ export const VoiceSettingsModal: React.FC<VoiceSettingsModalProps> = ({
                 >
                   <option value="">✨ Automatisch beste Vrouwelijke Nederlandse stem kiezen (Aanbevolen)</option>
                   {availableVoices.map((v, i) => {
-                    const isNatural = v.name.toLowerCase().includes('natural') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('claire') || v.name.toLowerCase().includes('fenna');
+                    const meta = speech.getVoiceMetadata(v);
+                    const genderIcon = meta.gender === 'female' ? '👩' : meta.gender === 'male' ? '👨' : '👤';
                     return (
                       <option key={v.voiceURI || i} value={v.voiceURI}>
-                        {isNatural ? '🌟 ' : ''}{v.name} ({v.lang})
+                        {genderIcon} {meta.isNeural ? '🌟 ' : ''}{v.name} ({meta.qualityBadge} - {v.lang})
                       </option>
                     );
                   })}
                 </select>
-                <p className="text-[11px] text-slate-500 font-medium flex items-center gap-1">
-                  <Info className="w-3.5 h-3.5 text-slate-400 flex-shrink-0" />
-                  <span>
-                    Tip: Microsoft Edge en Google Chrome bevatten speciale <b>Natural / Vrouwelijke</b> stemmen (zoals Fenna, Colette, Claire of Google Nederlands).
-                  </span>
-                </p>
               </div>
             )}
+
+            {/* Section 5: Troubleshooting & iPad/Mobile HD Voice Guide */}
+            <div className="rounded-2xl border-2 border-indigo-200 overflow-hidden bg-indigo-50/50">
+              <button
+                onClick={() => {
+                  sound.playPop();
+                  setShowDeviceGuide(!showDeviceGuide);
+                }}
+                className="w-full p-3.5 bg-indigo-100/70 hover:bg-indigo-100 text-left flex items-center justify-between gap-2 cursor-pointer transition-colors"
+              >
+                <div className="flex items-center gap-2 text-xs sm:text-sm font-black text-indigo-950">
+                  <HelpCircle className="w-4 h-4 text-indigo-600 flex-shrink-0" />
+                  <span>Waarom klinkt de stem op iPad/Mobiel anders &amp; hoe fix je dat?</span>
+                </div>
+                {showDeviceGuide ? <ChevronUp className="w-4 h-4 text-indigo-700" /> : <ChevronDown className="w-4 h-4 text-indigo-700" />}
+              </button>
+
+              {showDeviceGuide && (
+                <div className="p-4 space-y-4 text-xs text-indigo-950">
+                  <p className="leading-relaxed">
+                    Op laptops (in Chrome of Edge) downloadt de browser automatisch <b>Google Nederlands</b> of <b>Microsoft Fenna (Natural HD)</b>. Op een <b>iPad, iPhone of Android</b> gebruikt het apparaat standaard een compacte/robotachtige stem om geheugen te sparen.
+                  </p>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                    <div className="bg-white p-3 rounded-xl border border-indigo-200 shadow-2xs space-y-1">
+                      <div className="font-black text-indigo-900 flex items-center gap-1.5">
+                        <Tablet className="w-3.5 h-3.5 text-indigo-600" />
+                        <span>iPad &amp; iPhone (Apple)</span>
+                      </div>
+                      <ol className="list-decimal list-inside space-y-1 text-[11px] text-slate-700 font-medium leading-normal">
+                        <li>Open de iPad <b>Instellingen</b> app.</li>
+                        <li>Ga naar <b>Toegankelijkheid</b> $\to$ <b>Gesproken inhoud</b> $\to$ <b>Stemmen</b>.</li>
+                        <li>Tik op <b>Nederlands</b>.</li>
+                        <li>Kies <b>Claire</b> of <b>Siri (Stem 2)</b> en tik op <b>Verbeterd / Premium downloaden</b>.</li>
+                        <li>Herlaad deze pagina op je iPad $\to$ klinkt direct super mooi!</li>
+                      </ol>
+                    </div>
+
+                    <div className="bg-white p-3 rounded-xl border border-indigo-200 shadow-2xs space-y-1">
+                      <div className="font-black text-indigo-900 flex items-center gap-1.5">
+                        <Laptop className="w-3.5 h-3.5 text-indigo-600" />
+                        <span>Andere Laptop &amp; Android</span>
+                      </div>
+                      <ol className="list-decimal list-inside space-y-1 text-[11px] text-slate-700 font-medium leading-normal">
+                        <li>Open de app in <b>Google Chrome</b> of <b>Microsoft Edge</b>.</li>
+                        <li>In Edge: kies <b>Microsoft Fenna (Online)</b> of <b>Colette</b> in het menu hierboven.</li>
+                        <li>Op Android: Instellingen $\to$ Toegankelijkheid $\to$ Tekst-naar-spraak $\to$ Download Nederlands spraakpakket.</li>
+                      </ol>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
 
           </div>
 
@@ -346,7 +442,7 @@ export const VoiceSettingsModal: React.FC<VoiceSettingsModalProps> = ({
             <button
               onClick={() => {
                 sound.playPop();
-                speech.testVoice('Wat fijn! Deze stem staat nu ingesteld voor het hele spel!');
+                speech.testVoice('Wat fijn! De vrouwelijke stem staat nu perfect ingesteld voor Ridheya en Hemali!');
               }}
               className="text-xs font-black text-amber-900 hover:text-amber-950 flex items-center gap-1.5 cursor-pointer"
             >

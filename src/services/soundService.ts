@@ -182,18 +182,76 @@ class SoundService {
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
 
-    if (type === 'lion') {
+    if (type.includes('lion') || type.includes('leeuw')) {
+      // Warm cub growl
       osc.type = 'sawtooth';
-      osc.frequency.setValueAtTime(150, now);
+      osc.frequency.setValueAtTime(140, now);
       osc.frequency.linearRampToValueAtTime(220, now + 0.15);
-      osc.frequency.linearRampToValueAtTime(130, now + 0.4);
+      osc.frequency.linearRampToValueAtTime(120, now + 0.4);
       gain.gain.setValueAtTime(0.08, now);
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
-    } else if (type === 'elephant') {
+    } else if (type.includes('elephant') || type.includes('olifant')) {
+      // Trumpeting upward slide
       osc.type = 'triangle';
-      osc.frequency.setValueAtTime(200, now);
-      osc.frequency.exponentialRampToValueAtTime(600, now + 0.3);
+      osc.frequency.setValueAtTime(220, now);
+      osc.frequency.exponentialRampToValueAtTime(680, now + 0.28);
       gain.gain.setValueAtTime(0.12, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.38);
+    } else if (type.includes('owl') || type.includes('uil')) {
+      // Gentle owl hoot-hoot
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(440, now);
+      osc.frequency.setValueAtTime(370, now + 0.12);
+      osc.frequency.setValueAtTime(440, now + 0.22);
+      gain.gain.setValueAtTime(0.14, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.42);
+    } else if (type.includes('kitten') || type.includes('cat') || type.includes('kat')) {
+      // High sweet kitten meow/purr
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(650, now);
+      osc.frequency.linearRampToValueAtTime(980, now + 0.15);
+      osc.frequency.linearRampToValueAtTime(820, now + 0.35);
+      gain.gain.setValueAtTime(0.12, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.38);
+    } else if (type.includes('puppy') || type.includes('dog') || type.includes('hond')) {
+      // Cheerful puppy yip
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(480, now);
+      osc.frequency.exponentialRampToValueAtTime(900, now + 0.1);
+      osc.frequency.exponentialRampToValueAtTime(600, now + 0.22);
+      gain.gain.setValueAtTime(0.15, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+    } else if (type.includes('monkey') || type.includes('aap')) {
+      // Playful monkey chatter
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(550, now);
+      osc.frequency.linearRampToValueAtTime(850, now + 0.08);
+      osc.frequency.linearRampToValueAtTime(620, now + 0.16);
+      osc.frequency.linearRampToValueAtTime(950, now + 0.26);
+      gain.gain.setValueAtTime(0.12, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+    } else if (type.includes('parrot') || type.includes('papegaai')) {
+      // Melodic bird chirp/whistle
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(880, now);
+      osc.frequency.linearRampToValueAtTime(1400, now + 0.12);
+      osc.frequency.linearRampToValueAtTime(1100, now + 0.24);
+      gain.gain.setValueAtTime(0.14, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.32);
+    } else if (type.includes('fox') || type.includes('vos')) {
+      // Fox yip
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(500, now);
+      osc.frequency.exponentialRampToValueAtTime(1100, now + 0.12);
+      osc.frequency.exponentialRampToValueAtTime(750, now + 0.26);
+      gain.gain.setValueAtTime(0.13, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+    } else if (type.includes('dragon') || type.includes('draak')) {
+      // Fiery magic shimmer
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(320, now);
+      osc.frequency.exponentialRampToValueAtTime(640, now + 0.2);
+      gain.gain.setValueAtTime(0.1, now);
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
     } else {
       osc.type = 'sine';
@@ -209,6 +267,81 @@ class SoundService {
 
     osc.start(now);
     osc.stop(now + 0.45);
+  }
+
+  // Arcade Sound Effects
+  playArcadeCombo(comboLevel: number = 1) {
+    const ctx = this.getAudioContext();
+    if (!ctx) return;
+
+    const basePitch = Math.min(1200, 440 * Math.pow(1.15, Math.min(10, comboLevel)));
+    const now = ctx.currentTime;
+    const notes = [basePitch, basePitch * 1.25, basePitch * 1.5];
+
+    notes.forEach((freq, idx) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(freq, now + idx * 0.05);
+
+      gain.gain.setValueAtTime(0, now + idx * 0.05);
+      gain.gain.linearRampToValueAtTime(0.18, now + idx * 0.05 + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.05 + 0.2);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start(now + idx * 0.05);
+      osc.stop(now + idx * 0.05 + 0.2);
+    });
+  }
+
+  playArcadePowerup() {
+    const ctx = this.getAudioContext();
+    if (!ctx) return;
+
+    const now = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(300, now);
+    osc.frequency.exponentialRampToValueAtTime(1200, now + 0.3);
+
+    gain.gain.setValueAtTime(0.15, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc.start(now);
+    osc.stop(now + 0.35);
+  }
+
+  playArcadeTick() {
+    const ctx = this.getAudioContext();
+    if (!ctx) return;
+
+    const now = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(800, now);
+    osc.frequency.exponentialRampToValueAtTime(400, now + 0.04);
+
+    gain.gain.setValueAtTime(0.1, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc.start(now);
+    osc.stop(now + 0.05);
+  }
+
+  playArcadeFever() {
+    this.playFanfare();
   }
 
   // Spoken Dutch text-to-speech for young learners (routed via high-quality speechService)
