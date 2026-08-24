@@ -44,7 +44,7 @@ export const RidheyaSpellingFactoryModal: React.FC<RidheyaSpellingFactoryModalPr
   const [showSummary, setShowSummary] = useState(false);
   const [sessionScore, setSessionScore] = useState(0);
   const [isArcadeBlitz, setIsArcadeBlitz] = useState(false);
-  const [blitzTimeLeft, setBlitzTimeLeft] = useState(8);
+  const [blitzTimeLeft, setBlitzTimeLeft] = useState(15);
   const blitzTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Filtered pool of items based on category
@@ -76,7 +76,7 @@ export const RidheyaSpellingFactoryModal: React.FC<RidheyaSpellingFactoryModalPr
       return;
     }
 
-    setBlitzTimeLeft(8);
+    setBlitzTimeLeft(15);
     blitzTimerRef.current = setInterval(() => {
       setBlitzTimeLeft(prev => {
         if (prev <= 1) {
@@ -254,7 +254,7 @@ export const RidheyaSpellingFactoryModal: React.FC<RidheyaSpellingFactoryModalPr
                 ? 'bg-purple-600 border-purple-400 text-white animate-pulse'
                 : 'bg-white border-purple-300 text-purple-700 hover:bg-purple-50'
             }`}
-            title="Schakel 8-seconden timer en combo multipliers in!"
+            title="Schakel 15-seconden timer en combo multipliers in!"
           >
             <span>🕹️ Blitz:</span>
             <span>{isArcadeBlitz ? 'AAN ⚡' : 'UIT'}</span>
@@ -298,8 +298,8 @@ export const RidheyaSpellingFactoryModal: React.FC<RidheyaSpellingFactoryModalPr
               {isArcadeBlitz && (
                 <div className="absolute top-0 left-0 right-0 h-1.5 bg-slate-200">
                   <motion.div
-                    className={`h-full ${blitzTimeLeft <= 2 ? 'bg-rose-500' : 'bg-purple-600'}`}
-                    animate={{ width: `${(blitzTimeLeft / 8) * 100}%` }}
+                    className={`h-full ${blitzTimeLeft <= 3 ? 'bg-rose-500' : 'bg-purple-600'}`}
+                    animate={{ width: `${(blitzTimeLeft / 15) * 100}%` }}
                     transition={{ ease: 'linear', duration: 0.2 }}
                   />
                 </div>

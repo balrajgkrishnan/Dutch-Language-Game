@@ -188,7 +188,7 @@ export const DutchArcadeArenaModal: React.FC<DutchArcadeArenaModalProps> = ({
   // -------------------------------------------------------------
   const [blitzQuestions, setBlitzQuestions] = useState(COMPREHENSIVE_SPELLING_FACTORY_ITEMS);
   const [blitzIdx, setBlitzIdx] = useState(0);
-  const [blitzTimeLeft, setBlitzTimeLeft] = useState(7);
+  const [blitzTimeLeft, setBlitzTimeLeft] = useState(15);
   const [blitzSelectedOpt, setBlitzSelectedOpt] = useState<string | null>(null);
   const blitzTimerRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -196,7 +196,7 @@ export const DutchArcadeArenaModal: React.FC<DutchArcadeArenaModalProps> = ({
   // GAME 3: CITO TURBO DASH STATE
   // -------------------------------------------------------------
   const [turboIdx, setTurboIdx] = useState(0);
-  const [turboTimeLeft, setTurboTimeLeft] = useState(10);
+  const [turboTimeLeft, setTurboTimeLeft] = useState(15);
   const [turboSelectedOpt, setTurboSelectedOpt] = useState<number | null>(null);
   const turboTimerRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -423,7 +423,7 @@ export const DutchArcadeArenaModal: React.FC<DutchArcadeArenaModalProps> = ({
     setIsFeverMode(false);
     setBlitzIdx(0);
     setBlitzSelectedOpt(null);
-    setBlitzTimeLeft(6);
+    setBlitzTimeLeft(15);
 
     // Shuffle questions
     const shuffled = [...COMPREHENSIVE_SPELLING_FACTORY_ITEMS].sort(() => Math.random() - 0.5);
@@ -440,7 +440,7 @@ export const DutchArcadeArenaModal: React.FC<DutchArcadeArenaModalProps> = ({
         if (prev <= 1) {
           // Timeout on this question
           handleBlitzTimeout();
-          return 6;
+          return 15;
         }
         if (prev <= 3) {
           sound.playArcadeTick();
@@ -466,7 +466,7 @@ export const DutchArcadeArenaModal: React.FC<DutchArcadeArenaModalProps> = ({
       return Math.max(0, nextLives);
     });
     setBlitzIdx(prev => prev + 1);
-    setBlitzTimeLeft(6);
+    setBlitzTimeLeft(15);
   };
 
   const handleSelectBlitzOption = (opt: string, e: React.MouseEvent) => {
@@ -513,7 +513,7 @@ export const DutchArcadeArenaModal: React.FC<DutchArcadeArenaModalProps> = ({
     setTimeout(() => {
       setBlitzSelectedOpt(null);
       setBlitzIdx(prev => prev + 1);
-      setBlitzTimeLeft(6);
+      setBlitzTimeLeft(15);
     }, 450);
   };
 
@@ -532,7 +532,7 @@ export const DutchArcadeArenaModal: React.FC<DutchArcadeArenaModalProps> = ({
     setIsFeverMode(false);
     setTurboIdx(0);
     setTurboSelectedOpt(null);
-    setTurboTimeLeft(10);
+    setTurboTimeLeft(15);
 
     sound.playArcadePowerup();
   };
@@ -544,7 +544,7 @@ export const DutchArcadeArenaModal: React.FC<DutchArcadeArenaModalProps> = ({
       setTurboTimeLeft(prev => {
         if (prev <= 1) {
           handleTurboTimeout();
-          return 10;
+          return 15;
         }
         if (prev <= 4) {
           sound.playArcadeTick();
@@ -570,7 +570,7 @@ export const DutchArcadeArenaModal: React.FC<DutchArcadeArenaModalProps> = ({
       return Math.max(0, nextLives);
     });
     setTurboIdx(prev => prev + 1);
-    setTurboTimeLeft(10);
+    setTurboTimeLeft(15);
   };
 
   const handleSelectTurboOption = (optIdx: number, e: React.MouseEvent) => {
@@ -617,7 +617,7 @@ export const DutchArcadeArenaModal: React.FC<DutchArcadeArenaModalProps> = ({
     setTimeout(() => {
       setTurboSelectedOpt(null);
       setTurboIdx(prev => prev + 1);
-      setTurboTimeLeft(10);
+      setTurboTimeLeft(15);
     }, 550);
   };
 
@@ -809,7 +809,7 @@ export const DutchArcadeArenaModal: React.FC<DutchArcadeArenaModalProps> = ({
                       Woord Meteor Sprint
                     </h5>
                     <p className="text-xs text-slate-300 leading-relaxed">
-                      Kies in 6 seconden het ontbrekende lettergreeptype! Schiet raketten en activeer Fever Mode!
+                      Kies in 15 seconden het ontbrekende lettergreeptype! Schiet raketten en activeer Fever Mode!
                     </p>
                   </div>
 
@@ -837,7 +837,7 @@ export const DutchArcadeArenaModal: React.FC<DutchArcadeArenaModalProps> = ({
                       Cito Turbo Dash
                     </h5>
                     <p className="text-xs text-slate-300 leading-relaxed">
-                      Snelheidsrace met signaalwoorden (desondanks, daardoor, echter) en verwijswoorden!
+                      Snelheidsrace met 15-seconden timer voor signaalwoorden (desondanks, daardoor, echter) en verwijswoorden!
                     </p>
                   </div>
 
@@ -1001,8 +1001,8 @@ export const DutchArcadeArenaModal: React.FC<DutchArcadeArenaModalProps> = ({
                 {/* Shrinking Time Bar */}
                 <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden mt-2">
                   <motion.div
-                    className={`h-full ${blitzTimeLeft <= 2 ? 'bg-rose-500' : 'bg-pink-500'}`}
-                    animate={{ width: `${(blitzTimeLeft / 6) * 100}%` }}
+                    className={`h-full ${blitzTimeLeft <= 3 ? 'bg-rose-500' : 'bg-pink-500'}`}
+                    animate={{ width: `${(blitzTimeLeft / 15) * 100}%` }}
                     transition={{ ease: 'linear', duration: 0.2 }}
                   />
                 </div>
@@ -1048,7 +1048,7 @@ export const DutchArcadeArenaModal: React.FC<DutchArcadeArenaModalProps> = ({
                 <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
                   <motion.div
                     className={`h-full ${turboTimeLeft <= 3 ? 'bg-rose-500' : 'bg-emerald-500'}`}
-                    animate={{ width: `${(turboTimeLeft / 10) * 100}%` }}
+                    animate={{ width: `${(turboTimeLeft / 15) * 100}%` }}
                     transition={{ ease: 'linear', duration: 0.2 }}
                   />
                 </div>
