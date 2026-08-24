@@ -190,6 +190,8 @@ export const DutchArcadeArenaModal: React.FC<DutchArcadeArenaModalProps> = ({
   const [blitzIdx, setBlitzIdx] = useState(0);
   const [blitzTimeLeft, setBlitzTimeLeft] = useState(15);
   const [blitzSelectedOpt, setBlitzSelectedOpt] = useState<string | null>(null);
+  const [isBlitzRevealing, setIsBlitzRevealing] = useState(false);
+  const [blitzTimedOut, setBlitzTimedOut] = useState(false);
   const blitzTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // -------------------------------------------------------------
@@ -198,6 +200,8 @@ export const DutchArcadeArenaModal: React.FC<DutchArcadeArenaModalProps> = ({
   const [turboIdx, setTurboIdx] = useState(0);
   const [turboTimeLeft, setTurboTimeLeft] = useState(15);
   const [turboSelectedOpt, setTurboSelectedOpt] = useState<number | null>(null);
+  const [isTurboRevealing, setIsTurboRevealing] = useState(false);
+  const [turboTimedOut, setTurboTimedOut] = useState(false);
   const turboTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Helper: Trigger Floating Point Feedback
@@ -423,6 +427,8 @@ export const DutchArcadeArenaModal: React.FC<DutchArcadeArenaModalProps> = ({
     setIsFeverMode(false);
     setBlitzIdx(0);
     setBlitzSelectedOpt(null);
+    setIsBlitzRevealing(false);
+    setBlitzTimedOut(false);
     setBlitzTimeLeft(15);
 
     // Shuffle questions
@@ -433,14 +439,14 @@ export const DutchArcadeArenaModal: React.FC<DutchArcadeArenaModalProps> = ({
   };
 
   useEffect(() => {
-    if (activeGame !== 'syllable_blitz' || isGameOver) return;
+    if (activeGame !== 'syllable_blitz' || isGameOver || isBlitzRevealing) return;
 
     blitzTimerRef.current = setInterval(() => {
       setBlitzTimeLeft(prev => {
         if (prev <= 1) {
           // Timeout on this question
           handleBlitzTimeout();
-          return 15;
+          return 0;
         }
         if (prev <= 3) {
           sound.playArcadeTick();
@@ -452,28 +458,45 @@ export const DutchArcadeArenaModal: React.FC<DutchArcadeArenaModalProps> = ({
     return () => {
       if (blitzTimerRef.current) clearInterval(blitzTimerRef.current);
     };
-  }, [activeGame, blitzIdx, isGameOver]);
+  }, [activeGame, blitzIdx, isGameOver, isBlitzRevealing]);
 
   const handleBlitzTimeout = () => {
+    if (isBlitzRevealing) return;
+    if (blitzTimerRef.current) clearInterval(blitzTimerRef.current);
+
     sound.playWrong();
     setCombo(0);
     setIsFeverMode(false);
+    setBlitzTimedOut(true);
+    setIsBlitzRevealing(true);
+
     setLives(prev => {
       const nextLives = prev - 1;
       if (nextLives <= 0) {
-        handleEndGame('blitz');
+        setTimeout(() => handleEndGame('blitz'), 1500);
       }
       return Math.max(0, nextLives);
     });
-    setBlitzIdx(prev => prev + 1);
-    setBlitzTimeLeft(15);
+
+    // Show correct answer for 1500ms before moving to next question
+    setTimeout(() => {
+      setBlitzSelectedOpt(null);
+      setIsBlitzRevealing(false);
+      setBlitzTimedOut(false);
+      setBlitzIdx(prev => prev + 1);
+      setBlitzTimeLeft(15);
+    }, 1500);
   };
 
   const handleSelectBlitzOption = (opt: string, e: React.MouseEvent) => {
-    if (isGameOver || blitzSelectedOpt !== null) return;
-    setBlitzSelectedOpt(opt);
+    if (isGameOver || isBlitzRevealing || blitzSelectedOpt !== null) return;
+    if (blitzTimerRef.current) clearInterval(blitzTimerRef.current);
 
-    const isCorrect = opt === currentBlitzItem.syllables[currentBlitzItem.missingIndex];
+    setBlitzSelectedOpt(opt);
+    setIsBlitzRevealing(true);
+
+    const correctSyllable = currentBlitzItem.syllables[currentBlitzItem.missingIndex];
+    const isCorrect = opt === correctSyllable;
     const rect = e.currentTarget.getBoundingClientRect();
     const clickX = rect.left + rect.width / 2;
     const clickY = rect.top;
@@ -503,18 +526,21 @@ export const DutchArcadeArenaModal: React.FC<DutchArcadeArenaModalProps> = ({
       setLives(prev => {
         const nextLives = prev - 1;
         if (nextLives <= 0) {
-          handleEndGame('blitz');
+          setTimeout(() => handleEndGame('blitz'), 1500);
         }
         return Math.max(0, nextLives);
       });
       triggerFloatingScore('FOUT! (-1 ❤️)', clickX, clickY, 'text-rose-400 font-bold');
     }
 
+    // Show correct answer clearly for 1500ms before advancing
     setTimeout(() => {
       setBlitzSelectedOpt(null);
+      setIsBlitzRevealing(false);
+      setBlitzTimedOut(false);
       setBlitzIdx(prev => prev + 1);
       setBlitzTimeLeft(15);
-    }, 450);
+    }, 1500);
   };
 
   // -------------------------------------------------------------
@@ -532,19 +558,21 @@ export const DutchArcadeArenaModal: React.FC<DutchArcadeArenaModalProps> = ({
     setIsFeverMode(false);
     setTurboIdx(0);
     setTurboSelectedOpt(null);
+    setIsTurboRevealing(false);
+    setTurboTimedOut(false);
     setTurboTimeLeft(15);
 
     sound.playArcadePowerup();
   };
 
   useEffect(() => {
-    if (activeGame !== 'cito_turbo' || isGameOver) return;
+    if (activeGame !== 'cito_turbo' || isGameOver || isTurboRevealing) return;
 
     turboTimerRef.current = setInterval(() => {
       setTurboTimeLeft(prev => {
         if (prev <= 1) {
           handleTurboTimeout();
-          return 15;
+          return 0;
         }
         if (prev <= 4) {
           sound.playArcadeTick();
@@ -556,26 +584,42 @@ export const DutchArcadeArenaModal: React.FC<DutchArcadeArenaModalProps> = ({
     return () => {
       if (turboTimerRef.current) clearInterval(turboTimerRef.current);
     };
-  }, [activeGame, turboIdx, isGameOver]);
+  }, [activeGame, turboIdx, isGameOver, isTurboRevealing]);
 
   const handleTurboTimeout = () => {
+    if (isTurboRevealing) return;
+    if (turboTimerRef.current) clearInterval(turboTimerRef.current);
+
     sound.playWrong();
     setCombo(0);
     setIsFeverMode(false);
+    setTurboTimedOut(true);
+    setIsTurboRevealing(true);
+
     setLives(prev => {
       const nextLives = prev - 1;
       if (nextLives <= 0) {
-        handleEndGame('turbo');
+        setTimeout(() => handleEndGame('turbo'), 1600);
       }
       return Math.max(0, nextLives);
     });
-    setTurboIdx(prev => prev + 1);
-    setTurboTimeLeft(15);
+
+    // Show correct answer for 1600ms before advancing
+    setTimeout(() => {
+      setTurboSelectedOpt(null);
+      setIsTurboRevealing(false);
+      setTurboTimedOut(false);
+      setTurboIdx(prev => prev + 1);
+      setTurboTimeLeft(15);
+    }, 1600);
   };
 
   const handleSelectTurboOption = (optIdx: number, e: React.MouseEvent) => {
-    if (isGameOver || turboSelectedOpt !== null) return;
+    if (isGameOver || isTurboRevealing || turboSelectedOpt !== null) return;
+    if (turboTimerRef.current) clearInterval(turboTimerRef.current);
+
     setTurboSelectedOpt(optIdx);
+    setIsTurboRevealing(true);
 
     const isCorrect = optIdx === currentTurboItem.correctIndex;
     const rect = e.currentTarget.getBoundingClientRect();
@@ -607,18 +651,21 @@ export const DutchArcadeArenaModal: React.FC<DutchArcadeArenaModalProps> = ({
       setLives(prev => {
         const nextLives = prev - 1;
         if (nextLives <= 0) {
-          handleEndGame('turbo');
+          setTimeout(() => handleEndGame('turbo'), 1600);
         }
         return Math.max(0, nextLives);
       });
       triggerFloatingScore('FOUT! (-1 ❤️)', clickX, clickY, 'text-rose-400 font-bold');
     }
 
+    // Show correct answer for 1600ms before advancing
     setTimeout(() => {
       setTurboSelectedOpt(null);
+      setIsTurboRevealing(false);
+      setTurboTimedOut(false);
       setTurboIdx(prev => prev + 1);
       setTurboTimeLeft(15);
-    }, 550);
+    }, 1600);
   };
 
   // Universal End Game Handler
@@ -968,27 +1015,34 @@ export const DutchArcadeArenaModal: React.FC<DutchArcadeArenaModalProps> = ({
               </div>
 
               {/* Word Console */}
-              <div className="bg-slate-950 p-6 rounded-3xl border-2 border-pink-500/40 flex flex-col items-center justify-center gap-4 shadow-2xl relative">
+              <div className="bg-slate-950 p-5 sm:p-6 rounded-3xl border-2 border-pink-500/40 flex flex-col items-center justify-center gap-3.5 shadow-2xl relative">
                 <div className="text-3xl">{currentBlitzItem.emoji || '🚀'}</div>
                 
                 {/* Syllables */}
                 <div className="flex items-center gap-2 flex-wrap justify-center">
                   {currentBlitzItem.syllables.map((syl, sIdx) => {
                     const isMissing = sIdx === currentBlitzItem.missingIndex;
+                    const correctSyllable = currentBlitzItem.syllables[currentBlitzItem.missingIndex];
+                    let boxStyle = 'bg-slate-800 border-slate-600 text-white';
+
+                    if (isMissing) {
+                      if (isBlitzRevealing) {
+                        if (blitzSelectedOpt === correctSyllable) {
+                          boxStyle = 'bg-gradient-to-r from-emerald-600 to-teal-600 border-emerald-300 text-white scale-110 shadow-lg ring-2 ring-emerald-300';
+                        } else {
+                          boxStyle = 'bg-gradient-to-r from-amber-500 to-emerald-600 border-emerald-300 text-white scale-110 shadow-lg ring-2 ring-emerald-400';
+                        }
+                      } else {
+                        boxStyle = 'bg-pink-900/60 border-dashed border-pink-400 text-pink-300 animate-pulse';
+                      }
+                    }
+
                     return (
                       <div
                         key={sIdx}
-                        className={`h-14 px-4 min-w-[56px] rounded-2xl border-2 flex items-center justify-center font-black text-xl sm:text-2xl transition-all shadow-md ${
-                          isMissing
-                            ? blitzSelectedOpt
-                              ? blitzSelectedOpt === syl
-                                ? 'bg-emerald-500 border-emerald-300 text-white scale-110'
-                                : 'bg-red-600 border-red-300 text-white animate-shake'
-                              : 'bg-pink-900/60 border-dashed border-pink-400 text-pink-300 animate-pulse'
-                            : 'bg-slate-800 border-slate-600 text-white'
-                        }`}
+                        className={`h-14 px-4 min-w-[56px] rounded-2xl border-2 flex items-center justify-center font-black text-xl sm:text-2xl transition-all shadow-md ${boxStyle}`}
                       >
-                        {isMissing ? blitzSelectedOpt || '??' : syl}
+                        {isMissing ? (isBlitzRevealing ? correctSyllable : '??') : syl}
                       </div>
                     );
                   })}
@@ -998,8 +1052,27 @@ export const DutchArcadeArenaModal: React.FC<DutchArcadeArenaModalProps> = ({
                   "{currentBlitzItem.exampleSentence}"
                 </p>
 
+                {/* Answer Reveal Feedback Banner */}
+                {isBlitzRevealing && (
+                  <div className={`w-full py-2 px-3 rounded-xl border text-center font-bold text-xs sm:text-sm animate-fade-in ${
+                    blitzSelectedOpt === currentBlitzItem.syllables[currentBlitzItem.missingIndex]
+                      ? 'bg-emerald-950/90 border-emerald-400 text-emerald-200'
+                      : blitzTimedOut
+                        ? 'bg-amber-950/90 border-amber-400 text-amber-200'
+                        : 'bg-rose-950/90 border-rose-400 text-rose-200'
+                  }`}>
+                    {blitzSelectedOpt === currentBlitzItem.syllables[currentBlitzItem.missingIndex] ? (
+                      <span>✅ Juist! <strong>"{currentBlitzItem.syllables.join('')}"</strong> is correct gespeld!</span>
+                    ) : blitzTimedOut ? (
+                      <span>⏰ Tijd om! Het juiste antwoord was: <strong>"{currentBlitzItem.syllables[currentBlitzItem.missingIndex]}"</strong> ({currentBlitzItem.syllables.join('')})</span>
+                    ) : (
+                      <span>❌ Helaas! Het juiste antwoord is: <strong>"{currentBlitzItem.syllables[currentBlitzItem.missingIndex]}"</strong> ({currentBlitzItem.syllables.join('')})</span>
+                    )}
+                  </div>
+                )}
+
                 {/* Shrinking Time Bar */}
-                <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden mt-2">
+                <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden mt-1">
                   <motion.div
                     className={`h-full ${blitzTimeLeft <= 3 ? 'bg-rose-500' : 'bg-pink-500'}`}
                     animate={{ width: `${(blitzTimeLeft / 15) * 100}%` }}
@@ -1010,16 +1083,44 @@ export const DutchArcadeArenaModal: React.FC<DutchArcadeArenaModalProps> = ({
 
               {/* 4 Arcade Option Buttons */}
               <div className="grid grid-cols-2 gap-3">
-                {currentBlitzItem.options.map((opt, optIdx) => (
-                  <button
-                    key={optIdx}
-                    onClick={(e) => handleSelectBlitzOption(opt, e)}
-                    disabled={blitzSelectedOpt !== null}
-                    className="p-4 rounded-2xl border-2 border-purple-500/50 bg-gradient-to-r from-purple-900/80 to-indigo-900/80 hover:from-purple-800 hover:to-indigo-800 text-white font-black text-lg sm:text-xl cursor-pointer shadow-lg active:scale-95 transition-all text-center"
-                  >
-                    {opt}
-                  </button>
-                ))}
+                {currentBlitzItem.options.map((opt, optIdx) => {
+                  const correctSyllable = currentBlitzItem.syllables[currentBlitzItem.missingIndex];
+                  const isCorrect = opt === correctSyllable;
+                  const isChosen = opt === blitzSelectedOpt;
+
+                  let btnStyle = 'border-purple-500/50 bg-gradient-to-r from-purple-900/80 to-indigo-900/80 hover:from-purple-800 hover:to-indigo-800 text-white';
+
+                  if (isBlitzRevealing) {
+                    if (isCorrect) {
+                      btnStyle = 'bg-gradient-to-r from-emerald-600 to-teal-600 border-emerald-300 ring-2 ring-emerald-400 text-white scale-102 shadow-xl';
+                    } else if (isChosen) {
+                      btnStyle = 'bg-gradient-to-r from-rose-800 to-red-900 border-rose-400 ring-2 ring-rose-400 text-rose-100 shadow-md';
+                    } else {
+                      btnStyle = 'bg-slate-900/60 border-slate-700 text-slate-500 opacity-40';
+                    }
+                  }
+
+                  return (
+                    <button
+                      key={optIdx}
+                      onClick={(e) => handleSelectBlitzOption(opt, e)}
+                      disabled={isBlitzRevealing || blitzSelectedOpt !== null}
+                      className={`p-3.5 sm:p-4 rounded-2xl border-2 font-black text-lg sm:text-xl cursor-pointer shadow-lg active:scale-95 transition-all text-center flex items-center justify-center gap-2 ${btnStyle}`}
+                    >
+                      <span>{opt}</span>
+                      {isBlitzRevealing && isCorrect && (
+                        <span className="text-[11px] bg-white text-emerald-950 px-2 py-0.5 rounded-full font-black">
+                          ✓ Juist!
+                        </span>
+                      )}
+                      {isBlitzRevealing && isChosen && !isCorrect && (
+                        <span className="text-[11px] bg-rose-950 text-rose-200 px-2 py-0.5 rounded-full font-bold">
+                          ✗ Jouw keuze
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
               </div>
             </div>
           )}
@@ -1039,10 +1140,29 @@ export const DutchArcadeArenaModal: React.FC<DutchArcadeArenaModalProps> = ({
               </div>
 
               {/* Question Dashboard */}
-              <div className="bg-slate-950 p-6 rounded-3xl border-2 border-emerald-500/40 space-y-4 shadow-2xl">
+              <div className="bg-slate-950 p-5 sm:p-6 rounded-3xl border-2 border-emerald-500/40 space-y-3.5 shadow-2xl">
                 <p className="text-base sm:text-lg font-black text-white text-center leading-relaxed">
                   "{currentTurboItem.sentence}"
                 </p>
+
+                {/* Answer Reveal Feedback Banner */}
+                {isTurboRevealing && (
+                  <div className={`w-full py-2.5 px-3 rounded-xl border text-center font-bold text-xs sm:text-sm animate-fade-in ${
+                    turboSelectedOpt === currentTurboItem.correctIndex
+                      ? 'bg-emerald-950/90 border-emerald-400 text-emerald-200'
+                      : turboTimedOut
+                        ? 'bg-amber-950/90 border-amber-400 text-amber-200'
+                        : 'bg-rose-950/90 border-rose-400 text-rose-200'
+                  }`}>
+                    {turboSelectedOpt === currentTurboItem.correctIndex ? (
+                      <span>✅ Juist! <strong>"{currentTurboItem.options[currentTurboItem.correctIndex]}"</strong> ({currentTurboItem.rule})</span>
+                    ) : turboTimedOut ? (
+                      <span>⏰ Tijd om! Het juiste antwoord was: <strong>"{currentTurboItem.options[currentTurboItem.correctIndex]}"</strong> ({currentTurboItem.rule})</span>
+                    ) : (
+                      <span>❌ Helaas! Het juiste antwoord is: <strong>"{currentTurboItem.options[currentTurboItem.correctIndex]}"</strong> ({currentTurboItem.rule})</span>
+                    )}
+                  </div>
+                )}
 
                 {/* Shrinking Time Bar */}
                 <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
@@ -1056,16 +1176,43 @@ export const DutchArcadeArenaModal: React.FC<DutchArcadeArenaModalProps> = ({
 
               {/* Options Grid */}
               <div className="grid grid-cols-2 gap-3">
-                {currentTurboItem.options.map((opt, optIdx) => (
-                  <button
-                    key={optIdx}
-                    onClick={(e) => handleSelectTurboOption(optIdx, e)}
-                    disabled={turboSelectedOpt !== null}
-                    className="p-3.5 rounded-2xl border-2 border-emerald-500/50 bg-gradient-to-r from-emerald-950 to-teal-900 hover:from-emerald-900 hover:to-teal-800 text-white font-black text-base sm:text-lg cursor-pointer shadow-lg active:scale-95 transition-all text-center"
-                  >
-                    {opt}
-                  </button>
-                ))}
+                {currentTurboItem.options.map((opt, optIdx) => {
+                  const isCorrect = optIdx === currentTurboItem.correctIndex;
+                  const isChosen = optIdx === turboSelectedOpt;
+
+                  let btnStyle = 'border-emerald-500/50 bg-gradient-to-r from-emerald-950 to-teal-900 hover:from-emerald-900 hover:to-teal-800 text-white';
+
+                  if (isTurboRevealing) {
+                    if (isCorrect) {
+                      btnStyle = 'bg-gradient-to-r from-emerald-600 to-teal-600 border-emerald-300 ring-2 ring-emerald-400 text-white scale-102 shadow-xl';
+                    } else if (isChosen) {
+                      btnStyle = 'bg-gradient-to-r from-rose-800 to-red-900 border-rose-400 ring-2 ring-rose-400 text-rose-100 shadow-md';
+                    } else {
+                      btnStyle = 'bg-slate-900/60 border-slate-700 text-slate-500 opacity-40';
+                    }
+                  }
+
+                  return (
+                    <button
+                      key={optIdx}
+                      onClick={(e) => handleSelectTurboOption(optIdx, e)}
+                      disabled={isTurboRevealing || turboSelectedOpt !== null}
+                      className={`p-3.5 rounded-2xl border-2 font-black text-base sm:text-lg cursor-pointer shadow-lg active:scale-95 transition-all text-center flex items-center justify-center gap-2 ${btnStyle}`}
+                    >
+                      <span>{opt}</span>
+                      {isTurboRevealing && isCorrect && (
+                        <span className="text-[11px] bg-white text-emerald-950 px-2 py-0.5 rounded-full font-black">
+                          ✓ Juist!
+                        </span>
+                      )}
+                      {isTurboRevealing && isChosen && !isCorrect && (
+                        <span className="text-[11px] bg-rose-950 text-rose-200 px-2 py-0.5 rounded-full font-bold">
+                          ✗ Jouw keuze
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
               </div>
             </div>
           )}

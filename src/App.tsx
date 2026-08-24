@@ -62,7 +62,8 @@ export default function App() {
   const [currentVerbIndex, setCurrentVerbIndex] = useState(0);
   const [groep68Mode, setGroep68Mode] = useState<'expedition' | 'verb_arena'>('expedition');
   const [selectedVerbTier, setSelectedVerbTier] = useState<'all' | 'beginner' | 'intermediate' | 'advanced'>('all');
-  const [activeTab, setActiveTab] = useState<'adventure' | 'sanctuary' | 'badges' | 'map'>('adventure');
+  const [activeTab, setActiveTab] = useState<'adventure' | 'arcade' | 'sanctuary' | 'badges' | 'map'>('adventure');
+  const [isExpeditionActive, setIsExpeditionActive] = useState(false);
   
   // Modals state
   const [showRewardModal, setShowRewardModal] = useState(false);
@@ -518,348 +519,548 @@ export default function App() {
       {/* Main Content Area */}
       <div className="flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-2 sm:py-3 space-y-4">
         
-        {/* 1. Quick Sister Switcher Banner (1-tap between Ridheya Gr 5 & Hemali Gr 8) */}
-        <div className="bg-slate-900/90 backdrop-blur-md rounded-2xl p-2 sm:p-2.5 border border-white/15 shadow-md flex items-center justify-between gap-2 flex-wrap">
-          <div className="flex items-center gap-2 pl-1">
-            <span className="text-xs font-black uppercase text-amber-400 tracking-wider flex items-center gap-1.5">
-              <span>👑</span>
-              <span>Speler Keuze:</span>
-            </span>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => {
-                if (currentUsername.toLowerCase() !== 'ridheya') {
-                  sound.playPop();
-                  handleSwitchUser('ridheya');
-                }
-              }}
-              className={`px-3 py-1.5 rounded-xl text-xs font-black transition-all flex items-center gap-1.5 cursor-pointer ${
-                currentUsername.toLowerCase() === 'ridheya'
-                  ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-md scale-105 ring-2 ring-emerald-300'
-                  : 'bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white'
-              }`}
-            >
-              <span>🩺</span>
-              <span>Ridheya (Groep 5 • Dierenarts &amp; Speurheld)</span>
-            </button>
-
-            <button
-              onClick={() => {
-                if (currentUsername.toLowerCase() !== 'hemali') {
-                  sound.playPop();
-                  handleSwitchUser('hemali');
-                }
-              }}
-              className={`px-3 py-1.5 rounded-xl text-xs font-black transition-all flex items-center gap-1.5 cursor-pointer ${
-                currentUsername.toLowerCase() === 'hemali'
-                  ? 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-md scale-105 ring-2 ring-indigo-300'
-                  : 'bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white'
-              }`}
-            >
-              <span>✨</span>
-              <span>Hemali (Groep 8 • Schrandere Magiër &amp; Cito Master)</span>
-            </button>
-          </div>
-        </div>
-
-        {/* 2. Hero Interactive Comic & Cutscene Story Quest Card */}
-        <div 
-          onClick={() => {
-            sound.playPop();
-            setShowCitoRpgModal(true);
-          }}
-          className={`rounded-3xl p-5 sm:p-6 shadow-xl border-2 text-white flex flex-col sm:flex-row items-center justify-between gap-5 cursor-pointer transition-all hover:scale-[1.01] active:scale-99 group relative overflow-hidden ${
-            currentUsername.toLowerCase() === 'ridheya'
-              ? 'bg-gradient-to-r from-emerald-900 via-teal-900 to-slate-950 border-emerald-400/50 shadow-emerald-950/30'
-              : 'bg-gradient-to-r from-indigo-950 via-purple-950 to-slate-950 border-purple-400/50 shadow-purple-950/30'
-          }`}
-        >
-          <div className="flex items-center gap-4">
-            <div className="w-16 h-16 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center text-4xl shadow-inner flex-shrink-0 group-hover:scale-110 transition-transform">
-              {currentUsername.toLowerCase() === 'ridheya' ? '🩺' : '✨'}
-            </div>
-            <div>
-              <div className="flex items-center gap-2 flex-wrap mb-1">
-                <span className="bg-amber-400 text-slate-950 text-[10px] sm:text-xs font-black px-2.5 py-0.5 rounded-full uppercase tracking-wider shadow-xs flex items-center gap-1">
-                  <Sparkles className="w-3 h-3 text-slate-950" />
-                  Interactief RPG Avontuur met Cutscenes
-                </span>
-                <span className="text-xs text-amber-200 font-bold">
-                  {currentUsername.toLowerCase() === 'ridheya' ? 'Groep 5 • Dierenredding Avontuur' : 'Groep 8 • Doorstroomtoets & Cito'}
-                </span>
-              </div>
-              <h3 className="text-lg sm:text-xl font-black text-white tracking-tight">
-                {currentUsername.toLowerCase() === 'ridheya'
-                  ? 'Het Geheim van de Boomhut Dierenkliniek & De Dierenvallei 🐾'
-                  : 'Het Verloren Astrolabium & Het Mysterie van de Cito Tijdwachters 📜'}
-              </h3>
-              <p className="text-xs sm:text-sm text-slate-200/90 font-medium line-clamp-2 mt-1">
-                {currentUsername.toLowerCase() === 'ridheya'
-                  ? 'Reis met Ridheya en hondje Kopi door het oerwoud, ontdek moeilijke woorden met het pop-up woordenboek en genees dieren!'
-                  : 'Ontrafel cryptische manuscripten, kraak moeilijke signaalwoorden (desondanks, daarentegen) en kies je eigen verhaalroute!'}
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2 w-full sm:w-auto justify-end flex-shrink-0">
-            <button className="w-full sm:w-auto bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950 font-black text-sm px-5 py-3 rounded-2xl shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer whitespace-nowrap">
-              <Play className="w-4 h-4 fill-current" />
-              <span>Speel Verhaal ➔</span>
-            </button>
-          </div>
-        </div>
-
-        {/* 3. The 4 Core Game Bento Modules */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-          
-          {/* Card 1: Safari Arcade Arena (Ballon Popper, Syllable Sprint, Cito Turbo) */}
-          <div
-            id="bento-arcade-card"
-            onClick={() => {
-              sound.playPop();
-              setShowArcadeModal(true);
-            }}
-            className="bg-gradient-to-br from-slate-900 via-purple-950 to-indigo-950 border-2 border-pink-500/50 rounded-3xl p-4 text-white flex flex-col justify-between gap-3 shadow-lg hover:border-pink-300 transition-all hover:scale-[1.02] cursor-pointer group relative overflow-hidden"
-          >
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-2xl p-2 rounded-2xl bg-pink-500/20 border border-pink-400/30 group-hover:rotate-6 transition-transform">
-                  🕹️
-                </span>
-                <span className="text-[10px] font-black uppercase bg-pink-500/30 text-pink-200 px-2 py-0.5 rounded-full animate-pulse">
-                  ⚡ Arcade Games
-                </span>
-              </div>
-              <h4 className="text-base font-black text-white group-hover:text-pink-300 transition-colors">
-                Safari Arcade Arena
-              </h4>
-              <p className="text-xs text-slate-300 font-medium">
-                Klank Ballon Popper, Woord Meteor Sprint &amp; Cito Turbo Dash met combo's en highscores!
-              </p>
-            </div>
-            
-            <div className="pt-2 flex items-center justify-between text-xs font-black text-pink-300 border-t border-white/10">
-              <span>Speel Arcade ➔</span>
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </div>
-          </div>
-
-          {/* Card 2: Game Arena (Werkwoorden Boss Battle of Spelling Fabriek) */}
-          <div
-            id="bento-boss-card"
-            onClick={() => {
-              sound.playPop();
-              if (currentUsername.toLowerCase() === 'hemali') {
-                setShowBossArenaModal(true);
-              } else {
-                setShowSpellingFactoryModal(true);
-              }
-            }}
-            className="bg-gradient-to-br from-slate-900 to-indigo-950 border-2 border-indigo-500/40 rounded-3xl p-4 text-white flex flex-col justify-between gap-3 shadow-lg hover:border-amber-400/60 transition-all hover:scale-[1.02] cursor-pointer group"
-          >
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-2xl p-2 rounded-2xl bg-indigo-500/20 border border-indigo-400/30 group-hover:rotate-6 transition-transform">
-                  ⚔️
-                </span>
-                <span className="text-[10px] font-black uppercase bg-indigo-500/30 text-indigo-200 px-2 py-0.5 rounded-full">
-                  Boss Arena
-                </span>
-              </div>
-              <h4 className="text-base font-black text-white group-hover:text-amber-300 transition-colors">
-                {currentUsername.toLowerCase() === 'hemali'
-                  ? '\'t Kofschip Boss Battle'
-                  : 'Spelling Fabriek'}
-              </h4>
-              <p className="text-xs text-slate-300 font-medium">
-                {currentUsername.toLowerCase() === 'hemali'
-                  ? 'Vecht tegen de DT-Draak met d/t/dt en verleden tijd!'
-                  : 'Breek klankblokken, dubbelzetters & open/gesloten lettergrepen!'}
-              </p>
-            </div>
-            
-            <div className="pt-2 flex items-center justify-between text-xs font-black text-amber-300 border-t border-white/10">
-              <span>Start Gevecht</span>
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </div>
-          </div>
-
-          {/* Card 3: Tamagotchi Pet Sanctuary */}
-          <div
-            id="bento-tamagotchi-card"
-            onClick={() => {
-              sound.playPop();
-              setShowTamagotchiModal(true);
-            }}
-            className="bg-gradient-to-br from-slate-900 to-emerald-950 border-2 border-emerald-500/40 rounded-3xl p-4 text-white flex flex-col justify-between gap-3 shadow-lg hover:border-emerald-400/60 transition-all hover:scale-[1.02] cursor-pointer group"
-          >
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-2xl p-2 rounded-2xl bg-emerald-500/20 border border-emerald-400/30 group-hover:rotate-6 transition-transform">
-                  🐾
-                </span>
-                <span className="text-[10px] font-black uppercase bg-emerald-500/30 text-emerald-200 px-2 py-0.5 rounded-full">
-                  Pet Care
-                </span>
-              </div>
-              <h4 className="text-base font-black text-white group-hover:text-emerald-300 transition-colors">
-                Dierenkamer
-              </h4>
-              <p className="text-xs text-slate-300 font-medium">
-                Verzorg, train en voer Professor Ollie 🦉 en Max 🐒 in 7 biomen!
-              </p>
-            </div>
-
-            <div className="pt-2 flex items-center justify-between text-xs font-black text-emerald-300 border-t border-white/10">
-              <span>Dierenkamer</span>
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </div>
-          </div>
-
-          {/* Card 4: Interactive Dutch Dictionary & Cito Lab */}
-          <div
-            id="bento-dict-card"
-            onClick={() => {
-              sound.playPop();
-              setShowDictionaryModal(true);
-            }}
-            className="bg-gradient-to-br from-slate-900 to-amber-950 border-2 border-amber-500/40 rounded-3xl p-4 text-white flex flex-col justify-between gap-3 shadow-lg hover:border-amber-400/60 transition-all hover:scale-[1.02] cursor-pointer group"
-          >
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-2xl p-2 rounded-2xl bg-amber-500/20 border border-amber-400/30 group-hover:rotate-6 transition-transform">
-                  📚
-                </span>
-                <span className="text-[10px] font-black uppercase bg-amber-500/30 text-amber-200 px-2 py-0.5 rounded-full">
-                  Woordenboek
-                </span>
-              </div>
-              <h4 className="text-base font-black text-white group-hover:text-amber-300 transition-colors">
-                Woordenboek
-              </h4>
-              <p className="text-xs text-slate-300 font-medium">
-                7-traps morphologische analyse, samengestelde woordontleding &amp; synoniemen!
-              </p>
-            </div>
-
-            <div className="pt-2 flex items-center justify-between text-xs font-black text-amber-300 border-t border-white/10">
-              <span>Woordenboek</span>
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </div>
-          </div>
-
-        </div>
-
-        {/* 4. Compact Companion Bar */}
-        <CompanionCard
-          profile={profile}
-          onUpdateProfile={(updater) => setProfile(updater)}
-          onOpenTamagotchiRoom={() => setShowTamagotchiModal(true)}
-        />
-
         <main className="space-y-4">
           
           {/* TAB 1: ADVENTURE & EXPEDITION MODE */}
           {activeTab === 'adventure' && (
             <div className="space-y-4">
               
-              {/* 1. Global Biome Location Switcher (7 Biomes) */}
-              <BiomeSelector
-                selectedBiome={selectedBiome}
-                onSelectBiome={handleSelectBiome}
-                unlockedCountByBiome={unlockedCountByBiome}
-                totalCountByBiome={totalCountByBiome}
-              />
+              {/* 1. Quick Sister Switcher Banner (1-tap between Ridheya Gr 5 & Hemali Gr 8) */}
+              <div className="bg-slate-900/95 backdrop-blur-md rounded-2xl p-2.5 sm:p-3 border border-white/15 shadow-md flex items-center justify-between gap-2.5 flex-wrap">
+                <div className="flex items-center gap-2 pl-1">
+                  <span className="text-xs font-black uppercase text-amber-400 tracking-wider flex items-center gap-1.5">
+                    <span>👑</span>
+                    <span>Kies Avonturier:</span>
+                  </span>
+                </div>
 
-              {/* 2. Sub-Toggle for Groep 6-7-8 (Expedition vs Verb Arena) */}
-              {profile.selectedGrade === 'group_6_7_8' && (
-                <div className="bg-white/95 backdrop-blur-md rounded-2xl p-2 border border-slate-200 shadow-xs flex items-center justify-between gap-2 flex-wrap">
-                  <div className="flex items-center gap-1.5 pl-2">
-                    <Zap className="w-4 h-4 text-amber-500" />
-                    <span className="text-xs font-black text-slate-800 uppercase tracking-wider">
-                      Groep 6-7-8 Modus:
-                    </span>
-                  </div>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <button
+                    onClick={() => {
+                      if (currentUsername.toLowerCase() !== 'ridheya') {
+                        sound.playPop();
+                        handleSwitchUser('ridheya');
+                        setIsExpeditionActive(false);
+                      }
+                    }}
+                    className={`px-3.5 py-2 rounded-xl text-xs font-black transition-all flex items-center gap-2 cursor-pointer ${
+                      currentUsername.toLowerCase() === 'ridheya'
+                        ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-md scale-102 ring-2 ring-emerald-300'
+                        : 'bg-slate-800/90 text-slate-300 hover:bg-slate-700 hover:text-white border border-slate-700'
+                    }`}
+                  >
+                    <span className="text-sm">🩺</span>
+                    <div className="text-left leading-tight">
+                      <div className="font-black">Ridheya (Groep 5)</div>
+                      <div className="text-[10px] text-emerald-100 font-medium opacity-90">Dierenarts &amp; AVI M3-E4</div>
+                    </div>
+                  </button>
 
-                  <div className="flex items-center gap-1.5">
+                  <button
+                    onClick={() => {
+                      if (currentUsername.toLowerCase() !== 'hemali') {
+                        sound.playPop();
+                        handleSwitchUser('hemali');
+                        setIsExpeditionActive(false);
+                      }
+                    }}
+                    className={`px-3.5 py-2 rounded-xl text-xs font-black transition-all flex items-center gap-2 cursor-pointer ${
+                      currentUsername.toLowerCase() === 'hemali'
+                        ? 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-md scale-102 ring-2 ring-indigo-300'
+                        : 'bg-slate-800/90 text-slate-300 hover:bg-slate-700 hover:text-white border border-slate-700'
+                    }`}
+                  >
+                    <span className="text-sm">✨</span>
+                    <div className="text-left leading-tight">
+                      <div className="font-black">Hemali (Groep 8)</div>
+                      <div className="text-[10px] text-indigo-100 font-medium opacity-90">Cito Master &amp; Doorstroomtoets</div>
+                    </div>
+                  </button>
+                </div>
+              </div>
+
+              {/* VIEW A: ACTIVE EXPEDITION QUIZ (When student clicked 'Start Safari Expeditie' or chose a level) */}
+              {isExpeditionActive ? (
+                <div className="space-y-4">
+                  {/* Expedition Top Navigation & Status Bar */}
+                  <div className="bg-slate-900/95 backdrop-blur-md rounded-2xl p-3 sm:p-3.5 border border-white/15 text-white flex items-center justify-between gap-3 flex-wrap shadow-lg">
                     <button
                       onClick={() => {
-                        setGroep68Mode('expedition');
                         sound.playPop();
+                        setIsExpeditionActive(false);
                       }}
-                      className={`px-3 py-1.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-1.5 ${
-                        groep68Mode === 'expedition'
-                          ? 'bg-emerald-600 text-white shadow-xs'
-                          : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                      }`}
+                      className="bg-slate-800 hover:bg-slate-700 text-white font-black text-xs px-3.5 py-2 rounded-xl transition-all flex items-center gap-1.5 cursor-pointer border border-slate-700 active:scale-95"
+                    >
+                      <span>←</span>
+                      <span>Terug naar Hoofdmenu</span>
+                    </button>
+
+                    <div className="flex items-center gap-2">
+                      <span className="text-xl p-1 bg-white/10 rounded-xl">{activeBiomeConfig.emoji}</span>
+                      <div className="text-left leading-tight">
+                        <div className="text-xs sm:text-sm font-black text-white flex items-center gap-1.5">
+                          <span>{activeBiomeConfig.name}</span>
+                          <span className="text-emerald-400">• Level {currentBiomeLevelIdx + 1}: {currentLevel.title}</span>
+                        </div>
+                        <div className="text-[10px] text-slate-300 font-medium">
+                          Dierbeloning: <strong>{currentLevel.animalReward.name} {currentLevel.animalReward.emoji}</strong>
+                        </div>
+                      </div>
+                    </div>
+
+                    <button
+                      onClick={() => {
+                        sound.playPop();
+                        setIsExpeditionActive(false);
+                        setActiveTab('map');
+                      }}
+                      className="bg-emerald-600/80 hover:bg-emerald-600 text-white font-bold text-xs px-3 py-2 rounded-xl transition-all flex items-center gap-1 cursor-pointer shadow-xs active:scale-95"
                     >
                       <Compass className="w-3.5 h-3.5" />
-                      <span>{activeBiomeConfig.name} Expeditie</span>
-                    </button>
-
-                    <button
-                      onClick={() => {
-                        setGroep68Mode('verb_arena');
-                        sound.playPop();
-                      }}
-                      className={`px-3 py-1.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-1.5 ${
-                        groep68Mode === 'verb_arena'
-                          ? 'bg-amber-600 text-white shadow-xs'
-                          : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                      }`}
-                    >
-                      <Zap className="w-3.5 h-3.5" />
-                      <span>Sterke Werkwoorden Arena (100+)</span>
+                      <span>Kies Ander Werelddeel</span>
                     </button>
                   </div>
-                </div>
-              )}
 
-              {/* 3. Render Quiz or Verb Arena */}
-              {profile.selectedGrade === 'group_4_5' || groep68Mode === 'expedition' ? (
-                /* Primary Unified Expeditie Quiz for Both Grades */
-                <QuizCard
-                  question={currentQuestion}
-                  animal={currentLevel.animalReward}
-                  level={currentLevel}
-                  biome={selectedBiome}
-                  chapterTitle={currentLevel.title}
-                  introStory={currentLevel.introStory}
-                  playerName={profile.name}
-                  avatarEmoji={profile.avatarEmoji}
-                  totalQuestionsInLevel={currentLevel.questions.length}
-                  currentQuestionIndex={currentQuestionIndex}
-                  onAnswerCorrect={handleAnswerCorrect}
-                  onAnswerIncorrect={handleAnswerIncorrect}
-                  onNextQuestion={handleNextQuestion}
-                  onSpeakStory={() => sound.speak(currentLevel.introStory)}
-                />
+                  {/* Sub-Toggle for Groep 6-7-8 (Expedition vs Verb Arena) */}
+                  {profile.selectedGrade === 'group_6_7_8' && (
+                    <div className="bg-white/95 backdrop-blur-md rounded-2xl p-2 border border-slate-200 shadow-xs flex items-center justify-between gap-2 flex-wrap">
+                      <div className="flex items-center gap-1.5 pl-2">
+                        <Zap className="w-4 h-4 text-amber-500" />
+                        <span className="text-xs font-black text-slate-800 uppercase tracking-wider">
+                          Groep 6-7-8 Modus:
+                        </span>
+                      </div>
+
+                      <div className="flex items-center gap-1.5">
+                        <button
+                          onClick={() => {
+                            setGroep68Mode('expedition');
+                            sound.playPop();
+                          }}
+                          className={`px-3 py-1.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-1.5 ${
+                            groep68Mode === 'expedition'
+                              ? 'bg-emerald-600 text-white shadow-xs'
+                              : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                          }`}
+                        >
+                          <Compass className="w-3.5 h-3.5" />
+                          <span>{activeBiomeConfig.name} Expeditie</span>
+                        </button>
+
+                        <button
+                          onClick={() => {
+                            setGroep68Mode('verb_arena');
+                            sound.playPop();
+                          }}
+                          className={`px-3 py-1.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-1.5 ${
+                            groep68Mode === 'verb_arena'
+                              ? 'bg-amber-600 text-white shadow-xs'
+                              : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                          }`}
+                        >
+                          <Zap className="w-3.5 h-3.5" />
+                          <span>Sterke Werkwoorden Arena (100+)</span>
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Render Primary Unified Expeditie Quiz or Verb Arena */}
+                  {profile.selectedGrade === 'group_4_5' || groep68Mode === 'expedition' ? (
+                    <QuizCard
+                      question={currentQuestion}
+                      animal={currentLevel.animalReward}
+                      level={currentLevel}
+                      biome={selectedBiome}
+                      chapterTitle={currentLevel.title}
+                      introStory={currentLevel.introStory}
+                      playerName={profile.name}
+                      avatarEmoji={profile.avatarEmoji}
+                      totalQuestionsInLevel={currentLevel.questions.length}
+                      currentQuestionIndex={currentQuestionIndex}
+                      onAnswerCorrect={handleAnswerCorrect}
+                      onAnswerIncorrect={handleAnswerIncorrect}
+                      onNextQuestion={handleNextQuestion}
+                      onSpeakStory={() => sound.speak(currentLevel.introStory)}
+                    />
+                  ) : (
+                    <VerbQuizCard
+                      verbItem={currentVerb}
+                      mascotAnimal={verbMascotAnimal}
+                      playerName={profile.name}
+                      avatarEmoji={profile.avatarEmoji}
+                      selectedTier={selectedVerbTier}
+                      onSelectTier={(tier) => {
+                        setSelectedVerbTier(tier);
+                        setCurrentVerbIndex(0);
+                        sound.playPop();
+                      }}
+                      onAnswerCorrect={handleAnswerCorrect}
+                      onAnswerIncorrect={handleAnswerIncorrect}
+                      onNextVerb={handleNextVerb}
+                      totalVerbsAvailable={filteredVerbs.length}
+                      currentVerbIndex={currentVerbIndex}
+                    />
+                  )}
+                </div>
               ) : (
-                /* Groep 6-7-8 Special Sterke Werkwoorden Arena */
-                <VerbQuizCard
-                  verbItem={currentVerb}
-                  mascotAnimal={verbMascotAnimal}
-                  playerName={profile.name}
-                  avatarEmoji={profile.avatarEmoji}
-                  selectedTier={selectedVerbTier}
-                  onSelectTier={(tier) => {
-                    setSelectedVerbTier(tier);
-                    setCurrentVerbIndex(0);
-                    sound.playPop();
-                  }}
-                  onAnswerCorrect={handleAnswerCorrect}
-                  onAnswerIncorrect={handleAnswerIncorrect}
-                  onNextVerb={handleNextVerb}
-                  totalVerbsAvailable={filteredVerbs.length}
-                  currentVerbIndex={currentVerbIndex}
-                />
+                /* VIEW B: CLEAN HOME HUB (Story Quest, Active Expedition Card & 4 Bento Modules) */
+                <div className="space-y-4">
+                  {/* 2. Hero Interactive Comic & Cutscene Story Quest Card */}
+                  <div 
+                    onClick={() => {
+                      sound.playPop();
+                      setShowCitoRpgModal(true);
+                    }}
+                    className={`rounded-3xl p-5 sm:p-6 shadow-xl border-2 text-white flex flex-col sm:flex-row items-center justify-between gap-5 cursor-pointer transition-all hover:scale-[1.01] active:scale-99 group relative overflow-hidden ${
+                      currentUsername.toLowerCase() === 'ridheya'
+                        ? 'bg-gradient-to-r from-emerald-950 via-teal-900 to-slate-950 border-emerald-400/50 shadow-emerald-950/30'
+                        : 'bg-gradient-to-r from-indigo-950 via-purple-950 to-slate-950 border-purple-400/50 shadow-purple-950/30'
+                    }`}
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center text-3xl sm:text-4xl shadow-inner flex-shrink-0 group-hover:scale-110 transition-transform">
+                        {currentUsername.toLowerCase() === 'ridheya' ? '🩺' : '✨'}
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-2 flex-wrap mb-1">
+                          <span className="bg-amber-400 text-slate-950 text-[10px] sm:text-xs font-black px-2.5 py-0.5 rounded-full uppercase tracking-wider shadow-xs flex items-center gap-1">
+                            <Sparkles className="w-3 h-3 text-slate-950" />
+                            Interactief RPG Avontuur met Cutscenes
+                          </span>
+                          <span className="text-xs text-amber-200 font-bold">
+                            {currentUsername.toLowerCase() === 'ridheya' ? 'Groep 5 • Dierenredding Avontuur' : 'Groep 8 • Doorstroomtoets & Cito'}
+                          </span>
+                        </div>
+                        <h3 className="text-base sm:text-xl font-black text-white tracking-tight">
+                          {currentUsername.toLowerCase() === 'ridheya'
+                            ? 'Het Geheim van de Boomhut Dierenkliniek & De Dierenvallei 🐾'
+                            : 'Het Verloren Astrolabium & Het Mysterie van de Cito Tijdwachters 📜'}
+                        </h3>
+                        <p className="text-xs sm:text-sm text-slate-200/90 font-medium line-clamp-2 mt-1">
+                          {currentUsername.toLowerCase() === 'ridheya'
+                            ? 'Reis met Ridheya en hondje Kopi door het oerwoud, ontdek moeilijke woorden met het pop-up woordenboek en genees dieren!'
+                            : 'Ontrafel cryptische manuscripten, kraak moeilijke signaalwoorden (desondanks, daarentegen) en kies je eigen verhaalroute!'}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-2 w-full sm:w-auto justify-end flex-shrink-0">
+                      <button className="w-full sm:w-auto bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950 font-black text-xs sm:text-sm px-4 sm:px-5 py-2.5 sm:py-3 rounded-2xl shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer whitespace-nowrap">
+                        <Play className="w-4 h-4 fill-current" />
+                        <span>Speel Verhaal ➔</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* 3. Linked Safari Expeditie Launch Card */}
+                  <div className="bg-white/95 backdrop-blur-md rounded-3xl p-4 sm:p-5 border border-emerald-200/80 shadow-md flex flex-col md:flex-row items-center justify-between gap-4">
+                    <div className="flex items-center gap-4 w-full md:w-auto">
+                      <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 text-white flex items-center justify-center text-3xl sm:text-4xl shadow-md flex-shrink-0">
+                        {activeBiomeConfig.emoji}
+                      </div>
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="bg-emerald-100 text-emerald-800 text-[10px] sm:text-xs font-black px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+                            🦁 Actieve Safari Expeditie
+                          </span>
+                          <span className="text-xs font-bold text-slate-500">
+                            Level {currentBiomeLevelIdx + 1} van {biomeLevels.length}
+                          </span>
+                        </div>
+                        <h3 className="text-base sm:text-lg font-black text-slate-900">
+                          {activeBiomeConfig.name}: {currentLevel.title}
+                        </h3>
+                        <p className="text-xs text-slate-600 font-medium">
+                          Dierbeloning: <strong className="text-emerald-700">{currentLevel.animalReward.name} {currentLevel.animalReward.emoji}</strong> ({currentLevel.animalReward.rarity}) • {currentLevel.questions.length} vragen
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-2.5 w-full md:w-auto justify-end flex-wrap sm:flex-nowrap">
+                      <button
+                        onClick={() => {
+                          sound.playPop();
+                          setActiveTab('map');
+                        }}
+                        className="px-3.5 py-2.5 rounded-2xl border border-slate-200 hover:bg-slate-100 text-slate-700 font-bold text-xs cursor-pointer transition-all flex items-center gap-1.5 whitespace-nowrap shadow-xs"
+                        title="Bekijk de 7 werelddelen op de wereldkaart"
+                      >
+                        <Compass className="w-3.5 h-3.5 text-emerald-600" />
+                        <span>Wereldkaart 🗺️</span>
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          sound.playPop();
+                          setIsExpeditionActive(true);
+                        }}
+                        className="w-full sm:w-auto bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-xs sm:text-sm px-5 py-2.5 sm:py-3 rounded-2xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer whitespace-nowrap active:scale-95"
+                      >
+                        <Play className="w-4 h-4 fill-current" />
+                        <span>Start {activeBiomeConfig.name} ➔</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* 4. The 4 Core Game Bento Modules */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                    
+                    {/* Card 1: Safari Arcade Arena */}
+                    <div
+                      id="bento-arcade-card"
+                      onClick={() => {
+                        sound.playPop();
+                        setShowArcadeModal(true);
+                      }}
+                      className="bg-gradient-to-br from-slate-900 via-purple-950 to-indigo-950 border border-pink-500/40 rounded-2xl p-3.5 text-white flex flex-col justify-between gap-3 shadow-md hover:border-pink-300 transition-all hover:scale-[1.02] cursor-pointer group"
+                    >
+                      <div className="space-y-1.5">
+                        <div className="flex items-center justify-between">
+                          <span className="text-xl p-1.5 rounded-xl bg-pink-500/20 border border-pink-400/30 group-hover:rotate-6 transition-transform">
+                            🕹️
+                          </span>
+                          <span className="text-[10px] font-black uppercase bg-pink-500/30 text-pink-200 px-2 py-0.5 rounded-full animate-pulse">
+                            15s Blitz ⚡
+                          </span>
+                        </div>
+                        <h4 className="text-sm font-black text-white group-hover:text-pink-300 transition-colors">
+                          Safari Arcade Arena
+                        </h4>
+                        <p className="text-xs text-slate-300 font-medium">
+                          Ballon Popper, Woord Sprint &amp; Cito Turbo Dash!
+                        </p>
+                      </div>
+                      
+                      <div className="pt-2 flex items-center justify-between text-xs font-black text-pink-300 border-t border-white/10">
+                        <span>Speel Arcade</span>
+                        <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                      </div>
+                    </div>
+
+                    {/* Card 2: Game Arena (Werkwoorden Boss Battle of Spelling Fabriek) */}
+                    <div
+                      id="bento-boss-card"
+                      onClick={() => {
+                        sound.playPop();
+                        if (currentUsername.toLowerCase() === 'hemali') {
+                          setShowBossArenaModal(true);
+                        } else {
+                          setShowSpellingFactoryModal(true);
+                        }
+                      }}
+                      className="bg-gradient-to-br from-slate-900 to-indigo-950 border border-indigo-500/40 rounded-2xl p-3.5 text-white flex flex-col justify-between gap-3 shadow-md hover:border-amber-400/60 transition-all hover:scale-[1.02] cursor-pointer group"
+                    >
+                      <div className="space-y-1.5">
+                        <div className="flex items-center justify-between">
+                          <span className="text-xl p-1.5 rounded-xl bg-indigo-500/20 border border-indigo-400/30 group-hover:rotate-6 transition-transform">
+                            ⚔️
+                          </span>
+                          <span className="text-[10px] font-black uppercase bg-indigo-500/30 text-indigo-200 px-2 py-0.5 rounded-full">
+                            {currentUsername.toLowerCase() === 'hemali' ? '\'t Kofschip' : 'Klanken'}
+                          </span>
+                        </div>
+                        <h4 className="text-sm font-black text-white group-hover:text-amber-300 transition-colors">
+                          {currentUsername.toLowerCase() === 'hemali'
+                            ? 'DT-Draak Boss Battle'
+                            : 'Spelling Fabriek'}
+                        </h4>
+                        <p className="text-xs text-slate-300 font-medium">
+                          {currentUsername.toLowerCase() === 'hemali'
+                            ? 'Vecht tegen de DT-Draak met d/t/dt en verleden tijd!'
+                            : 'Breek klankblokken, dubbelzetters & lettergrepen!'}
+                        </p>
+                      </div>
+                      
+                      <div className="pt-2 flex items-center justify-between text-xs font-black text-amber-300 border-t border-white/10">
+                        <span>Start Gevecht</span>
+                        <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                      </div>
+                    </div>
+
+                    {/* Card 3: Tamagotchi Pet Sanctuary */}
+                    <div
+                      id="bento-tamagotchi-card"
+                      onClick={() => {
+                        sound.playPop();
+                        setShowTamagotchiModal(true);
+                      }}
+                      className="bg-gradient-to-br from-slate-900 to-emerald-950 border border-emerald-500/40 rounded-2xl p-3.5 text-white flex flex-col justify-between gap-3 shadow-md hover:border-emerald-400/60 transition-all hover:scale-[1.02] cursor-pointer group"
+                    >
+                      <div className="space-y-1.5">
+                        <div className="flex items-center justify-between">
+                          <span className="text-xl p-1.5 rounded-xl bg-emerald-500/20 border border-emerald-400/30 group-hover:rotate-6 transition-transform">
+                            🐾
+                          </span>
+                          <span className="text-[10px] font-black uppercase bg-emerald-500/30 text-emerald-200 px-2 py-0.5 rounded-full">
+                            Dierenzorg
+                          </span>
+                        </div>
+                        <h4 className="text-sm font-black text-white group-hover:text-emerald-300 transition-colors">
+                          Dierenkamer
+                        </h4>
+                        <p className="text-xs text-slate-300 font-medium">
+                          Verzorg, aai en voed je huisdier in de Dierenkamer!
+                        </p>
+                      </div>
+
+                      <div className="pt-2 flex items-center justify-between text-xs font-black text-emerald-300 border-t border-white/10">
+                        <span>Dierenkamer Openen</span>
+                        <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                      </div>
+                    </div>
+
+                    {/* Card 4: Interactive Dutch Dictionary & Cito Lab */}
+                    <div
+                      id="bento-dict-card"
+                      onClick={() => {
+                        sound.playPop();
+                        setShowDictionaryModal(true);
+                      }}
+                      className="bg-gradient-to-br from-slate-900 to-amber-950 border border-amber-500/40 rounded-2xl p-3.5 text-white flex flex-col justify-between gap-3 shadow-md hover:border-amber-400/60 transition-all hover:scale-[1.02] cursor-pointer group"
+                    >
+                      <div className="space-y-1.5">
+                        <div className="flex items-center justify-between">
+                          <span className="text-xl p-1.5 rounded-xl bg-amber-500/20 border border-amber-400/30 group-hover:rotate-6 transition-transform">
+                            📚
+                          </span>
+                          <span className="text-[10px] font-black uppercase bg-amber-500/30 text-amber-200 px-2 py-0.5 rounded-full">
+                            Woordenboek
+                          </span>
+                        </div>
+                        <h4 className="text-sm font-black text-white group-hover:text-amber-300 transition-colors">
+                          Nederlands Woordenboek
+                        </h4>
+                        <p className="text-xs text-slate-300 font-medium">
+                          7-traps woordontleding, Cito signaalwoorden &amp; synoniemen!
+                        </p>
+                      </div>
+
+                      <div className="pt-2 flex items-center justify-between text-xs font-black text-amber-300 border-t border-white/10">
+                        <span>Woordenboek</span>
+                        <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
               )}
             </div>
           )}
 
-          {/* TAB 2: ANIMAL SANCTUARY (DIERENPARK) */}
+          {/* TAB 2: SAFARI ARCADE ARENA HUB */}
+          {activeTab === 'arcade' && (
+            <div className="space-y-4">
+              <div className="bg-gradient-to-r from-purple-900 via-indigo-900 to-slate-950 rounded-3xl p-6 text-white border-2 border-purple-400/50 shadow-xl flex flex-col md:flex-row items-center justify-between gap-5">
+                <div className="flex items-center gap-4">
+                  <div className="w-16 h-16 rounded-2xl bg-purple-500/20 border border-purple-300/40 flex items-center justify-center text-4xl shadow-inner flex-shrink-0">
+                    🕹️
+                  </div>
+                  <div>
+                    <span className="bg-pink-500 text-white text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full tracking-wider">
+                      Arcade Mini-Games (15s Blitz Modus)
+                    </span>
+                    <h3 className="text-xl font-black text-white mt-1">
+                      Safari Dutch Arcade Arena
+                    </h3>
+                    <p className="text-xs text-purple-200 mt-1 max-w-xl">
+                      Train spelling, signaalwoorden en leesvaardigheid met snelle 15-seconden rondes, combo vermenigvuldigers en sterrenbeloningen!
+                    </p>
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => {
+                    sound.playPop();
+                    setShowArcadeModal(true);
+                  }}
+                  className="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-400 hover:to-purple-500 text-white font-black text-sm px-6 py-3 rounded-2xl shadow-lg transition-all cursor-pointer whitespace-nowrap active:scale-95 flex items-center gap-2"
+                >
+                  <Play className="w-4 h-4 fill-current" />
+                  <span>Start Arcade Modus ➔</span>
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {/* Game 1: Balloon Popper */}
+                <div
+                  onClick={() => {
+                    sound.playPop();
+                    setShowArcadeModal(true);
+                  }}
+                  className="bg-white rounded-3xl p-5 border border-purple-100 shadow-md hover:shadow-xl transition-all cursor-pointer group flex flex-col justify-between"
+                >
+                  <div className="space-y-2">
+                    <div className="w-12 h-12 rounded-2xl bg-pink-100 text-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                      🎈
+                    </div>
+                    <h4 className="text-base font-black text-slate-800">
+                      Klank Ballon Popper
+                    </h4>
+                    <p className="text-xs text-slate-500 leading-relaxed">
+                      Laat ballonnen knappen met de juiste doelwoorden en dubbelzetters. Perfect voor snelle woordherkenning!
+                    </p>
+                  </div>
+                  <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-black text-purple-600">
+                    <span>Speel Ballon Popper</span>
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </div>
+                </div>
+
+                {/* Game 2: Meteor Sprint */}
+                <div
+                  onClick={() => {
+                    sound.playPop();
+                    setShowArcadeModal(true);
+                  }}
+                  className="bg-white rounded-3xl p-5 border border-purple-100 shadow-md hover:shadow-xl transition-all cursor-pointer group flex flex-col justify-between"
+                >
+                  <div className="space-y-2">
+                    <div className="w-12 h-12 rounded-2xl bg-amber-100 text-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                      ☄️
+                    </div>
+                    <h4 className="text-base font-black text-slate-800">
+                      Woord Meteor Sprint (15s)
+                    </h4>
+                    <p className="text-xs text-slate-500 leading-relaxed">
+                      Los binnen 15 seconden definities, synoniemen en tegenstellingen op voor meteoren inslaan!
+                    </p>
+                  </div>
+                  <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-black text-amber-600">
+                    <span>Speel Meteor Sprint</span>
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </div>
+                </div>
+
+                {/* Game 3: Cito Turbo Dash */}
+                <div
+                  onClick={() => {
+                    sound.playPop();
+                    setShowArcadeModal(true);
+                  }}
+                  className="bg-white rounded-3xl p-5 border border-purple-100 shadow-md hover:shadow-xl transition-all cursor-pointer group flex flex-col justify-between"
+                >
+                  <div className="space-y-2">
+                    <div className="w-12 h-12 rounded-2xl bg-emerald-100 text-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                      ⚡
+                    </div>
+                    <h4 className="text-base font-black text-slate-800">
+                      Cito Turbo Dash (15s)
+                    </h4>
+                    <p className="text-xs text-slate-500 leading-relaxed">
+                      Kraak signaalwoorden en verwijswoorden in authentieke Cito passages onder de 15s timer!
+                    </p>
+                  </div>
+                  <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-black text-emerald-600">
+                    <span>Speel Turbo Dash</span>
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* TAB 3: ANIMAL SANCTUARY (DIERENPARK) */}
           {activeTab === 'sanctuary' && (
             <AnimalSanctuary
               animals={animals}
@@ -906,6 +1107,7 @@ export default function App() {
                     }
                   }));
                   setCurrentQuestionIndex(0);
+                  setIsExpeditionActive(true);
                   setActiveTab('adventure');
                 }}
               />
