@@ -352,7 +352,8 @@ export const CitoRpgExamModal: React.FC<CitoRpgExamModalProps> = ({
   };
 
   const handleChooseRpgPath = (nextPage: number) => {
-    sound.playPop();
+    sound.playPageFlip();
+    sound.playFootsteps();
     setCurrentRpgPageNumber(nextPage);
     setRpgMysteryAnswer(null);
     setIsRpgClueChecked(false);
@@ -634,11 +635,55 @@ export const CitoRpgExamModal: React.FC<CitoRpgExamModalProps> = ({
                 </div>
               </div>
 
+              {/* Animated Interactive Chapter Stepping Trail (Pages 1 to 12) */}
+              <div className="bg-white rounded-2xl p-3 border border-emerald-200/80 shadow-xs space-y-2">
+                <div className="flex items-center justify-between text-xs font-black text-emerald-950 px-1">
+                  <span className="flex items-center gap-1.5">
+                    <span>🐾</span>
+                    <span>Avonturenkaart &amp; Mijlpalen:</span>
+                  </span>
+                  <span className="text-emerald-700 font-mono text-[11px]">
+                    Pagina {currentRpgPage.pageNumber} van {campaignPages.length}
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-6 sm:grid-cols-12 gap-1.5">
+                  {campaignPages.map((pg) => {
+                    const isCurrent = pg.pageNumber === currentRpgPage.pageNumber;
+                    const isPast = pg.pageNumber < currentRpgPage.pageNumber;
+                    return (
+                      <button
+                        key={pg.pageNumber}
+                        onClick={() => handleChooseRpgPath(pg.pageNumber)}
+                        className={`h-8 sm:h-9 rounded-xl font-black text-[11px] flex items-center justify-center transition-all cursor-pointer border-2 relative ${
+                          isCurrent
+                            ? 'bg-gradient-to-tr from-amber-400 to-orange-400 text-slate-950 border-amber-300 shadow-md scale-105 ring-2 ring-amber-400/40'
+                            : isPast
+                            ? 'bg-emerald-100 text-emerald-900 border-emerald-300 hover:bg-emerald-200'
+                            : 'bg-slate-50 text-slate-400 border-slate-200 hover:bg-white hover:text-slate-700'
+                        }`}
+                        title={`Ga direct naar Pagina ${pg.pageNumber}: ${pg.title}`}
+                      >
+                        {isCurrent ? (
+                          <span className="animate-pulse">{selectedProtagonist === 'ridheya' ? '🩺' : '✨'}</span>
+                        ) : isPast ? (
+                          <span>✓</span>
+                        ) : (
+                          <span>{pg.pageNumber}</span>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
               {/* Interactive Visual Animated Cutscene Stage */}
               <StoryCutsceneStage
                 protagonist={selectedProtagonist}
                 pageTitle={currentRpgPage.title}
                 biomeName={currentRpgPage.biome}
+                pageNumber={currentRpgPage.pageNumber}
+                totalPages={campaignPages.length}
                 characterDialogue={
                   selectedProtagonist === 'ridheya'
                     ? (currentRpgPage.pageNumber === 1
@@ -779,10 +824,31 @@ export const CitoRpgExamModal: React.FC<CitoRpgExamModalProps> = ({
 
               {/* Choose-Your-Own-Adventure Branching Decisions */}
               <div className="space-y-3 pt-2">
-                <h4 className="text-xs sm:text-sm font-black text-slate-700 uppercase tracking-wider flex items-center gap-2">
-                  <span>🧭</span>
-                  <span>Wat doen {currentProfile.name} en haar zus nu? Kies jullie pad:</span>
-                </h4>
+                <div className="flex items-center justify-between">
+                  <h4 className="text-xs sm:text-sm font-black text-slate-700 uppercase tracking-wider flex items-center gap-2">
+                    <span>🧭</span>
+                    <span>Wat doen {currentProfile.name} en haar zus nu? Kies jullie pad:</span>
+                  </h4>
+
+                  <div className="flex items-center gap-1.5">
+                    {currentRpgPage.pageNumber > 1 && (
+                      <button
+                        onClick={() => handleChooseRpgPath(currentRpgPage.pageNumber - 1)}
+                        className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs cursor-pointer transition-all flex items-center gap-1"
+                      >
+                        <span>◀ Vorige</span>
+                      </button>
+                    )}
+                    {currentRpgPage.pageNumber < campaignPages.length && (
+                      <button
+                        onClick={() => handleChooseRpgPath(currentRpgPage.pageNumber + 1)}
+                        className="px-3 py-1.5 rounded-xl bg-emerald-100 hover:bg-emerald-200 text-emerald-900 font-bold text-xs cursor-pointer transition-all flex items-center gap-1"
+                      >
+                        <span>Volgende ▶</span>
+                      </button>
+                    )}
+                  </div>
+                </div>
 
                 <div className="grid grid-cols-1 gap-3">
                   {currentRpgPage.choices.map((choice, cIdx) => (

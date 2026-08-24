@@ -5,6 +5,7 @@ import { StoryAdventure, PlayerProfile, VocabularyWord } from '../types';
 import { READING_ADVENTURES } from '../data/readingAdventuresData';
 import { sound } from '../services/soundService';
 import { speech } from '../services/speechService';
+import { StoryCutsceneStage } from './StoryCutsceneStage';
 import confetti from 'canvas-confetti';
 
 interface ReadingAdventureModalProps {
@@ -315,6 +316,18 @@ export const ReadingAdventureModal: React.FC<ReadingAdventureModalProps> = ({
           {/* STEP 2: READ ALONG STORY */}
           {step === 'read_story' && (
             <div className="space-y-4">
+              
+              {/* Dynamic Animated Adventure Stage */}
+              <StoryCutsceneStage
+                protagonist={profile.name.toLowerCase().includes('hemali') ? 'hemali' : 'ridheya'}
+                pageTitle={currentStory.title}
+                biomeName={`${currentStory.coverEmoji} ${currentStory.grade === 'group_4_5' ? 'Safaripark Borneo Dierenkliniek' : 'Gevorderd Safari Mysterie'}`}
+                characterDialogue={currentStory.subtitle}
+                characterEmote="excited"
+                pageNumber={selectedStoryIndex + 1}
+                totalPages={READING_ADVENTURES.length}
+              />
+
               <div className="flex items-center justify-between flex-wrap gap-2 bg-emerald-50 p-3 rounded-2xl border border-emerald-200">
                 <div className="flex items-center gap-2">
                   <BookOpen className="w-5 h-5 text-emerald-700" />
