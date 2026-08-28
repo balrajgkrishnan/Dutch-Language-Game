@@ -3498,31 +3498,58 @@ function verbsForTier(tier: VerbItem['tier'], allVerbs: VerbItem[]): VerbItem[] 
     .sort((a, b) => a.infinitief.localeCompare(b.infinitief));
 }
 
-/** Zone index (0-9) a verb belongs to, given the full verb roster. */
-export function getZoneIndex(verb: VerbItem, allVerbs: VerbItem[] = WERKWOORDEN_DATA): number {
+// Zone lookups (getZoneIndex/getVerbsInZone/getTotalZoneCount) are called
+// repeatedly per render (e.g. once per zone tile), and each call used to
+// redo the filter+sort over up to 80 verbs from scratch — O(n^2)-ish and
+// measurably janky. WERKWOORDEN_DATA never changes at runtime, so the
+// zone layout is computed once and cached; only non-default (test/synthetic)
+// arrays recompute fresh every call, so cache staleness can never leak into
+// callers that inject their own verb arrays.
+interface ZoneCache {
+  indexByInfinitief: Map<string, number>;
+  verbsByZone: Map<number, VerbItem[]>;
+  totalZones: number;
+}
+
+let defaultZoneCache: ZoneCache | null = null;
+
+function buildZoneCache(allVerbs: VerbItem[]): ZoneCache {
+  const indexByInfinitief = new Map<string, number>();
+  const verbsByZone = new Map<number, VerbItem[]>();
   let zoneOffset = 0;
   for (const tier of TIER_ORDER) {
     const sameTier = verbsForTier(tier, allVerbs);
-    if (tier === verb.tier) {
-      const idxWithinTier = sameTier.findIndex(v => v.infinitief === verb.infinitief);
-      return zoneOffset + Math.floor(idxWithinTier / ZONE_SIZE);
-    }
+    sameTier.forEach((v, idx) => {
+      const zoneIndex = zoneOffset + Math.floor(idx / ZONE_SIZE);
+      indexByInfinitief.set(v.infinitief, zoneIndex);
+      const bucket = verbsByZone.get(zoneIndex);
+      if (bucket) bucket.push(v);
+      else verbsByZone.set(zoneIndex, [v]);
+    });
     zoneOffset += Math.ceil(sameTier.length / ZONE_SIZE);
   }
-  return -1; // verb.tier is 'expert' or unrecognized — not zoned
+  return { indexByInfinitief, verbsByZone, totalZones: zoneOffset };
+}
+
+function getZoneCache(allVerbs: VerbItem[]): ZoneCache {
+  if (allVerbs !== WERKWOORDEN_DATA) return buildZoneCache(allVerbs);
+  if (!defaultZoneCache) defaultZoneCache = buildZoneCache(allVerbs);
+  return defaultZoneCache;
+}
+
+/** Zone index (0-9) a verb belongs to, given the full verb roster. */
+export function getZoneIndex(verb: VerbItem, allVerbs: VerbItem[] = WERKWOORDEN_DATA): number {
+  return getZoneCache(allVerbs).indexByInfinitief.get(verb.infinitief) ?? -1;
 }
 
 /** All verbs belonging to a given zone index (0-9), in stable alphabetical order. */
 export function getVerbsInZone(zoneIndex: number, allVerbs: VerbItem[] = WERKWOORDEN_DATA): VerbItem[] {
-  return allVerbs.filter(v => getZoneIndex(v, allVerbs) === zoneIndex);
+  // Defensive copy: verbsByZone holds shared cached arrays, callers must not mutate them.
+  return [...(getZoneCache(allVerbs).verbsByZone.get(zoneIndex) ?? [])];
 }
 
 /** Total number of zones present in the current roster. */
 export function getTotalZoneCount(allVerbs: VerbItem[] = WERKWOORDEN_DATA): number {
-  let count = 0;
-  for (const tier of TIER_ORDER) {
-    count += Math.ceil(verbsForTier(tier, allVerbs).length / ZONE_SIZE);
-  }
-  return count;
+  return getZoneCache(allVerbs).totalZones;
 }
 
