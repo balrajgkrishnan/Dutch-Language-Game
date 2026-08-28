@@ -6,6 +6,8 @@ import { AnimalSanctuary } from './components/AnimalSanctuary';
 import { BadgeShowcase } from './components/BadgeShowcase';
 import { LevelRoadmap } from './components/LevelRoadmap';
 import { RewardModal } from './components/RewardModal';
+import { VerbZoneMapPanel } from './components/VerbZoneMapPanel';
+import { ZoneRewardModal } from './components/ZoneRewardModal';
 import { GradeSelectorModal } from './components/GradeSelectorModal';
 import { GradeSwitcherBar } from './components/GradeSwitcherBar';
 import { ProfileAvatarModal } from './components/ProfileAvatarModal';
@@ -33,6 +35,7 @@ import { BIOMES, ALL_BIOME_ANIMALS } from './data/biomeData';
 import { BIOME_LEVELS_GROEP_4_5 } from './data/biomeLevels45';
 import { BIOME_LEVELS_GROEP_6_8 } from './data/biomeLevels68';
 import { WERKWOORDEN_DATA } from './data/werkwoorden';
+import { getVerbsInZone, getZoneMeta, isZoneComplete } from './data/verbZones';
 import { Animal, Badge, PlayerProfile, GradeLevel, VerbItem, BiomeType, AccessibilitySettings } from './types';
 import { sound } from './services/soundService';
 import { 
@@ -62,6 +65,9 @@ export default function App() {
   const [currentVerbIndex, setCurrentVerbIndex] = useState(0);
   const [groep68Mode, setGroep68Mode] = useState<'expedition' | 'verb_arena'>('expedition');
   const [selectedVerbTier, setSelectedVerbTier] = useState<'all' | 'beginner' | 'intermediate' | 'advanced'>('all');
+  const [selectedVerbZone, setSelectedVerbZone] = useState<number>(0);
+  const [showZoneRewardModal, setShowZoneRewardModal] = useState(false);
+  const [justCompletedZoneIndex, setJustCompletedZoneIndex] = useState<number>(0);
   const [activeTab, setActiveTab] = useState<'adventure' | 'arcade' | 'sanctuary' | 'badges' | 'map'>('adventure');
   const [isExpeditionActive, setIsExpeditionActive] = useState(false);
   
@@ -208,19 +214,12 @@ export default function App() {
     : levelQuestions;
   const currentQuestion = prioritizedQuestions[currentQuestionIndex % prioritizedQuestions.length] || levelQuestions[0];
 
-  // Sterke Werkwoorden: Differentiated pools for Hemali vs Ridheya
-  const effectiveVerbTier = isRidheya
-    ? 'beginner'
-    : (selectedVerbTier || 'all');
-  const filteredVerbs = effectiveVerbTier === 'all'
-    ? (isHemali ? WERKWOORDEN_DATA.filter(v => v.tier !== 'beginner' || v.school_priority) : WERKWOORDEN_DATA)
-    : WERKWOORDEN_DATA.filter(v => v.tier === effectiveVerbTier);
-  
-  // Prioritize unseen verbs
-  const unseenVerbs = (filteredVerbs.length > 0 ? filteredVerbs : WERKWOORDEN_DATA).filter(v => !seenSet.has(`verb-${v.infinitief}`));
+  // Sterke Werkwoorden: verbs are scoped to the selected zone, not tier.
+  const zoneVerbs = getVerbsInZone(selectedVerbZone, WERKWOORDEN_DATA);
+  const unseenVerbs = zoneVerbs.filter(v => !seenSet.has(`verb-${v.infinitief}`));
   const prioritizedVerbs = unseenVerbs.length > 0
-    ? [...unseenVerbs, ...(filteredVerbs.length > 0 ? filteredVerbs : WERKWOORDEN_DATA).filter(v => seenSet.has(`verb-${v.infinitief}`))]
-    : (filteredVerbs.length > 0 ? filteredVerbs : WERKWOORDEN_DATA);
+    ? [...unseenVerbs, ...zoneVerbs.filter(v => seenSet.has(`verb-${v.infinitief}`))]
+    : zoneVerbs;
   const currentVerb: VerbItem = prioritizedVerbs[currentVerbIndex % prioritizedVerbs.length] || WERKWOORDEN_DATA[0];
 
   // Mascot animal for current interaction
@@ -414,10 +413,12 @@ export default function App() {
     const seenSet = new Set<string>(profile.seenQuestionIds || []);
     seenSet.add(verbKey);
 
+    const wasZoneCompleteBefore = isZoneComplete(selectedVerbZone, profile);
+
     setProfile(prev => {
       const history = prev.questionHistory || {};
       const prevEntry = history[verbKey] || { count: 0, lastSeen: 0 };
-      return {
+      const nextProfile: PlayerProfile = {
         ...prev,
         seenQuestionIds: Array.from(seenSet),
         questionHistory: {
@@ -429,7 +430,23 @@ export default function App() {
           }
         }
       };
+
+      const isZoneCompleteNow = isZoneComplete(selectedVerbZone, nextProfile);
+      if (!wasZoneCompleteBefore && isZoneCompleteNow) {
+        nextProfile.stars = prev.stars + 50;
+        nextProfile.score = prev.score + 50;
+      }
+      return nextProfile;
     });
+
+    const wasZoneCompleteAfter = isZoneComplete(
+      selectedVerbZone,
+      { ...profile, questionHistory: { ...(profile.questionHistory || {}), [verbKey]: { count: 1, lastSeen: Date.now(), wasCorrect } } }
+    );
+    if (!wasZoneCompleteBefore && wasZoneCompleteAfter) {
+      setJustCompletedZoneIndex(selectedVerbZone);
+      setShowZoneRewardModal(true);
+    }
 
     setCurrentVerbIndex(prev => prev + 1);
   };
@@ -733,23 +750,33 @@ export default function App() {
                       onSpeakStory={() => sound.speak(currentLevel.introStory)}
                     />
                   ) : (
-                    <VerbQuizCard
-                      verbItem={currentVerb}
-                      mascotAnimal={verbMascotAnimal}
-                      playerName={profile.name}
-                      avatarEmoji={profile.avatarEmoji}
-                      selectedTier={selectedVerbTier}
-                      onSelectTier={(tier) => {
-                        setSelectedVerbTier(tier);
-                        setCurrentVerbIndex(0);
-                        sound.playPop();
-                      }}
-                      onAnswerCorrect={handleAnswerCorrect}
-                      onAnswerIncorrect={handleAnswerIncorrect}
-                      onNextVerb={handleNextVerb}
-                      totalVerbsAvailable={filteredVerbs.length}
-                      currentVerbIndex={currentVerbIndex}
-                    />
+                    <>
+                      <VerbZoneMapPanel
+                        profile={profile}
+                        selectedZoneIndex={selectedVerbZone}
+                        onSelectZone={(zoneIndex) => {
+                          setSelectedVerbZone(zoneIndex);
+                          setCurrentVerbIndex(0);
+                        }}
+                      />
+                      <VerbQuizCard
+                        verbItem={currentVerb}
+                        mascotAnimal={verbMascotAnimal}
+                        playerName={profile.name}
+                        avatarEmoji={profile.avatarEmoji}
+                        selectedTier={selectedVerbTier}
+                        onSelectTier={(tier) => {
+                          setSelectedVerbTier(tier);
+                          setCurrentVerbIndex(0);
+                          sound.playPop();
+                        }}
+                        onAnswerCorrect={handleAnswerCorrect}
+                        onAnswerIncorrect={handleAnswerIncorrect}
+                        onNextVerb={handleNextVerb}
+                        totalVerbsAvailable={zoneVerbs.length}
+                        currentVerbIndex={currentVerbIndex}
+                      />
+                    </>
                   )}
                 </div>
               ) : (
@@ -1365,6 +1392,15 @@ export default function App() {
           setShowRewardModal(false);
           setJustUnlockedBadges([]);
           setActiveTab('sanctuary');
+        }}
+      />
+
+      <ZoneRewardModal
+        isOpen={showZoneRewardModal}
+        zone={getZoneMeta(justCompletedZoneIndex)}
+        onClose={() => setShowZoneRewardModal(false)}
+        onGoToZoneMap={() => {
+          setShowZoneRewardModal(false);
         }}
       />
     </div>
