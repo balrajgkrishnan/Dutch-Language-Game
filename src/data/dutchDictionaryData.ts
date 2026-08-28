@@ -14,7 +14,7 @@ export interface DictionaryEntry {
   syllables: string[]; // e.g. ["on", "der", "zoek", "schip"]
   exampleNl: string;
   citoCategory?: 'Signaalwoord Tegenstelling' | 'Signaalwoord Oorzaak/Gevolg' | 'Signaalwoord Tijd/Volgorde' | 'Signaalwoord Samenvatting' | 'Verwijswoord' | 'Moeilijk Cito Woord' | 'Basisschool Kernwoord';
-  level?: 'Groep 3-4 (AVI M3-E4)' | 'Groep 5-6 (AVI M5-E6)' | 'Groep 7-8 (Doorstroomtoets)';
+  level?: 'Groep 3-4 (AVI M3-E4)' | 'Groep 4-5 (AVI E4-M5)' | 'Groep 5-6 (AVI M5-E6)' | 'Groep 7-8 (Doorstroomtoets)';
   lemma?: string; // Base form / root word (e.g. "oneindig" for "oneindigheid")
   variants?: string[]; // Morphological forms (e.g. ["oneindige", "oneindigheden"])
   synonyms?: string[]; // Synonyms (e.g. ["grenzeloos", "onmetelijk"])
