@@ -439,6 +439,10 @@ export default function App() {
       return nextProfile;
     });
 
+    // setProfile's updater must stay pure (no side effects), so it can't trigger the
+    // reward modal itself. Recompute zone-completion here from the same inputs (prev
+    // profile + this verb's outcome) just to decide whether to pop the modal. If you
+    // change how `wasCorrect` is derived above, change it identically here too.
     const wasZoneCompleteAfter = isZoneComplete(
       selectedVerbZone,
       { ...profile, questionHistory: { ...(profile.questionHistory || {}), [verbKey]: { count: 1, lastSeen: Date.now(), wasCorrect: profile.questionHistory?.[verbKey]?.wasCorrect || wasCorrect } } }
@@ -764,7 +768,7 @@ export default function App() {
                         mascotAnimal={verbMascotAnimal}
                         playerName={profile.name}
                         avatarEmoji={profile.avatarEmoji}
-                        selectedTier={selectedVerbTier}
+                        selectedTier={getZoneMeta(selectedVerbZone)?.tierLabel}
                         onSelectTier={(tier) => {
                           setSelectedVerbTier(tier);
                           setCurrentVerbIndex(0);
