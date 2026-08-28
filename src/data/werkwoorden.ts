@@ -2703,6 +2703,703 @@ export const WERKWOORDEN_DATA: VerbItem[] = [
       "nl": "De sterke wind heeft een grote tak van de boom afgebroken.",
       "en": "The strong wind broke off a large branch from the tree."
     }
+  },
+  {
+    "infinitief": "verrijzen",
+    "english": "to rise again/resurrect",
+    "imperfectum_ev": "verrees",
+    "imperfectum_mv": "verrezen",
+    "perfectum": "verrezen",
+    "hulpwerkwoord": "is",
+    "notes": "",
+    "tier": "advanced",
+    "accept_alt": {},
+    "frequency": 1,
+    "school_priority": true,
+    "example": {
+      "nl": "De oude tempel is uit de jungle weer verrezen.",
+      "en": "The old temple has risen again from the jungle."
+    }
+  },
+  {
+    "infinitief": "ontstaan",
+    "english": "to arise/originate",
+    "imperfectum_ev": "ontstond",
+    "imperfectum_mv": "ontstonden",
+    "perfectum": "ontstaan",
+    "hulpwerkwoord": "is",
+    "notes": "",
+    "tier": "advanced",
+    "accept_alt": {},
+    "frequency": 3,
+    "school_priority": true,
+    "example": {
+      "nl": "Er is een nieuwe waterpoel midden op de savanne ontstaan.",
+      "en": "A new water hole has formed in the middle of the savannah."
+    }
+  },
+  {
+    "infinitief": "toestaan",
+    "english": "to permit",
+    "imperfectum_ev": "stond toe",
+    "imperfectum_mv": "stonden toe",
+    "perfectum": "toegestaan",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "advanced",
+    "accept_alt": {},
+    "frequency": 2,
+    "school_priority": true,
+    "example": {
+      "nl": "De boswachter heeft een korte pauze bij de waterpoel toegestaan.",
+      "en": "The ranger allowed a short break at the water hole."
+    }
+  },
+  {
+    "infinitief": "afstaan",
+    "english": "to relinquish",
+    "imperfectum_ev": "stond af",
+    "imperfectum_mv": "stonden af",
+    "perfectum": "afgestaan",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "advanced",
+    "accept_alt": {},
+    "frequency": 2,
+    "school_priority": true,
+    "example": {
+      "nl": "De oude leeuw heeft zijn plaats aan de jonge leider afgestaan.",
+      "en": "The old lion relinquished his place to the young leader."
+    }
+  },
+  {
+    "infinitief": "aanbieden",
+    "english": "to offer",
+    "imperfectum_ev": "bood aan",
+    "imperfectum_mv": "boden aan",
+    "perfectum": "aangeboden",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "advanced",
+    "accept_alt": {},
+    "frequency": 3,
+    "school_priority": true,
+    "example": {
+      "nl": "De gids heeft de moeë wandelaars vers water aangeboden.",
+      "en": "The guide offered the tired hikers fresh water."
+    }
+  },
+  {
+    "infinitief": "uitgeven",
+    "english": "to spend/publish",
+    "imperfectum_ev": "gaf uit",
+    "imperfectum_mv": "gaven uit",
+    "perfectum": "uitgegeven",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "advanced",
+    "accept_alt": {},
+    "frequency": 3,
+    "school_priority": true,
+    "example": {
+      "nl": "De uitgeverij heeft een nieuw boek over de Serengeti uitgegeven.",
+      "en": "The publisher published a new book about the Serengeti."
+    }
+  },
+  {
+    "infinitief": "opgeven",
+    "english": "to give up/hand in",
+    "imperfectum_ev": "gaf op",
+    "imperfectum_mv": "gaven op",
+    "perfectum": "opgegeven",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "advanced",
+    "accept_alt": {},
+    "frequency": 3,
+    "school_priority": true,
+    "example": {
+      "nl": "De vermoeide jager heeft de achtervolging eindelijk opgegeven.",
+      "en": "The exhausted hunter finally gave up the chase."
+    }
+  },
+  {
+    "infinitief": "doorgeven",
+    "english": "to pass on",
+    "imperfectum_ev": "gaf door",
+    "imperfectum_mv": "gaven door",
+    "perfectum": "doorgegeven",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "advanced",
+    "accept_alt": {},
+    "frequency": 2,
+    "school_priority": true,
+    "example": {
+      "nl": "De verzorger heeft het voedingsschema aan zijn collega doorgegeven.",
+      "en": "The keeper passed on the feeding schedule to his colleague."
+    }
+  },
+  {
+    "infinitief": "toegeven",
+    "english": "to admit/give in",
+    "imperfectum_ev": "gaf toe",
+    "imperfectum_mv": "gaven toe",
+    "perfectum": "toegegeven",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "advanced",
+    "accept_alt": {},
+    "frequency": 2,
+    "school_priority": true,
+    "example": {
+      "nl": "De stroper heeft zijn fout tegenover de politie toegegeven.",
+      "en": "The poacher admitted his mistake to the police."
+    }
+  },
+  {
+    "infinitief": "tegenkomen",
+    "english": "to run into",
+    "imperfectum_ev": "kwam tegen",
+    "imperfectum_mv": "kwamen tegen",
+    "perfectum": "tegengekomen",
+    "hulpwerkwoord": "is",
+    "notes": "",
+    "tier": "advanced",
+    "accept_alt": {},
+    "frequency": 3,
+    "school_priority": true,
+    "example": {
+      "nl": "De toeristen zijn een kudde olifanten op het pad tegengekomen.",
+      "en": "The tourists ran into a herd of elephants on the path."
+    }
+  },
+  {
+    "infinitief": "uitkomen",
+    "english": "to come true/come out",
+    "imperfectum_ev": "kwam uit",
+    "imperfectum_mv": "kwamen uit",
+    "perfectum": "uitgekomen",
+    "hulpwerkwoord": "is",
+    "notes": "",
+    "tier": "advanced",
+    "accept_alt": {},
+    "frequency": 2,
+    "school_priority": true,
+    "example": {
+      "nl": "De voorspelling van de oude olifant is dit seizoen uitgekomen.",
+      "en": "The old elephant's prediction came true this season."
+    }
+  },
+  {
+    "infinitief": "meenemen",
+    "english": "to take along",
+    "imperfectum_ev": "nam mee",
+    "imperfectum_mv": "namen mee",
+    "perfectum": "meegenomen",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "advanced",
+    "accept_alt": {},
+    "frequency": 3,
+    "school_priority": true,
+    "example": {
+      "nl": "De verzorgster heeft het zieke jong naar de kliniek meegenomen.",
+      "en": "The keeper took the sick cub along to the clinic."
+    }
+  },
+  {
+    "infinitief": "wegnemen",
+    "english": "to take away",
+    "imperfectum_ev": "nam weg",
+    "imperfectum_mv": "namen weg",
+    "perfectum": "weggenomen",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "advanced",
+    "accept_alt": {},
+    "frequency": 2,
+    "school_priority": true,
+    "example": {
+      "nl": "De boer heeft het scherpe stuk metaal uit de wei weggenomen.",
+      "en": "The farmer took the sharp piece of metal out of the pasture."
+    }
+  },
+  {
+    "infinitief": "aannemen",
+    "english": "to accept/assume",
+    "imperfectum_ev": "nam aan",
+    "imperfectum_mv": "namen aan",
+    "perfectum": "aangenomen",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "advanced",
+    "accept_alt": {},
+    "frequency": 3,
+    "school_priority": true,
+    "example": {
+      "nl": "De dierentuin heeft een nieuwe verzorger voor de giraffen aangenomen.",
+      "en": "The zoo hired a new keeper for the giraffes."
+    }
+  },
+  {
+    "infinitief": "overnemen",
+    "english": "to take over",
+    "imperfectum_ev": "nam over",
+    "imperfectum_mv": "namen over",
+    "perfectum": "overgenomen",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "advanced",
+    "accept_alt": {},
+    "frequency": 2,
+    "school_priority": true,
+    "example": {
+      "nl": "De jonge verzorger heeft de nachtdienst van zijn moeë collega overgenomen.",
+      "en": "The young keeper took over the night shift from his tired colleague."
+    }
+  },
+  {
+    "infinitief": "inzien",
+    "english": "to realize",
+    "imperfectum_ev": "zag in",
+    "imperfectum_mv": "zagen in",
+    "perfectum": "ingezien",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "advanced",
+    "accept_alt": {},
+    "frequency": 2,
+    "school_priority": true,
+    "example": {
+      "nl": "De verzorger heeft eindelijk het gevaar van het losse hek ingezien.",
+      "en": "The keeper finally realized the danger of the loose gate."
+    }
+  },
+  {
+    "infinitief": "uitzien",
+    "english": "to look forward to",
+    "imperfectum_ev": "zag uit",
+    "imperfectum_mv": "zagen uit",
+    "perfectum": "uitgezien",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "advanced",
+    "accept_alt": {},
+    "frequency": 2,
+    "school_priority": true,
+    "example": {
+      "nl": "De giraffen hebben al dagen naar de regen uitgezien.",
+      "en": "The giraffes have been looking forward to the rain for days."
+    }
+  },
+  {
+    "infinitief": "aankijken",
+    "english": "to look at (someone)",
+    "imperfectum_ev": "keek aan",
+    "imperfectum_mv": "keken aan",
+    "perfectum": "aangekeken",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "advanced",
+    "accept_alt": {},
+    "frequency": 2,
+    "school_priority": true,
+    "example": {
+      "nl": "De nieuwsgierige aap heeft de bezoekers lang aangekeken.",
+      "en": "The curious monkey looked at the visitors for a long time."
+    }
+  },
+  {
+    "infinitief": "toekijken",
+    "english": "to watch/observe",
+    "imperfectum_ev": "keek toe",
+    "imperfectum_mv": "keken toe",
+    "perfectum": "toegekeken",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "advanced",
+    "accept_alt": {},
+    "frequency": 1,
+    "school_priority": true,
+    "example": {
+      "nl": "De moederolifant heeft bij de waterpoel rustig toegekeken.",
+      "en": "The mother elephant calmly watched at the water hole."
+    }
+  },
+  {
+    "infinitief": "uitlezen",
+    "english": "to finish reading",
+    "imperfectum_ev": "las uit",
+    "imperfectum_mv": "lazen uit",
+    "perfectum": "uitgelezen",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "advanced",
+    "accept_alt": {},
+    "frequency": 1,
+    "school_priority": true,
+    "example": {
+      "nl": "De kleine gids heeft het dikke dierenboek eindelijk uitgelezen.",
+      "en": "The young guide finally finished reading the thick animal book."
+    }
+  },
+  {
+    "infinitief": "verbreken",
+    "english": "to break off (formal)",
+    "imperfectum_ev": "verbrak",
+    "imperfectum_mv": "verbraken",
+    "perfectum": "verbroken",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "advanced",
+    "accept_alt": {},
+    "frequency": 1,
+    "school_priority": true,
+    "example": {
+      "nl": "De storm heeft de verbinding met het basiskamp verbroken.",
+      "en": "The storm broke off the connection with the base camp."
+    }
+  },
+  {
+    "infinitief": "doorbreken",
+    "english": "to break through",
+    "imperfectum_ev": "doorbrak",
+    "imperfectum_mv": "doorbraken",
+    "perfectum": "doorbroken",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "advanced",
+    "accept_alt": {},
+    "frequency": 2,
+    "school_priority": true,
+    "example": {
+      "nl": "De jonge olifant heeft de stilte van de nacht plotseling doorbroken.",
+      "en": "The young elephant suddenly broke through the silence of the night."
+    }
+  },
+  {
+    "infinitief": "onderbreken",
+    "english": "to interrupt",
+    "imperfectum_ev": "onderbrak",
+    "imperfectum_mv": "onderbraken",
+    "perfectum": "onderbroken",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "advanced",
+    "accept_alt": {},
+    "frequency": 2,
+    "school_priority": true,
+    "example": {
+      "nl": "De harde donder heeft het rustige diner bij het kampvuur onderbroken.",
+      "en": "The loud thunder interrupted the quiet dinner by the campfire."
+    }
+  },
+  {
+    "infinitief": "uitbreken",
+    "english": "to break out (of)",
+    "imperfectum_ev": "brak uit",
+    "imperfectum_mv": "braken uit",
+    "perfectum": "uitgebroken",
+    "hulpwerkwoord": "is",
+    "notes": "",
+    "tier": "advanced",
+    "accept_alt": {},
+    "frequency": 2,
+    "school_priority": true,
+    "example": {
+      "nl": "Er is gisteren een zware storm boven de vlakte uitgebroken.",
+      "en": "A severe storm broke out over the plain yesterday."
+    }
+  },
+  {
+    "infinitief": "opvallen",
+    "english": "to stand out",
+    "imperfectum_ev": "viel op",
+    "imperfectum_mv": "vielen op",
+    "perfectum": "opgevallen",
+    "hulpwerkwoord": "is",
+    "notes": "",
+    "tier": "advanced",
+    "accept_alt": {},
+    "frequency": 3,
+    "school_priority": true,
+    "example": {
+      "nl": "De gestreepte staart van de vos is meteen opgevallen.",
+      "en": "The fox's striped tail immediately stood out."
+    }
+  },
+  {
+    "infinitief": "meevallen",
+    "english": "to turn out better than expected",
+    "imperfectum_ev": "viel mee",
+    "imperfectum_mv": "vielen mee",
+    "perfectum": "meegevallen",
+    "hulpwerkwoord": "is",
+    "notes": "",
+    "tier": "advanced",
+    "accept_alt": {},
+    "frequency": 2,
+    "school_priority": true,
+    "example": {
+      "nl": "De lange trektocht door de savanne is uiteindelijk meegevallen.",
+      "en": "The long trek through the savannah turned out better than expected in the end."
+    }
+  },
+  {
+    "infinitief": "tegenvallen",
+    "english": "to be disappointing",
+    "imperfectum_ev": "viel tegen",
+    "imperfectum_mv": "vielen tegen",
+    "perfectum": "tegengevallen",
+    "hulpwerkwoord": "is",
+    "notes": "",
+    "tier": "advanced",
+    "accept_alt": {},
+    "frequency": 2,
+    "school_priority": true,
+    "example": {
+      "nl": "De oogst van dit droge seizoen is flink tegengevallen.",
+      "en": "This dry season's harvest was quite disappointing."
+    }
+  },
+  {
+    "infinitief": "uitvallen",
+    "english": "to fail/drop out",
+    "imperfectum_ev": "viel uit",
+    "imperfectum_mv": "vielen uit",
+    "perfectum": "uitgevallen",
+    "hulpwerkwoord": "is",
+    "notes": "",
+    "tier": "advanced",
+    "accept_alt": {},
+    "frequency": 2,
+    "school_priority": true,
+    "example": {
+      "nl": "De oude jeep is halverwege de safari helaas uitgevallen.",
+      "en": "The old jeep unfortunately broke down halfway through the safari."
+    }
+  },
+  {
+    "infinitief": "aanvallen",
+    "english": "to attack",
+    "imperfectum_ev": "viel aan",
+    "imperfectum_mv": "vielen aan",
+    "perfectum": "aangevallen",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "advanced",
+    "accept_alt": {},
+    "frequency": 3,
+    "school_priority": true,
+    "example": {
+      "nl": "De leeuw heeft de zwakke gazelle plotseling aangevallen.",
+      "en": "The lion suddenly attacked the weakened gazelle."
+    }
+  },
+  {
+    "infinitief": "overvallen",
+    "english": "to raid/ambush",
+    "imperfectum_ev": "overviel",
+    "imperfectum_mv": "overvielen",
+    "perfectum": "overvallen",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "advanced",
+    "accept_alt": {},
+    "frequency": 1,
+    "school_priority": true,
+    "example": {
+      "nl": "Een groep hyena's heeft de eenzame buffel bij de rivier overvallen.",
+      "en": "A group of hyenas ambushed the lone buffalo by the river."
+    }
+  },
+  {
+    "infinitief": "afvallen",
+    "english": "to fall off/lose weight",
+    "imperfectum_ev": "viel af",
+    "imperfectum_mv": "vielen af",
+    "perfectum": "afgevallen",
+    "hulpwerkwoord": "is",
+    "notes": "",
+    "tier": "advanced",
+    "accept_alt": {},
+    "frequency": 2,
+    "school_priority": true,
+    "example": {
+      "nl": "De zieke buffel is de afgelopen maanden flink afgevallen.",
+      "en": "The sick buffalo has lost a lot of weight in recent months."
+    }
+  },
+  {
+    "infinitief": "gelden",
+    "english": "to apply/be valid",
+    "imperfectum_ev": "gold",
+    "imperfectum_mv": "golden",
+    "perfectum": "gegolden",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "advanced",
+    "accept_alt": {},
+    "frequency": 2,
+    "school_priority": true,
+    "example": {
+      "nl": "Deze strenge regel heeft al jaren voor het hele reservaat gegolden.",
+      "en": "This strict rule has applied to the whole reserve for years."
+    }
+  },
+  {
+    "infinitief": "voorkomen",
+    "english": "to prevent/occur",
+    "imperfectum_ev": "kwam voor",
+    "imperfectum_mv": "kwamen voor",
+    "perfectum": "voorgekomen",
+    "hulpwerkwoord": "heeft/is",
+    "notes": "heeft (prevent sth) / is (occur)",
+    "tier": "advanced",
+    "accept_alt": {},
+    "frequency": 2,
+    "school_priority": true,
+    "example": {
+      "nl": "Zulke droogtes zijn dit jaar vaker op de savanne voorgekomen.",
+      "en": "Such droughts have occurred more often this year on the savannah."
+    }
+  },
+  {
+    "infinitief": "terugkomen",
+    "english": "to come back",
+    "imperfectum_ev": "kwam terug",
+    "imperfectum_mv": "kwamen terug",
+    "perfectum": "teruggekomen",
+    "hulpwerkwoord": "is",
+    "notes": "",
+    "tier": "advanced",
+    "accept_alt": {},
+    "frequency": 3,
+    "school_priority": true,
+    "example": {
+      "nl": "De verdwaalde jonge zebra is na twee dagen bij de kudde teruggekomen.",
+      "en": "The lost young zebra came back to the herd after two days."
+    }
+  },
+  {
+    "infinitief": "binnenkomen",
+    "english": "to come in/enter",
+    "imperfectum_ev": "kwam binnen",
+    "imperfectum_mv": "kwamen binnen",
+    "perfectum": "binnengekomen",
+    "hulpwerkwoord": "is",
+    "notes": "",
+    "tier": "advanced",
+    "accept_alt": {},
+    "frequency": 2,
+    "school_priority": true,
+    "example": {
+      "nl": "Een nieuwsgierig stekelvarken is per ongeluk de schuur binnengekomen.",
+      "en": "A curious porcupine accidentally came into the barn."
+    }
+  },
+  {
+    "infinitief": "overkomen",
+    "english": "to happen to/come across",
+    "imperfectum_ev": "overkwam",
+    "imperfectum_mv": "overkwamen",
+    "perfectum": "overkomen",
+    "hulpwerkwoord": "is",
+    "notes": "",
+    "tier": "advanced",
+    "accept_alt": {},
+    "frequency": 2,
+    "school_priority": true,
+    "example": {
+      "nl": "Er is de kleine giraffe gelukkig niets ergs overkomen.",
+      "en": "Fortunately, nothing bad happened to the little giraffe."
+    }
+  },
+  {
+    "infinitief": "aanschuiven",
+    "english": "to join at the table",
+    "imperfectum_ev": "schoof aan",
+    "imperfectum_mv": "schoven aan",
+    "perfectum": "aangeschoven",
+    "hulpwerkwoord": "is",
+    "notes": "",
+    "tier": "advanced",
+    "accept_alt": {},
+    "frequency": 1,
+    "school_priority": true,
+    "example": {
+      "nl": "Bij het avondeten is de jonge stagiair gezellig aangeschoven.",
+      "en": "At dinner, the young intern cozily joined at the table."
+    }
+  },
+  {
+    "infinitief": "weerstaan",
+    "english": "to resist/withstand",
+    "imperfectum_ev": "weerstond",
+    "imperfectum_mv": "weerstonden",
+    "perfectum": "weerstaan",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "advanced",
+    "accept_alt": {},
+    "frequency": 1,
+    "school_priority": true,
+    "example": {
+      "nl": "De oude baobab heeft vele hevige stormen weerstaan.",
+      "en": "The old baobab tree has withstood many fierce storms."
+    }
+  },
+  {
+    "infinitief": "verwerpen",
+    "english": "to reject",
+    "imperfectum_ev": "verwierp",
+    "imperfectum_mv": "verwierpen",
+    "perfectum": "verworpen",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "advanced",
+    "accept_alt": {},
+    "frequency": 1,
+    "school_priority": true,
+    "example": {
+      "nl": "De ranger heeft het riskante plan van de stroper meteen verworpen.",
+      "en": "The ranger immediately rejected the poacher's risky plan."
+    }
+  },
+  {
+    "infinitief": "treffen",
+    "english": "to meet/strike",
+    "imperfectum_ev": "trof",
+    "imperfectum_mv": "troffen",
+    "perfectum": "getroffen",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "advanced",
+    "accept_alt": {},
+    "frequency": 2,
+    "school_priority": true,
+    "example": {
+      "nl": "Het noodlot heeft de kleine kudde tijdens de droogte hard getroffen.",
+      "en": "Fate struck the small herd hard during the drought."
+    }
+  },
+  {
+    "infinitief": "verslapen",
+    "english": "to oversleep",
+    "imperfectum_ev": "versliep",
+    "imperfectum_mv": "versliepen",
+    "perfectum": "verslapen",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "advanced",
+    "accept_alt": {},
+    "frequency": 1,
+    "school_priority": true,
+    "example": {
+      "nl": "De nachtwaker heeft zich vanochtend helaas verslapen.",
+      "en": "The night watchman unfortunately overslept this morning."
+    }
   }
 ];
 
