@@ -1782,7 +1782,7 @@ export const WERKWOORDEN_DATA: VerbItem[] = [
     "frequency": 5,
     "school_priority": true,
     "example": {
-      "nl": "Boerin Tess heeft vroeg op moeten staan voor de dieren.",
+      "nl": "Boerin Tess heeft vroeg moeten opstaan voor de dieren.",
       "en": "Farmer Tess had to get up early for the animals."
     }
   },
