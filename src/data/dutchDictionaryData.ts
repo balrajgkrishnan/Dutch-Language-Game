@@ -1,7 +1,9 @@
 import { DUTCH_VOCABULARY_BANK } from './dutchVocabularyBank';
+import { DUTCH_DICTIONARY_EXPANSION } from './dutchDictionaryExpansion';
 
 // Comprehensive Curated Dutch Educational Dictionary for Kids (Groep 3-8 & Cito Prep)
 // Includes Cito signal words, high-frequency verbs, compound stems, adjectives, household words, and adventure vocabulary.
+// Now includes 70+ additional high-frequency game words from dutchDictionaryExpansion.
 
 export interface DictionaryEntry {
   word: string; // The canonical / base word
@@ -2153,6 +2155,15 @@ export const DUTCH_DICTIONARY_DB: Record<string, DictionaryEntry> = {
     level: 'Groep 5-6 (AVI M5-E6)'
   }
 };
+
+// Merge expansion entries into main dictionary
+const ENHANCED_DICTIONARY_DB: Record<string, DictionaryEntry> = {
+  ...DUTCH_DICTIONARY_DB,
+  ...DUTCH_DICTIONARY_EXPANSION
+};
+
+// Re-export the enhanced dictionary
+export { ENHANCED_DICTIONARY_DB as DUTCH_DICTIONARY_DB };
 
 // Common compound component roots for dynamic morphological composition
 export const COMPOUND_PREFIXES: Record<string, { meaning: string; en: string }> = {

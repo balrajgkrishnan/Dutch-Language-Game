@@ -1,6 +1,8 @@
 ﻿import { DUTCH_DICTIONARY_DB, COMPOUND_PREFIXES, COMPOUND_SUFFIXES, DictionaryEntry } from '../data/dutchDictionaryData';
 import { DUTCH_SEMANTIC_INDEX } from '../data/dutchVocabularyBank';
 import { WERKWOORDEN_DATA } from '../data/werkwoorden';
+// Dictionary now includes expansion entries from dutchDictionaryExpansion.ts
+// Total entries: ~424 (original) + 70 (expansion) = ~494 entries
 
 // ============================================================================
 // 1. ADVANCED DUTCH WORD NORMALIZATION & TOKENIZATION
