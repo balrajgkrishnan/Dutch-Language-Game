@@ -2564,7 +2564,7 @@ export const WERKWOORDEN_DATA: VerbItem[] = [
     "frequency": 3,
     "school_priority": true,
     "example": {
-      "nl": "De verzorger heeft warme laarzen aangetrokken voor de kou.",
+      "nl": "De verzorger heeft voor de kou warme laarzen aangetrokken.",
       "en": "The keeper put on warm boots for the cold."
     }
   },
