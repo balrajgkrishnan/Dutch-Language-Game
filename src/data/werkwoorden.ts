@@ -1742,7 +1742,7 @@ export const WERKWOORDEN_DATA: VerbItem[] = [
     "imperfectum_mv": "konden",
     "perfectum": "gekund",
     "hulpwerkwoord": "heeft",
-    "notes": "",
+    "notes": "Voltooid deelwoord (gekund) is grammaticaal juist maar zeldzaam; in gesproken taal gebruikt men meestal de dubbele infinitief (bijv. 'heeft kunnen rennen').",
     "tier": "beginner",
     "accept_alt": {},
     "frequency": 5,
@@ -1759,7 +1759,7 @@ export const WERKWOORDEN_DATA: VerbItem[] = [
     "imperfectum_mv": "mochten",
     "perfectum": "gemogen",
     "hulpwerkwoord": "heeft",
-    "notes": "",
+    "notes": "Voltooid deelwoord (gemogen) is grammaticaal juist maar zeldzaam; in gesproken taal gebruikt men meestal de dubbele infinitief (bijv. 'heeft mogen aaien').",
     "tier": "beginner",
     "accept_alt": {},
     "frequency": 4,
@@ -1776,7 +1776,7 @@ export const WERKWOORDEN_DATA: VerbItem[] = [
     "imperfectum_mv": "moesten",
     "perfectum": "gemoeten",
     "hulpwerkwoord": "heeft",
-    "notes": "",
+    "notes": "Voltooid deelwoord (gemoeten) is grammaticaal juist maar zeldzaam; in gesproken taal gebruikt men meestal de dubbele infinitief (bijv. 'heeft moeten opstaan').",
     "tier": "beginner",
     "accept_alt": {},
     "frequency": 5,
@@ -1793,7 +1793,7 @@ export const WERKWOORDEN_DATA: VerbItem[] = [
     "imperfectum_mv": "wilden",
     "perfectum": "gewild",
     "hulpwerkwoord": "heeft",
-    "notes": "",
+    "notes": "Voltooid deelwoord (gewild) is grammaticaal juist maar zeldzaam; in gesproken taal gebruikt men meestal de dubbele infinitief (bijv. 'heeft willen eten').",
     "tier": "beginner",
     "accept_alt": {},
     "frequency": 5,
@@ -1816,8 +1816,8 @@ export const WERKWOORDEN_DATA: VerbItem[] = [
     "frequency": 3,
     "school_priority": true,
     "example": {
-      "nl": "De boot is rustig over de rivier gevaren langs de nijlpaarden.",
-      "en": "The boat sailed calmly over the river past the hippos."
+      "nl": "De boot is rustig langs de nijlpaarden over de rivier gevaren.",
+      "en": "The boat sailed calmly past the hippos over the river."
     }
   },
   {
