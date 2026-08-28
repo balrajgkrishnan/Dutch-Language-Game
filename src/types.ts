@@ -286,6 +286,13 @@ export interface Animal {
   habitatName?: string;
 }
 
+export interface ZoneRewardAnimal {
+  id: string;
+  name: string;
+  title: string;
+  emoji: string;
+}
+
 export interface BiomeInfo {
   id: BiomeType;
   name: string;
