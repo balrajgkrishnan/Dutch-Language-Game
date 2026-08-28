@@ -1220,7 +1220,7 @@ export const WerkwoordBossArenaModal: React.FC<WerkwoordBossArenaModalProps> = (
               >
                 {/* Trainer Avatar */}
                 <div className="text-5xl sm:text-6xl">
-                  {isRidheya ? '🩺' : '🎓'}
+                  {profile.avatarEmoji || (isRidheya ? '🩺' : '✨')}
                 </div>
                 {/* Mascot Companion */}
                 <div className="text-3xl sm:text-4xl -ml-2 mb-1 animate-bounce">

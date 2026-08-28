@@ -57,71 +57,8 @@ export const AnimalAvatar: React.FC<AnimalAvatarProps> = ({
     }
   };
 
-  // Comprehensive Animal Emoji & Badge Map for all 7 Biomes
-  const animalConfig: Record<string, { emoji: string; badge: string }> = {
-    // 1. Farm
-    'bella-koe': { emoji: '🐮', badge: '🍀' },
-    'wolletje-schaap': { emoji: '🐑', badge: '🌾' },
-    'storm-paard': { emoji: '🐴', badge: '🍎' },
-    'pip-varken': { emoji: '🐷', badge: '🍉' },
-    'tok-kip': { emoji: '🐔', badge: '🌽' },
-    'daisy-eend': { emoji: '🦆', badge: '💧' },
-
-    // 2. Safari
-    'gigi-giraf': { emoji: '🦒', badge: '🌿' },
-    'leo-leeuw': { emoji: '🦁', badge: '🐾' },
-    'olli-olifant': { emoji: '🐘', badge: '💧' },
-    'ollie-olifant': { emoji: '🐘', badge: '💧' },
-    'zara-zebra': { emoji: '🦓', badge: '🌾' },
-    'mo-meerkat': { emoji: '🦦', badge: '🥜' },
-    'kibo-neushoorn': { emoji: '🦏', badge: '🌿' },
-
-    // 3. Sea
-    'dolly-dolfijn': { emoji: '🐬', badge: '🫧' },
-    'sammy-zeeschildpad': { emoji: '🐢', badge: '🪸' },
-    'octo-octopus': { emoji: '🐙', badge: '🫧' },
-    'wally-walvis': { emoji: '🐳', badge: '🌊' },
-    'finley-haai': { emoji: '🦈', badge: '🐟' },
-    'clippy-krab': { emoji: '🦀', badge: '🐚' },
-
-    // 4. Snow
-    'barny-ijsbeer': { emoji: '🐻‍❄️', badge: '❄️' },
-    'penny-pinguin': { emoji: '🐧', badge: '🧊' },
-    'robbie-zeehond': { emoji: '🦭', badge: '⭐' },
-    'pip-poolvos': { emoji: '🦊', badge: '❄️' },
-    'hedwig-sneeuwuil': { emoji: '🦉', badge: '✨' },
-    'sven-rendier': { emoji: '🦌', badge: '🌿' },
-
-    // 5. Jungle
-    'pippa-panda': { emoji: '🐼', badge: '🎋' },
-    'paco-papegaai': { emoji: '🦜', badge: '🌺' },
-    'toby-tijger': { emoji: '🐯', badge: '🥥' },
-    'koko-aap': { emoji: '🐒', badge: '🍌' },
-    'charlie-kameleon': { emoji: '🦎', badge: '🍃' },
-    'maya-toekan': { emoji: '🪶', badge: '🫐' },
-
-    // 6. Outback
-    'kiki-kangoeroe': { emoji: '🦘', badge: '🌾' },
-    'coco-koala': { emoji: '🐨', badge: '🌿' },
-    'wally-wombat': { emoji: '🐻', badge: '🥕' },
-    'daan-dingo': { emoji: '🐕', badge: '🍖' },
-    'ellie-emoe': { emoji: '🦤', badge: '🌾' },
-    'finn-woestijnvos': { emoji: '🦊', badge: '🫐' },
-
-    // 7. Mountain
-    'boris-steenbok': { emoji: '🐐', badge: '🌿' },
-    'max-marmot': { emoji: '🐿️', badge: '🌸' },
-    'luna-alpaca': { emoji: '🦙', badge: '🌾' },
-    'alex-arend': { emoji: '🦅', badge: '🐟' },
-    'saar-sint-bernard': { emoji: '🐕‍🦺', badge: '🧀' },
-    'bella-gems': { emoji: '🦌', badge: '🌸' }
-  };
-
   const matchedAnimal = ALL_BIOME_ANIMALS.find(a => a.id === animalId);
-  const currentConfig = animalConfig[animalId] || {
-    emoji: matchedAnimal?.emoji || '🌟',
-    badge: matchedAnimal?.favoriteFoodEmoji || '✨'
-  };
+  const currentEmoji = matchedAnimal?.emoji || '🌟';
 
   return (
     <motion.div
@@ -139,16 +76,7 @@ export const AnimalAvatar: React.FC<AnimalAvatarProps> = ({
         transition={{ repeat: Infinity, duration: 3, ease: 'easeInOut' }}
         className="relative flex items-center justify-center"
       >
-        <span className="filter drop-shadow-md select-none">{currentConfig.emoji}</span>
-        
-        {/* Cute ambient accessory badge */}
-        <motion.span
-          animate={{ scale: [0.8, 1.15, 0.8], opacity: [0.7, 1, 0.7] }}
-          transition={{ repeat: Infinity, duration: 2.2 }}
-          className="absolute -top-1 -right-1 text-xs"
-        >
-          {currentConfig.badge}
-        </motion.span>
+        <span className="filter drop-shadow-md select-none">{currentEmoji}</span>
       </motion.div>
 
       {/* Floating Pet Hearts */}

@@ -331,7 +331,7 @@ export const BIOME_LEVELS_GROEP_4_5: Record<BiomeType, Level[]> = {
           categoryIcon: '🐰',
           question: 'Wat is het juiste verkleinwoord van "konijn"?',
           type: 'choice',
-          options: ['konijntje', 'konijntje', 'konijnetje'],
+          options: ['konijntje', 'konijnjte', 'konijnetje'],
           correctOptionIndex: 0,
           hint: 'Konijn + tje = konijntje.',
           gradeBadge: 'Groep 4-5'
@@ -405,7 +405,7 @@ export const BIOME_LEVELS_GROEP_4_5: Record<BiomeType, Level[]> = {
           categoryIcon: '🐾',
           question: 'Kies het juiste woord: Met zijn scherpe ___ loopt de leeuw muisstil door het gras.',
           type: 'choice',
-          options: ['klauwen', 'klouwen', 'klauwen'],
+          options: ['klauwen', 'klouwen', 'klawen'],
           correctOptionIndex: 0,
           hint: 'Klauwen schrijf je met de atje-au van de au-plaat!',
           gradeBadge: 'Groep 4-5'
@@ -815,7 +815,7 @@ export const BIOME_LEVELS_GROEP_4_5: Record<BiomeType, Level[]> = {
           categoryIcon: '🌊',
           question: 'Kies het juist gespelde woord: In de zee zwemmen duizenden vrolijke ___.',
           type: 'choice',
-          options: ['dolfijnen', 'dolfynen', 'dolfijnen'],
+          options: ['dolfijnen', 'dolfynen', 'dolvijnen'],
           correctOptionIndex: 0,
           hint: 'Dolfijnen schrijf je met de lange ij van de ijstrein!',
           gradeBadge: 'Groep 4-5'

@@ -24,17 +24,17 @@ export function normalizeDutchWord(raw: string): string {
   let normalized = raw.normalize('NFC').trim().toLowerCase();
 
   // 2. Preserve fixed Dutch apostrophe expressions ('s avonds, 's ochtends, 's middags, 's nachts, 's zomers, 's winters, 's werelds)
-  const apostropheMatch = normalized.match(/^['â€™â€˜]s\s+([a-zÃ¤Ã«Ã¯Ã¶Ã¼Ã©Ã¨ÃªÃ³Ã²Ã´Ã¡Ã Ã¢]+)$/i);
+  const apostropheMatch = normalized.match(/^['’‘]s\s+([a-zäëïöüéèêóòôáàâ]+)$/i);
   if (apostropheMatch) {
     return `'s ${apostropheMatch[1]}`;
   }
 
   // 3. Strip surrounding quotation marks, brackets, punctuation, bullets, em-dashes
   // Leading punctuation (keep leading apostrophe only if followed by s and space, handled above)
-  normalized = normalized.replace(/^[Â«"â€œâ€˜'â€ž()[\]{}#*_~`â€“â€”â€¦â€¢Â·\/\\:;,!?.]+/g, '');
+  normalized = normalized.replace(/^[«"“‘'„()[\]{}#*_~`–—…•·\/\\:;,!?.]+/g, '');
   
   // Trailing punctuation
-  normalized = normalized.replace(/[Â»"â€â€™'â€ž()[\]{}#*_~`â€“â€”â€¦â€¢Â·\/\\:;,!?.]+$/g, '');
+  normalized = normalized.replace(/[»"”’'„()[\]{}#*_~`–—…•·\/\\:;,!?.]+$/g, '');
 
   // 4. Handle hyphenated edge cases (e.g. trailing/leading stray hyphens)
   normalized = normalized.replace(/^-+|-+$/g, '').trim();
@@ -111,7 +111,7 @@ function hasNonCompoundEnding(word: string): boolean {
 
 /** A constituent must contain at least one vowel to be a plausible word fragment. */
 function hasVowel(part: string): boolean {
-  return /[aeiouyÃ¡Ã©Ã­Ã³ÃºÃ¤Ã«Ã¯Ã¶Ã¼]/.test(part);
+  return /[aeiouyáéíóúäëïöü]/.test(part);
 }
 
 export const VERB_STEM_MAP: Record<string, { verb: string; en: string; nl: string }> = {
@@ -240,7 +240,7 @@ export function findCompoundSplit(word: string): CompoundSplitMatch | null {
     }
   }
 
-  // 3. Arbitrary combinations from DB/Lexicon â€” SCORED, BEST-CANDIDATE selection.
+  // 3. Arbitrary combinations from DB/Lexicon — SCORED, BEST-CANDIDATE selection.
   //    Accuracy over coverage: only accept a split that clears the confidence bar,
   //    to avoid false compounds like "materiaal", "documentatie", "categorie".
   //
@@ -411,7 +411,7 @@ export function syllabifyDutch(rawWord: string, depth = 0): string[] {
   for (const pfx of MORPHOLOGICAL_PREFIXES) {
     if (word.startsWith(pfx) && word.length >= pfx.length + 4) {
       const rest = word.slice(pfx.length);
-      const restVowels = rest.match(/[aeiouyÃ¡Ã©Ã­Ã³ÃºÃ¤Ã«Ã¯Ã¶Ã¼]/g);
+      const restVowels = rest.match(/[aeiouyáéíóúäëïöü]/g);
       if (restVowels && restVowels.length >= 1) {
         return [pfx, ...syllabifyDutchCore(rest, depth + 1)];
       }
@@ -426,7 +426,7 @@ export function syllabifyDutch(rawWord: string, depth = 0): string[] {
  * `depth` is carried through recursive suffix stripping to respect the recursion guard.
  */
 function syllabifyDutchCore(word: string, depth = 0): string[] {
-  const vowels = 'aeiouyÃ¡Ã©Ã­Ã³ÃºÃ¤Ã«Ã¯Ã¶Ã¼';
+  const vowels = 'aeiouyáéíóúäëïöü';
   const len = word.length;
   if (len <= 3 || depth > MAX_SYLLABIFY_DEPTH) return [word];
 
@@ -434,7 +434,7 @@ function syllabifyDutchCore(word: string, depth = 0): string[] {
   for (const sfx of MORPHOLOGICAL_SUFFIXES) {
     if (word.endsWith(sfx) && word.length >= sfx.length + 3) {
       const stem = word.slice(0, -sfx.length);
-      const stemVowels = stem.match(/[aeiouyÃ¡Ã©Ã­Ã³ÃºÃ¤Ã«Ã¯Ã¶Ã¼]/g);
+      const stemVowels = stem.match(/[aeiouyáéíóúäëïöü]/g);
       if (stemVowels && stemVowels.length >= 1) {
         const stemSyllables = syllabifyDutchCore(stem, depth + 1);
         const sfxSyllables = sfx.length > 4 ? syllabifyDutchCore(sfx, depth + 1) : [sfx];
@@ -492,7 +492,7 @@ function syllabifyDutchCore(word: string, depth = 0): string[] {
     const cLen = consonantSpan.length;
 
     if (cLen === 0) {
-      // Hiatus / two vowels touching without consonant (e.g. ru-Ã¯ne, po-Ã«-zie, cha-os, o-a-se)
+      // Hiatus / two vowels touching without consonant (e.g. ru-ïne, po-ë-zie, cha-os, o-a-se)
       splitPoints.push(currentNuc.end);
     } else if (cLen === 1) {
       // Rule: Single intervocalic consonant moves to the next syllable (V - CV)
@@ -1267,7 +1267,7 @@ export interface ReverseIndexMatch {
   citoCategory?: DictionaryEntry['citoCategory'];
 }
 
-// Characters from the embedded stories â€” names must never masquerade as dictionary words
+// Characters from the embedded stories — names must never masquerade as dictionary words
 const KNOWN_PROPER_NAMES: Record<string, string> = {
   'ridheya': 'een van de twee zussen / hoofdpersoon',
   'hemali': 'een van de twee zussen / hoofdpersoon',
@@ -1826,14 +1826,14 @@ export function lookupDutchWord(rawWord: string): DictionaryEntry {
     return generatedEntry;
   };
 
-  // 7a. Proper names (characters / places) â€” report these honestly instead of inventing fake translations
+  // 7a. Proper names (characters / places) — report these honestly instead of inventing fake translations
   if (KNOWN_PROPER_NAMES[clean] !== undefined) {
     const displayName = clean.split('-').map(part => part.charAt(0).toUpperCase() + part.slice(1)).join('-');
     const generatedEntry: DictionaryEntry = {
       word: clean,
       wordType: 'Zelfstandig naamwoord',
       meaningNl: `Eigennaam: "${displayName}" is ${KNOWN_PROPER_NAMES[clean]}. Dit is geen woordenboekwoord.`,
-      translationEn: 'Proper noun (character/place name) â€” not a dictionary word',
+      translationEn: 'Proper noun (character/place name) — not a dictionary word',
       syllables: syllabifyDutch(clean),
       exampleNl: `In het verhaal speelt ${displayName} een belangrijke rol.`,
       suggestions: earlySuggestions.length > 0 ? earlySuggestions : undefined,
@@ -1843,7 +1843,7 @@ export function lookupDutchWord(rawWord: string): DictionaryEntry {
     return buildFallbackAndCache(generatedEntry, ['proper_name_guard']);
   }
 
-  // 7b. Completely unknown words â€” be honest and explicit.
+  // 7b. Completely unknown words — be honest and explicit.
   //    We NEVER fabricate a full meaning or translation for an unverified word.
   //    Instead we offer a *labelled suffix hint* so the child gets a useful clue
   //    without the app asserting a meaning it hasn't verified.
@@ -1862,15 +1862,15 @@ export function lookupDutchWord(rawWord: string): DictionaryEntry {
 
   let derivedType: DictionaryEntry['wordType'] = 'Zelfstandig naamwoord';
   let derivedMeaning = 'Dit woord staat (nog) niet in ons woordenboek. Slag je Van Dale of juniorwoordenboek erop voor de exacte betekenis, of bekijk de suggesties hieronder.';
-  let derivedEn = '(unknown word â€” not verified, no reliable translation)';
+  let derivedEn = '(unknown word — not verified, no reliable translation)';
   let derivedSentence = `"${clean}" komt in dit verhaal voor, maar is nog niet geverifieerd.`;
 
   if (hit) {
     derivedType = hit.type;
     // Explicitly labelled as a HINT, not a meaning. Educational software must not
     // present an unverified guess as fact.
-    derivedMeaning = `Dit woord is niet geverifieerd in ons woordenboek. Het lijkt de uitgang "${hit.suffix}" te bevatten, die ${hit.hintNl}. Dit is een aanwijzing, gÃ©Ã©n bevestigde betekenis.`;
-    derivedEn = `Unverified word â€” appears to contain the suffix "${hit.suffix}", which ${hit.hintEn}. This is a hint, not a confirmed translation.`;
+    derivedMeaning = `Dit woord is niet geverifieerd in ons woordenboek. Het lijkt de uitgang "${hit.suffix}" te bevatten, die ${hit.hintNl}. Dit is een aanwijzing, géén bevestigde betekenis.`;
+    derivedEn = `Unverified word — appears to contain the suffix "${hit.suffix}", which ${hit.hintEn}. This is a hint, not a confirmed translation.`;
     derivedSentence = `"${clean}" lijkt de uitgang "${hit.suffix}" te bevatten; controleer de betekenis in een woordenboek.`;
   }
 
