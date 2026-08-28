@@ -426,7 +426,7 @@ export default function App() {
           [verbKey]: {
             count: prevEntry.count + 1,
             lastSeen: Date.now(),
-            wasCorrect
+            wasCorrect: prevEntry.wasCorrect || wasCorrect
           }
         }
       };
@@ -441,7 +441,7 @@ export default function App() {
 
     const wasZoneCompleteAfter = isZoneComplete(
       selectedVerbZone,
-      { ...profile, questionHistory: { ...(profile.questionHistory || {}), [verbKey]: { count: 1, lastSeen: Date.now(), wasCorrect } } }
+      { ...profile, questionHistory: { ...(profile.questionHistory || {}), [verbKey]: { count: 1, lastSeen: Date.now(), wasCorrect: profile.questionHistory?.[verbKey]?.wasCorrect || wasCorrect } } }
     );
     if (!wasZoneCompleteBefore && wasZoneCompleteAfter) {
       setJustCompletedZoneIndex(selectedVerbZone);
