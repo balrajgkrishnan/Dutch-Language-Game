@@ -1,8 +1,10 @@
 ﻿import { DUTCH_DICTIONARY_DB, COMPOUND_PREFIXES, COMPOUND_SUFFIXES, DictionaryEntry } from '../data/dutchDictionaryData';
 import { DUTCH_SEMANTIC_INDEX } from '../data/dutchVocabularyBank';
 import { WERKWOORDEN_DATA } from '../data/werkwoorden';
+import { lookupWiktionary } from './wiktionaryService';
 // Dictionary now includes expansion entries from dutchDictionaryExpansion.ts
-// Total entries: ~424 (original) + 70 (expansion) = ~494 entries
+// Total entries: ~424 (original) + 93 (expansion) = ~517 entries
+// Plus Wiktionary API fallback for words not in local database
 
 // ============================================================================
 // 1. ADVANCED DUTCH WORD NORMALIZATION & TOKENIZATION
@@ -1888,6 +1890,73 @@ export function lookupDutchWord(rawWord: string): DictionaryEntry {
   };
 
   return buildFallbackAndCache(generatedEntry, hit ? [`suffix_hint:${hit.suffix}`] : ['unknown_word_unverified']);
+}
+
+/**
+ * Async version of lookupDutchWord with Wiktionary API fallback
+ * Tries local dictionary first, then falls back to Wiktionary API
+ */
+export async function lookupDutchWordAsync(rawWord: string): Promise<DictionaryEntry> {
+  // First try the synchronous local lookup
+  const localResult = lookupDutchWord(rawWord);
+  
+  // If we got a real (non-generated) result from local DB, use it
+  if (localResult && !localResult.isGenerated) {
+    return localResult;
+  }
+  
+  // Try Wiktionary API as fallback
+  const clean = normalizeDutchWord(rawWord);
+  if (clean) {
+    try {
+      const wiktionaryResult = await lookupWiktionary(clean);
+      if (wiktionaryResult) {
+        // Cache the result
+        cacheSet(clean, wiktionaryResult);
+        return wiktionaryResult;
+      }
+    } catch (error) {
+      console.warn('Wiktionary lookup failed:', error);
+    }
+  }
+  
+  // Return the local generated fallback if Wiktionary also failed
+  return localResult;
+}
+
+/**
+ * Batch lookup multiple words with Wiktionary fallback
+ */
+export async function lookupDutchWordsBatch(words: string[]): Promise<Record<string, DictionaryEntry>> {
+  const results: Record<string, DictionaryEntry> = {};
+  const wiktionaryWords: string[] = [];
+  
+  // First pass: local lookups
+  for (const word of words) {
+    const clean = normalizeDutchWord(word);
+    if (!clean) continue;
+    
+    const localResult = lookupDutchWord(word);
+    if (localResult && !localResult.isGenerated) {
+      results[clean] = localResult;
+    } else {
+      wiktionaryWords.push(clean);
+    }
+  }
+  
+  // Second pass: Wiktionary lookups for missing words
+  if (wiktionaryWords.length > 0) {
+    const { lookupWiktionaryBatch } = await import('./wiktionaryService');
+    const wiktionaryResults = await lookupWiktionaryBatch(wiktionaryWords);
+    
+    // Merge results
+    for (const [word, entry] of Object.entries(wiktionaryResults)) {
+      results[word] = entry;
+      cacheSet(word, entry);
+    }
+  }
+  
+  return results;
 }
 
 /**
