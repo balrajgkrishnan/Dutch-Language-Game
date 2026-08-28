@@ -871,6 +871,17 @@ export const DUTCH_EDUCATIONAL_LEXICON: Record<string, LemmaMapping> = {
     variants: ['ware', 'waarheid', 'waarheden'],
     level: 'Groep 5-6 (AVI M5-E6)'
   },
+  'juist': {
+    lemma: 'juist',
+    type: 'Bijvoeglijk naamwoord',
+    en: 'Correct, right, accurate, proper',
+    nl: 'In overeenstemming met de feiten, regels of verwachtingen; goed; precies zoals het hoort.',
+    example: 'Hemali koos het juiste antwoord uit de vier mogelijkheden.',
+    synonyms: ['correct', 'goed', 'precies', 'waar', 'echt'],
+    variants: ['juiste', 'juister', 'juistst'],
+    level: 'Groep 3-4 (AVI M3-E4)',
+    citoCategory: 'Basisschool Kernwoord'
+  },
 
 
   // --- Core Dutch Function Words & Signal Words ---
