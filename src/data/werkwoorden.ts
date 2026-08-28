@@ -2040,6 +2040,669 @@ export const WERKWOORDEN_DATA: VerbItem[] = [
       "nl": "Het varken heeft gulzig zijn bak leeggevreten.",
       "en": "The pig greedily devoured its whole trough."
     }
+  },
+  {
+    "infinitief": "prijzen",
+    "english": "to praise",
+    "imperfectum_ev": "prees",
+    "imperfectum_mv": "prezen",
+    "perfectum": "geprezen",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "intermediate",
+    "accept_alt": {},
+    "frequency": 2,
+    "school_priority": true,
+    "example": {
+      "nl": "De ranger heeft de moedige giraf geprezen.",
+      "en": "The ranger praised the brave giraffe."
+    }
+  },
+  {
+    "infinitief": "rijzen",
+    "english": "to rise",
+    "imperfectum_ev": "rees",
+    "imperfectum_mv": "rezen",
+    "perfectum": "gerezen",
+    "hulpwerkwoord": "is",
+    "notes": "",
+    "tier": "intermediate",
+    "accept_alt": {},
+    "frequency": 2,
+    "school_priority": true,
+    "example": {
+      "nl": "De zon is stralend boven de savanne gerezen.",
+      "en": "The sun rose brilliantly over the savanna."
+    }
+  },
+  {
+    "infinitief": "splijten",
+    "english": "to split",
+    "imperfectum_ev": "spleet",
+    "imperfectum_mv": "spleten",
+    "perfectum": "gespleten",
+    "hulpwerkwoord": "heeft/is",
+    "notes": "heeft (iets splijten) / is (uit elkaar splijten)",
+    "tier": "intermediate",
+    "accept_alt": {},
+    "frequency": 2,
+    "school_priority": true,
+    "example": {
+      "nl": "De bliksem heeft de oude boom in tweeën gespleten.",
+      "en": "The lightning split the old tree in two."
+    }
+  },
+  {
+    "infinitief": "strijden",
+    "english": "to fight/battle",
+    "imperfectum_ev": "streed",
+    "imperfectum_mv": "streden",
+    "perfectum": "gestreden",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "intermediate",
+    "accept_alt": {},
+    "frequency": 3,
+    "school_priority": true,
+    "example": {
+      "nl": "De twee leeuwen hebben fel om het gebied gestreden.",
+      "en": "The two lions fought fiercely over the territory."
+    }
+  },
+  {
+    "infinitief": "vermijden",
+    "english": "to avoid",
+    "imperfectum_ev": "vermeed",
+    "imperfectum_mv": "vermeden",
+    "perfectum": "vermeden",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "intermediate",
+    "accept_alt": {},
+    "frequency": 3,
+    "school_priority": true,
+    "example": {
+      "nl": "De antilope heeft de krokodil in de rivier vermeden.",
+      "en": "The antelope avoided the crocodile in the river."
+    }
+  },
+  {
+    "infinitief": "bewijzen",
+    "english": "to prove",
+    "imperfectum_ev": "bewees",
+    "imperfectum_mv": "bewezen",
+    "perfectum": "bewezen",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "intermediate",
+    "accept_alt": {},
+    "frequency": 3,
+    "school_priority": true,
+    "example": {
+      "nl": "De sporen hebben bewezen dat de tijger hier was.",
+      "en": "The tracks proved that the tiger had been here."
+    }
+  },
+  {
+    "infinitief": "verwijzen",
+    "english": "to refer",
+    "imperfectum_ev": "verwees",
+    "imperfectum_mv": "verwezen",
+    "perfectum": "verwezen",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "intermediate",
+    "accept_alt": {},
+    "frequency": 2,
+    "school_priority": true,
+    "example": {
+      "nl": "De gids heeft naar de waterpoel verwezen voor de dorstige dieren.",
+      "en": "The guide referred to the waterhole for the thirsty animals."
+    }
+  },
+  {
+    "infinitief": "slijten",
+    "english": "to wear out",
+    "imperfectum_ev": "sleet",
+    "imperfectum_mv": "sleten",
+    "perfectum": "gesleten",
+    "hulpwerkwoord": "heeft/is",
+    "notes": "heeft (iets slijten) / is (zelf verslijten)",
+    "tier": "intermediate",
+    "accept_alt": {},
+    "frequency": 2,
+    "school_priority": true,
+    "example": {
+      "nl": "De wandelschoenen van de ranger zijn snel gesleten.",
+      "en": "The ranger's hiking boots wore out quickly."
+    }
+  },
+  {
+    "infinitief": "slijpen",
+    "english": "to sharpen/grind",
+    "imperfectum_ev": "sleep",
+    "imperfectum_mv": "slepen",
+    "perfectum": "geslepen",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "intermediate",
+    "accept_alt": {},
+    "frequency": 2,
+    "school_priority": true,
+    "example": {
+      "nl": "De boswachter heeft zijn kapmes scherp geslepen.",
+      "en": "The ranger sharpened his machete well."
+    }
+  },
+  {
+    "infinitief": "sluipen",
+    "english": "to sneak",
+    "imperfectum_ev": "sloop",
+    "imperfectum_mv": "slopen",
+    "perfectum": "geslopen",
+    "hulpwerkwoord": "heeft/is",
+    "notes": "heeft (sluipen als activiteit) / is (ergens naartoe sluipen)",
+    "tier": "intermediate",
+    "accept_alt": {},
+    "frequency": 3,
+    "school_priority": true,
+    "example": {
+      "nl": "De luipaard is stilletjes door het hoge gras geslopen.",
+      "en": "The leopard sneaked quietly through the tall grass."
+    }
+  },
+  {
+    "infinitief": "stuiven",
+    "english": "to spray/dash",
+    "imperfectum_ev": "stoof",
+    "imperfectum_mv": "stoven",
+    "perfectum": "gestoven",
+    "hulpwerkwoord": "heeft/is",
+    "notes": "heeft (stof doen opstuiven) / is (wegstuiven, richting)",
+    "tier": "intermediate",
+    "accept_alt": {},
+    "frequency": 2,
+    "school_priority": true,
+    "example": {
+      "nl": "Het stof is in grote wolken over het pad gestoven.",
+      "en": "Dust dashed across the path in big clouds."
+    }
+  },
+  {
+    "infinitief": "snuiven",
+    "english": "to sniff",
+    "imperfectum_ev": "snoof",
+    "imperfectum_mv": "snoven",
+    "perfectum": "gesnoven",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "intermediate",
+    "accept_alt": {},
+    "frequency": 2,
+    "school_priority": true,
+    "example": {
+      "nl": "De neushoorn heeft nieuwsgierig aan het gras gesnoven.",
+      "en": "The rhino sniffed curiously at the grass."
+    }
+  },
+  {
+    "infinitief": "krimpen",
+    "english": "to shrink",
+    "imperfectum_ev": "kromp",
+    "imperfectum_mv": "krompen",
+    "perfectum": "gekrompen",
+    "hulpwerkwoord": "is",
+    "notes": "",
+    "tier": "intermediate",
+    "accept_alt": {},
+    "frequency": 3,
+    "school_priority": true,
+    "example": {
+      "nl": "De waterpoel is in het droge seizoen flink gekrompen.",
+      "en": "The waterhole shrank a lot in the dry season."
+    }
+  },
+  {
+    "infinitief": "verzinnen",
+    "english": "to invent/make up",
+    "imperfectum_ev": "verzon",
+    "imperfectum_mv": "verzonnen",
+    "perfectum": "verzonnen",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "intermediate",
+    "accept_alt": {},
+    "frequency": 3,
+    "school_priority": true,
+    "example": {
+      "nl": "Tess heeft een grappig verhaal over de aap verzonnen.",
+      "en": "Tess made up a funny story about the monkey."
+    }
+  },
+  {
+    "infinitief": "dwingen",
+    "english": "to force",
+    "imperfectum_ev": "dwong",
+    "imperfectum_mv": "dwongen",
+    "perfectum": "gedwongen",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "intermediate",
+    "accept_alt": {},
+    "frequency": 3,
+    "school_priority": true,
+    "example": {
+      "nl": "De storm heeft de vogels om te schuilen gedwongen.",
+      "en": "The storm forced the birds to take shelter."
+    }
+  },
+  {
+    "infinitief": "verslinden",
+    "english": "to devour",
+    "imperfectum_ev": "verslond",
+    "imperfectum_mv": "verslonden",
+    "perfectum": "verslonden",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "intermediate",
+    "accept_alt": {},
+    "frequency": 3,
+    "school_priority": true,
+    "example": {
+      "nl": "De krokodil heeft de vis in één hap verslonden.",
+      "en": "The crocodile devoured the fish in one bite."
+    }
+  },
+  {
+    "infinitief": "dringen",
+    "english": "to push/press",
+    "imperfectum_ev": "drong",
+    "imperfectum_mv": "drongen",
+    "perfectum": "gedrongen",
+    "hulpwerkwoord": "heeft/is",
+    "notes": "heeft (aandringen op iets) / is (ergens naar binnen dringen)",
+    "tier": "intermediate",
+    "accept_alt": {},
+    "frequency": 2,
+    "school_priority": true,
+    "example": {
+      "nl": "De kudde buffels is dicht opeen naar de drinkplaats gedrongen.",
+      "en": "The herd of buffalo pushed closely together toward the watering spot."
+    }
+  },
+  {
+    "infinitief": "wringen",
+    "english": "to wring",
+    "imperfectum_ev": "wrong",
+    "imperfectum_mv": "wrongen",
+    "perfectum": "gewrongen",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "intermediate",
+    "accept_alt": {},
+    "frequency": 2,
+    "school_priority": true,
+    "example": {
+      "nl": "De verzorger heeft de natte doek goed gewrongen.",
+      "en": "The keeper wrung out the wet cloth well."
+    }
+  },
+  {
+    "infinitief": "blinken",
+    "english": "to shine/gleam",
+    "imperfectum_ev": "blonk",
+    "imperfectum_mv": "blonken",
+    "perfectum": "geblonken",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "intermediate",
+    "accept_alt": {},
+    "frequency": 2,
+    "school_priority": true,
+    "example": {
+      "nl": "De vacht van de panter heeft prachtig in de zon geblonken.",
+      "en": "The panther's fur gleamed beautifully in the sun."
+    }
+  },
+  {
+    "infinitief": "weven",
+    "english": "to weave",
+    "imperfectum_ev": "weefde",
+    "imperfectum_mv": "weefden",
+    "perfectum": "geweven",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "intermediate",
+    "accept_alt": {},
+    "frequency": 2,
+    "school_priority": true,
+    "example": {
+      "nl": "De spin heeft in de nacht een groot web geweven.",
+      "en": "The spider wove a big web during the night."
+    }
+  },
+  {
+    "infinitief": "zweren",
+    "english": "to swear (an oath)",
+    "imperfectum_ev": "zwoer",
+    "imperfectum_mv": "zwoeren",
+    "perfectum": "gezworen",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "intermediate",
+    "accept_alt": {},
+    "frequency": 2,
+    "school_priority": true,
+    "example": {
+      "nl": "De jonge ranger heeft plechtig gezworen de dieren te beschermen.",
+      "en": "The young ranger solemnly swore to protect the animals."
+    }
+  },
+  {
+    "infinitief": "verschijnen",
+    "english": "to appear",
+    "imperfectum_ev": "verscheen",
+    "imperfectum_mv": "verschenen",
+    "perfectum": "verschenen",
+    "hulpwerkwoord": "is",
+    "notes": "",
+    "tier": "intermediate",
+    "accept_alt": {},
+    "frequency": 4,
+    "school_priority": true,
+    "example": {
+      "nl": "Bij zonsopgang is de olifantenkudde bij de rivier verschenen.",
+      "en": "At sunrise the herd of elephants appeared by the river."
+    }
+  },
+  {
+    "infinitief": "ontvangen",
+    "english": "to receive",
+    "imperfectum_ev": "ontving",
+    "imperfectum_mv": "ontvingen",
+    "perfectum": "ontvangen",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "intermediate",
+    "accept_alt": {},
+    "frequency": 4,
+    "school_priority": true,
+    "example": {
+      "nl": "De dierenarts heeft een dringend telefoontje over de zieke giraf ontvangen.",
+      "en": "The vet received an urgent call about the sick giraffe."
+    }
+  },
+  {
+    "infinitief": "overwinnen",
+    "english": "to overcome",
+    "imperfectum_ev": "overwon",
+    "imperfectum_mv": "overwonnen",
+    "perfectum": "overwonnen",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "intermediate",
+    "accept_alt": {},
+    "frequency": 3,
+    "school_priority": true,
+    "example": {
+      "nl": "Het jonge veulen heeft zijn angst voor het water overwonnen.",
+      "en": "The young foal overcame its fear of water."
+    }
+  },
+  {
+    "infinitief": "verslaan",
+    "english": "to defeat",
+    "imperfectum_ev": "versloeg",
+    "imperfectum_mv": "versloegen",
+    "perfectum": "verslagen",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "intermediate",
+    "accept_alt": {},
+    "frequency": 3,
+    "school_priority": true,
+    "example": {
+      "nl": "De ranger heeft de gevaarlijke storm dapper verslagen.",
+      "en": "The ranger bravely overcame the dangerous storm."
+    }
+  },
+  {
+    "infinitief": "onthouden",
+    "english": "to remember",
+    "imperfectum_ev": "onthield",
+    "imperfectum_mv": "onthielden",
+    "perfectum": "onthouden",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "intermediate",
+    "accept_alt": {},
+    "frequency": 4,
+    "school_priority": true,
+    "example": {
+      "nl": "De papegaai heeft het hele liedje goed onthouden.",
+      "en": "The parrot remembered the whole song well."
+    }
+  },
+  {
+    "infinitief": "behouden",
+    "english": "to retain/keep",
+    "imperfectum_ev": "behield",
+    "imperfectum_mv": "behielden",
+    "perfectum": "behouden",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "intermediate",
+    "accept_alt": {},
+    "frequency": 3,
+    "school_priority": true,
+    "example": {
+      "nl": "De vos heeft ondanks de jacht zijn rust behouden.",
+      "en": "The fox kept its calm despite the hunt."
+    }
+  },
+  {
+    "infinitief": "opstaan",
+    "english": "to get up",
+    "imperfectum_ev": "stond op",
+    "imperfectum_mv": "stonden op",
+    "perfectum": "opgestaan",
+    "hulpwerkwoord": "is",
+    "notes": "",
+    "tier": "intermediate",
+    "accept_alt": {},
+    "frequency": 4,
+    "school_priority": true,
+    "example": {
+      "nl": "De luiaard is pas na de middag traag opgestaan.",
+      "en": "The sloth only got up slowly after noon."
+    }
+  },
+  {
+    "infinitief": "aankomen",
+    "english": "to arrive",
+    "imperfectum_ev": "kwam aan",
+    "imperfectum_mv": "kwamen aan",
+    "perfectum": "aangekomen",
+    "hulpwerkwoord": "is",
+    "notes": "",
+    "tier": "intermediate",
+    "accept_alt": {},
+    "frequency": 4,
+    "school_priority": true,
+    "example": {
+      "nl": "De boot met nieuwe dieren is eindelijk bij de haven aangekomen.",
+      "en": "The boat with new animals finally arrived at the harbor."
+    }
+  },
+  {
+    "infinitief": "uitvinden",
+    "english": "to invent",
+    "imperfectum_ev": "vond uit",
+    "imperfectum_mv": "vonden uit",
+    "perfectum": "uitgevonden",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "intermediate",
+    "accept_alt": {},
+    "frequency": 3,
+    "school_priority": true,
+    "example": {
+      "nl": "De onderzoekers hebben een handig hulpmiddel voor het dierenpark uitgevonden.",
+      "en": "The researchers invented a handy tool for the animal park."
+    }
+  },
+  {
+    "infinitief": "aantrekken",
+    "english": "to put on/attract",
+    "imperfectum_ev": "trok aan",
+    "imperfectum_mv": "trokken aan",
+    "perfectum": "aangetrokken",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "intermediate",
+    "accept_alt": {},
+    "frequency": 3,
+    "school_priority": true,
+    "example": {
+      "nl": "De verzorger heeft warme laarzen aangetrokken voor de kou.",
+      "en": "The keeper put on warm boots for the cold."
+    }
+  },
+  {
+    "infinitief": "bekijken",
+    "english": "to look at/examine",
+    "imperfectum_ev": "bekeek",
+    "imperfectum_mv": "bekeken",
+    "perfectum": "bekeken",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "intermediate",
+    "accept_alt": {},
+    "frequency": 4,
+    "school_priority": true,
+    "example": {
+      "nl": "De kinderen hebben de vlinders van dichtbij bekeken.",
+      "en": "The children looked at the butterflies up close."
+    }
+  },
+  {
+    "infinitief": "voorlezen",
+    "english": "to read aloud",
+    "imperfectum_ev": "las voor",
+    "imperfectum_mv": "lazen voor",
+    "perfectum": "voorgelezen",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "intermediate",
+    "accept_alt": {},
+    "frequency": 3,
+    "school_priority": true,
+    "example": {
+      "nl": "Tess heeft de kleintjes een verhaal over de safari voorgelezen.",
+      "en": "Tess read the little ones a story about the safari."
+    }
+  },
+  {
+    "infinitief": "herlezen",
+    "english": "to reread",
+    "imperfectum_ev": "herlas",
+    "imperfectum_mv": "herlazen",
+    "perfectum": "herlezen",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "intermediate",
+    "accept_alt": {},
+    "frequency": 2,
+    "school_priority": true,
+    "example": {
+      "nl": "De gids heeft het oude dagboek nog een keer herlezen.",
+      "en": "The guide reread the old diary once more."
+    }
+  },
+  {
+    "infinitief": "opschrijven",
+    "english": "to write down",
+    "imperfectum_ev": "schreef op",
+    "imperfectum_mv": "schreven op",
+    "perfectum": "opgeschreven",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "intermediate",
+    "accept_alt": {},
+    "frequency": 3,
+    "school_priority": true,
+    "example": {
+      "nl": "De onderzoeker heeft elke diersoort netjes opgeschreven.",
+      "en": "The researcher neatly wrote down every animal species."
+    }
+  },
+  {
+    "infinitief": "beschrijven",
+    "english": "to describe",
+    "imperfectum_ev": "beschreef",
+    "imperfectum_mv": "beschreven",
+    "perfectum": "beschreven",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "intermediate",
+    "accept_alt": {},
+    "frequency": 3,
+    "school_priority": true,
+    "example": {
+      "nl": "Het boek heeft het gedrag van de olifanten uitgebreid beschreven.",
+      "en": "The book described the elephants' behavior in detail."
+    }
+  },
+  {
+    "infinitief": "afsluiten",
+    "english": "to close off/lock",
+    "imperfectum_ev": "sloot af",
+    "imperfectum_mv": "sloten af",
+    "perfectum": "afgesloten",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "intermediate",
+    "accept_alt": {},
+    "frequency": 3,
+    "school_priority": true,
+    "example": {
+      "nl": "De verzorger heeft het hek van de leeuwenkooi goed afgesloten.",
+      "en": "The keeper properly locked the lion enclosure's gate."
+    }
+  },
+  {
+    "infinitief": "opsluiten",
+    "english": "to lock up",
+    "imperfectum_ev": "sloot op",
+    "imperfectum_mv": "sloten op",
+    "perfectum": "opgesloten",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "intermediate",
+    "accept_alt": {},
+    "frequency": 2,
+    "school_priority": true,
+    "example": {
+      "nl": "De verzorgers hebben de ontsnapte geit veilig opgesloten.",
+      "en": "The keepers safely locked up the escaped goat."
+    }
+  },
+  {
+    "infinitief": "afbreken",
+    "english": "to break off",
+    "imperfectum_ev": "brak af",
+    "imperfectum_mv": "braken af",
+    "perfectum": "afgebroken",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "intermediate",
+    "accept_alt": {},
+    "frequency": 3,
+    "school_priority": true,
+    "example": {
+      "nl": "De sterke wind heeft een grote tak van de boom afgebroken.",
+      "en": "The strong wind broke off a large branch from the tree."
+    }
   }
 ];
 
