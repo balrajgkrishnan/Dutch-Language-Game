@@ -729,6 +729,8 @@ export const DUTCH_DICTIONARY_DB: Record<string, DictionaryEntry> = {
     translationEn: 'Sea, ocean',
     syllables: ['zee'],
     exampleNl: 'De dolfijnen sprongen vrolijk uit de blauwe zee omhoog.',
+    synonyms: ['oceaan', 'watermassa', 'zeeark', 'golven'],
+    variants: ['zeeën', 'zeetje'],
     level: 'Groep 3-4 (AVI M3-E4)'
   },
   'strand': {
@@ -754,8 +756,8 @@ export const DUTCH_DICTIONARY_DB: Record<string, DictionaryEntry> = {
     wordType: 'Zelfstandig naamwoord',
     meaningNl: 'Een groot schip speciaal gebouwd voor wetenschappelijk onderzoek op zee.',
     translationEn: 'Research vessel / exploration ship',
-    compound: 'onderzoek + schip',
-    syllables: ['on', 'der', 'zoek', 'schip'],
+    compound: 'onderzoek + s + schip',
+    syllables: ['on', 'der', 'zoeks', 'schip'],
     exampleNl: 'Het onderzoeksschip lag voor anker in de baai met biologen aan boord.',
     citoCategory: 'Basisschool Kernwoord',
     level: 'Groep 5-6 (AVI M5-E6)'
@@ -775,7 +777,7 @@ export const DUTCH_DICTIONARY_DB: Record<string, DictionaryEntry> = {
     wordType: 'Zelfstandig naamwoord',
     meaningNl: 'Een schrift of boekje waarin je belangrijke informatie en ontdekkingen opschrijft.',
     translationEn: 'Notebook, journal, logbook',
-    compound: 'aantekening + boek',
+    compound: 'aantekeningen + boek',
     syllables: ['aan', 'te', 'ke', 'nin', 'gen', 'boek'],
     exampleNl: 'Hemali tekende een schets van het geheimzinnige runenschrift in haar boekje.',
     level: 'Groep 5-6 (AVI M5-E6)'
@@ -935,7 +937,7 @@ export const DUTCH_DICTIONARY_DB: Record<string, DictionaryEntry> = {
     wordType: 'Zelfstandig naamwoord',
     meaningNl: 'Een pasgeboren of heel jong leeuwtje.',
     translationEn: 'Lion cub',
-    compound: 'leeuw + welp',
+    compound: 'leeuwen + welp',
     syllables: ['leeu', 'wen', 'welp'],
     exampleNl: 'Het kleine leeuwenwelpje speelde met een twijgje.',
     level: 'Groep 3-4 (AVI M3-E4)'
@@ -1068,7 +1070,7 @@ export const DUTCH_DICTIONARY_DB: Record<string, DictionaryEntry> = {
     wordType: 'Zelfstandig naamwoord',
     meaningNl: 'Iemand die naar onbekende, afgelegen gebieden reist om nieuwe plekken, dieren of geheimen te ontdekken.',
     translationEn: 'Explorer / discovery adventurer',
-    compound: 'ontdekking + reiziger',
+    compound: 'ontdekking + s + reiziger',
     syllables: ['ont', 'dek', 'kings', 'rei', 'zi', 'ger'],
     exampleNl: 'Als dappere ontdekkingsreiziger bracht Hemali het mysterieuze nachthoorwoud in kaart.',
     citoCategory: 'Basisschool Kernwoord',
@@ -1413,7 +1415,7 @@ export const DUTCH_DICTIONARY_DB: Record<string, DictionaryEntry> = {
     wordType: 'Bijvoeglijk naamwoord',
     meaningNl: 'Gedachten kunnen overbrengen of horen zonder woorden te spreken.',
     translationEn: 'Telepathic, mind-reading',
-    syllables: ['te', 'le', 'pa', 'tisch'],
+    syllables: ['te', 'le', 'pa', 'thisch'],
     exampleNl: 'De wijze olifant sprak via telepathische gedachten rechtstreeks tot Hemali.',
     level: 'Groep 5-6 (AVI M5-E6)'
   },
@@ -1476,7 +1478,7 @@ export const DUTCH_DICTIONARY_DB: Record<string, DictionaryEntry> = {
     wordType: 'Zelfstandig naamwoord',
     meaningNl: 'Een spannende tocht of missie waarbij dieren of mensen uit gevaar worden bevrijd en geholpen.',
     translationEn: 'Rescue adventure',
-    compound: 'redding + avontuur',
+    compound: 'redding + s + avontuur',
     syllables: ['red', 'dings', 'a', 'von', 'tuur'],
     exampleNl: 'Tijdens hun reddingsavontuur in Maleisië hielpen Ridheya en Hemali talloze dieren in nood.',
     level: 'Groep 5-6 (AVI M5-E6)'
@@ -1652,7 +1654,7 @@ export const DUTCH_DICTIONARY_DB: Record<string, DictionaryEntry> = {
     wordType: 'Zelfstandig naamwoord',
     meaningNl: 'De aaneengesloten laag van boomkruinen en bladeren hoog bovenin het bos of regenwoud.',
     translationEn: 'Canopy, treetops',
-    compound: 'bladeren + dak',
+    compound: 'blader + dak',
     syllables: ['bla', 'der', 'dak'],
     exampleNl: 'Het zonlicht filterde in gouden stralen door het dichte groene bladerdak.',
     level: 'Groep 5-6 (AVI M5-E6)'
@@ -1720,7 +1722,7 @@ export const DUTCH_DICTIONARY_DB: Record<string, DictionaryEntry> = {
     wordType: 'Zelfstandig naamwoord',
     meaningNl: 'Een oneindige magische bibliotheek waarin de geschiedenis en toekomst van het universum bewaard worden.',
     translationEn: 'Time library, Chronos archives',
-    compound: 'tijd + bibliotheek',
+    compound: 'tijd + s + bibliotheek',
     syllables: ['tijds', 'bi', 'blio', 'theek'],
     exampleNl: 'Tussen de zwevende boekenplanken van de Tijdsbibliotheek zocht Hemali naar de verloren tijdsrol.',
     level: 'Groep 7-8 (Doorstroomtoets)'
@@ -1763,6 +1765,8 @@ export const DUTCH_DICTIONARY_DB: Record<string, DictionaryEntry> = {
     translationEn: 'Table, desk',
     syllables: ['ta', 'fel'],
     exampleNl: 'Ridheya en Hemali legden de oude landkaart op de houten tafel.',
+    synonyms: ['bureau', 'eettafel', 'werktafel', 'salontafel'],
+    variants: ['tafels', 'tafeltje'],
     level: 'Groep 3-4 (AVI M3-E4)'
   },
   'leestafel': {
@@ -1802,6 +1806,8 @@ export const DUTCH_DICTIONARY_DB: Record<string, DictionaryEntry> = {
     translationEn: 'Chair, seat',
     syllables: ['stoel'],
     exampleNl: 'Ridheya trok een zachte stoel naar voren om het prentenboek te bekijken.',
+    synonyms: ['zetel', 'fauteuil', 'zitplaats', 'kruk'],
+    variants: ['stoelen', 'stoeltje'],
     level: 'Groep 3-4 (AVI M3-E4)'
   },
   'bank': {
@@ -1811,6 +1817,8 @@ export const DUTCH_DICTIONARY_DB: Record<string, DictionaryEntry> = {
     translationEn: 'Couch, sofa, bench / Bank',
     syllables: ['bank'],
     exampleNl: 'Samen ploften de zussen neer op de comfortabele fluwelen bank.',
+    synonyms: ['sofa', 'zitbank', 'rustbank'],
+    variants: ['banken', 'bankje'],
     level: 'Groep 3-4 (AVI M3-E4)'
   },
   'kast': {
@@ -1820,6 +1828,8 @@ export const DUTCH_DICTIONARY_DB: Record<string, DictionaryEntry> = {
     translationEn: 'Cupboard, wardrobe, cabinet',
     syllables: ['kast'],
     exampleNl: 'Achterin de oude houten kast vonden ze een geheime doorgang.',
+    synonyms: ['kledingkast', 'boekenkast', 'vitrine', 'kabinet', 'dressoir'],
+    variants: ['kasten', 'kastje'],
     level: 'Groep 3-4 (AVI M3-E4)'
   },
   'boekenkast': {
@@ -1837,6 +1847,8 @@ export const DUTCH_DICTIONARY_DB: Record<string, DictionaryEntry> = {
     wordType: 'Zelfstandig naamwoord',
     meaningNl: 'Een plat serviesgoed om eten van te eten, of een schoolbord waarop geschreven wordt.',
     translationEn: 'Plate, dish / Blackboard, sign',
+    synonyms: ['schaal', 'eetbord', 'schoteltje', 'paneel'],
+    variants: ['borden', 'bordje'],
     syllables: ['bord'],
     exampleNl: 'De meester schreef de raadselachtige rekensom met krijt op het bord.',
     level: 'Groep 3-4 (AVI M3-E4)'
@@ -1858,6 +1870,8 @@ export const DUTCH_DICTIONARY_DB: Record<string, DictionaryEntry> = {
     translationEn: 'Class, classroom group',
     syllables: ['klas'],
     exampleNl: 'De hele klas luisterde ademloos naar het spannende verhaal.',
+    synonyms: ['groep', 'leerjaar', 'klaslokaal', 'groepsvorming'],
+    variants: ['klassen', 'klasje'],
     level: 'Groep 3-4 (AVI M3-E4)'
   },
   'klaslokaal': {
@@ -1877,6 +1891,8 @@ export const DUTCH_DICTIONARY_DB: Record<string, DictionaryEntry> = {
     translationEn: 'Notebook, exercise book',
     syllables: ['schrift'],
     exampleNl: 'Met een vulpen schreef Ridheya keurig haar antwoorden in het schrift.',
+    synonyms: ['notitieboek', 'schrijfblok', 'dagboek', 'cahier'],
+    variants: ['schriften', 'schriftje'],
     level: 'Groep 3-4 (AVI M3-E4)'
   },
   'potlood': {
@@ -1886,15 +1902,19 @@ export const DUTCH_DICTIONARY_DB: Record<string, DictionaryEntry> = {
     translationEn: 'Pencil',
     syllables: ['pot', 'lood'],
     exampleNl: 'Met een scherp potlood tekende Hemali een schets van de plattegrond.',
+    synonyms: ['grafietpotlood', 'kleurpotlood', 'stift'],
+    variants: ['potloden', 'potloodje'],
     level: 'Groep 3-4 (AVI M3-E4)'
   },
   'pen': {
     word: 'pen',
     wordType: 'Zelfstandig naamwoord',
     meaningNl: 'Een schrijfvoorwerp gevuld met inkt.',
-    translationEn: 'Pen',
+    translationEn: 'Pen / writing pen',
     syllables: ['pen'],
     exampleNl: 'De gouden veerpen gleed soepel over het perkament.',
+    synonyms: ['balpen', 'vulpen', 'stift', 'veer'],
+    variants: ['pennen', 'pennetje'],
     level: 'Groep 3-4 (AVI M3-E4)'
   },
   'gum': {
@@ -1904,6 +1924,8 @@ export const DUTCH_DICTIONARY_DB: Record<string, DictionaryEntry> = {
     translationEn: 'Eraser, rubber',
     syllables: ['gum'],
     exampleNl: 'Met haar roze gum wiste ze het foutje voorzichtig uit.',
+    synonyms: ['stuf', 'vlakgom', 'wisser'],
+    variants: ['gummen', 'gummetje'],
     level: 'Groep 3-4 (AVI M3-E4)'
   },
   'liniaal': {
@@ -1913,6 +1935,8 @@ export const DUTCH_DICTIONARY_DB: Record<string, DictionaryEntry> = {
     translationEn: 'Ruler',
     syllables: ['li', 'ni', 'aal'],
     exampleNl: 'Met de liniaal maten ze de afstand op de schatkaart in centimeters.',
+    synonyms: ['meetlat', 'maatstok', 'geodriehoek'],
+    variants: ['linialen', 'liniaaltje'],
     level: 'Groep 3-4 (AVI M3-E4)'
   },
   'schooltas': {
@@ -1933,6 +1957,8 @@ export const DUTCH_DICTIONARY_DB: Record<string, DictionaryEntry> = {
     compound: 'rug + zak',
     syllables: ['rug', 'zak'],
     exampleNl: 'In haar rugzak bewaarde Hemali een kompas, een waterfles en een toverlantaarn.',
+    synonyms: ['tas', 'knapzak', 'ransel', 'rugtas'],
+    variants: ['rugzakken', 'rugzakje'],
     level: 'Groep 3-4 (AVI M3-E4)'
   },
   'zaklamp': {

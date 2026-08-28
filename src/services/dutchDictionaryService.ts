@@ -1,4 +1,4 @@
-import { DUTCH_DICTIONARY_DB, COMPOUND_PREFIXES, COMPOUND_SUFFIXES, DictionaryEntry } from '../data/dutchDictionaryData';
+﻿import { DUTCH_DICTIONARY_DB, COMPOUND_PREFIXES, COMPOUND_SUFFIXES, DictionaryEntry } from '../data/dutchDictionaryData';
 import { DUTCH_SEMANTIC_INDEX } from '../data/dutchVocabularyBank';
 import { WERKWOORDEN_DATA } from '../data/werkwoorden';
 
@@ -20,17 +20,17 @@ export function normalizeDutchWord(raw: string): string {
   let normalized = raw.normalize('NFC').trim().toLowerCase();
 
   // 2. Preserve fixed Dutch apostrophe expressions ('s avonds, 's ochtends, 's middags, 's nachts, 's zomers, 's winters, 's werelds)
-  const apostropheMatch = normalized.match(/^['’‘]s\s+([a-zäëïöüéèêóòôáàâ]+)$/i);
+  const apostropheMatch = normalized.match(/^['â€™â€˜]s\s+([a-zÃ¤Ã«Ã¯Ã¶Ã¼Ã©Ã¨ÃªÃ³Ã²Ã´Ã¡Ã Ã¢]+)$/i);
   if (apostropheMatch) {
     return `'s ${apostropheMatch[1]}`;
   }
 
   // 3. Strip surrounding quotation marks, brackets, punctuation, bullets, em-dashes
   // Leading punctuation (keep leading apostrophe only if followed by s and space, handled above)
-  normalized = normalized.replace(/^[«"“‘'„()[\]{}#*_~`–—…•·\/\\:;,!?.]+/g, '');
+  normalized = normalized.replace(/^[Â«"â€œâ€˜'â€ž()[\]{}#*_~`â€“â€”â€¦â€¢Â·\/\\:;,!?.]+/g, '');
   
   // Trailing punctuation
-  normalized = normalized.replace(/[»"”’'„()[\]{}#*_~`–—…•·\/\\:;,!?.]+$/g, '');
+  normalized = normalized.replace(/[Â»"â€â€™'â€ž()[\]{}#*_~`â€“â€”â€¦â€¢Â·\/\\:;,!?.]+$/g, '');
 
   // 4. Handle hyphenated edge cases (e.g. trailing/leading stray hyphens)
   normalized = normalized.replace(/^-+|-+$/g, '').trim();
@@ -54,7 +54,15 @@ const INDIVISIBLE_ONSET_CLUSTERS = [
   'kl', 'pl', 'bl', 'fl', 'gl', 'cl', 'sl', 'sm', 'sn', 'sw', 'tw', 'kn', 'wr'
 ];
 
-const NEVER_SPLIT_CONSONANT_DIGRAPHS = ['ch', 'sch', 'ng', 'nk', 'th', 'sh', 'ph', 'qu'];
+// Onset digraphs: behave as a single onset, so the split goes BEFORE them
+// (la-chen, bi-bli-o-theek). They carry the vowel that follows.
+// NOTE: ng/nk are deliberately NOT here — in standard Dutch orthography they
+// split across the boundary (zin-gen, ban-ken): first consonant to the coda,
+// second to the onset.
+const ONSET_DIGRAPHS = ['ch', 'sch', 'th', 'sh', 'ph', 'qu'];
+
+// Digraphs that must never be broken apart (kept as one onset).
+const NEVER_SPLIT_CONSONANT_DIGRAPHS = [...ONSET_DIGRAPHS];
 
 const MORPHOLOGICAL_SUFFIXES = [
   'achtigheden', 'achtigheid', 'heid', 'heden', 'schap', 'schappen',
@@ -67,6 +75,40 @@ const MORPHOLOGICAL_SUFFIXES = [
 const MORPHOLOGICAL_PREFIXES = [
   'on', 'be', 'ge', 'ver', 'her', 'ont', 'wan', 'mis'
 ];
+
+// ============================================================================
+// COMPOUND-DETECTION HEURISTICS (accuracy over coverage)
+// ============================================================================
+
+/**
+ * Loanword / non-compound endings. Words ending in one of these are single
+ * morphemes (e.g. documentatie, categorie, mechanisme, theorie) and must NOT
+ * be split even when both fragments exist in the DB.
+ */
+const NON_COMPOUND_ENDINGS = [
+  'atie', 'itie', 'otie', 'utie', 'etie',
+  'isme', 'ist', 'iteit', 'heid', 'teit', 'theek',
+  'um', 'us', 'aal', 'iel', 'tief', 'schap', 'aris', 'isme', 'gram', 'loog'
+];
+
+/** Words that are never the left constituent of a genuine Dutch compound. */
+const COMPOUND_LEFT_BLOCKLIST = new Set(['de', 'het', 'een', 'en', 'of', 'voor', 'met', 'aan', 'uit', 'op', 'in', 'te']);
+
+/** Minimum confidence to accept an arbitrary (non-prefixed) compound split. */
+const ARBITRARY_COMPOUND_MIN_CONFIDENCE = 0.8;
+
+/** Minimum acceptable length for a constituent part of an arbitrary compound. */
+const MIN_COMPOUND_PART_LENGTH = 4;
+
+/** Does this word look like a non-compound loanword? */
+function hasNonCompoundEnding(word: string): boolean {
+  return NON_COMPOUND_ENDINGS.some(e => word.endsWith(e));
+}
+
+/** A constituent must contain at least one vowel to be a plausible word fragment. */
+function hasVowel(part: string): boolean {
+  return /[aeiouyÃ¡Ã©Ã­Ã³ÃºÃ¤Ã«Ã¯Ã¶Ã¼]/.test(part);
+}
 
 export const VERB_STEM_MAP: Record<string, { verb: string; en: string; nl: string }> = {
   'lees': { verb: 'lezen', en: 'reading', nl: 'lezen' },
@@ -113,6 +155,8 @@ export interface CompoundSplitMatch {
   enA: string;
   enB: string;
   typeB?: DictionaryEntry['wordType'];
+  /** Confidence that this is a genuine compound (0-1). 1.0 = curated prefix/stem. */
+  confidence: number;
 }
 
 /**
@@ -151,7 +195,8 @@ export function findCompoundSplit(word: string): CompoundSplitMatch | null {
           meaningB: sInfo.meaning,
           enA: pInfo.en,
           enB: sInfo.en,
-          typeB: sInfo.type as DictionaryEntry['wordType'] || 'Zelfstandig naamwoord'
+          typeB: sInfo.type as DictionaryEntry['wordType'] || 'Zelfstandig naamwoord',
+          confidence: 1.0 // curated prefix compounds are authoritative
         };
       }
     }
@@ -184,13 +229,25 @@ export function findCompoundSplit(word: string): CompoundSplitMatch | null {
           meaningB: sInfo.meaning,
           enA: vInfo.en,
           enB: sInfo.en,
-          typeB: (sInfo.type as DictionaryEntry['wordType']) || 'Zelfstandig naamwoord'
+          typeB: (sInfo.type as DictionaryEntry['wordType']) || 'Zelfstandig naamwoord',
+          confidence: 1.0 // curated verb-stem compounds are authoritative
         };
       }
     }
   }
 
-  // 3. Check arbitrary combinations from DB/Lexicon
+  // 3. Arbitrary combinations from DB/Lexicon â€” SCORED, BEST-CANDIDATE selection.
+  //    Accuracy over coverage: only accept a split that clears the confidence bar,
+  //    to avoid false compounds like "materiaal", "documentatie", "categorie".
+  //
+  //    Fast vetoes first:
+  if (hasNonCompoundEnding(word)) return null; // loanword ending â†’ single morpheme
+
+  let best: CompoundSplitMatch | null = null;
+  let bestScore = 0;
+
+  // Allow 3-letter constituents (rug+zak, bal+pen) but require them to clear a
+  // higher confidence bar than the default, to keep false positives out.
   for (let i = 3; i <= word.length - 3; i++) {
     const partA = word.slice(0, i);
     let rest = word.slice(i);
@@ -203,6 +260,11 @@ export function findCompoundSplit(word: string): CompoundSplitMatch | null {
       rest = rest.slice(2);
     }
 
+    // Structural vetoes
+    if (COMPOUND_LEFT_BLOCKLIST.has(partA)) continue;      // articles/preps never left part
+    if (partA.length < 3 || rest.length < 3) continue;
+    if (!hasVowel(partA) || !hasVowel(rest)) continue;      // each fragment must be word-like
+
     const infoA = (DUTCH_EDUCATIONAL_LEXICON && DUTCH_EDUCATIONAL_LEXICON[partA]) || (DUTCH_DICTIONARY_DB && DUTCH_DICTIONARY_DB[partA]);
     const infoB = (DUTCH_EDUCATIONAL_LEXICON && DUTCH_EDUCATIONAL_LEXICON[rest]) || (DUTCH_DICTIONARY_DB && DUTCH_DICTIONARY_DB[rest]) || COMPOUND_SUFFIXES[rest];
 
@@ -213,72 +275,105 @@ export function findCompoundSplit(word: string): CompoundSplitMatch | null {
       const eB = 'translationEn' in infoB ? infoB.translationEn : ('en' in infoB ? infoB.en : '');
       const tB = 'wordType' in infoB ? infoB.wordType : ('type' in infoB ? infoB.type : 'Zelfstandig naamwoord');
 
-      return {
-        partA,
-        linking,
-        partB: rest,
-        meaningA: mA,
-        meaningB: mB,
-        enA: eA,
-        enB: eB,
-        typeB: (tB as DictionaryEntry['wordType']) || 'Zelfstandig naamwoord'
-      };
+      // Confidence scoring (heuristics, NOT lexical certainty):
+      //  - both constituents must be real dictionary words (gate, above)
+      //  - balance bonus: genuine compounds have roughly equal-length parts
+      //  - constituent length bonus: longer parts are more reliable anchors
+      //  - linking consonant is a strong compound signal
+      //  - short (3-letter) parts get a penalty: higher false-positive risk
+      const balance = 1 - Math.abs(partA.length - rest.length) / word.length;
+      const minLen = Math.min(partA.length, rest.length);
+      let confidence = 0.55 + balance * 0.2 + minLen * 0.04 + (linking ? 0.1 : 0);
+      if (minLen < MIN_COMPOUND_PART_LENGTH) confidence -= 0.03; // mild short-part penalty
+      confidence = Math.min(0.9, confidence); // arbitrary splits never reach curated 1.0
+
+      if (confidence > bestScore) {
+        bestScore = confidence;
+        best = {
+          partA,
+          linking,
+          partB: rest,
+          meaningA: mA,
+          meaningB: mB,
+          enA: eA,
+          enB: eB,
+          typeB: (tB as DictionaryEntry['wordType']) || 'Zelfstandig naamwoord',
+          confidence
+        };
+      }
     }
   }
 
-  return null;
+  return bestScore >= ARBITRARY_COMPOUND_MIN_CONFIDENCE ? best : null;
 }
+
+/**
+ * Hardcoded syllable overrides. These are audited automatically:
+ * run `scripts/auditSyllableOverrides.ts` to list any override that the
+ * rule engine already reproduces correctly, so the list only contains
+ * words the rules cannot handle (truly exceptional morphemic splits).
+ */
+const SYLLABLE_OVERRIDES: Record<string, string[]> = {
+  'oneindigheid': ['on', 'ein', 'dig', 'heid'],
+  'oneindigheden': ['on', 'ein', 'dig', 'he', 'den'],
+  'oneindig': ['on', 'ein', 'dig'],
+  'oneindige': ['on', 'ein', 'di', 'ge'],
+  'onderzoekschip': ['on', 'der', 'zoek', 'schip'],
+  'onderzoeksschip': ['on', 'der', 'zoeks', 'schip'],
+  'leestafel': ['lees', 'ta', 'fel'],
+  'koraalrif': ['ko', 'raal', 'rif'],
+  'duinpad': ['duin', 'pad'],
+  'helmgras': ['helm', 'gras'],
+  'schildpad': ['schild', 'pad'],
+  'boomhutkliniek': ['boom', 'hut', 'kli', 'niek'],
+  'tijdloos': ['tijd', 'loos'],
+  'bibliotheek': ['bi', 'bli', 'o', 'theek'],
+  'kristalgrot': ['kris', 'tal', 'grot'],
+  'desondanks': ['des', 'on', 'danks'],
+  'daardoor': ['daar', 'door'],
+  'desalniettemin': ['des', 'al', 'niet', 'te', 'min'],
+  'achterdochtig': ['ach', 'ter', 'doch', 'tig'],
+  'waarschijnlijk': ['waar', 'schijn', 'lijk'],
+  'mogelijkheid': ['mo', 'ge', 'lijk', 'heid'],
+  'mogelijkheden': ['mo', 'ge', 'lijk', 'he', 'den'],
+  'moeilijkheid': ['moei', 'lijk', 'heid'],
+  'moeilijkheden': ['moei', 'lijk', 'he', 'den'],
+  'duidelijkheid': ['dui', 'de', 'lijk', 'heid'],
+  'gezondheid': ['ge', 'zond', 'heid'],
+  'schoonheid': ['schoon', 'heid'],
+  'waarheid': ['waar', 'heid'],
+  'vrijheid': ['vrij', 'heid'],
+  'veiligheid': ['vei', 'lig', 'heid'],
+  'geheimzinnig': ['ge', 'heim', 'zin', 'nig'],
+  'geheimzinnigheid': ['ge', 'heim', 'zin', 'nig', 'heid'],
+  'wonderbaarlijk': ['won', 'der', 'baar', 'lijk'],
+  'eindeloos': ['ein', 'de', 'loos'],
+  'eindeloosheid': ['ein', 'de', 'loos', 'heid'],
+  'grenzeloos': ['gren', 'ze', 'loos'],
+  'grenzeloosheid': ['gren', 'ze', 'loos', 'heid'],
+  // Morphological long-vowel + coda clusters the phonetic rules can't resolve:
+  'aardappel': ['aard', 'ap', 'pel'],
+  'aardbei': ['aard', 'bei']
+};
+
+const MAX_SYLLABIFY_DEPTH = 4;
 
 /**
  * Breaks a Dutch word into phonetically and morphologically correct syllables (klankgroepen).
  * Example: "oneindigheid" -> ["on", "ein", "dig", "heid"]
  * Example: "onderzoekschip" -> ["on", "der", "zoek", "schip"]
  * Example: "leestafel" -> ["lees", "ta", "fel"]
+ *
+ * `depth` is a recursion guard against cyclic compound/hyphen structures.
  */
-export function syllabifyDutch(rawWord: string): string[] {
+export function syllabifyDutch(rawWord: string, depth = 0): string[] {
   const word = normalizeDutchWord(rawWord);
   if (!word || word.length <= 3) return [word || rawWord];
 
-  // Specific hardcoded overrides for known complex educational words
-  const SYLLABLE_OVERRIDES: Record<string, string[]> = {
-    'oneindigheid': ['on', 'ein', 'dig', 'heid'],
-    'oneindigheden': ['on', 'ein', 'dig', 'he', 'den'],
-    'oneindig': ['on', 'ein', 'dig'],
-    'oneindige': ['on', 'ein', 'di', 'ge'],
-    'onderzoekschip': ['on', 'der', 'zoek', 'schip'],
-    'onderzoeksschip': ['on', 'der', 'zoeks', 'schip'],
-    'leestafel': ['lees', 'ta', 'fel'],
-    'koraalrif': ['ko', 'raal', 'rif'],
-    'duinpad': ['duin', 'pad'],
-    'helmgras': ['helm', 'gras'],
-    'schildpad': ['schild', 'pad'],
-    'boomhutkliniek': ['boom', 'hut', 'kli', 'niek'],
-    'tijdloos': ['tijd', 'loos'],
-    'bibliotheek': ['bi', 'bli', 'o', 'theek'],
-    'kristalgrot': ['kris', 'tal', 'grot'],
-    'desondanks': ['des', 'on', 'danks'],
-    'daardoor': ['daar', 'door'],
-    'desalniettemin': ['des', 'al', 'niet', 'te', 'min'],
-    'achterdochtig': ['ach', 'ter', 'doch', 'tig'],
-    'waarschijnlijk': ['waar', 'schijn', 'lijk'],
-    'mogelijkheid': ['mo', 'ge', 'lijk', 'heid'],
-    'mogelijkheden': ['mo', 'ge', 'lijk', 'he', 'den'],
-    'moeilijkheid': ['moei', 'lijk', 'heid'],
-    'moeilijkheden': ['moei', 'lijk', 'he', 'den'],
-    'duidelijkheid': ['dui', 'de', 'lijk', 'heid'],
-    'gezondheid': ['ge', 'zond', 'heid'],
-    'schoonheid': ['schoon', 'heid'],
-    'waarheid': ['waar', 'heid'],
-    'vrijheid': ['vrij', 'heid'],
-    'veiligheid': ['vei', 'lig', 'heid'],
-    'geheimzinnig': ['ge', 'heim', 'zin', 'nig'],
-    'geheimzinnigheid': ['ge', 'heim', 'zin', 'nig', 'heid'],
-    'wonderbaarlijk': ['won', 'der', 'baar', 'lijk'],
-    'eindeloos': ['ein', 'de', 'loos'],
-    'eindeloosheid': ['ein', 'de', 'loos', 'heid'],
-    'grenzeloos': ['gren', 'ze', 'loos'],
-    'grenzeloosheid': ['gren', 'ze', 'loos', 'heid']
-  };
+  // Recursion guard (Bug 3): malformed compound metadata can recurse forever
+  if (depth > MAX_SYLLABIFY_DEPTH) {
+    return [word];
+  }
 
   if (SYLLABLE_OVERRIDES[word]) {
     return SYLLABLE_OVERRIDES[word];
@@ -289,7 +384,7 @@ export function syllabifyDutch(rawWord: string): string[] {
     const parts = word.split('-');
     const res: string[] = [];
     parts.forEach((p, idx) => {
-      res.push(...syllabifyDutch(p));
+      res.push(...syllabifyDutch(p, depth + 1));
       if (idx < parts.length - 1) {
         res[res.length - 1] = res[res.length - 1] + '-';
       }
@@ -300,8 +395,8 @@ export function syllabifyDutch(rawWord: string): string[] {
   // Check if compound word: decompose and syllabify components
   const compound = findCompoundSplit(word);
   if (compound) {
-    const sylA = syllabifyDutch(compound.partA);
-    const sylB = syllabifyDutch(compound.partB);
+    const sylA = syllabifyDutch(compound.partA, depth + 1);
+    const sylB = syllabifyDutch(compound.partB, depth + 1);
     if (compound.linking) {
       sylA[sylA.length - 1] = sylA[sylA.length - 1] + compound.linking;
     }
@@ -312,32 +407,33 @@ export function syllabifyDutch(rawWord: string): string[] {
   for (const pfx of MORPHOLOGICAL_PREFIXES) {
     if (word.startsWith(pfx) && word.length >= pfx.length + 4) {
       const rest = word.slice(pfx.length);
-      const restVowels = rest.match(/[aeiouyáéíóúäëïöü]/g);
+      const restVowels = rest.match(/[aeiouyÃ¡Ã©Ã­Ã³ÃºÃ¤Ã«Ã¯Ã¶Ã¼]/g);
       if (restVowels && restVowels.length >= 1) {
-        return [pfx, ...syllabifyDutchCore(rest)];
+        return [pfx, ...syllabifyDutchCore(rest, depth + 1)];
       }
     }
   }
 
-  return syllabifyDutchCore(word);
+  return syllabifyDutchCore(word, depth + 1);
 }
 
 /**
- * Core phonetic syllable division for a single Dutch morpheme or un-prefixed stem
+ * Core phonetic syllable division for a single Dutch morpheme or un-prefixed stem.
+ * `depth` is carried through recursive suffix stripping to respect the recursion guard.
  */
-function syllabifyDutchCore(word: string): string[] {
-  const vowels = 'aeiouyáéíóúäëïöü';
+function syllabifyDutchCore(word: string, depth = 0): string[] {
+  const vowels = 'aeiouyÃ¡Ã©Ã­Ã³ÃºÃ¤Ã«Ã¯Ã¶Ã¼';
   const len = word.length;
-  if (len <= 3) return [word];
+  if (len <= 3 || depth > MAX_SYLLABIFY_DEPTH) return [word];
 
   // Check morphological suffix match at the end
   for (const sfx of MORPHOLOGICAL_SUFFIXES) {
     if (word.endsWith(sfx) && word.length >= sfx.length + 3) {
       const stem = word.slice(0, -sfx.length);
-      const stemVowels = stem.match(/[aeiouyáéíóúäëïöü]/g);
+      const stemVowels = stem.match(/[aeiouyÃ¡Ã©Ã­Ã³ÃºÃ¤Ã«Ã¯Ã¶Ã¼]/g);
       if (stemVowels && stemVowels.length >= 1) {
-        const stemSyllables = syllabifyDutchCore(stem);
-        const sfxSyllables = sfx.length > 4 ? syllabifyDutchCore(sfx) : [sfx];
+        const stemSyllables = syllabifyDutchCore(stem, depth + 1);
+        const sfxSyllables = sfx.length > 4 ? syllabifyDutchCore(sfx, depth + 1) : [sfx];
         return [...stemSyllables, ...sfxSyllables];
       }
     }
@@ -392,7 +488,7 @@ function syllabifyDutchCore(word: string): string[] {
     const cLen = consonantSpan.length;
 
     if (cLen === 0) {
-      // Hiatus / two vowels touching without consonant (e.g. ru-ïne, po-ë-zie, cha-os, o-a-se)
+      // Hiatus / two vowels touching without consonant (e.g. ru-Ã¯ne, po-Ã«-zie, cha-os, o-a-se)
       splitPoints.push(currentNuc.end);
     } else if (cLen === 1) {
       // Rule: Single intervocalic consonant moves to the next syllable (V - CV)
@@ -404,12 +500,11 @@ function syllabifyDutchCore(word: string): string[] {
       if (INDIVISIBLE_ONSET_CLUSTERS.includes(consonantSpan)) {
         splitPoints.push(currentNuc.end);
       } else if (NEVER_SPLIT_CONSONANT_DIGRAPHS.includes(consonantSpan)) {
-        // e.g. la - chen (ch stays with 2nd syllable) or zin - gen (ng)
-        if (consonantSpan === 'ch' || consonantSpan === 'sch') {
-          splitPoints.push(currentNuc.end);
-        } else {
-          splitPoints.push(nextNuc.start);
-        }
+        // Onset digraph (ch/sch/th/sh/ph/qu) moves RIGHT with the following vowel:
+        // la-chen, bi-bli-o-theek -> split goes BEFORE the digraph (at currentNuc.end).
+        // (ng/nk are NOT here: they fall through to the default 2-consonant rule,
+        //  which splits them zin-gen / ban-ken.)
+        splitPoints.push(currentNuc.end);
       } else {
         // Rule: Split between consonants, prioritizing a valid onset for the second syllable
         let splitFound = false;
@@ -519,6 +614,27 @@ export const DUTCH_EDUCATIONAL_LEXICON: Record<string, LemmaMapping> = {
     synonyms: ['oneindigheid', 'eeuwigheid'],
     variants: ['eindeloos', 'eindeloze'],
     level: 'Groep 5-6 (AVI M5-E6)'
+  },
+  // --- Body Parts & Clothing (Compound Stems) ---
+  'rug': {
+    lemma: 'rug',
+    type: 'Zelfstandig naamwoord',
+    en: 'Back (of the body)',
+    nl: 'Het achterste deel van het bovenlichaam tussen de nek en de billen.',
+    example: 'De rug van de stoel was te hoog voor Ridheya.',
+    synonyms: ['achterkant', 'ruggengraat'],
+    variants: ['ruggen', 'rugzak'],
+    level: 'Groep 3-4 (AVI M3-E4)'
+  },
+  'zak': {
+    lemma: 'zak',
+    type: 'Zelfstandig naamwoord',
+    en: 'Bag, sack, pocket',
+    nl: 'Een zakvormig voorwerp om iets in te bewaren of te dragen.',
+    example: 'Hemali stopte de kaart in haar zak.',
+    synonyms: ['tas', 'buidel', 'zakje'],
+    variants: ['zakken', 'zakje', 'rugzak'],
+    level: 'Groep 3-4 (AVI M3-E4)'
   },
   'grenzeloos': {
     lemma: 'grenzeloos',
@@ -673,6 +789,89 @@ export const DUTCH_EDUCATIONAL_LEXICON: Record<string, LemmaMapping> = {
     level: 'Groep 5-6 (AVI M5-E6)',
     citoCategory: 'Moeilijk Cito Woord'
   },
+
+  // --- Root Adjectives for '-heid' Abstract Nouns (lemma anchors) ---
+  'mogelijk': {
+    lemma: 'mogelijk',
+    type: 'Bijvoeglijk naamwoord',
+    en: 'Possible, feasible',
+    nl: 'Dat gedaan of bereikt kan worden; haalbaar.',
+    example: 'Met een stevige ladder was het mogelijk om over de hoge muur te klimmen.',
+    synonyms: ['haalbaar', 'doenbaar', 'realiseerbaar'],
+    variants: ['mogelijke', 'mogelijkheid', 'mogelijkheden'],
+    level: 'Groep 5-6 (AVI M5-E6)'
+  },
+  'moeilijk': {
+    lemma: 'moeilijk',
+    type: 'Bijvoeglijk naamwoord',
+    en: 'Difficult, hard, challenging',
+    nl: 'Niet gemakkelijk om te doen of te begrijpen; lastig.',
+    example: 'De moeilijke puzzel kostte de zussen veel denkwerk en geduld om op te lossen.',
+    synonyms: ['lastig', 'ingewikkeld', 'moeizaam'],
+    variants: ['moeilijke', 'moeilijkheid', 'moeilijkheden'],
+    level: 'Groep 3-4 (AVI M3-E4)'
+  },
+  'duidelijk': {
+    lemma: 'duidelijk',
+    type: 'Bijvoeglijk naamwoord',
+    en: 'Clear, obvious, evident',
+    nl: 'Goed zichtbaar of begrijpelijk; zonder onzekerheid.',
+    example: 'De aanwijzingen op de kaart waren duidelijk leesbaar onder de lantaarn.',
+    synonyms: ['helder', 'overduidelijk', 'begrijpelijk'],
+    variants: ['duidelijke', 'duidelijkheid', 'duidelijkheden'],
+    level: 'Groep 5-6 (AVI M5-E6)'
+  },
+  'zeker': {
+    lemma: 'zeker',
+    type: 'Bijvoeglijk naamwoord',
+    en: 'Certain, sure, safe',
+    nl: 'Zonder twijfel; of veilig bevestigd.',
+    example: 'Hemali was er helemaal zeker van dat de ingang achter de waterval verborgen lag.',
+    synonyms: ['vast', 'verzekerd', 'ongetwijfeld'],
+    variants: ['zekere', 'zekerheid', 'zekerheden', 'onzeker', 'onzekerheid'],
+    level: 'Groep 5-6 (AVI M5-E6)'
+  },
+  'gezond': {
+    lemma: 'gezond',
+    type: 'Bijvoeglijk naamwoord',
+    en: 'Healthy, fit, wholesome',
+    nl: 'In goede lichamelijke of geestelijke toestand; niet ziek.',
+    example: 'Na de behandeling bij de dierenarts was het luipaard weer helemaal gezond.',
+    synonyms: ['fit', 'sterk', 'kerngezond'],
+    variants: ['gezonde', 'gezondheid'],
+    level: 'Groep 3-4 (AVI M3-E4)'
+  },
+  'vrij': {
+    lemma: 'vrij',
+    type: 'Bijvoeglijk naamwoord',
+    en: 'Free, at liberty, unoccupied',
+    nl: 'Niet in slavernij of gevangenschap; of beschikbaar.',
+    example: 'De valk vloog vrij en trots weer boven de dichte jungle.',
+    synonyms: ['onafhankelijk', 'los', 'onbewaakt'],
+    variants: ['vrije', 'vrijheid', 'vrijheden'],
+    level: 'Groep 3-4 (AVI M3-E4)'
+  },
+  'schoon': {
+    lemma: 'schoon',
+    type: 'Bijvoeglijk naamwoord',
+    en: 'Clean, beautiful, fair',
+    nl: 'Netjes gewassen; of fraai van uiterlijk.',
+    example: 'Na een grondige wasbeurt zag het schildpad er helemaal schoon uit.',
+    synonyms: ['rein', 'beeldschoon', 'mooi'],
+    variants: ['schone', 'schoonheid'],
+    level: 'Groep 3-4 (AVI M3-E4)'
+  },
+  'waar': {
+    lemma: 'waar',
+    type: 'Bijvoeglijk naamwoord',
+    en: 'True, factual, honest',
+    nl: 'In overeenstemming met de werkelijkheid; niet verzonnen.',
+    example: 'De ware toedracht van de oude legende bleek veel spannender dan gedacht.',
+    synonyms: ['feitelijk', 'eerlijk', 'juist'],
+    variants: ['ware', 'waarheid', 'waarheden'],
+    level: 'Groep 5-6 (AVI M5-E6)'
+  },
+
 
   // --- Core Dutch Function Words & Signal Words ---
   'desondanks': {
@@ -1053,6 +1252,16 @@ export interface ReverseIndexMatch {
   citoCategory?: DictionaryEntry['citoCategory'];
 }
 
+// Characters from the embedded stories â€” names must never masquerade as dictionary words
+const KNOWN_PROPER_NAMES: Record<string, string> = {
+  'ridheya': 'een van de twee zussen / hoofdpersoon',
+  'hemali': 'een van de twee zussen / hoofdpersoon',
+  'amir': 'vriend en dierenredder in de verhalen',
+  'mei-ling': 'dierenarts-vriendin in de verhalen',
+  'meiling': 'dierenarts-vriendin in de verhalen',
+  'tess': 'safari-personage'
+};
+
 const REVERSE_VARIANT_INDEX = new Map<string, ReverseIndexMatch>();
 
 function initializeReverseVariantIndex() {
@@ -1187,16 +1396,62 @@ export function clearDictionaryDiagnostics(): void {
 // 8. DYNAMIC LOOKUP ENGINE WITH CACHING & MORPHOLOGY
 // ============================================================================
 
-const lookupCache = new Map<string, DictionaryEntry>();
+/**
+ * Monotonic clock with a safe fallback. `performance.now()` may be unavailable
+ * in some non-browser / server environments, so we guard it (Bug 2).
+ */
+function nowMs(): number {
+  const p = globalThis.performance as { now?: () => number } | undefined;
+  return (p && typeof p.now === 'function') ? p.now() : Date.now();
+}
 
 /**
- * Builds an authentic, high-quality English noun translation from an adjective definition.
- * (Replaces machine-generated concatenations like "oneindig-ness" with real English words).
+ * Bounded LRU lookup cache (Bug 1). Without a cap, a long session could grow
+ * the cache indefinitely and increase browser memory. We cap it and evict the
+ * least-recently-used entry (Map preserves insertion order, so the oldest key
+ * is the first key of the iterator).
+ */
+const MAX_LOOKUP_CACHE = 500;
+const lookupCache = new Map<string, DictionaryEntry>();
+
+/** Read from cache, refreshing recency (true LRU behaviour). */
+function cacheGet(key: string): DictionaryEntry | undefined {
+  const entry = lookupCache.get(key);
+  if (entry !== undefined) {
+    lookupCache.delete(key);
+    lookupCache.set(key, entry); // re-insert at the end = most-recently-used
+  }
+  return entry;
+}
+
+/** Write to cache, evicting the least-recently-used entry when full. */
+function cacheSet(key: string, entry: DictionaryEntry): void {
+  if (lookupCache.has(key)) lookupCache.delete(key);
+  lookupCache.set(key, entry);
+  if (lookupCache.size > MAX_LOOKUP_CACHE) {
+    const oldestKey = lookupCache.keys().next().value;
+    if (oldestKey !== undefined) lookupCache.delete(oldestKey);
+  }
+}
+
+/** Exposed for tests/diagnostics: clear the lookup cache. */
+export function clearDictionaryCache(): void {
+  lookupCache.clear();
+}
+
+/**
+ * Builds an English noun gloss for a -heid/-heden noun derived from a VERIFIED base adjective.
+ * Only used in the morphological-stem path where the base word is confirmed to exist.
+ *
+ * IMPORTANT (accuracy over coverage): we only return real English nouns from a curated
+ * mapping. We deliberately do NOT synthesize English words with suffix rules
+ * (ic->ity, ous->ness, ...) because those fabricate incorrect words too often.
+ * When there is no curated mapping we return an explicit descriptive phrase instead.
  */
 function transformAdjectiveToNounEn(enAdj: string): string {
   const lower = enAdj.toLowerCase();
-  
-  // Specific curated mappings
+
+  // Curated adjective -> noun mappings (real English words only)
   const DIRECT_NOUN_MAP: Record<string, string> = {
     'infinite': 'Infinity, boundlessness',
     'endless': 'Endlessness, eternity',
@@ -1232,28 +1487,9 @@ function transformAdjectiveToNounEn(enAdj: string): string {
     }
   }
 
-  // Grammatical morphology fallback
-  const firstWord = enAdj.split(/[,;\s/]+/)[0].toLowerCase();
-  if (firstWord.endsWith('ble')) {
-    return firstWord.slice(0, -3) + 'bility';
-  }
-  if (firstWord.endsWith('ful')) {
-    return firstWord + 'ness';
-  }
-  if (firstWord.endsWith('less')) {
-    return firstWord + 'ness';
-  }
-  if (firstWord.endsWith('y')) {
-    return firstWord.slice(0, -1) + 'iness';
-  }
-  if (firstWord.endsWith('ous')) {
-    return firstWord + 'ness';
-  }
-  if (firstWord.endsWith('ic')) {
-    return firstWord + 'ity';
-  }
-
-  return `${enAdj.charAt(0).toUpperCase() + enAdj.slice(1)} (state or quality)`;
+  // Honest fallback: describe rather than fabricate an English word.
+  const base = enAdj.split(/[,;\s/]+/)[0].trim();
+  return `The quality or state of being "${base}" (-ness/-ity form)`;
 }
 
 /**
@@ -1300,7 +1536,7 @@ export function resolveSemanticSynonyms(word: string, lemma?: string): string[] 
  * Intelligent Dutch Dictionary & Educational Translation Resolver (7-Stage Pipeline)
  */
 export function lookupDutchWord(rawWord: string): DictionaryEntry {
-  const startTime = performance.now();
+  const startTime = nowMs();
   initializeReverseVariantIndex();
 
   if (!rawWord) {
@@ -1327,9 +1563,9 @@ export function lookupDutchWord(rawWord: string): DictionaryEntry {
     };
   }
 
-  // 1. Dynamic Cache Stage
-  if (lookupCache.has(clean)) {
-    const cached = lookupCache.get(clean)!;
+  // 1. Dynamic Cache Stage (bounded LRU)
+  const cached = cacheGet(clean);
+  if (cached) {
     recordDiagnostic({
       rawWord,
       normalized: clean,
@@ -1339,7 +1575,7 @@ export function lookupDutchWord(rawWord: string): DictionaryEntry {
       compound: cached.compound,
       syllables: cached.syllables || [clean],
       rulesApplied: ['cached_memory_hit'],
-      timeMs: Math.round((performance.now() - startTime) * 100) / 100,
+      timeMs: Math.round((nowMs() - startTime) * 100) / 100,
       timestamp: Date.now()
     });
     return cached;
@@ -1361,7 +1597,7 @@ export function lookupDutchWord(rawWord: string): DictionaryEntry {
       level: lex.level || 'Groep 5-6 (AVI M5-E6)',
       citoCategory: lex.citoCategory
     };
-    lookupCache.set(clean, entry);
+    cacheSet(clean, entry);
     recordDiagnostic({
       rawWord,
       normalized: clean,
@@ -1370,7 +1606,7 @@ export function lookupDutchWord(rawWord: string): DictionaryEntry {
       lemma: entry.lemma,
       syllables: entry.syllables || [clean],
       rulesApplied: ['educational_lexicon_exact'],
-      timeMs: Math.round((performance.now() - startTime) * 100) / 100,
+      timeMs: Math.round((nowMs() - startTime) * 100) / 100,
       timestamp: Date.now()
     });
     return entry;
@@ -1382,10 +1618,12 @@ export function lookupDutchWord(rawWord: string): DictionaryEntry {
     const semanticSynonyms = resolveSemanticSynonyms(clean, dbEntry.lemma);
     const entry: DictionaryEntry = {
       ...dbEntry,
-      syllables: syllabifyDutch(clean),
+      // Preserve curated syllable breakdowns (validator-verified); only fall back
+      // to the syllabifier when nothing is curated.
+      syllables: dbEntry.syllables && dbEntry.syllables.length > 0 ? dbEntry.syllables : syllabifyDutch(clean),
       synonyms: semanticSynonyms.length > 0 ? semanticSynonyms : dbEntry.synonyms
     };
-    lookupCache.set(clean, entry);
+    cacheSet(clean, entry);
     recordDiagnostic({
       rawWord,
       normalized: clean,
@@ -1394,7 +1632,7 @@ export function lookupDutchWord(rawWord: string): DictionaryEntry {
       lemma: entry.lemma,
       syllables: entry.syllables || [clean],
       rulesApplied: ['dutch_database_exact'],
-      timeMs: Math.round((performance.now() - startTime) * 100) / 100,
+      timeMs: Math.round((nowMs() - startTime) * 100) / 100,
       timestamp: Date.now()
     });
     return entry;
@@ -1429,7 +1667,7 @@ export function lookupDutchWord(rawWord: string): DictionaryEntry {
       citoCategory: rev.citoCategory,
       synonyms: semanticSynonyms.length > 0 ? semanticSynonyms : undefined
     };
-    lookupCache.set(clean, entry);
+    cacheSet(clean, entry);
     recordDiagnostic({
       rawWord,
       normalized: clean,
@@ -1438,7 +1676,7 @@ export function lookupDutchWord(rawWord: string): DictionaryEntry {
       lemma: rev.lemma,
       syllables: entry.syllables || [clean],
       rulesApplied: [`reverse_index_${rev.rule}`],
-      timeMs: Math.round((performance.now() - startTime) * 100) / 100,
+      timeMs: Math.round((nowMs() - startTime) * 100) / 100,
       timestamp: Date.now()
     });
     return entry;
@@ -1493,7 +1731,7 @@ export function lookupDutchWord(rawWord: string): DictionaryEntry {
         isGenerated: true
       };
 
-      lookupCache.set(clean, entry);
+      cacheSet(clean, entry);
       recordDiagnostic({
         rawWord,
         normalized: clean,
@@ -1502,7 +1740,7 @@ export function lookupDutchWord(rawWord: string): DictionaryEntry {
         lemma: item.candidate,
         syllables: entry.syllables || [clean],
         rulesApplied: [item.rule],
-        timeMs: Math.round((performance.now() - startTime) * 100) / 100,
+        timeMs: Math.round((nowMs() - startTime) * 100) / 100,
         timestamp: Date.now()
       });
       return entry;
@@ -1539,7 +1777,7 @@ export function lookupDutchWord(rawWord: string): DictionaryEntry {
       isGenerated: true
     };
 
-    lookupCache.set(clean, entry);
+    cacheSet(clean, entry);
     recordDiagnostic({
       rawWord,
       normalized: clean,
@@ -1548,60 +1786,77 @@ export function lookupDutchWord(rawWord: string): DictionaryEntry {
       compound: compoundDisplay,
       syllables: entry.syllables || [clean],
       rulesApplied: ['compound_split_success', `parts:${partA}+${partB}`],
-      timeMs: Math.round((performance.now() - startTime) * 100) / 100,
+      timeMs: Math.round((nowMs() - startTime) * 100) / 100,
       timestamp: Date.now()
     });
     return entry;
   }
 
   // 7. Morphological Suffix Synthesis (Educational Fallback for Novel Words)
-  let derivedType: DictionaryEntry['wordType'] = 'Zelfstandig naamwoord';
-  let derivedMeaning = `Zelfstandig naamwoord dat een belangrijk begrip of verschijnsel in de tekst aanduidt.`;
-  let derivedEn = `${clean.charAt(0).toUpperCase() + clean.slice(1)}`;
-  let derivedSentence = `Tijdens hun onderzoek noteerde Hemali het begrip "${clean}" in haar logboek.`;
+  //    IMPORTANT: never echo the Dutch word back as the English "translation",
+  //    and never invent a fake meaning for completely unknown words.
+  const earlySuggestions = getFuzzySuggestions(clean, 3);
+  const buildFallbackAndCache = (generatedEntry: DictionaryEntry, rulesApplied: string[]): DictionaryEntry => {
+    cacheSet(clean, generatedEntry);
+    recordDiagnostic({
+      rawWord,
+      normalized: clean,
+      found: true,
+      stage: 'fallback',
+      syllables: generatedEntry.syllables || [clean],
+      rulesApplied,
+      timeMs: Math.round((nowMs() - startTime) * 100) / 100,
+      timestamp: Date.now()
+    });
+    return generatedEntry;
+  };
 
-  if (clean.endsWith('heid')) {
-    derivedType = 'Zelfstandig naamwoord';
-    const base = clean.slice(0, -4);
-    derivedMeaning = `Zelfstandig naamwoord dat de eigenschap, hoedanigheid of toestand van '${base}' aangeeft.`;
-    derivedEn = transformAdjectiveToNounEn(base);
-    derivedSentence = `De ${clean} van het mysterieuze heiligdom wekte grote nieuwsgierigheid bij de meisjes.`;
-  } else if (clean.endsWith('ing')) {
-    derivedType = 'Zelfstandig naamwoord';
-    const base = clean.slice(0, -3);
-    derivedMeaning = `Zelfstandig naamwoord dat de handeling, werking of het resultaat van '${base}' beschrijft.`;
-    derivedEn = `${base.charAt(0).toUpperCase() + base.slice(1)}ing / Process of ${base}`;
-    derivedSentence = `De plotselinge ${clean} zorgde voor een verrassende wending in het avontuur.`;
-  } else if (clean.endsWith('schap')) {
-    derivedType = 'Zelfstandig naamwoord';
-    const base = clean.slice(0, -5);
-    derivedMeaning = `Zelfstandig naamwoord dat een toestand, relatie of gebied van '${base}' aanduidt.`;
-    derivedEn = `State or relationship of ${base}`;
-    derivedSentence = `De warme vriendschap en het ${clean} brachten de dieren dichter bij elkaar.`;
-  } else if (clean.endsWith('ig') || clean.endsWith('ige')) {
-    derivedType = 'Bijvoeglijk naamwoord';
-    const base = clean.replace(/e?$/, '').slice(0, -2);
-    derivedMeaning = `Bijvoeglijk naamwoord dat aangeeft dat iets gekenmerkt wordt door de eigenschap '${base}'.`;
-    derivedEn = `Characterized by ${base}`;
-    derivedSentence = `Ridheya wandelde over het ${clean} pad langs de oever van de beek.`;
-  } else if (clean.endsWith('baar') || clean.endsWith('bare')) {
-    derivedType = 'Bijvoeglijk naamwoord';
-    const base = clean.replace(/e?$/, '').slice(0, -4);
-    derivedMeaning = `Bijvoeglijk naamwoord dat aangeeft dat iets gedaan kán worden (-baar).`;
-    derivedEn = `Capable of being ${base}ed (-able)`;
-    derivedSentence = `Het oude document was gelukkig nog goed ${clean} voor de jonge speurders.`;
-  } else if (clean.endsWith('loos') || clean.endsWith('loze')) {
-    derivedType = 'Bijvoeglijk naamwoord';
-    const base = clean.replace(/loze$/, 'loos').slice(0, -4);
-    derivedMeaning = `Bijvoeglijk naamwoord dat aangeeft dat iets ontbreekt of zonder '${base}' is.`;
-    derivedEn = `Without ${base} (-less)`;
-    derivedSentence = `In de ${clean} stilte van de nacht hoorden de zussen een uil roepen.`;
-  } else if (clean.endsWith('vol') || clean.endsWith('volle')) {
-    derivedType = 'Bijvoeglijk naamwoord';
-    const base = clean.replace(/e?$/, '').replace(/l$/, '').slice(0, -3);
-    derivedMeaning = `Bijvoeglijk naamwoord dat aanduidt dat iets vol is van de eigenschap '${base}'.`;
-    derivedEn = `Full of ${base} (-ful)`;
-    derivedSentence = `Met een ${clean} gebaar bedankte het geredde diertje de twee zussen.`;
+  // 7a. Proper names (characters / places) â€” report these honestly instead of inventing fake translations
+  if (KNOWN_PROPER_NAMES[clean] !== undefined) {
+    const displayName = clean.split('-').map(part => part.charAt(0).toUpperCase() + part.slice(1)).join('-');
+    const generatedEntry: DictionaryEntry = {
+      word: clean,
+      wordType: 'Zelfstandig naamwoord',
+      meaningNl: `Eigennaam: "${displayName}" is ${KNOWN_PROPER_NAMES[clean]}. Dit is geen woordenboekwoord.`,
+      translationEn: 'Proper noun (character/place name) â€” not a dictionary word',
+      syllables: syllabifyDutch(clean),
+      exampleNl: `In het verhaal speelt ${displayName} een belangrijke rol.`,
+      suggestions: earlySuggestions.length > 0 ? earlySuggestions : undefined,
+      level: 'Groep 3-4 (AVI M3-E4)',
+      isGenerated: true
+    };
+    return buildFallbackAndCache(generatedEntry, ['proper_name_guard']);
+  }
+
+  // 7b. Completely unknown words â€” be honest and explicit.
+  //    We NEVER fabricate a full meaning or translation for an unverified word.
+  //    Instead we offer a *labelled suffix hint* so the child gets a useful clue
+  //    without the app asserting a meaning it hasn't verified.
+  const SUFFIX_HINTS: Array<{ re: RegExp; suffix: string; hintNl: string; hintEn: string; type: DictionaryEntry['wordType'] }> = [
+    { re: /heid$/, suffix: '-heid', hintNl: 'maakt er een zelfstandig naamwoord van dat een eigenschap of toestand aanduidt', hintEn: 'turns a word into a noun for a quality or state (like "-ness")', type: 'Zelfstandig naamwoord' },
+    { re: /(ing|ijking)$/, suffix: '-ing', hintNl: 'maakt er een zelfstandig naamwoord van dat een handeling of het resultaat daarvan benoemt', hintEn: 'turns a verb into a noun for an action or its result (like "-ing")', type: 'Zelfstandig naamwoord' },
+    { re: /schap$/, suffix: '-schap', hintNl: 'maakt er een zelfstandig naamwoord van dat een toestand of relatie aanduidt', hintEn: 'turns a word into a noun for a state or relationship (like "-ship")', type: 'Zelfstandig naamwoord' },
+    { re: /(baar|bare)$/, suffix: '-baar', hintNl: 'betekent meestal "dat gedaan kan worden"', hintEn: 'usually means "able to be done" (like "-able")', type: 'Bijvoeglijk naamwoord' },
+    { re: /(loos|loze)$/, suffix: '-loos', hintNl: 'betekent meestal "zonder iets"', hintEn: 'usually means "without something" (like "-less")', type: 'Bijvoeglijk naamwoord' },
+    { re: /(vol|volle)$/, suffix: '-vol', hintNl: 'betekent meestal "vol van iets"', hintEn: 'usually means "full of something" (like "-ful")', type: 'Bijvoeglijk naamwoord' },
+    { re: /(ig|ige)$/, suffix: '-ig', hintNl: 'maakt er vaak een bijvoeglijk naamwoord van dat een eigenschap beschrijft', hintEn: 'often turns a word into an adjective describing a quality (like "-y"/"-ous")', type: 'Bijvoeglijk naamwoord' },
+    { re: /(lijk|lijke)$/, suffix: '-lijk', hintNl: 'maakt er vaak een bijvoeglijk naamwoord of bijwoord van', hintEn: 'often forms an adjective or adverb (like "-ly")', type: 'Bijvoeglijk naamwoord' }
+  ];
+
+  const hit = SUFFIX_HINTS.find(h => h.re.test(clean));
+
+  let derivedType: DictionaryEntry['wordType'] = 'Zelfstandig naamwoord';
+  let derivedMeaning = 'Dit woord staat (nog) niet in ons woordenboek. Slag je Van Dale of juniorwoordenboek erop voor de exacte betekenis, of bekijk de suggesties hieronder.';
+  let derivedEn = '(unknown word â€” not verified, no reliable translation)';
+  let derivedSentence = `"${clean}" komt in dit verhaal voor, maar is nog niet geverifieerd.`;
+
+  if (hit) {
+    derivedType = hit.type;
+    // Explicitly labelled as a HINT, not a meaning. Educational software must not
+    // present an unverified guess as fact.
+    derivedMeaning = `Dit woord is niet geverifieerd in ons woordenboek. Het lijkt de uitgang "${hit.suffix}" te bevatten, die ${hit.hintNl}. Dit is een aanwijzing, gÃ©Ã©n bevestigde betekenis.`;
+    derivedEn = `Unverified word â€” appears to contain the suffix "${hit.suffix}", which ${hit.hintEn}. This is a hint, not a confirmed translation.`;
+    derivedSentence = `"${clean}" lijkt de uitgang "${hit.suffix}" te bevatten; controleer de betekenis in een woordenboek.`;
   }
 
   const semanticSynonyms = resolveSemanticSynonyms(clean);
@@ -1614,22 +1869,12 @@ export function lookupDutchWord(rawWord: string): DictionaryEntry {
     syllables: syllabifyDutch(clean),
     exampleNl: derivedSentence,
     synonyms: semanticSynonyms.length > 0 ? semanticSynonyms : undefined,
+    suggestions: earlySuggestions.length > 0 ? earlySuggestions : undefined,
     level: clean.length > 8 ? 'Groep 5-6 (AVI M5-E6)' : 'Groep 3-4 (AVI M3-E4)',
     isGenerated: true
   };
 
-  lookupCache.set(clean, generatedEntry);
-  recordDiagnostic({
-    rawWord,
-    normalized: clean,
-    found: true,
-    stage: 'fallback',
-    syllables: generatedEntry.syllables || [clean],
-    rulesApplied: ['morphological_suffix_synthesis'],
-    timeMs: Math.round((performance.now() - startTime) * 100) / 100,
-    timestamp: Date.now()
-  });
-  return generatedEntry;
+  return buildFallbackAndCache(generatedEntry, hit ? [`suffix_hint:${hit.suffix}`] : ['unknown_word_unverified']);
 }
 
 /**
@@ -1689,7 +1934,8 @@ export function searchDictionaryWords(query: string, limit = 25): DictionaryEntr
       ) {
         results.push({
           ...entry,
-          syllables: syllabifyDutch(key)
+          // Keep curated syllables intact; only synthesize when missing.
+          syllables: entry.syllables && entry.syllables.length > 0 ? entry.syllables : syllabifyDutch(key)
         });
         seen.add(key);
         if (results.length >= limit) break;

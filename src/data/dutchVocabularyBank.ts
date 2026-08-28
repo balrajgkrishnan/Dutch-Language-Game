@@ -227,55 +227,14 @@ export const DUTCH_VOCABULARY_BANK: Record<string, DictionaryEntry> = {
   // ==========================================
   // FURNITURE & HOUSEHOLD OBJECTS
   // ==========================================
-  'tafel': {
-    word: 'tafel',
-    wordType: 'Zelfstandig naamwoord',
-    meaningNl: 'Een meubelstuk bestaande uit een horizontaal vlak blad op poten om aan te eten of werken.',
-    translationEn: 'Table / desk',
-    syllables: ['ta', 'fel'],
-    exampleNl: 'Hemali spreidde de oude schatkaart zorgvuldig uit over de grote houten tafel.',
-    synonyms: ['bureau', 'eettafel', 'werktafel', 'salontafel'],
-    level: 'Groep 3-4 (AVI M3-E4)',
-    variants: ['tafels', 'tafeltje']
-  },
-  'stoel': {
-    word: 'stoel',
-    wordType: 'Zelfstandig naamwoord',
-    meaningNl: 'Een zitmeubel met een rugleuning dat plaats biedt aan één persoon.',
-    translationEn: 'Chair / seat',
-    syllables: ['stoel'],
-    exampleNl: 'Ridheya klom op de stoel om het uiltje beter te kunnen aaien.',
-    synonyms: ['zetel', 'fauteuil', 'zitplaats', 'kruk'],
-    level: 'Groep 3-4 (AVI M3-E4)',
-    variants: ['stoelen', 'stoeltje']
-  },
-  'bank': {
-    word: 'bank',
-    wordType: 'Zelfstandig naamwoord',
-    meaningNl: 'Een breed en comfortabel zitmeubel voor meerdere personen, of een financiële instelling.',
-    translationEn: 'Couch / sofa / bench',
-    syllables: ['bank'],
-    exampleNl: 'Na een lange boswandeling ploften de zussen lekker neer op de zachte bank.',
-    synonyms: ['sofa', 'zitbank', 'rustbank'],
-    level: 'Groep 3-4 (AVI M3-E4)',
-    variants: ['banken', 'bankje']
-  },
-  'kast': {
-    word: 'kast',
-    wordType: 'Zelfstandig naamwoord',
-    meaningNl: 'Een bergmeubel met planken, deuren of laden om spullen, boeken of kleding in op te bergen.',
-    translationEn: 'Cupboard / wardrobe / cabinet',
-    syllables: ['kast'],
-    exampleNl: 'In de boekenkast stonden honderden leerzame verhalen netjes op een rij.',
-    synonyms: ['kledingkast', 'boekenkast', 'vitrine', 'kabinet', 'dressoir'],
-    level: 'Groep 3-4 (AVI M3-E4)',
-    variants: ['kasten', 'kastje']
-  },
+  // NOTE: 'tafel', 'stoel', 'bank' and 'kast' live only in DUTCH_DICTIONARY_DB
+  // (canonical entries enriched with this bank's synonyms & variants) to avoid
+  // duplicate keys silently overriding each other.
   'bed': {
     word: 'bed',
     wordType: 'Zelfstandig naamwoord',
     meaningNl: 'Een meubel met een matras, deken en kussen waarin je slaapt en rust.',
-    translationEn: 'Bed',
+    translationEn: 'Bed / cot / sleeping furniture',
     syllables: ['bed'],
     exampleNl: 'Onder het warme dekbed in haar bed droomde Ridheya over wilde safaridieren.',
     synonyms: ['slaapplaats', 'matras', 'ledikant', 'kribbe'],
@@ -375,17 +334,7 @@ export const DUTCH_VOCABULARY_BANK: Record<string, DictionaryEntry> = {
   // ==========================================
   // KITCHEN & DINING
   // ==========================================
-  'bord': {
-    word: 'bord',
-    wordType: 'Zelfstandig naamwoord',
-    meaningNl: 'Een plat rond serviesgoed om eten van te nuttigen, of een paneel om op te schrijven.',
-    translationEn: 'Plate / dish / board',
-    syllables: ['bord'],
-    exampleNl: 'Op haar bord lagen sappige bosbessen en verse pannenkoekjes.',
-    synonyms: ['schaal', 'eetbord', 'schoteltje', 'paneel'],
-    level: 'Groep 3-4 (AVI M3-E4)',
-    variants: ['borden', 'bordje']
-  },
+  // ('bord' lives only in DUTCH_DICTIONARY_DB - see furniture note above)
   'beker': {
     word: 'beker',
     wordType: 'Zelfstandig naamwoord',
@@ -511,18 +460,7 @@ export const DUTCH_VOCABULARY_BANK: Record<string, DictionaryEntry> = {
     level: 'Groep 3-4 (AVI M3-E4)',
     variants: ['brillen', 'brilletje']
   },
-  'rugzak': {
-    word: 'rugzak',
-    wordType: 'Zelfstandig naamwoord',
-    meaningNl: 'Een tas van stevige stof die je met riemen op je rug draagt tijdens wandeltochten.',
-    translationEn: 'Backpack / rucksack',
-    compound: 'rug + zak',
-    syllables: ['rug', 'zak'],
-    exampleNl: 'In haar rugzak bewaarde Hemali een vergrootglas, haar dagboek en een veldfles.',
-    synonyms: ['tas', 'knapzak', 'ransel', 'rugtas'],
-    level: 'Groep 3-4 (AVI M3-E4)',
-    variants: ['rugzakken', 'rugzakje']
-  },
+  // ('rugzak' lives only in DUTCH_DICTIONARY_DB - see furniture note above)
 
   // ==========================================
   // SCHOOL, READING & STUDY
@@ -531,24 +469,14 @@ export const DUTCH_VOCABULARY_BANK: Record<string, DictionaryEntry> = {
     word: 'school',
     wordType: 'Zelfstandig naamwoord',
     meaningNl: 'Een onderwijsinstelling waar leerlingen les krijgen van leraren en nieuwe kennis opdoen.',
-    translationEn: 'School',
+    translationEn: 'School / school building / place of learning',
     syllables: ['school'],
     exampleNl: 'Op school vertelden de meisjes enthousiast over hun avontuur in het safaripark.',
     synonyms: ['basisschool', 'klas', 'onderwijsinstituut', 'academie'],
     level: 'Groep 3-4 (AVI M3-E4)',
     variants: ['scholen', 'schooltje']
   },
-  'klas': {
-    word: 'klas',
-    wordType: 'Zelfstandig naamwoord',
-    meaningNl: 'Een groep leerlingen van hetzelfde leerjaar, of het lokaal waarin zij les krijgen.',
-    translationEn: 'Class / classroom / grade',
-    syllables: ['klas'],
-    exampleNl: 'De hele klas luisterde muisstil toen de meester het spannende verhaal voorlas.',
-    synonyms: ['groep', 'leerjaar', 'klaslokaal', 'groepsvorming'],
-    level: 'Groep 3-4 (AVI M3-E4)',
-    variants: ['klassen', 'klasje']
-  },
+  // ('klas' lives only in DUTCH_DICTIONARY_DB - see furniture note above)
   'boek': {
     word: 'boek',
     wordType: 'Zelfstandig naamwoord',
@@ -560,61 +488,7 @@ export const DUTCH_VOCABULARY_BANK: Record<string, DictionaryEntry> = {
     level: 'Groep 3-4 (AVI M3-E4)',
     variants: ['boeken', 'boekje']
   },
-  'schrift': {
-    word: 'schrift',
-    wordType: 'Zelfstandig naamwoord',
-    meaningNl: 'Een dun boekje met gelinieerde of geruite pagina\'s om in te schrijven of tekenen.',
-    translationEn: 'Notebook / exercise book / script',
-    syllables: ['schrift'],
-    exampleNl: 'In haar schriftje tekende Ridheya alle dieren die ze onderweg had gezien.',
-    synonyms: ['notitieboek', 'schrijfblok', 'dagboek', 'cahier'],
-    level: 'Groep 3-4 (AVI M3-E4)',
-    variants: ['schriften', 'schriftje']
-  },
-  'potlood': {
-    word: 'potlood',
-    wordType: 'Zelfstandig naamwoord',
-    meaningNl: 'Een houten stift met een kern van grafiet om mee te schrijven of tekenen.',
-    translationEn: 'Pencil',
-    syllables: ['pot', 'lood'],
-    exampleNl: 'Met een geslepen potlood schreef Hemali de antwoorden van de Cito-toets op.',
-    synonyms: ['grafietpotlood', 'kleurpotlood', 'stift'],
-    level: 'Groep 3-4 (AVI M3-E4)',
-    variants: ['potloden', 'potloodje']
-  },
-  'pen': {
-    word: 'pen',
-    wordType: 'Zelfstandig naamwoord',
-    meaningNl: 'Een schrijfinstrument dat inkt bevat om blijvende teksten mee te noteren.',
-    translationEn: 'Pen / ballpoint / fountain pen',
-    syllables: ['pen'],
-    exampleNl: 'Met een sierlijke vulpen ondertekende de ontdekkingsreiziger het verdrag.',
-    synonyms: ['balpen', 'vulpen', 'stift', 'veer'],
-    level: 'Groep 3-4 (AVI M3-E4)',
-    variants: ['pennen', 'pennetje']
-  },
-  'gum': {
-    word: 'gum',
-    wordType: 'Zelfstandig naamwoord',
-    meaningNl: 'Een zacht stukje rubber om potloodstrepen en foutjes mee uit te wissen.',
-    translationEn: 'Eraser / rubber',
-    syllables: ['gum'],
-    exampleNl: 'Met haar gum wiste Ridheya het verkeerde cijfer voorzichtig weg.',
-    synonyms: ['stuf', 'vlakgom', 'wisser'],
-    level: 'Groep 3-4 (AVI M3-E4)',
-    variants: ['gummen', 'gummetje']
-  },
-  'liniaal': {
-    word: 'liniaal',
-    wordType: 'Zelfstandig naamwoord',
-    meaningNl: 'Een platte houten of kunststof lat met centimeters om rechte lijnen te trekken of lengtes te meten.',
-    translationEn: 'Ruler',
-    syllables: ['li', 'ni', 'aal'],
-    exampleNl: 'Met de liniaal mat Hemali de afstand tussen de twee eilanden op de landkaart.',
-    synonyms: ['meetlat', 'maatstok', 'geodriehoek'],
-    level: 'Groep 3-4 (AVI M3-E4)',
-    variants: ['linialen', 'liniaaltje']
-  },
+  // ('schrift', 'potlood', 'pen', 'gum' and 'liniaal' live only in DUTCH_DICTIONARY_DB)
   'schaar': {
     word: 'schaar',
     wordType: 'Zelfstandig naamwoord',
@@ -645,7 +519,7 @@ export const DUTCH_VOCABULARY_BANK: Record<string, DictionaryEntry> = {
     word: 'water',
     wordType: 'Zelfstandig naamwoord',
     meaningNl: 'De heldere vloeistof die rivieren, meren en oceanen vormt en die onmisbaar is voor al het leven.',
-    translationEn: 'Water',
+    translationEn: 'Water / H2O (drinkable liquid)',
     syllables: ['wa', 'ter'],
     exampleNl: 'Het kristalheldere water stroomde vrolijk kletterend van de berghelling.',
     synonyms: ['vocht', 'zee', 'rivier', 'bronwater'],
@@ -729,17 +603,7 @@ export const DUTCH_VOCABULARY_BANK: Record<string, DictionaryEntry> = {
     level: 'Groep 3-4 (AVI M3-E4)',
     variants: ['bossen', 'bosje']
   },
-  'zee': {
-    word: 'zee',
-    wordType: 'Zelfstandig naamwoord',
-    meaningNl: 'Een uitgestrekte zoutwatermassa die een groot deel van het aardoppervlak bedekt.',
-    translationEn: 'Sea / ocean',
-    syllables: ['zee'],
-    exampleNl: 'De golven van de blauwe zee kabbelden rustig tegen het witte zandstrand.',
-    synonyms: ['oceaan', 'watermassa', 'zeeark', 'golven'],
-    level: 'Groep 3-4 (AVI M3-E4)',
-    variants: ['zeeën', 'zeetje']
-  },
+  // ('zee' lives only in DUTCH_DICTIONARY_DB - see furniture note above)
   'rivier': {
     word: 'rivier',
     wordType: 'Zelfstandig naamwoord',
