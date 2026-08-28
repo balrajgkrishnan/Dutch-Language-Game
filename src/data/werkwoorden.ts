@@ -1615,6 +1615,431 @@ export const WERKWOORDEN_DATA: VerbItem[] = [
       "nl": "Iedereen heeft gezwegen toen de leeuw naderbij kwam.",
       "en": "Everyone stayed silent when the lion approached."
     }
+  },
+  {
+    "infinitief": "slaan",
+    "english": "to hit",
+    "imperfectum_ev": "sloeg",
+    "imperfectum_mv": "sloegen",
+    "perfectum": "geslagen",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "beginner",
+    "accept_alt": {},
+    "frequency": 5,
+    "school_priority": true,
+    "example": {
+      "nl": "De staart van de krokodil heeft hard tegen het water geslagen.",
+      "en": "The crocodile's tail hit the water hard."
+    }
+  },
+  {
+    "infinitief": "lijken",
+    "english": "to seem",
+    "imperfectum_ev": "leek",
+    "imperfectum_mv": "leken",
+    "perfectum": "geleken",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "beginner",
+    "accept_alt": {},
+    "frequency": 4,
+    "school_priority": true,
+    "example": {
+      "nl": "De schaduw in het gras heeft op een slang geleken.",
+      "en": "The shadow in the grass looked like a snake."
+    }
+  },
+  {
+    "infinitief": "meten",
+    "english": "to measure",
+    "imperfectum_ev": "mat",
+    "imperfectum_mv": "maten",
+    "perfectum": "gemeten",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "beginner",
+    "accept_alt": {},
+    "frequency": 4,
+    "school_priority": true,
+    "example": {
+      "nl": "De verzorger heeft de lengte van de giraf gemeten.",
+      "en": "The keeper measured the giraffe's length."
+    }
+  },
+  {
+    "infinitief": "begrijpen",
+    "english": "to understand",
+    "imperfectum_ev": "begreep",
+    "imperfectum_mv": "begrepen",
+    "perfectum": "begrepen",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "beginner",
+    "accept_alt": {},
+    "frequency": 5,
+    "school_priority": true,
+    "example": {
+      "nl": "Tess heeft het gedrag van de olifanten goed begrepen.",
+      "en": "Tess understood the elephants' behavior well."
+    }
+  },
+  {
+    "infinitief": "verstaan",
+    "english": "to understand (language)",
+    "imperfectum_ev": "verstond",
+    "imperfectum_mv": "verstonden",
+    "perfectum": "verstaan",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "beginner",
+    "accept_alt": {},
+    "frequency": 3,
+    "school_priority": true,
+    "example": {
+      "nl": "Paco Papegaai heeft ieder woord van Tess verstaan.",
+      "en": "Paco the Parrot understood every word Tess said."
+    }
+  },
+  {
+    "infinitief": "genezen",
+    "english": "to heal/cure",
+    "imperfectum_ev": "genas",
+    "imperfectum_mv": "genazen",
+    "perfectum": "genezen",
+    "hulpwerkwoord": "heeft/is",
+    "notes": "heeft (heal sth) / is (get better)",
+    "tier": "beginner",
+    "accept_alt": {},
+    "frequency": 3,
+    "school_priority": true,
+    "example": {
+      "nl": "De dierenarts heeft de gewonde vleugel van de arend genezen.",
+      "en": "The vet healed the eagle's injured wing."
+    }
+  },
+  {
+    "infinitief": "bestaan",
+    "english": "to exist",
+    "imperfectum_ev": "bestond",
+    "imperfectum_mv": "bestonden",
+    "perfectum": "bestaan",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "beginner",
+    "accept_alt": {},
+    "frequency": 3,
+    "school_priority": true,
+    "example": {
+      "nl": "Zo'n groot safaripark heeft hier vroeger niet bestaan.",
+      "en": "Such a big safari park did not exist here before."
+    }
+  },
+  {
+    "infinitief": "kunnen",
+    "english": "can (modal)",
+    "imperfectum_ev": "kon",
+    "imperfectum_mv": "konden",
+    "perfectum": "gekund",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "beginner",
+    "accept_alt": {},
+    "frequency": 5,
+    "school_priority": true,
+    "example": {
+      "nl": "De cheeta heeft heel snel kunnen rennen.",
+      "en": "The cheetah was able to run very fast."
+    }
+  },
+  {
+    "infinitief": "mogen",
+    "english": "may (modal)",
+    "imperfectum_ev": "mocht",
+    "imperfectum_mv": "mochten",
+    "perfectum": "gemogen",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "beginner",
+    "accept_alt": {},
+    "frequency": 4,
+    "school_priority": true,
+    "example": {
+      "nl": "De kinderen hebben de baby-olifant mogen aaien.",
+      "en": "The kids were allowed to pet the baby elephant."
+    }
+  },
+  {
+    "infinitief": "moeten",
+    "english": "must (modal)",
+    "imperfectum_ev": "moest",
+    "imperfectum_mv": "moesten",
+    "perfectum": "gemoeten",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "beginner",
+    "accept_alt": {},
+    "frequency": 5,
+    "school_priority": true,
+    "example": {
+      "nl": "Boerin Tess heeft vroeg op moeten staan voor de dieren.",
+      "en": "Farmer Tess had to get up early for the animals."
+    }
+  },
+  {
+    "infinitief": "willen",
+    "english": "to want (modal)",
+    "imperfectum_ev": "wilde",
+    "imperfectum_mv": "wilden",
+    "perfectum": "gewild",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "beginner",
+    "accept_alt": {},
+    "frequency": 5,
+    "school_priority": true,
+    "example": {
+      "nl": "De giraf heeft graag de hoogste bladeren willen eten.",
+      "en": "The giraffe wanted to eat the highest leaves."
+    }
+  },
+  {
+    "infinitief": "varen",
+    "english": "to sail",
+    "imperfectum_ev": "voer",
+    "imperfectum_mv": "voeren",
+    "perfectum": "gevaren",
+    "hulpwerkwoord": "heeft/is",
+    "notes": "heeft (no direction) / is (to a destination)",
+    "tier": "beginner",
+    "accept_alt": {},
+    "frequency": 3,
+    "school_priority": true,
+    "example": {
+      "nl": "De boot is rustig over de rivier gevaren langs de nijlpaarden.",
+      "en": "The boat sailed calmly over the river past the hippos."
+    }
+  },
+  {
+    "infinitief": "jagen",
+    "english": "to hunt",
+    "imperfectum_ev": "joeg",
+    "imperfectum_mv": "joegen",
+    "perfectum": "gejaagd",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "beginner",
+    "accept_alt": {},
+    "frequency": 4,
+    "school_priority": true,
+    "example": {
+      "nl": "De leeuwin heeft in de vroege ochtend gejaagd.",
+      "en": "The lioness hunted in the early morning."
+    }
+  },
+  {
+    "infinitief": "raden",
+    "english": "to guess",
+    "imperfectum_ev": "raadde",
+    "imperfectum_mv": "raadden",
+    "perfectum": "geraden",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "beginner",
+    "accept_alt": {},
+    "frequency": 4,
+    "school_priority": true,
+    "example": {
+      "nl": "Tess heeft geraden welk dier het geluid maakte.",
+      "en": "Tess guessed which animal made the sound."
+    }
+  },
+  {
+    "infinitief": "stinken",
+    "english": "to stink",
+    "imperfectum_ev": "stonk",
+    "imperfectum_mv": "stonken",
+    "perfectum": "gestonken",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "beginner",
+    "accept_alt": {},
+    "frequency": 3,
+    "school_priority": true,
+    "example": {
+      "nl": "De stal van de varkens heeft flink gestonken.",
+      "en": "The pigs' barn stank quite badly."
+    }
+  },
+  {
+    "infinitief": "klinken",
+    "english": "to sound",
+    "imperfectum_ev": "klonk",
+    "imperfectum_mv": "klonken",
+    "perfectum": "geklonken",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "beginner",
+    "accept_alt": {},
+    "frequency": 4,
+    "school_priority": true,
+    "example": {
+      "nl": "Het gebrul van de leeuw heeft angstaanjagend geklonken.",
+      "en": "The lion's roar sounded frightening."
+    }
+  },
+  {
+    "infinitief": "schuiven",
+    "english": "to push/slide",
+    "imperfectum_ev": "schoof",
+    "imperfectum_mv": "schoven",
+    "perfectum": "geschoven",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "beginner",
+    "accept_alt": {},
+    "frequency": 4,
+    "school_priority": true,
+    "example": {
+      "nl": "De verzorger heeft de zware voerbak naar het hek geschoven.",
+      "en": "The keeper pushed the heavy feeding trough toward the gate."
+    }
+  },
+  {
+    "infinitief": "zuigen",
+    "english": "to suck",
+    "imperfectum_ev": "zoog",
+    "imperfectum_mv": "zogen",
+    "perfectum": "gezogen",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "beginner",
+    "accept_alt": {},
+    "frequency": 3,
+    "school_priority": true,
+    "example": {
+      "nl": "Het olifantje heeft gulzig water door zijn slurf gezogen.",
+      "en": "The baby elephant sucked water eagerly through its trunk."
+    }
+  },
+  {
+    "infinitief": "strijken",
+    "english": "to iron/stroke",
+    "imperfectum_ev": "streek",
+    "imperfectum_mv": "streken",
+    "perfectum": "gestreken",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "beginner",
+    "accept_alt": {},
+    "frequency": 3,
+    "school_priority": true,
+    "example": {
+      "nl": "Tess heeft zacht over de vacht van het welpje gestreken.",
+      "en": "Tess gently stroked the cub's fur."
+    }
+  },
+  {
+    "infinitief": "vouwen",
+    "english": "to fold",
+    "imperfectum_ev": "vouwde",
+    "imperfectum_mv": "vouwden",
+    "perfectum": "gevouwen",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "beginner",
+    "accept_alt": {},
+    "frequency": 3,
+    "school_priority": true,
+    "example": {
+      "nl": "De gids heeft de safarikaart netjes gevouwen.",
+      "en": "The guide neatly folded the safari map."
+    }
+  },
+  {
+    "infinitief": "knijpen",
+    "english": "to pinch",
+    "imperfectum_ev": "kneep",
+    "imperfectum_mv": "knepen",
+    "perfectum": "geknepen",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "beginner",
+    "accept_alt": {},
+    "frequency": 3,
+    "school_priority": true,
+    "example": {
+      "nl": "De krab heeft met zijn schaar in het zand geknepen.",
+      "en": "The crab pinched at the sand with its claw."
+    }
+  },
+  {
+    "infinitief": "wijken",
+    "english": "to yield/give way",
+    "imperfectum_ev": "week",
+    "imperfectum_mv": "weken",
+    "perfectum": "geweken",
+    "hulpwerkwoord": "is",
+    "notes": "",
+    "tier": "beginner",
+    "accept_alt": {},
+    "frequency": 3,
+    "school_priority": true,
+    "example": {
+      "nl": "De kudde zebra's is voor de leeuw geweken.",
+      "en": "The herd of zebras gave way for the lion."
+    }
+  },
+  {
+    "infinitief": "lijden",
+    "english": "to suffer",
+    "imperfectum_ev": "leed",
+    "imperfectum_mv": "leden",
+    "perfectum": "geleden",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "beginner",
+    "accept_alt": {},
+    "frequency": 3,
+    "school_priority": true,
+    "example": {
+      "nl": "Het zieke dier heeft veel pijn geleden.",
+      "en": "The sick animal suffered a lot of pain."
+    }
+  },
+  {
+    "infinitief": "schenken",
+    "english": "to pour/donate",
+    "imperfectum_ev": "schonk",
+    "imperfectum_mv": "schonken",
+    "perfectum": "geschonken",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "beginner",
+    "accept_alt": {},
+    "frequency": 4,
+    "school_priority": true,
+    "example": {
+      "nl": "Tess heeft vers water in de drinkbak geschonken.",
+      "en": "Tess poured fresh water into the drinking trough."
+    }
+  },
+  {
+    "infinitief": "vreten",
+    "english": "to devour (animal eating)",
+    "imperfectum_ev": "vrat",
+    "imperfectum_mv": "vraten",
+    "perfectum": "gevreten",
+    "hulpwerkwoord": "heeft",
+    "notes": "",
+    "tier": "beginner",
+    "accept_alt": {},
+    "frequency": 3,
+    "school_priority": true,
+    "example": {
+      "nl": "Het varken heeft gulzig zijn bak leeggevreten.",
+      "en": "The pig greedily devoured its whole trough."
+    }
   }
 ];
 
