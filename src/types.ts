@@ -171,6 +171,8 @@ export interface StoryAdventure {
   estimatedMinutes?: number;
   vocabulary: VocabularyWord[];
   paragraphs: string[];
+  /** Generated illustration per paragraph, same index/length as `paragraphs`. Path under /story-images/. */
+  paragraphImages?: string[];
   comprehensionQuestions: {
     id?: string;
     type?: string;

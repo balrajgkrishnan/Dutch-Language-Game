@@ -5,7 +5,7 @@ import { StoryAdventure, PlayerProfile, VocabularyWord } from '../types';
 import { READING_ADVENTURES } from '../data/readingAdventuresData';
 import { sound } from '../services/soundService';
 import { speech } from '../services/speechService';
-import { StoryCutsceneStage } from './StoryCutsceneStage';
+import { IllustratedStoryPage } from './IllustratedStoryPage';
 import confetti from 'canvas-confetti';
 
 interface ReadingAdventureModalProps {
@@ -79,7 +79,7 @@ export const ReadingAdventureModal: React.FC<ReadingAdventureModalProps> = ({
     }
 
     setIsNarrating(true);
-    const fullText = currentStory.paragraphs.join(' ');
+    const fullText = currentStory.paragraphs[activeParagraphIndex] || '';
     speech.speak(fullText, {
       rate: readingSpeed,
       onEnd: () => {
@@ -313,26 +313,15 @@ export const ReadingAdventureModal: React.FC<ReadingAdventureModalProps> = ({
             </div>
           )}
 
-          {/* STEP 2: READ ALONG STORY */}
+          {/* STEP 2: READ ALONG STORY (illustrated, one page at a time) */}
           {step === 'read_story' && (
             <div className="space-y-4">
-              
-              {/* Dynamic Animated Adventure Stage */}
-              <StoryCutsceneStage
-                protagonist={profile.name.toLowerCase().includes('hemali') ? 'hemali' : 'ridheya'}
-                pageTitle={currentStory.title}
-                biomeName={`${currentStory.coverEmoji} ${currentStory.grade === 'group_4_5' ? 'Safaripark Borneo Dierenkliniek' : 'Gevorderd Safari Mysterie'}`}
-                characterDialogue={currentStory.subtitle}
-                characterEmote="excited"
-                pageNumber={selectedStoryIndex + 1}
-                totalPages={READING_ADVENTURES.length}
-              />
 
               <div className="flex items-center justify-between flex-wrap gap-2 bg-emerald-50 p-3 rounded-2xl border border-emerald-200">
                 <div className="flex items-center gap-2">
                   <BookOpen className="w-5 h-5 text-emerald-700" />
                   <span className="text-xs font-black text-emerald-950 uppercase tracking-wide">
-                    Lees-Met-Mij Modus
+                    {currentStory.title}
                   </span>
                 </div>
 
@@ -367,27 +356,29 @@ export const ReadingAdventureModal: React.FC<ReadingAdventureModalProps> = ({
                 </div>
               </div>
 
-              {/* Story Paragraphs */}
-              <div className="space-y-3 bg-white p-4 sm:p-6 rounded-2xl border border-slate-200 shadow-2xs leading-relaxed text-slate-800 text-base sm:text-lg font-medium">
-                {currentStory.paragraphs.map((para, pIdx) => (
-                  <p key={pIdx} className="hover:bg-emerald-50/50 p-2 rounded-xl transition-colors">
-                    {para}
-                  </p>
-                ))}
-              </div>
-
-              <div className="flex justify-end">
-                <button
-                  onClick={() => {
-                    sound.playPop();
+              <IllustratedStoryPage
+                imageUrl={currentStory.paragraphImages?.[activeParagraphIndex]}
+                text={currentStory.paragraphs[activeParagraphIndex]}
+                pageNumber={activeParagraphIndex + 1}
+                totalPages={currentStory.paragraphs.length}
+                onPrev={activeParagraphIndex > 0 ? () => {
+                  sound.playPop();
+                  setActiveParagraphIndex(prev => prev - 1);
+                } : undefined}
+                onNext={() => {
+                  sound.playPop();
+                  if (activeParagraphIndex < currentStory.paragraphs.length - 1) {
+                    setActiveParagraphIndex(prev => prev + 1);
+                  } else {
                     setStep('comprehension');
-                  }}
-                  className="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-black text-sm flex items-center gap-2 cursor-pointer shadow-md"
-                >
-                  <span>Naar de Vragen &amp; Rivieroversteek</span>
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-              </div>
+                  }
+                }}
+                nextLabel={
+                  activeParagraphIndex < currentStory.paragraphs.length - 1
+                    ? 'Volgende Pagina'
+                    : 'Naar de Vragen'
+                }
+              />
             </div>
           )}
 

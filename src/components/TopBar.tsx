@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { Sparkles, Volume2, VolumeX, Flame, Star, Coins, Award, Compass, Trees, Download, GraduationCap, User, BookOpen, Mic, Wrench, Crown, Shirt, Palette } from 'lucide-react';
+import { Sparkles, Volume2, VolumeX, Flame, Star, Coins, Award, Compass, Trees, Download, GraduationCap, User, BookOpen, Library, Mic, Wrench, Crown, Shirt, Palette } from 'lucide-react';
 import { sound } from '../services/soundService';
 import { GradeLevel, BiomeType } from '../types';
 import { BIOMES } from '../data/biomeData';
@@ -176,6 +176,20 @@ export const TopBar: React.FC<TopBarProps> = ({
                 title="Steminstellingen & Voorleessnelheid"
               >
                 <Mic className="w-4 h-4 text-amber-700" />
+              </button>
+            )}
+
+            {onOpenReadingModal && (
+              <button
+                id="reading-adventures-quick-btn"
+                onClick={() => {
+                  sound.playPop();
+                  onOpenReadingModal();
+                }}
+                className="p-2 rounded-xl border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 transition-all cursor-pointer shadow-xs active:scale-95"
+                title="Voorleesverhalen & Leesavontuur"
+              >
+                <Library className="w-4 h-4 text-emerald-700" />
               </button>
             )}
 

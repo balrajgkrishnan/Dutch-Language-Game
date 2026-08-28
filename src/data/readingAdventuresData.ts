@@ -33,6 +33,7 @@ export const READING_ADVENTURES: StoryAdventure[] = [
       'Een klein geel vlindertje landt zachtjes op het topje van Ridheya’s neus. Ridheya moet heel hard giechelen!',
       'Max geeft het vlindertje een druppeltje zoet suikerwater op een blad. Nu zijn ze voor altijd de beste vriendjes in de tuin.'
     ],
+    paragraphImages: ['/story-images/vlinder-tuin/paragraph-1.png', '/story-images/vlinder-tuin/paragraph-2.png', '/story-images/vlinder-tuin/paragraph-3.png'],
     comprehensionQuestions: [
       {
         id: 'vt-q1',
@@ -105,6 +106,7 @@ export const READING_ADVENTURES: StoryAdventure[] = [
       'Pip neemt een aanloopje, springt op haar zachte witte buik en roetsjt naar beneden. Wheee!',
       'Ze plonst pardoes in het heldere water en vangt direct een lekker zilvervisje voor haar lunch. Wat een feest!'
     ],
+    paragraphImages: ['/story-images/pinguin-ijs/paragraph-1.png', '/story-images/pinguin-ijs/paragraph-2.png', '/story-images/pinguin-ijs/paragraph-3.png'],
     comprehensionQuestions: [
       {
         id: 'pi-q1',
@@ -184,6 +186,7 @@ export const READING_ADVENTURES: StoryAdventure[] = [
       'Ella liep dapper naar een grote acaciaboom en hief haar slurfje hoog in de lucht om te ruiken waar water was.',
       'In de verte hoorde ze spetterend water. Bij de koele waterpoel vond ze haar moeder en begon blij te trompetteren!'
     ],
+    paragraphImages: ['/story-images/lost-elephant/paragraph-1.png', '/story-images/lost-elephant/paragraph-2.png', '/story-images/lost-elephant/paragraph-3.png'],
     comprehensionQuestions: [
       {
         id: 'le-q1',
@@ -256,6 +259,7 @@ export const READING_ADVENTURES: StoryAdventure[] = [
       'Sami ontdekt een klein geel visje dat vastzit tussen wat los zeegras. Met haar sterke flipper duwt Sami het zeegras voorzichtig opzij.',
       'Het visje danst een vrolijk rondje door het water. Als dank wijst het visje Sami de weg naar het lekkerste sappige zeegrasveld!'
     ],
+    paragraphImages: ['/story-images/ocean-coral-rescue/paragraph-1.png', '/story-images/ocean-coral-rescue/paragraph-2.png', '/story-images/ocean-coral-rescue/paragraph-3.png'],
     comprehensionQuestions: [
       {
         id: 'ocr-q1',
@@ -340,6 +344,7 @@ export const READING_ADVENTURES: StoryAdventure[] = [
       'Hemali boog zich voorover en bekeek de sporen in de aarde met een vergrootglas. Ze ontdekte poederachtige witte vegen op een heuvel met zachte kalkklei. De zebra had daar heerlijk liggen rollen om zichzelf te beschermen tegen vervelende steekvliegen!',
       'Met een zachte waterstraal spoelde Hemali een stukje van de flank schoon, waarna de schitterende zwarte strepen weer zichtbaar werden. Het mysterie was met glans opgelost!'
     ],
+    paragraphImages: ['/story-images/zebra-stripes/paragraph-1.png', '/story-images/zebra-stripes/paragraph-2.png', '/story-images/zebra-stripes/paragraph-3.png', '/story-images/zebra-stripes/paragraph-4.png'],
     comprehensionQuestions: [
       {
         id: 'zs-q1',
@@ -420,6 +425,7 @@ export const READING_ADVENTURES: StoryAdventure[] = [
       'Onder de grond zijn de wortels van woudreuzen verbonden door een gigantisch schimmelnetwerk, ook wel het "Wood Wide Web" genoemd. Wanneer een boom wordt aangevallen door rupsen, zendt hij chemische waarschuwingsstoffen naar zijn buurbomen.',
       'Tegelijkertijd veranderen kameleons van kleur om territoria af te bakenen en bootsen vogels alarmroepen na om apen te waarschuwen voor naderende roofdieren. Alles in het oerwoud werkt naadloos samen in een wonderbaarlijk evenwicht.'
     ],
+    paragraphImages: ['/story-images/regenwoud-communicatie/paragraph-1.png', '/story-images/regenwoud-communicatie/paragraph-2.png', '/story-images/regenwoud-communicatie/paragraph-3.png'],
     comprehensionQuestions: [
       {
         id: 'rc-q1',
