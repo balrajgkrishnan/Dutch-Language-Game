@@ -22,7 +22,7 @@ export interface DictionaryEntry {
   isGenerated?: boolean;
 }
 
-export const DUTCH_DICTIONARY_DB: Record<string, DictionaryEntry> = {
+export const BASE_DICTIONARY_DB: Record<string, DictionaryEntry> = {
   ...DUTCH_VOCABULARY_BANK,
   // === ARTICLES & PRONOUNS (LIDWOORDEN & VOORNAAMWOORDEN) ===
   'de': {
@@ -2157,13 +2157,10 @@ export const DUTCH_DICTIONARY_DB: Record<string, DictionaryEntry> = {
 };
 
 // Merge expansion entries into main dictionary
-const ENHANCED_DICTIONARY_DB: Record<string, DictionaryEntry> = {
-  ...DUTCH_DICTIONARY_DB,
+export const DUTCH_DICTIONARY_DB: Record<string, DictionaryEntry> = {
+  ...BASE_DICTIONARY_DB,
   ...DUTCH_DICTIONARY_EXPANSION
 };
-
-// Re-export the enhanced dictionary
-export { ENHANCED_DICTIONARY_DB as DUTCH_DICTIONARY_DB };
 
 // Common compound component roots for dynamic morphological composition
 export const COMPOUND_PREFIXES: Record<string, { meaning: string; en: string }> = {
