@@ -51,6 +51,17 @@ import {
   FileText, ArrowRight, Play, CheckCircle2 
 } from 'lucide-react';
 
+// Picks the next item to show: the first not-yet-seen item in stable order,
+// or (once everything has been seen at least once) cycles through the full
+// list by index. Never indexes into a list that reorders itself between
+// calls — that's what let some items go permanently unseen while others
+// repeated indefinitely (a real bug: see git history for details).
+function pickNextItem<T>(items: T[], seenKeys: Set<string>, keyOf: (item: T) => string, cycleIndex: number): T | undefined {
+  const nextUnseen = items.find(item => !seenKeys.has(keyOf(item)));
+  if (nextUnseen !== undefined) return nextUnseen;
+  return items.length > 0 ? items[cycleIndex % items.length] : undefined;
+}
+
 export default function App() {
   // Current active user (Hemali or Ridheya)
   const [currentUsername, setCurrentUsername] = useState<string>(() => getActiveUsername());
@@ -207,20 +218,12 @@ export default function App() {
 
   // Prioritize unseen questions in the current level for cross-session freshness
   const levelQuestions = currentLevel.questions;
-  const seenSet = new Set(profile.seenQuestionIds || []);
-  const unseenQuestions = levelQuestions.filter(q => !seenSet.has(q.id));
-  const prioritizedQuestions = unseenQuestions.length > 0
-    ? [...unseenQuestions, ...levelQuestions.filter(q => seenSet.has(q.id))]
-    : levelQuestions;
-  const currentQuestion = prioritizedQuestions[currentQuestionIndex % prioritizedQuestions.length] || levelQuestions[0];
+  const seenSet = new Set<string>(profile.seenQuestionIds || []);
+  const currentQuestion = pickNextItem(levelQuestions, seenSet, (q: (typeof levelQuestions)[number]) => q.id, currentQuestionIndex) || levelQuestions[0];
 
   // Sterke Werkwoorden: verbs are scoped to the selected zone, not tier.
   const zoneVerbs = getVerbsInZone(selectedVerbZone, WERKWOORDEN_DATA);
-  const unseenVerbs = zoneVerbs.filter(v => !seenSet.has(`verb-${v.infinitief}`));
-  const prioritizedVerbs = unseenVerbs.length > 0
-    ? [...unseenVerbs, ...zoneVerbs.filter(v => seenSet.has(`verb-${v.infinitief}`))]
-    : zoneVerbs;
-  const currentVerb: VerbItem = prioritizedVerbs[currentVerbIndex % prioritizedVerbs.length] || WERKWOORDEN_DATA[0];
+  const currentVerb: VerbItem = pickNextItem(zoneVerbs, seenSet, v => `verb-${v.infinitief}`, currentVerbIndex) || WERKWOORDEN_DATA[0];
 
   // Mascot animal for current interaction
   const verbMascotAnimal = animals[currentVerbIndex % animals.length] || animals[0];
