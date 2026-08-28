@@ -409,37 +409,29 @@ export default function App() {
   };
 
   // Handler: Next Verb in Arena Mode
-  const handleNextVerb = () => {
+  const handleNextVerb = (wasCorrect: boolean) => {
     const verbKey = `verb-${currentVerb.infinitief}`;
     const seenSet = new Set<string>(profile.seenQuestionIds || []);
     seenSet.add(verbKey);
 
-    const nextIdx = currentVerbIndex + 1;
-    if (nextIdx % 4 === 0) {
-      const nextLockedAnimal = ALL_BIOME_ANIMALS.find(a => !profile.unlockedAnimals.includes(a.id));
-      if (nextLockedAnimal) {
-        setProfile(prev => ({
-          ...prev,
-          stars: prev.stars + 50,
-          score: prev.score + 50,
-          seenQuestionIds: Array.from(seenSet),
-          unlockedAnimals: [...prev.unlockedAnimals, nextLockedAnimal.id]
-        }));
-        setJustUnlockedAnimal(nextLockedAnimal);
-        setShowRewardModal(true);
-      } else {
-        setProfile(prev => ({
-          ...prev,
-          seenQuestionIds: Array.from(seenSet)
-        }));
-      }
-    } else {
-      setProfile(prev => ({
+    setProfile(prev => {
+      const history = prev.questionHistory || {};
+      const prevEntry = history[verbKey] || { count: 0, lastSeen: 0 };
+      return {
         ...prev,
-        seenQuestionIds: Array.from(seenSet)
-      }));
-    }
-    setCurrentVerbIndex(nextIdx);
+        seenQuestionIds: Array.from(seenSet),
+        questionHistory: {
+          ...history,
+          [verbKey]: {
+            count: prevEntry.count + 1,
+            lastSeen: Date.now(),
+            wasCorrect
+          }
+        }
+      };
+    });
+
+    setCurrentVerbIndex(prev => prev + 1);
   };
 
   // Handler: Feed Animal in Sanctuary
