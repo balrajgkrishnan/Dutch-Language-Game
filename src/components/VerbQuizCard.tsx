@@ -28,7 +28,7 @@ interface VerbQuizCardProps {
   onAnswerCorrect: (points: number) => void;
   onAnswerIncorrect: () => void;
   onNextQuestion?: () => void;
-  onNextVerb?: () => void;
+  onNextVerb?: (wasCorrect: boolean) => void;
 }
 
 export const VerbQuizCard: React.FC<VerbQuizCardProps> = ({
@@ -60,8 +60,9 @@ export const VerbQuizCard: React.FC<VerbQuizCardProps> = ({
   const activeTierLabel = tierName || (selectedTier ? `Niveau ${selectedTier.toUpperCase()}` : `Niveau ${activeVerb.tier}`);
   
   const handleNext = () => {
+    const wasCorrect = Boolean(isMcCorrect && auxResult && participleResult);
     if (onNextQuestion) onNextQuestion();
-    else if (onNextVerb) onNextVerb();
+    else if (onNextVerb) onNextVerb(wasCorrect);
   };
 
   const [step, setStep] = useState<'step_mc' | 'step_participle' | 'feedback'>('step_mc');
