@@ -1699,3 +1699,45 @@ export function checkParticiple(typed: string, targetVerb: VerbItem): boolean {
   return false;
 }
 
+export const ZONE_SIZE = 20;
+
+// Zones are derived, not stored: each tier's verbs are sorted alphabetically by
+// infinitief and chunked into fixed-size zones. Tier population sizes (60/80/60
+// once the full 200-verb roster is authored) must stay exact multiples of
+// ZONE_SIZE for this to divide evenly — verified by the self-check in Task 6.
+const TIER_ORDER: VerbItem['tier'][] = ['beginner', 'intermediate', 'advanced'];
+
+function verbsForTier(tier: VerbItem['tier'], allVerbs: VerbItem[]): VerbItem[] {
+  return allVerbs
+    .filter(v => v.tier === tier)
+    .sort((a, b) => a.infinitief.localeCompare(b.infinitief));
+}
+
+/** Zone index (0-9) a verb belongs to, given the full verb roster. */
+export function getZoneIndex(verb: VerbItem, allVerbs: VerbItem[] = WERKWOORDEN_DATA): number {
+  let zoneOffset = 0;
+  for (const tier of TIER_ORDER) {
+    const sameTier = verbsForTier(tier, allVerbs);
+    if (tier === verb.tier) {
+      const idxWithinTier = sameTier.findIndex(v => v.infinitief === verb.infinitief);
+      return zoneOffset + Math.floor(idxWithinTier / ZONE_SIZE);
+    }
+    zoneOffset += Math.ceil(sameTier.length / ZONE_SIZE);
+  }
+  return -1; // verb.tier is 'expert' or unrecognized — not zoned
+}
+
+/** All verbs belonging to a given zone index (0-9), in stable alphabetical order. */
+export function getVerbsInZone(zoneIndex: number, allVerbs: VerbItem[] = WERKWOORDEN_DATA): VerbItem[] {
+  return allVerbs.filter(v => getZoneIndex(v, allVerbs) === zoneIndex);
+}
+
+/** Total number of zones present in the current roster. */
+export function getTotalZoneCount(allVerbs: VerbItem[] = WERKWOORDEN_DATA): number {
+  let count = 0;
+  for (const tier of TIER_ORDER) {
+    count += Math.ceil(verbsForTier(tier, allVerbs).length / ZONE_SIZE);
+  }
+  return count;
+}
+
