@@ -2060,7 +2060,7 @@ export const WERKWOORDEN_DATA: VerbItem[] = [
   },
   {
     "infinitief": "rijzen",
-    "english": "to rise",
+    "english": "to rise (sun, dough, mist)",
     "imperfectum_ev": "rees",
     "imperfectum_mv": "rezen",
     "perfectum": "gerezen",
@@ -2082,7 +2082,7 @@ export const WERKWOORDEN_DATA: VerbItem[] = [
     "imperfectum_mv": "spleten",
     "perfectum": "gespleten",
     "hulpwerkwoord": "heeft/is",
-    "notes": "heeft (iets splijten) / is (uit elkaar splijten)",
+    "notes": "heeft (split sth) / is (split apart)",
     "tier": "intermediate",
     "accept_alt": {},
     "frequency": 2,
@@ -2156,8 +2156,8 @@ export const WERKWOORDEN_DATA: VerbItem[] = [
     "frequency": 2,
     "school_priority": true,
     "example": {
-      "nl": "De gids heeft naar de waterpoel verwezen voor de dorstige dieren.",
-      "en": "The guide referred to the waterhole for the thirsty animals."
+      "nl": "De gids heeft de dorstige dieren naar de waterpoel verwezen.",
+      "en": "The guide referred the thirsty animals to the waterhole."
     }
   },
   {
@@ -2167,7 +2167,7 @@ export const WERKWOORDEN_DATA: VerbItem[] = [
     "imperfectum_mv": "sleten",
     "perfectum": "gesleten",
     "hulpwerkwoord": "heeft/is",
-    "notes": "heeft (iets slijten) / is (zelf verslijten)",
+    "notes": "heeft (wear sth out) / is (wear out)",
     "tier": "intermediate",
     "accept_alt": {},
     "frequency": 2,
@@ -2191,7 +2191,7 @@ export const WERKWOORDEN_DATA: VerbItem[] = [
     "school_priority": true,
     "example": {
       "nl": "De boswachter heeft zijn kapmes scherp geslepen.",
-      "en": "The ranger sharpened his machete well."
+      "en": "The ranger sharpened his machete to a sharp edge."
     }
   },
   {
@@ -2201,7 +2201,7 @@ export const WERKWOORDEN_DATA: VerbItem[] = [
     "imperfectum_mv": "slopen",
     "perfectum": "geslopen",
     "hulpwerkwoord": "heeft/is",
-    "notes": "heeft (sluipen als activiteit) / is (ergens naartoe sluipen)",
+    "notes": "heeft (as an activity) / is (sneak to a place)",
     "tier": "intermediate",
     "accept_alt": {},
     "frequency": 3,
@@ -2218,7 +2218,7 @@ export const WERKWOORDEN_DATA: VerbItem[] = [
     "imperfectum_mv": "stoven",
     "perfectum": "gestoven",
     "hulpwerkwoord": "heeft/is",
-    "notes": "heeft (stof doen opstuiven) / is (wegstuiven, richting)",
+    "notes": "heeft (make sth spray/fly up) / is (dash off, direction)",
     "tier": "intermediate",
     "accept_alt": {},
     "frequency": 2,
@@ -2320,7 +2320,7 @@ export const WERKWOORDEN_DATA: VerbItem[] = [
     "imperfectum_mv": "drongen",
     "perfectum": "gedrongen",
     "hulpwerkwoord": "heeft/is",
-    "notes": "heeft (aandringen op iets) / is (ergens naar binnen dringen)",
+    "notes": "heeft (press/insist on sth) / is (push into a place)",
     "tier": "intermediate",
     "accept_alt": {},
     "frequency": 2,
@@ -2536,7 +2536,7 @@ export const WERKWOORDEN_DATA: VerbItem[] = [
   },
   {
     "infinitief": "uitvinden",
-    "english": "to invent",
+    "english": "to invent (a device)",
     "imperfectum_ev": "vond uit",
     "imperfectum_mv": "vonden uit",
     "perfectum": "uitgevonden",
