@@ -980,48 +980,13 @@ export default function App() {
           <span>7 Wereldlocaties • 42 Dieren • Groep 4-5 &amp; Groep 6-7-8</span>
         </div>
 
-        <div className="flex items-center gap-3 flex-wrap">
-          <button
-            onClick={() => setShowLoginModal(true)}
-            className="text-slate-700 hover:text-emerald-800 font-bold text-[11px] flex items-center gap-1.5 bg-white/90 hover:bg-white px-3 py-1.5 rounded-xl border border-slate-200 shadow-xs cursor-pointer"
-          >
-            <Users className="w-3.5 h-3.5 text-emerald-600" />
-            <span>Speler: {profile.name} ({profile.avatarEmoji})</span>
-          </button>
-
-          <button
-            onClick={() => setShowScoreboardModal(true)}
-            className="text-indigo-800 hover:text-indigo-950 font-bold text-[11px] flex items-center gap-1.5 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-xl border border-indigo-200 shadow-xs cursor-pointer"
-          >
-            <BarChart3 className="w-3.5 h-3.5 text-indigo-600" />
-            <span>Ouder Scorebord</span>
-          </button>
-
-          <button
-            onClick={() => setShowCitoRpgModal(true)}
-            className="text-emerald-800 hover:text-emerald-950 font-black uppercase text-[11px] flex items-center gap-1 bg-emerald-100/80 hover:bg-emerald-100 px-3 py-1.5 rounded-xl border border-emerald-300 shadow-xs cursor-pointer"
-          >
-            <span>🗺️ Cito RPG &amp; Toets</span>
-          </button>
-
-          <a
-            href="/boerin_tess_safari.html"
-            download="Boerin_Tess_Safaripark_Spel.html"
-            className="text-slate-800 hover:text-slate-950 font-black uppercase text-[11px] flex items-center gap-1 bg-white/80 hover:bg-white px-3 py-1.5 rounded-xl border border-slate-200 shadow-xs"
-          >
-            <span>📥 Offline HTML</span>
-          </a>
-
-          <button
-            id="reset-game-btn"
-            onClick={handleResetProgress}
-            className="text-slate-400 hover:text-rose-600 flex items-center gap-1 cursor-pointer transition-colors font-bold uppercase text-[11px]"
-            title="Herstart voortgang vanaf level 1"
-          >
-            <RotateCcw className="w-3 h-3" />
-            <span>Herstart</span>
-          </button>
-        </div>
+        <button
+          onClick={() => setShowVersionModal(true)}
+          className="text-slate-400 hover:text-slate-600 font-bold text-[11px] cursor-pointer"
+          title="Versie-informatie"
+        >
+          v8.0.1
+        </button>
       </footer>
 
       {/* Female Explorer Profile / Avatar Selection Modal */}
