@@ -9,11 +9,9 @@ import { RewardModal } from './components/RewardModal';
 import { VerbZoneMapPanel } from './components/VerbZoneMapPanel';
 import { ZoneRewardModal } from './components/ZoneRewardModal';
 import { GradeSelectorModal } from './components/GradeSelectorModal';
-import { GradeSwitcherBar } from './components/GradeSwitcherBar';
 import { ProfileAvatarModal } from './components/ProfileAvatarModal';
 import { LoginModal } from './components/LoginModal';
 import { EnhancedParentDashboardModal } from './components/EnhancedParentDashboardModal';
-import { CompanionCard } from './components/CompanionCard';
 import { ReadingAdventureModal } from './components/ReadingAdventureModal';
 import { HemaliReporterModal } from './components/HemaliReporterModal';
 import { RidheyaSpellingFactoryModal } from './components/RidheyaSpellingFactoryModal';
@@ -615,27 +613,15 @@ export default function App() {
         tocaCustomization={(profile.customization as any)?.toca}
         onOpenProfileModal={() => setShowProfileModal(true)}
         onOpenLoginModal={() => setShowLoginModal(true)}
-        onOpenScoreboardModal={() => setShowScoreboardModal(true)}
-        onOpenReadingModal={() => setShowReadingModal(true)}
-        onOpenReporterModal={() => setShowReporterModal(true)}
-        onOpenSpellingFactoryModal={() => setShowSpellingFactoryModal(true)}
-        onOpenSisterTeamModal={() => setShowSisterTeamModal(true)}
         onOpenWardrobeModal={() => setShowWardrobeModal(true)}
-        onOpenVersionModal={() => setShowVersionModal(true)}
-        onOpenVetHospitalModal={() => setShowVetHospitalModal(true)}
-        onOpenCitoRpgModal={() => setShowCitoRpgModal(true)}
         onOpenVoiceModal={() => setShowVoiceModal(true)}
-        onOpenDictionaryModal={() => setShowDictionaryModal(true)}
-        onOpenArcadeModal={() => setShowArcadeModal(true)}
+        onResetProgress={handleResetProgress}
         stars={profile.stars}
         score={profile.score}
         streak={profile.streak}
-        activeTab={activeTab}
-        onSelectTab={setActiveTab}
         unlockedCount={unlockedCount}
         totalAnimals={totalAnimals}
         selectedGrade={profile.selectedGrade}
-        selectedBiome={selectedBiome}
         onOpenGradeSelector={() => setShowGradeModal(true)}
       />
 
