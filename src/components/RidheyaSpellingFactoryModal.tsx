@@ -55,8 +55,6 @@ export const RidheyaSpellingFactoryModal: React.FC<RidheyaSpellingFactoryModalPr
     return COMPREHENSIVE_SPELLING_FACTORY_ITEMS.filter(item => item.category === selectedCategory);
   }, [selectedCategory]);
 
-  if (!isOpen) return null;
-
   const currentItem: SpellingFactoryItem = filteredItems[currentIndex] || filteredItems[0] || COMPREHENSIVE_SPELLING_FACTORY_ITEMS[0];
 
   const handleSpeakWord = () => {
@@ -177,6 +175,8 @@ export const RidheyaSpellingFactoryModal: React.FC<RidheyaSpellingFactoryModalPr
   };
 
   const isCurrentCorrect = selectedOption === currentItem.syllables[currentItem.missingIndex];
+
+  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/60 backdrop-blur-sm overflow-y-auto">
