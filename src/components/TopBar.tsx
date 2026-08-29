@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { Sparkles, Volume2, VolumeX, Flame, Star, Coins, Award, Compass, Trees, Download, GraduationCap, User, BookOpen, Library, Mic, Wrench, Crown, Shirt, Palette } from 'lucide-react';
+import { Sparkles, Volume2, VolumeX, GraduationCap, Mic, RotateCcw } from 'lucide-react';
 import { sound } from '../services/soundService';
-import { GradeLevel, BiomeType } from '../types';
+import { GradeLevel } from '../types';
 import { BIOMES } from '../data/biomeData';
 import { TocaAvatar } from './TocaAvatar';
 import { TocaCustomization } from '../data/tocaAvatarData';
@@ -14,27 +14,15 @@ interface TopBarProps {
   tocaCustomization?: Partial<TocaCustomization>;
   onOpenProfileModal: () => void;
   onOpenLoginModal?: () => void;
-  onOpenScoreboardModal?: () => void;
-  onOpenReadingModal?: () => void;
-  onOpenReporterModal?: () => void;
-  onOpenSpellingFactoryModal?: () => void;
-  onOpenSisterTeamModal?: () => void;
   onOpenWardrobeModal?: () => void;
-  onOpenVersionModal?: () => void;
-  onOpenVetHospitalModal?: () => void;
-  onOpenCitoRpgModal?: () => void;
   onOpenVoiceModal?: () => void;
-  onOpenDictionaryModal?: () => void;
-  onOpenArcadeModal?: () => void;
+  onResetProgress?: () => void;
   stars: number;
   score: number;
   streak: number;
-  activeTab: 'adventure' | 'arcade' | 'sanctuary' | 'badges' | 'map';
-  onSelectTab: (tab: 'adventure' | 'arcade' | 'sanctuary' | 'badges' | 'map') => void;
   unlockedCount: number;
   totalAnimals: number;
   selectedGrade: GradeLevel;
-  selectedBiome?: BiomeType;
   onOpenGradeSelector: () => void;
 }
 
@@ -45,27 +33,15 @@ export const TopBar: React.FC<TopBarProps> = ({
   tocaCustomization,
   onOpenProfileModal,
   onOpenLoginModal,
-  onOpenScoreboardModal,
-  onOpenReadingModal,
-  onOpenReporterModal,
-  onOpenSpellingFactoryModal,
-  onOpenSisterTeamModal,
   onOpenWardrobeModal,
-  onOpenVersionModal,
-  onOpenVetHospitalModal,
-  onOpenCitoRpgModal,
   onOpenVoiceModal,
-  onOpenDictionaryModal,
-  onOpenArcadeModal,
+  onResetProgress,
   stars,
   score,
   streak,
-  activeTab,
-  onSelectTab,
   unlockedCount,
   totalAnimals,
   selectedGrade,
-  selectedBiome = 'farm',
   onOpenGradeSelector
 }) => {
   const [soundOn, setSoundOn] = useState(true);
@@ -80,17 +56,6 @@ export const TopBar: React.FC<TopBarProps> = ({
     if (next) sound.playPop();
   };
 
-  const handleDownloadOfflineHTML = () => {
-    sound.playStar();
-    const link = document.createElement('a');
-    link.href = '/boerin_tess_safari.html';
-    link.download = 'Boerin_Tess_Safaripark_Spel.html';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-
-  const progressPercent = Math.min(100, Math.round((unlockedCount / totalAnimals) * 100));
 
   return (
     <header id="top-navbar" className="w-full max-w-5xl mx-auto px-3 sm:px-4 pt-3 sm:pt-4 pb-2 space-y-2.5">
@@ -179,56 +144,19 @@ export const TopBar: React.FC<TopBarProps> = ({
               </button>
             )}
 
-            {onOpenReadingModal && (
+            {onResetProgress && (
               <button
-                id="reading-adventures-quick-btn"
+                id="reset-game-btn"
                 onClick={() => {
                   sound.playPop();
-                  onOpenReadingModal();
+                  onResetProgress();
                 }}
-                className="p-2 rounded-xl border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 transition-all cursor-pointer shadow-xs active:scale-95"
-                title="Voorleesverhalen & Leesavontuur"
+                className="p-2 rounded-xl border border-rose-200 bg-rose-50 hover:bg-rose-100 text-rose-700 transition-all cursor-pointer shadow-xs active:scale-95"
+                title="Herstart voortgang vanaf level 1"
               >
-                <Library className="w-4 h-4 text-emerald-700" />
+                <RotateCcw className="w-4 h-4" />
               </button>
             )}
-
-            {onOpenDictionaryModal && (
-              <button
-                id="dictionary-quick-btn"
-                onClick={() => {
-                  sound.playPop();
-                  onOpenDictionaryModal();
-                }}
-                className="p-2 rounded-xl border border-blue-200 bg-blue-50 hover:bg-blue-100 text-blue-800 transition-all cursor-pointer shadow-xs active:scale-95"
-                title="Interactief Nederlands Woordenboek & Cito Hulp"
-              >
-                <BookOpen className="w-4 h-4 text-blue-700" />
-              </button>
-            )}
-
-            {onOpenScoreboardModal && (
-              <button
-                id="parent-scoreboard-btn"
-                onClick={() => {
-                  sound.playPop();
-                  onOpenScoreboardModal();
-                }}
-                className="p-2 rounded-xl border border-indigo-200 bg-indigo-50 hover:bg-indigo-100 text-indigo-800 transition-all cursor-pointer shadow-xs active:scale-95"
-                title="Ouder & Docent Scorebord"
-              >
-                <Award className="w-4 h-4 text-indigo-700" />
-              </button>
-            )}
-
-            <button
-              id="download-html-btn"
-              onClick={handleDownloadOfflineHTML}
-              className="p-2 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 transition-all cursor-pointer shadow-xs active:scale-95"
-              title="Download offline HTML versie"
-            >
-              <Download className="w-4 h-4 text-slate-600" />
-            </button>
 
             <button
               id="sound-toggle-btn"
@@ -247,6 +175,14 @@ export const TopBar: React.FC<TopBarProps> = ({
 
         {/* Right Stats & Progress Bar */}
         <div className="flex items-center gap-3 sm:gap-5 flex-wrap justify-between sm:justify-end w-full md:w-auto">
+          {/* Dieren Collection Percent */}
+          <div className="flex flex-col items-start sm:items-end">
+            <span className="text-[9px] uppercase font-bold text-slate-400 tracking-wider">Dieren</span>
+            <span className="text-sm sm:text-base font-black text-emerald-700 leading-tight">
+              {Math.min(100, Math.round((unlockedCount / totalAnimals) * 100))}%
+            </span>
+          </div>
+
           {/* Score Counter */}
           <div className="flex flex-col items-start sm:items-end">
             <span className="text-[9px] uppercase font-bold text-slate-400 tracking-wider">Score</span>
@@ -273,107 +209,6 @@ export const TopBar: React.FC<TopBarProps> = ({
         </div>
       </div>
 
-      {/* Main Navigation Tabs */}
-      <nav id="game-navigation-tabs" className="flex items-center justify-between gap-1.5 sm:gap-2 overflow-x-auto pb-0.5">
-        <div className="flex items-center gap-1.5 sm:gap-2 flex-nowrap min-w-max">
-          {/* Adventure Tab */}
-          <button
-            id="nav-tab-adventure"
-            onClick={() => {
-              sound.playPop();
-              onSelectTab('adventure');
-            }}
-            className={`px-3 sm:px-4 py-2 rounded-2xl font-black text-xs sm:text-sm uppercase tracking-wider flex items-center gap-2 cursor-pointer transition-all border ${
-              activeTab === 'adventure'
-                ? 'bg-emerald-600 text-white border-emerald-700 shadow-md shadow-emerald-600/20'
-                : 'bg-white/80 backdrop-blur-md text-slate-600 hover:text-emerald-900 hover:bg-white border-slate-200/80 shadow-xs'
-            }`}
-          >
-            <Compass className="w-4 h-4" />
-            <span>Taal Avontuur</span>
-          </button>
-
-          {/* Safari Arcade Tab */}
-          <button
-            id="nav-tab-arcade"
-            onClick={() => {
-              sound.playPop();
-              onSelectTab('arcade');
-            }}
-            className={`px-3 sm:px-4 py-2 rounded-2xl font-black text-xs sm:text-sm uppercase tracking-wider flex items-center gap-2 cursor-pointer transition-all border ${
-              activeTab === 'arcade'
-                ? 'bg-purple-600 text-white border-purple-700 shadow-md shadow-purple-600/20'
-                : 'bg-white/80 backdrop-blur-md text-slate-600 hover:text-purple-900 hover:bg-white border-slate-200/80 shadow-xs'
-            }`}
-          >
-            <Sparkles className="w-4 h-4 text-amber-300" />
-            <span>Safari Arcade ⚡</span>
-          </button>
-
-          {/* Dierenpark Sanctuary Tab */}
-          <button
-            id="nav-tab-sanctuary"
-            onClick={() => {
-              sound.playPop();
-              onSelectTab('sanctuary');
-            }}
-            className={`px-3 sm:px-4 py-2 rounded-2xl font-black text-xs sm:text-sm uppercase tracking-wider flex items-center gap-2 cursor-pointer transition-all border ${
-              activeTab === 'sanctuary'
-                ? 'bg-emerald-600 text-white border-emerald-700 shadow-md shadow-emerald-600/20'
-                : 'bg-white/80 backdrop-blur-md text-slate-600 hover:text-emerald-900 hover:bg-white border-slate-200/80 shadow-xs'
-            }`}
-          >
-            <Trees className="w-4 h-4" />
-            <span>Dierenpark ({unlockedCount}/{totalAnimals})</span>
-          </button>
-
-          {/* Badges Showcase Tab */}
-          <button
-            id="nav-tab-badges"
-            onClick={() => {
-              sound.playPop();
-              onSelectTab('badges');
-            }}
-            className={`px-3 sm:px-4 py-2 rounded-2xl font-black text-xs sm:text-sm uppercase tracking-wider flex items-center gap-2 cursor-pointer transition-all border ${
-              activeTab === 'badges'
-                ? 'bg-emerald-600 text-white border-emerald-700 shadow-md shadow-emerald-600/20'
-                : 'bg-white/80 backdrop-blur-md text-slate-600 hover:text-emerald-900 hover:bg-white border-slate-200/80 shadow-xs'
-            }`}
-          >
-            <Award className="w-4 h-4" />
-            <span>Medailles</span>
-          </button>
-
-          {/* Level Roadmap Tab */}
-          <button
-            id="nav-tab-map"
-            onClick={() => {
-              sound.playPop();
-              onSelectTab('map');
-            }}
-            className={`px-3 sm:px-4 py-2 rounded-2xl font-black text-xs sm:text-sm uppercase tracking-wider flex items-center gap-2 cursor-pointer transition-all border ${
-              activeTab === 'map'
-                ? 'bg-emerald-600 text-white border-emerald-700 shadow-md shadow-emerald-600/20'
-                : 'bg-white/80 backdrop-blur-md text-slate-600 hover:text-emerald-900 hover:bg-white border-slate-200/80 shadow-xs'
-            }`}
-          >
-            <Compass className="w-4 h-4" />
-            <span>Wereldkaart</span>
-          </button>
-        </div>
-
-        {/* Global Dieren Progress Bar */}
-        <div className="hidden md:flex items-center gap-2 bg-white/80 backdrop-blur-md px-3 py-1.5 rounded-2xl border border-slate-200/80 shadow-xs">
-          <span className="text-[11px] font-black text-slate-600 whitespace-nowrap">Wereldcollectie:</span>
-          <div className="w-20 bg-slate-200 rounded-full h-2 overflow-hidden">
-            <div
-              className="bg-gradient-to-r from-amber-400 to-emerald-500 h-2 rounded-full transition-all duration-500"
-              style={{ width: `${progressPercent}%` }}
-            />
-          </div>
-          <span className="text-[11px] font-black text-emerald-800">{progressPercent}%</span>
-        </div>
-      </nav>
     </header>
   );
 };
