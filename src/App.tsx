@@ -579,7 +579,7 @@ export default function App() {
       rpgSubtitle,
       expeditionEmoji: activeBiomeConfig.emoji,
       expeditionTitle: `${activeBiomeConfig.name} Expeditie`,
-      expeditionSubtitle: `${currentLevel.title} • Level ${currentBiomeLevelIdx + 1} van ${biomeLevels.length}`
+      expeditionSubtitle: `${currentLevel.name} • Level ${currentBiomeLevelIdx + 1} van ${biomeLevels.length}`
     }
   );
 
@@ -655,7 +655,7 @@ export default function App() {
                       <div className="text-left leading-tight">
                         <div className="text-xs sm:text-sm font-black text-white flex items-center gap-1.5">
                           <span>{activeBiomeConfig.name}</span>
-                          <span className="text-emerald-400">• Level {currentBiomeLevelIdx + 1}: {currentLevel.title}</span>
+                          <span className="text-emerald-400">• Level {currentBiomeLevelIdx + 1}: {currentLevel.name}</span>
                         </div>
                         <div className="text-[10px] text-slate-300 font-medium">
                           Dierbeloning: <strong>{currentLevel.animalReward.name} {currentLevel.animalReward.emoji}</strong>
@@ -727,7 +727,7 @@ export default function App() {
                       animal={currentLevel.animalReward}
                       level={currentLevel}
                       biome={selectedBiome}
-                      chapterTitle={currentLevel.title}
+                      chapterTitle={currentLevel.chapterTitle}
                       introStory={currentLevel.introStory}
                       playerName={profile.name}
                       avatarEmoji={profile.avatarEmoji}
