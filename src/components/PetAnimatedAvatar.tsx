@@ -75,7 +75,7 @@ export const PetAnimatedAvatar: React.FC<PetAnimatedAvatarProps> = ({
       case 'happy':
         return {
           animate: { y: [0, -18, 0, -8, 0], scaleY: [1, 1.12, 0.94, 1.05, 1], rotate: [0, -3, 3, -1, 0] },
-          transition: { duration: 0.7, repeat: Infinity, ease: 'easeInOut' }
+          transition: { duration: 0.7, repeat: Infinity, ease: 'easeInOut' as const }
         };
       case 'eating':
         return {
@@ -85,12 +85,12 @@ export const PetAnimatedAvatar: React.FC<PetAnimatedAvatarProps> = ({
       case 'sleeping':
         return {
           animate: { scaleY: [1, 1.04, 1], scaleX: [1, 0.98, 1], y: [0, 3, 0], rotate: [-1.5, 1.5, -1.5] },
-          transition: { duration: 2.8, repeat: Infinity, ease: 'easeInOut' }
+          transition: { duration: 2.8, repeat: Infinity, ease: 'easeInOut' as const }
         };
       case 'bathing':
         return {
           animate: { rotate: [-6, 6, -6], y: [0, -6, 0], scale: [1, 1.03, 1] },
-          transition: { duration: 0.85, repeat: Infinity, ease: 'easeInOut' }
+          transition: { duration: 0.85, repeat: Infinity, ease: 'easeInOut' as const }
         };
       case 'dancing':
         return {
@@ -100,18 +100,18 @@ export const PetAnimatedAvatar: React.FC<PetAnimatedAvatarProps> = ({
             scaleX: [1, 1.08, 0.95, 1.08, 1],
             scaleY: [1, 0.95, 1.08, 0.95, 1]
           },
-          transition: { duration: 0.75, repeat: Infinity, ease: 'easeInOut' }
+          transition: { duration: 0.75, repeat: Infinity, ease: 'easeInOut' as const }
         };
       case 'playing':
       case 'bubble_pop':
         return {
           animate: { y: [0, -22, 0], rotate: [0, -8, 8, 0], scale: [1, 1.06, 0.96, 1] },
-          transition: { duration: 0.7, repeat: Infinity, ease: 'easeInOut' }
+          transition: { duration: 0.7, repeat: Infinity, ease: 'easeInOut' as const }
         };
       case 'vet_exam':
         return {
           animate: { scale: [1, 1.03, 1], y: [0, -2, 0] },
-          transition: { duration: 1.2, repeat: Infinity, ease: 'easeInOut' }
+          transition: { duration: 1.2, repeat: Infinity, ease: 'easeInOut' as const }
         };
       case 'sad':
         return {
@@ -122,7 +122,7 @@ export const PetAnimatedAvatar: React.FC<PetAnimatedAvatarProps> = ({
       default:
         return {
           animate: { y: [0, -5, 0], scaleY: [1, 1.03, 1], scaleX: [1, 0.98, 1] },
-          transition: { duration: 2.2, repeat: Infinity, ease: 'easeInOut' }
+          transition: { duration: 2.2, repeat: Infinity, ease: 'easeInOut' as const }
         };
     }
   };

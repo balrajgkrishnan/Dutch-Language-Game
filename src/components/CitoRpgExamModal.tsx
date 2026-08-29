@@ -1000,7 +1000,7 @@ export const CitoRpgExamModal: React.FC<CitoRpgExamModalProps> = ({
                       <button
                         onClick={() => {
                           sound.playPop();
-                          setActiveTab('rpg_story');
+                          setActiveTab('rpg_adventure');
                         }}
                         className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white font-black px-5 py-2.5 rounded-xl text-xs transition-all cursor-pointer flex items-center justify-center gap-2 shadow-md shadow-emerald-600/20"
                       >
