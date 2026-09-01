@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { sound } from '../services/soundService';
 import { HomeTile } from '../data/homeTiles';
@@ -15,6 +15,8 @@ const SIZE_CLASSES: Record<HomeTile['size'], string> = {
 
 export const BentoTile: React.FC<BentoTileProps> = ({ tile }) => {
   const isXl = tile.size === 'xl';
+  const [iconFailed, setIconFailed] = useState(false);
+  useEffect(() => setIconFailed(false), [tile.id]);
 
   return (
     <div
@@ -27,13 +29,25 @@ export const BentoTile: React.FC<BentoTileProps> = ({ tile }) => {
       } rounded-2xl text-white flex flex-col justify-between gap-3 shadow-md transition-all hover:scale-[1.02] cursor-pointer group`}
     >
       <div className="space-y-1.5">
-        <span
-          className={`inline-flex items-center justify-center rounded-xl bg-white/10 border border-white/20 group-hover:rotate-6 transition-transform ${
-            isXl ? 'w-14 h-14 text-3xl' : 'w-9 h-9 text-xl'
-          }`}
-        >
-          {tile.emoji}
-        </span>
+        {iconFailed ? (
+          <span
+            className={`inline-flex items-center justify-center rounded-xl bg-white/10 border border-white/20 group-hover:rotate-6 transition-transform ${
+              isXl ? 'w-14 h-14 text-3xl' : 'w-9 h-9 text-xl'
+            }`}
+          >
+            {tile.emoji}
+          </span>
+        ) : (
+          <img
+            src={`/tile-icons/${tile.id}.png`}
+            alt=""
+            onError={() => setIconFailed(true)}
+            draggable={false}
+            className={`rounded-xl shadow-sm group-hover:rotate-6 transition-transform select-none ${
+              isXl ? 'w-14 h-14' : 'w-9 h-9'
+            }`}
+          />
+        )}
         <h4 className={`font-black text-white ${isXl ? 'text-lg sm:text-xl' : 'text-sm'}`}>
           {tile.title}
         </h4>
