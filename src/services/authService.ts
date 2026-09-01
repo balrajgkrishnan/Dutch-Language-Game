@@ -41,6 +41,23 @@ export const USER_ACCOUNTS: Record<string, { password: string; config: UserAccou
       companionEmoji: '🐒',
       focusBio: 'Groep 5 • Sterk in Rekenen & Logisch Denken • Focus: Leesvloeiendheid, Woordenschat & Spelling'
     }
+  },
+  papa: {
+    password: 'Papa2026!',
+    config: {
+      username: 'Papa',
+      displayName: 'Papa',
+      defaultAvatar: '👨',
+      defaultAvatarId: 'tess',
+      defaultTitle: 'Ouder Testaccount',
+      defaultGrade: 'group_6_7_8',
+      passwordHash: 'Papa2026!',
+      companionId: 'ollie-owl',
+      companionName: 'Professor Ollie Uil',
+      companionSpecies: 'Uil',
+      companionEmoji: '🦉',
+      focusBio: 'Ouder account voor testen & voortgang bekijken'
+    }
   }
 };
 
@@ -306,7 +323,7 @@ export function verifyLogin(
   const lower = username.toLowerCase();
   const acc = USER_ACCOUNTS[lower];
   if (!acc) {
-    return { success: false, error: 'Onbekende speler. Kies Hemali of Ridheya.' };
+    return { success: false, error: 'Onbekende speler. Kies Hemali, Ridheya of Papa.' };
   }
 
   if (acc.password !== passwordAttempt) {

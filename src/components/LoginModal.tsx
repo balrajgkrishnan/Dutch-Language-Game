@@ -66,7 +66,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({
           </p>
 
           {/* Quick Select Profile Cards */}
-          <div className="grid grid-cols-2 gap-3 mt-5 text-left">
+          <div className="grid grid-cols-3 gap-3 mt-5 text-left">
             {/* Hemali */}
             <button
               type="button"
@@ -104,6 +104,25 @@ export const LoginModal: React.FC<LoginModalProps> = ({
                 Groep 3-5
               </div>
             </button>
+
+            {/* Papa */}
+            <button
+              type="button"
+              onClick={() => handleSelectQuick('Papa')}
+              className={`p-3.5 rounded-2xl border transition-all cursor-pointer flex flex-col items-center text-center relative ${
+                selectedUser.toLowerCase() === 'papa'
+                  ? 'bg-indigo-50 border-2 border-indigo-500 shadow-md ring-2 ring-indigo-400/20'
+                  : 'bg-slate-50 hover:bg-slate-100 border-slate-200'
+              }`}
+            >
+              <div className="p-1 rounded-xl bg-white shadow-2xs mb-1 w-12 h-12 flex items-center justify-center text-2xl">
+                👨
+              </div>
+              <div className="font-black text-sm text-slate-800">Papa</div>
+              <div className="text-[10px] text-indigo-800 font-bold bg-indigo-100 px-2 py-0.5 rounded-full mt-1">
+                Ouder
+              </div>
+            </button>
           </div>
 
           {/* Password Form */}
@@ -112,7 +131,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({
               <label className="block text-xs font-bold text-slate-700 mb-1 flex items-center justify-between">
                 <span>Wachtwoord voor {selectedUser}:</span>
                 <span className="text-[10px] text-slate-400 font-normal">
-                  {selectedUser === 'Hemali' ? 'Hint: Big2014!' : 'Hint: Small2018!'}
+                  {selectedUser === 'Hemali' ? 'Hint: Big2014!' : selectedUser === 'Papa' ? 'Hint: Papa2026!' : 'Hint: Small2018!'}
                 </span>
               </label>
               <div className="relative">

@@ -121,7 +121,7 @@ export default function App() {
     setCurrentUsername(newUsername);
     const loaded = loadUserProfile(newUsername);
     const isNewRidheya = newUsername.toLowerCase() === 'ridheya';
-    
+
     if (isNewRidheya) {
       loaded.selectedGrade = 'group_4_5';
       setSelectedVerbTier('beginner');
@@ -129,12 +129,18 @@ export default function App() {
       loaded.selectedGrade = 'group_6_7_8';
       setSelectedVerbTier('all');
     }
-    
+
     setProfile(loaded);
     setSelectedBiome(loaded.selectedBiome || 'farm');
     setCurrentQuestionIndex(0);
     setCurrentVerbIndex(0);
     setShowLoginModal(false);
+
+    // Papa's account pins the parent dashboard so progress is front-and-center,
+    // while still leaving the normal home screen underneath for testing games.
+    if (newUsername.toLowerCase() === 'papa') {
+      setShowScoreboardModal(true);
+    }
   };
 
   // Opens the Sterke Werkwoorden zone arena directly, forcing Hemali's
