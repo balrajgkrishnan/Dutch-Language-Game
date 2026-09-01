@@ -371,9 +371,16 @@ export const DutchArcadeArenaModal: React.FC<DutchArcadeArenaModalProps> = ({
   };
 
   const createRandomBubble = (seed: number = 0): BubbleItem => {
+    // Escalating difficulty: every 7 spawn ticks (~11s) makes bombs more
+    // frequent, from the base 12% up to 24% by the end of a 45s round.
+    // (Bubbles themselves are static -- no speed/fall animation exists to
+    // ramp up -- so bomb density is the real difficulty lever here.)
+    const difficultyTier = Math.floor(seed / 7);
+    const bombChance = Math.min(0.12 + difficultyTier * 0.03, 0.24);
+
     const rand = Math.random();
     const isSpecial = rand < 0.12;
-    const isBomb = rand > 0.88;
+    const isBomb = !isSpecial && rand > 1 - bombChance;
 
     let type: BubbleItem['type'] = 'correct';
     let text = '';
@@ -439,11 +446,18 @@ export const DutchArcadeArenaModal: React.FC<DutchArcadeArenaModalProps> = ({
       });
     }, 1000);
 
+    // Escalating difficulty: the board gets busier over the round (more
+    // bubbles allowed on screen at once, alongside the rising bomb chance
+    // in createRandomBubble) -- was confirmed flat-difficulty the whole 45s
+    // before this, since nothing changed with elapsed time.
+    let spawnTicks = 0;
     bubbleSpawnRef.current = setInterval(() => {
+      spawnTicks++;
+      const difficultyTier = Math.floor(spawnTicks / 7);
+      const maxOnScreen = Math.min(9 + difficultyTier, 12);
       setBubbles(prev => {
-        // Keep between 6 and 10 bubbles on screen
-        if (prev.length < 9) {
-          return [...prev, createRandomBubble()];
+        if (prev.length < maxOnScreen) {
+          return [...prev, createRandomBubble(spawnTicks)];
         }
         return prev;
       });
