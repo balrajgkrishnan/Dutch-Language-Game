@@ -29,7 +29,8 @@ const TILE_THEMES = {
   sky: 'from-sky-500 to-blue-600 border-sky-300/60 hover:border-sky-200',
   indigo: 'from-indigo-500 to-purple-700 border-indigo-300/60 hover:border-indigo-200',
   yellow: 'from-yellow-500 to-amber-600 border-yellow-300/60 hover:border-yellow-200',
-  slate: 'from-blue-700 to-slate-800 border-blue-300/50 hover:border-blue-200'
+  slate: 'from-blue-700 to-slate-800 border-blue-300/50 hover:border-blue-200',
+  lime: 'from-lime-500 to-green-700 border-lime-300/60 hover:border-lime-200'
 } as const;
 
 export interface HomeTileHandlers {
@@ -40,6 +41,7 @@ export interface HomeTileHandlers {
   openArcade: () => void;
   openBossArena: () => void;
   openTamagotchi: () => void;
+  openTestSelector: () => void;
   openExpedition: () => void;
   goToSanctuary: () => void;
   goToMap: () => void;
@@ -76,6 +78,12 @@ export function buildHomeTiles(handlers: HomeTileHandlers, ctx: HomeTileContext)
       title: 'Spelling Fabriek',
       subtitle: 'Maak nieuwe woorden in de magische spellingfabriek!',
       theme: TILE_THEMES.violet, onClick: handlers.openSpellingFactory
+    },
+    {
+      id: 'test-mode', group: 'learn', size: 'standard', emoji: '📝',
+      title: 'Toetsweek',
+      subtitle: '50 vragen, meteen het antwoord zien, en een eindscore!',
+      theme: TILE_THEMES.lime, onClick: handlers.openTestSelector
     },
     // Play
     {

@@ -13,6 +13,9 @@ import { ProfileAvatarModal } from './components/ProfileAvatarModal';
 import { LoginModal } from './components/LoginModal';
 import { EnhancedParentDashboardModal } from './components/EnhancedParentDashboardModal';
 import { RidheyaSpellingFactoryModal } from './components/RidheyaSpellingFactoryModal';
+import { TestModeSelectorModal } from './components/TestModeSelectorModal';
+import { SpellingTestModal } from './components/SpellingTestModal';
+import { SterkeWerkwoordenTestModal } from './components/SterkeWerkwoordenTestModal';
 import { TocaWardrobeStudioModal } from './components/TocaWardrobeStudioModal';
 import { TamagotchiPetRoomModal } from './components/TamagotchiPetRoomModal';
 import { VersionFlashModal } from './components/VersionFlashModal';
@@ -92,6 +95,9 @@ export default function App() {
   const [showTamagotchiModal, setShowTamagotchiModal] = useState(false);
   const [showCitoRpgModal, setShowCitoRpgModal] = useState(false);
   const [showBossArenaModal, setShowBossArenaModal] = useState(false);
+  const [showTestSelectorModal, setShowTestSelectorModal] = useState(false);
+  const [showSpellingTestModal, setShowSpellingTestModal] = useState(false);
+  const [showWerkwoordenTestModal, setShowWerkwoordenTestModal] = useState(false);
   const [showVoiceModal, setShowVoiceModal] = useState(false);
   const [showDictionaryModal, setShowDictionaryModal] = useState(false);
   const [showArcadeModal, setShowArcadeModal] = useState(false);
@@ -564,6 +570,7 @@ export default function App() {
       openArcade: () => setShowArcadeModal(true),
       openBossArena: () => setShowBossArenaModal(true),
       openTamagotchi: () => setShowTamagotchiModal(true),
+      openTestSelector: () => setShowTestSelectorModal(true),
       openExpedition: () => setIsExpeditionActive(true),
       goToSanctuary: () => setActiveTab('sanctuary'),
       goToMap: () => setActiveTab('map'),
@@ -990,6 +997,26 @@ export default function App() {
         isOpen={showSpellingFactoryModal}
         profile={profile}
         onClose={() => setShowSpellingFactoryModal(false)}
+        onUpdateProfile={(updater) => setProfile(updater)}
+      />
+
+      {/* Toetsweek: mode selector + the two test modals */}
+      <TestModeSelectorModal
+        isOpen={showTestSelectorModal}
+        onClose={() => setShowTestSelectorModal(false)}
+        onSelectSpelling={() => { setShowTestSelectorModal(false); setShowSpellingTestModal(true); }}
+        onSelectWerkwoorden={() => { setShowTestSelectorModal(false); setShowWerkwoordenTestModal(true); }}
+      />
+      <SpellingTestModal
+        isOpen={showSpellingTestModal}
+        profile={profile}
+        onClose={() => setShowSpellingTestModal(false)}
+        onUpdateProfile={(updater) => setProfile(updater)}
+      />
+      <SterkeWerkwoordenTestModal
+        isOpen={showWerkwoordenTestModal}
+        profile={profile}
+        onClose={() => setShowWerkwoordenTestModal(false)}
         onUpdateProfile={(updater) => setProfile(updater)}
       />
 

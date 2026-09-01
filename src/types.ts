@@ -306,6 +306,17 @@ export interface ActivityLogItem {
   spokenText?: string;
 }
 
+export interface TestResult {
+  id: string;
+  gameType: 'spelling' | 'werkwoorden';
+  grade: GradeLevel;
+  dateFormatted: string; // e.g. "18-08-2026"
+  timestamp: number;
+  correct: number;
+  total: number;
+  percentage: number;
+}
+
 export interface AccessibilitySettings {
   dyslexiaFont: boolean;
   fontSize: 'normal' | 'large' | 'xlarge';
@@ -342,6 +353,7 @@ export interface PlayerProfile {
   verbStats: Record<string, { correct: number; wrong: number }>;
   activityLogs?: ActivityLogItem[];
   lastActiveTimestamp?: number;
+  testAttempts?: TestResult[];
 
   // New Adaptive & Child-Centric Features
   mastery: SkillMastery;
