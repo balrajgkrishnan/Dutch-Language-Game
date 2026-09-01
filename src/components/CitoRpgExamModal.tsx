@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   X, BookOpen, Sparkles, Volume2, ArrowRight, CheckCircle2, 
@@ -18,6 +18,7 @@ import {
 } from '../data/citoRpgData';
 import { sound } from '../services/soundService';
 import { speech } from '../services/speechService';
+import { useFullscreen } from '../hooks/useFullscreen';
 import { InteractiveDutchText } from './InteractiveDutchText';
 import { StoryCutsceneStage } from './StoryCutsceneStage';
 import confetti from 'canvas-confetti';
@@ -106,60 +107,7 @@ export const CitoRpgExamModal: React.FC<CitoRpgExamModalProps> = ({
   // JSON copy indicator
   const [hasCopiedJson, setHasCopiedJson] = useState<boolean>(false);
 
-  // Fullscreen state and ref
-  const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
-  const modalContainerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleFullscreenChange = () => {
-      setIsFullscreen(Boolean(document.fullscreenElement));
-    };
-    document.addEventListener('fullscreenchange', handleFullscreenChange);
-    document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
-    document.addEventListener('mozfullscreenchange', handleFullscreenChange);
-    document.addEventListener('MSFullscreenChange', handleFullscreenChange);
-    return () => {
-      document.removeEventListener('fullscreenchange', handleFullscreenChange);
-      document.removeEventListener('webkitfullscreenchange', handleFullscreenChange);
-      document.removeEventListener('mozfullscreenchange', handleFullscreenChange);
-      document.removeEventListener('MSFullscreenChange', handleFullscreenChange);
-    };
-  }, []);
-
-  const toggleFullscreen = async () => {
-    sound.playPop();
-    try {
-      if (!document.fullscreenElement) {
-        if (modalContainerRef.current) {
-          const el = modalContainerRef.current as any;
-          if (el.requestFullscreen) {
-            await el.requestFullscreen();
-          } else if (el.webkitRequestFullscreen) {
-            await el.webkitRequestFullscreen();
-          } else if (el.msRequestFullscreen) {
-            await el.msRequestFullscreen();
-          } else {
-            setIsFullscreen(prev => !prev);
-          }
-        } else {
-          setIsFullscreen(prev => !prev);
-        }
-      } else {
-        const doc = document as any;
-        if (doc.exitFullscreen) {
-          await doc.exitFullscreen();
-        } else if (doc.webkitExitFullscreen) {
-          await doc.webkitExitFullscreen();
-        } else if (doc.msExitFullscreen) {
-          await doc.msExitFullscreen();
-        }
-        setIsFullscreen(false);
-      }
-    } catch (err) {
-      // Fallback for sandboxed iframe environments
-      setIsFullscreen(prev => !prev);
-    }
-  };
+  const { isFullscreen, containerRef: modalContainerRef, toggleFullscreen } = useFullscreen<HTMLDivElement>();
 
   if (!isOpen) return null;
 
