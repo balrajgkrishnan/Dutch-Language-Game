@@ -152,19 +152,6 @@ export interface ExplorerCustomization {
 }
 
 
-export interface ReporterMission {
-  id: string;
-  title: string;
-  scenario: string;
-  targetAnimalEmoji: string;
-  targetAnimalName?: string;
-  vocabularyToUse: string[];
-  promptQuestions: string[];
-  sampleGoodAnswer: string;
-  difficulty?: 'easy' | 'medium' | 'advanced';
-  badgeRewardId?: string;
-}
-
 export interface SpellingFactoryItem {
   id: string;
   word: string;
@@ -397,36 +384,3 @@ export interface UserAccountConfig {
   focusBio: string;
 }
 
-export interface VetPatientCase {
-  id: string;
-  patientName: string;
-  species: string;
-  animalEmoji: string;
-  age: string;
-  biome: BiomeType;
-  symptoms: string[];
-  temperature: string;
-  caseReport: string; // Under 100 words child-friendly reading
-  targetProblem: string;
-  treatmentTool: {
-    id: string;
-    name: string;
-    icon: string;
-    description: string;
-  };
-  toolOptions: {
-    id: string;
-    name: string;
-    icon: string;
-    description: string;
-  }[];
-  spellingWord: {
-    word: string;
-    hint: string;
-    scrambledLetters: string[];
-  };
-  cureCheerMessage: string;
-  rewardStars: number;
-  rewardCoins: number;
-  badgeRewardId?: string;
-}

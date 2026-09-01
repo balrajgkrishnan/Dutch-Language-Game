@@ -24,16 +24,13 @@ export interface HomeTileHandlers {
   openRpgAdventure: () => void;
   openVerbArena: () => void;
   openDictionary: () => void;
-  openReporter: () => void;
   openSpellingFactory: () => void;
   openArcade: () => void;
   openBossArena: () => void;
   openTamagotchi: () => void;
-  openSisterTeam: () => void;
   openExpedition: () => void;
   goToSanctuary: () => void;
   goToMap: () => void;
-  openVetHospital: () => void;
   goToBadges: () => void;
   openScoreboard: () => void;
 }
@@ -63,14 +60,8 @@ export function buildHomeTiles(handlers: HomeTileHandlers, ctx: HomeTileContext)
       theme: THEMES.learn, onClick: handlers.openDictionary
     },
     {
-      id: 'reporter', group: 'learn', size: 'standard', emoji: '📰',
-      title: "Hemali's Reporter Missie",
-      subtitle: 'Onderzoek het safaripark als een echte verslaggever!',
-      theme: THEMES.learn, onClick: handlers.openReporter
-    },
-    {
       id: 'spelling-factory', group: 'learn', size: 'standard', emoji: '🧪',
-      title: "Ridheya's Spelling Fabriek",
+      title: 'Spelling Fabriek',
       subtitle: 'Maak nieuwe woorden in de magische spellingfabriek!',
       theme: THEMES.learn, onClick: handlers.openSpellingFactory
     },
@@ -93,12 +84,6 @@ export function buildHomeTiles(handlers: HomeTileHandlers, ctx: HomeTileContext)
       subtitle: 'Verzorg, aai en voed je huisdier in de Dierenkamer!',
       theme: THEMES.play, onClick: handlers.openTamagotchi
     },
-    {
-      id: 'sister-team', group: 'play', size: 'standard', emoji: '🤝',
-      title: 'Sister Team Samen-Quest',
-      subtitle: 'Werk samen met je zus aan een speciale missie!',
-      theme: THEMES.play, onClick: handlers.openSisterTeam
-    },
     // Explore
     {
       id: 'expedition', group: 'explore', size: 'standard', emoji: ctx.expeditionEmoji,
@@ -117,12 +102,6 @@ export function buildHomeTiles(handlers: HomeTileHandlers, ctx: HomeTileContext)
       title: 'Wereldkaart',
       subtitle: 'Kies uit 7 werelddelen om te verkennen!',
       theme: THEMES.explore, onClick: handlers.goToMap
-    },
-    {
-      id: 'vet-hospital', group: 'explore', size: 'standard', emoji: '🏥',
-      title: 'Dierenziekenhuis',
-      subtitle: 'Help Dokter Ridheya zieke dieren beter maken!',
-      theme: THEMES.explore, onClick: handlers.openVetHospital
     },
     // Progress
     {

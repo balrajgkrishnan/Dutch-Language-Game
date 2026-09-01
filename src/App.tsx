@@ -12,13 +12,10 @@ import { GradeSelectorModal } from './components/GradeSelectorModal';
 import { ProfileAvatarModal } from './components/ProfileAvatarModal';
 import { LoginModal } from './components/LoginModal';
 import { EnhancedParentDashboardModal } from './components/EnhancedParentDashboardModal';
-import { HemaliReporterModal } from './components/HemaliReporterModal';
 import { RidheyaSpellingFactoryModal } from './components/RidheyaSpellingFactoryModal';
-import { SisterTeamModal } from './components/SisterTeamModal';
 import { TocaWardrobeStudioModal } from './components/TocaWardrobeStudioModal';
 import { TamagotchiPetRoomModal } from './components/TamagotchiPetRoomModal';
 import { VersionFlashModal } from './components/VersionFlashModal';
-import { VeterinarianHospitalModal } from './components/VeterinarianHospitalModal';
 import { CitoRpgExamModal } from './components/CitoRpgExamModal';
 import { WerkwoordBossArenaModal } from './components/WerkwoordBossArenaModal';
 import { VoiceSettingsModal } from './components/VoiceSettingsModal';
@@ -90,12 +87,9 @@ export default function App() {
   const [showScoreboardModal, setShowScoreboardModal] = useState(false);
   
   // New Adaptive Modals state
-  const [showReporterModal, setShowReporterModal] = useState(false);
   const [showSpellingFactoryModal, setShowSpellingFactoryModal] = useState(false);
-  const [showSisterTeamModal, setShowSisterTeamModal] = useState(false);
   const [showWardrobeModal, setShowWardrobeModal] = useState(false);
   const [showVersionModal, setShowVersionModal] = useState(false);
-  const [showVetHospitalModal, setShowVetHospitalModal] = useState(false);
   const [showTamagotchiModal, setShowTamagotchiModal] = useState(false);
   const [showCitoRpgModal, setShowCitoRpgModal] = useState(false);
   const [showBossArenaModal, setShowBossArenaModal] = useState(false);
@@ -564,16 +558,13 @@ export default function App() {
       openRpgAdventure: () => setShowCitoRpgModal(true),
       openVerbArena,
       openDictionary: () => setShowDictionaryModal(true),
-      openReporter: () => setShowReporterModal(true),
       openSpellingFactory: () => setShowSpellingFactoryModal(true),
       openArcade: () => setShowArcadeModal(true),
       openBossArena: () => setShowBossArenaModal(true),
       openTamagotchi: () => setShowTamagotchiModal(true),
-      openSisterTeam: () => setShowSisterTeamModal(true),
       openExpedition: () => setIsExpeditionActive(true),
       goToSanctuary: () => setActiveTab('sanctuary'),
       goToMap: () => setActiveTab('map'),
-      openVetHospital: () => setShowVetHospitalModal(true),
       goToBadges: () => setActiveTab('badges'),
       openScoreboard: () => setShowScoreboardModal(true)
     },
@@ -1007,29 +998,12 @@ export default function App() {
         onUpdateProfile={(updater) => setProfile(updater)}
       />
 
-      {/* Hemali Safari Reporter Modal */}
-      <HemaliReporterModal
-        isOpen={showReporterModal}
-        profile={profile}
-        onClose={() => setShowReporterModal(false)}
-        onUpdateProfile={(updater) => setProfile(updater)}
-      />
-
       {/* Ridheya Spelling Factory Modal */}
       <RidheyaSpellingFactoryModal
         isOpen={showSpellingFactoryModal}
         profile={profile}
         onClose={() => setShowSpellingFactoryModal(false)}
         onUpdateProfile={(updater) => setProfile(updater)}
-      />
-
-      {/* Sister Team Cooperative Quest Modal */}
-      <SisterTeamModal
-        isOpen={showSisterTeamModal}
-        profile={profile}
-        onClose={() => setShowSisterTeamModal(false)}
-        onOpenHemaliMission={() => setShowReporterModal(true)}
-        onOpenRidheyaMission={() => setShowSpellingFactoryModal(true)}
       />
 
       {/* Toca & Roblox Avatar & Wardrobe Studio Modal */}
@@ -1052,14 +1026,6 @@ export default function App() {
       <VersionFlashModal
         isOpen={showVersionModal}
         onClose={() => setShowVersionModal(false)}
-      />
-
-      {/* Veterinarian Animal Hospital Modal (Dokter Ridheya) */}
-      <VeterinarianHospitalModal
-        isOpen={showVetHospitalModal}
-        onClose={() => setShowVetHospitalModal(false)}
-        profile={profile}
-        onUpdateProfile={(updater) => setProfile(updater)}
       />
 
       {/* Interactive Tamagotchi Pet Room & Adoption Studio Modal */}
