@@ -1,25 +1,27 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import confetti from 'canvas-confetti';
-import { 
-  X, Heart, Sparkles, Utensils, Moon, Sun, Music, 
-  Bath, Stethoscope, Trophy, Volume2, Edit3, Check, 
+import {
+  X, Heart, Sparkles, Utensils, Moon, Sun, Music,
+  Bath, Stethoscope, Trophy, Volume2, Edit3, Check,
   Smile, Shield, Zap, RefreshCw, ShoppingBag, ArrowRight,
-  Flame, Award, Star, Compass, Play, Plus, Activity
+  Flame, Award, Star, Compass, Play, Plus, Activity,
+  Maximize2, Minimize2
 } from 'lucide-react';
 import { PetCompanionState, PlayerProfile, CompanionPetId } from '../types';
-import { 
-  ALL_PETS, 
-  TAMAGOTCHI_FOODS, 
-  TAMAGOTCHI_CARE_ACTIONS, 
-  TAMAGOTCHI_HATS, 
-  PET_GROWTH_STAGES, 
-  PET_HOMES, 
-  createInitialCompanion 
+import {
+  ALL_PETS,
+  TAMAGOTCHI_FOODS,
+  TAMAGOTCHI_CARE_ACTIONS,
+  TAMAGOTCHI_HATS,
+  PET_GROWTH_STAGES,
+  PET_HOMES,
+  createInitialCompanion
 } from '../data/companionData';
 import { sound } from '../services/soundService';
 import { speech } from '../services/speechService';
 import { PetAnimatedAvatar } from './PetAnimatedAvatar';
+import { useFullscreen } from '../hooks/useFullscreen';
 
 interface TamagotchiPetRoomModalProps {
   isOpen: boolean;
@@ -150,6 +152,7 @@ export const TamagotchiPetRoomModal: React.FC<TamagotchiPetRoomModalProps> = ({
   const [vetScanProgress, setVetScanProgress] = useState(0);
   const [isScanningVet, setIsScanningVet] = useState(false);
   const [bandagesApplied, setBandagesApplied] = useState<number[]>([]);
+  const { isFullscreen, containerRef, toggleFullscreen } = useFullscreen<HTMLDivElement>();
 
   // Synchronize customNameInput when companion changes
   useEffect(() => {
@@ -462,12 +465,17 @@ export const TamagotchiPetRoomModal: React.FC<TamagotchiPetRoomModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-2 sm:p-4 select-none">
+    <div className={`fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center ${isFullscreen ? 'p-0' : 'p-2 sm:p-4'} select-none`}>
       <motion.div
+        ref={containerRef}
         initial={{ scale: 0.92, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.92, opacity: 0 }}
-        className="bg-slate-900 rounded-3xl shadow-2xl border-4 border-amber-400 max-w-3xl w-full overflow-hidden flex flex-col max-h-[94vh]"
+        className={`bg-slate-900 ${
+          isFullscreen
+            ? 'w-full h-full max-w-none max-h-none rounded-none border-0'
+            : 'rounded-3xl shadow-2xl border-4 border-amber-400 max-w-3xl w-full max-h-[94vh]'
+        } overflow-hidden flex flex-col`}
       >
         {/* Top Header Bar */}
         <div className="bg-gradient-to-r from-amber-500 via-rose-500 to-purple-600 p-3 sm:p-4 text-white flex items-center justify-between shadow-lg">
@@ -504,6 +512,13 @@ export const TamagotchiPetRoomModal: React.FC<TamagotchiPetRoomModalProps> = ({
               <Trophy className="w-4 h-4 text-amber-300" />
               <span className="text-amber-300">{profile.score} 🪙</span>
             </div>
+            <button
+              onClick={toggleFullscreen}
+              className="w-9 h-9 rounded-2xl bg-white/20 hover:bg-white/30 text-white flex items-center justify-center cursor-pointer transition-all border border-white/30"
+              title={isFullscreen ? 'Verlaat Volledig Scherm' : 'Volledig Scherm'}
+            >
+              {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
+            </button>
             <button
               onClick={onClose}
               className="w-9 h-9 rounded-2xl bg-white/20 hover:bg-rose-600 text-white flex items-center justify-center cursor-pointer transition-all border border-white/30"

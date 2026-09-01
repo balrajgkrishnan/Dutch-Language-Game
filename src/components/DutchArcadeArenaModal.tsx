@@ -1,14 +1,16 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { 
-  X, Zap, Sparkles, Heart, Trophy, Flame, RotateCcw, Award, 
-  Volume2, VolumeX, Play, Pause, Clock, Star, ShieldAlert, 
-  ChevronRight, ArrowRight, Gamepad2, Rocket, HelpCircle
+import {
+  X, Zap, Sparkles, Heart, Trophy, Flame, RotateCcw, Award,
+  Volume2, VolumeX, Play, Pause, Clock, Star, ShieldAlert,
+  ChevronRight, ArrowRight, Gamepad2, Rocket, HelpCircle,
+  Maximize2, Minimize2
 } from 'lucide-react';
 import { PlayerProfile } from '../types';
 import { COMPREHENSIVE_SPELLING_FACTORY_ITEMS } from '../data/comprehensiveSpellingData';
 import { sound } from '../services/soundService';
 import { speech } from '../services/speechService';
+import { useFullscreen } from '../hooks/useFullscreen';
 import confetti from 'canvas-confetti';
 
 interface DutchArcadeArenaModalProps {
@@ -241,8 +243,9 @@ export const DutchArcadeArenaModal: React.FC<DutchArcadeArenaModalProps> = ({
   profile,
   onUpdateProfile
 }) => {
+  const { isFullscreen, containerRef, toggleFullscreen } = useFullscreen<HTMLDivElement>();
   const [activeGame, setActiveGame] = useState<ArcadeGameMode>('hub');
-  
+
   // Universal Arcade State
   const [score, setScore] = useState(0);
   const [combo, setCombo] = useState(0);
@@ -818,7 +821,7 @@ export const DutchArcadeArenaModal: React.FC<DutchArcadeArenaModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-slate-950/85 backdrop-blur-md overflow-hidden">
+    <div className={`fixed inset-0 z-50 flex items-center justify-center ${isFullscreen ? 'p-0' : 'p-2 sm:p-4'} bg-slate-950/85 backdrop-blur-md overflow-hidden`}>
       {/* Floating Scores Overlay */}
       {floatingScores.map(f => (
         <motion.div
@@ -834,10 +837,15 @@ export const DutchArcadeArenaModal: React.FC<DutchArcadeArenaModalProps> = ({
       ))}
 
       <motion.div
+        ref={containerRef}
         initial={{ scale: 0.95, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.95, opacity: 0 }}
-        className="bg-slate-900 text-white rounded-3xl w-full max-w-3xl shadow-2xl border-2 border-indigo-500/50 overflow-hidden flex flex-col max-h-[95vh] relative"
+        className={`bg-slate-900 text-white ${
+          isFullscreen
+            ? 'w-full h-full max-w-none max-h-none rounded-none border-0'
+            : 'w-full max-w-3xl rounded-3xl shadow-2xl border-2 border-indigo-500/50 max-h-[95vh]'
+        } overflow-hidden flex flex-col relative`}
       >
         {/* Neon Arcade Banner */}
         <div className={`p-3.5 sm:p-4 flex items-center justify-between transition-colors ${
@@ -884,6 +892,13 @@ export const DutchArcadeArenaModal: React.FC<DutchArcadeArenaModalProps> = ({
                 Menu
               </button>
             )}
+            <button
+              onClick={toggleFullscreen}
+              className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center cursor-pointer transition-all"
+              title={isFullscreen ? 'Verlaat Volledig Scherm' : 'Volledig Scherm'}
+            >
+              {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
+            </button>
             <button
               onClick={() => {
                 speech.stop();

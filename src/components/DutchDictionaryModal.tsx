@@ -1,9 +1,10 @@
 import React, { useState, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { BookOpen, Search, Volume2, Sparkles, X, Puzzle, ArrowRight } from 'lucide-react';
+import { BookOpen, Search, Volume2, Sparkles, X, Puzzle, ArrowRight, Maximize2, Minimize2 } from 'lucide-react';
 import { DUTCH_DICTIONARY_DB, DictionaryEntry } from '../data/dutchDictionaryData';
 import { lookupDutchWord, lookupDutchWordAsync, searchDictionaryWords } from '../services/dutchDictionaryService';
 import { sound } from '../services/soundService';
+import { useFullscreen } from '../hooks/useFullscreen';
 
 interface DutchDictionaryModalProps {
   isOpen: boolean;
@@ -22,6 +23,7 @@ export const DutchDictionaryModal: React.FC<DutchDictionaryModalProps> = ({
   const [activeTab, setActiveTab] = useState<TabType>('all');
   const [selectedWord, setSelectedWord] = useState<DictionaryEntry | null>(null);
   const pendingWordRef = useRef<string | null>(null);
+  const { isFullscreen, containerRef, toggleFullscreen } = useFullscreen<HTMLDivElement>();
 
   // Filtered dictionary entries
   const displayedEntries = useMemo(() => {
@@ -74,12 +76,17 @@ export const DutchDictionaryModal: React.FC<DutchDictionaryModalProps> = ({
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/60 backdrop-blur-sm overflow-y-auto">
+      <div className={`fixed inset-0 z-50 flex items-center justify-center ${isFullscreen ? 'p-0' : 'p-3 sm:p-4'} bg-slate-900/60 backdrop-blur-sm overflow-y-auto`}>
         <motion.div
+          ref={containerRef}
           initial={{ opacity: 0, scale: 0.95, y: 15 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 15 }}
-          className="w-full max-w-4xl bg-white rounded-3xl shadow-2xl border-4 border-amber-300 overflow-hidden flex flex-col max-h-[90vh]"
+          className={`bg-white ${
+            isFullscreen
+              ? 'w-full h-full max-w-none max-h-none rounded-none border-0'
+              : 'w-full max-w-4xl rounded-3xl shadow-2xl border-4 border-amber-300 max-h-[90vh]'
+          } overflow-hidden flex flex-col`}
         >
           {/* Header */}
           <div className="bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 p-4 sm:p-5 text-white flex items-center justify-between gap-3 flex-shrink-0">
@@ -100,13 +107,22 @@ export const DutchDictionaryModal: React.FC<DutchDictionaryModalProps> = ({
               </div>
             </div>
 
-            <button
-              onClick={onClose}
-              className="p-2 rounded-2xl bg-white/20 hover:bg-white/30 text-white cursor-pointer transition-colors"
-              title="Sluiten"
-            >
-              <X className="w-6 h-6" />
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={toggleFullscreen}
+                className="p-2 rounded-2xl bg-white/20 hover:bg-white/30 text-white cursor-pointer transition-colors"
+                title={isFullscreen ? 'Verlaat Volledig Scherm' : 'Volledig Scherm'}
+              >
+                {isFullscreen ? <Minimize2 className="w-5 h-5" /> : <Maximize2 className="w-5 h-5" />}
+              </button>
+              <button
+                onClick={onClose}
+                className="p-2 rounded-2xl bg-white/20 hover:bg-white/30 text-white cursor-pointer transition-colors"
+                title="Sluiten"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
           </div>
 
           {/* Search & Filter Bar */}

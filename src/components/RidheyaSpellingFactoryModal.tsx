@@ -1,13 +1,15 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { 
-  X, Volume2, CheckCircle2, ArrowRight, Lightbulb, 
-  Sparkles, Filter, Shuffle, RefreshCw, Award, ChevronRight
+import {
+  X, Volume2, CheckCircle2, ArrowRight, Lightbulb,
+  Sparkles, Filter, Shuffle, RefreshCw, Award, ChevronRight,
+  Maximize2, Minimize2
 } from 'lucide-react';
 import { SpellingFactoryItem, PlayerProfile } from '../types';
 import { COMPREHENSIVE_SPELLING_FACTORY_ITEMS } from '../data/comprehensiveSpellingData';
 import { sound } from '../services/soundService';
 import { speech } from '../services/speechService';
+import { useFullscreen } from '../hooks/useFullscreen';
 import confetti from 'canvas-confetti';
 
 interface RidheyaSpellingFactoryModalProps {
@@ -46,6 +48,7 @@ export const RidheyaSpellingFactoryModal: React.FC<RidheyaSpellingFactoryModalPr
   const [isArcadeBlitz, setIsArcadeBlitz] = useState(false);
   const [blitzTimeLeft, setBlitzTimeLeft] = useState(15);
   const blitzTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const { isFullscreen, containerRef, toggleFullscreen } = useFullscreen<HTMLDivElement>();
 
   // Filtered pool of items based on category
   const filteredItems = useMemo(() => {
@@ -179,12 +182,17 @@ export const RidheyaSpellingFactoryModal: React.FC<RidheyaSpellingFactoryModalPr
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/60 backdrop-blur-sm overflow-y-auto">
+    <div className={`fixed inset-0 z-50 flex items-center justify-center ${isFullscreen ? 'p-0' : 'p-3 sm:p-4'} bg-slate-950/60 backdrop-blur-sm overflow-y-auto`}>
       <motion.div
+        ref={containerRef}
         initial={{ scale: 0.95, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.95, opacity: 0 }}
-        className="bg-white rounded-3xl w-full max-w-2xl shadow-2xl border border-amber-100 overflow-hidden flex flex-col max-h-[92vh]"
+        className={`bg-white ${
+          isFullscreen
+            ? 'w-full h-full max-w-none max-h-none rounded-none border-0'
+            : 'w-full max-w-2xl rounded-3xl shadow-2xl border border-amber-100 max-h-[92vh]'
+        } overflow-hidden flex flex-col`}
       >
         {/* Header */}
         <div className="bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 p-4 sm:p-5 text-white flex items-center justify-between shadow-md">
@@ -210,6 +218,14 @@ export const RidheyaSpellingFactoryModal: React.FC<RidheyaSpellingFactoryModalPr
             </div>
           </div>
 
+          <div className="flex items-center gap-2">
+          <button
+            onClick={toggleFullscreen}
+            className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center cursor-pointer transition-all"
+            title={isFullscreen ? 'Verlaat Volledig Scherm' : 'Volledig Scherm'}
+          >
+            {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
+          </button>
           <button
             onClick={() => {
               speech.stop();
@@ -219,6 +235,7 @@ export const RidheyaSpellingFactoryModal: React.FC<RidheyaSpellingFactoryModalPr
           >
             <X className="w-5 h-5" />
           </button>
+          </div>
         </div>
 
         {/* Category Scroll Filter Tabs + Arcade Blitz Toggle */}

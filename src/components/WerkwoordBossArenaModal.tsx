@@ -1,13 +1,15 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { 
-  X, Zap, Shield, Sparkles, Heart, Trophy, Flame, RotateCcw, 
-  Award, CheckCircle2, HelpCircle, Swords, Backpack, Compass, 
-  Volume2, FastForward, Play, ChevronRight, Eye, ArrowRight, RefreshCw
+import {
+  X, Zap, Shield, Sparkles, Heart, Trophy, Flame, RotateCcw,
+  Award, CheckCircle2, HelpCircle, Swords, Backpack, Compass,
+  Volume2, FastForward, Play, ChevronRight, Eye, ArrowRight, RefreshCw,
+  Maximize2, Minimize2
 } from 'lucide-react';
 import { PlayerProfile } from '../types';
 import { sound } from '../services/soundService';
 import { speech } from '../services/speechService';
+import { useFullscreen } from '../hooks/useFullscreen';
 import confetti from 'canvas-confetti';
 
 interface WerkwoordBossArenaModalProps {
@@ -769,6 +771,7 @@ export const WerkwoordBossArenaModal: React.FC<WerkwoordBossArenaModalProps> = (
   profile,
   onUpdateProfile
 }) => {
+  const { isFullscreen, containerRef, toggleFullscreen } = useFullscreen<HTMLDivElement>();
   const [selectedBossIndex, setSelectedBossIndex] = useState<number>(0);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
   const [activeQuestions, setActiveQuestions] = useState<BossDuelQuestion[]>([]);
@@ -1030,12 +1033,17 @@ export const WerkwoordBossArenaModal: React.FC<WerkwoordBossArenaModalProps> = (
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-slate-950/85 backdrop-blur-md overflow-y-auto font-sans">
+    <div className={`fixed inset-0 z-50 flex items-center justify-center ${isFullscreen ? 'p-0' : 'p-2 sm:p-4'} bg-slate-950/85 backdrop-blur-md overflow-y-auto font-sans`}>
       <motion.div
+        ref={containerRef}
         initial={{ scale: 0.92, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.92, opacity: 0 }}
-        className="bg-slate-900 rounded-3xl w-full max-w-4xl shadow-2xl border-4 border-amber-400/60 overflow-hidden flex flex-col text-white max-h-[96vh] relative"
+        className={`bg-slate-900 ${
+          isFullscreen
+            ? 'w-full h-full max-w-none max-h-none rounded-none border-0'
+            : 'w-full max-w-4xl rounded-3xl shadow-2xl border-4 border-amber-400/60 max-h-[96vh]'
+        } overflow-hidden flex flex-col text-white relative`}
       >
         {/* TOP RETRO POKÉMON BANNER */}
         <div className="bg-slate-950 px-4 py-2.5 border-b-2 border-amber-500/40 flex items-center justify-between gap-2 flex-wrap">
@@ -1069,13 +1077,22 @@ export const WerkwoordBossArenaModal: React.FC<WerkwoordBossArenaModalProps> = (
             ))}
           </div>
 
-          <button
-            onClick={onClose}
-            className="w-8 h-8 rounded-xl bg-slate-800 hover:bg-rose-900/80 text-white flex items-center justify-center transition-all cursor-pointer border border-slate-700 active:scale-90"
-            title="Sluit Arena"
-          >
-            <X className="w-4 h-4" />
-          </button>
+          <div className="flex items-center gap-1.5">
+            <button
+              onClick={toggleFullscreen}
+              className="w-8 h-8 rounded-xl bg-slate-800 hover:bg-slate-700 text-white flex items-center justify-center transition-all cursor-pointer border border-slate-700 active:scale-90"
+              title={isFullscreen ? 'Verlaat Volledig Scherm' : 'Volledig Scherm'}
+            >
+              {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
+            </button>
+            <button
+              onClick={onClose}
+              className="w-8 h-8 rounded-xl bg-slate-800 hover:bg-rose-900/80 text-white flex items-center justify-center transition-all cursor-pointer border border-slate-700 active:scale-90"
+              title="Sluit Arena"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
         </div>
 
         {/* ═══════════════════════════════════════════════════════════════ */}

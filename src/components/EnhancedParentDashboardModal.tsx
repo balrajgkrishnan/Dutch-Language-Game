@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { 
-  X, 
-  TrendingUp, 
-  Award, 
-  BookOpen, 
-  Mic, 
-  CheckCircle2, 
-  AlertCircle, 
-  Clock, 
-  Sparkles, 
-  User, 
+import {
+  X,
+  TrendingUp,
+  Award,
+  BookOpen,
+  Mic,
+  CheckCircle2,
+  AlertCircle,
+  Clock,
+  Sparkles,
+  User,
   RefreshCw,
   Printer,
   Compass,
@@ -19,10 +19,13 @@ import {
   Calendar,
   Layers,
   Star,
-  FileText
+  FileText,
+  Maximize2,
+  Minimize2
 } from 'lucide-react';
 import { PlayerProfile, SkillMastery, AssessmentSnapshot } from '../types';
 import { loadUserProfile } from '../services/authService';
+import { useFullscreen } from '../hooks/useFullscreen';
 import { ReadingHeroDashboard } from './assessment/ReadingHeroDashboard';
 import { CommunicationDashboard } from './assessment/CommunicationDashboard';
 import { SafariPlacementModal } from './assessment/SafariPlacementModal';
@@ -61,6 +64,7 @@ export const EnhancedParentDashboardModal: React.FC<EnhancedParentDashboardModal
   const [showWritingModal, setShowWritingModal] = useState(false);
   const [showMilestonesModal, setShowMilestonesModal] = useState(false);
   const [showPrintableModal, setShowPrintableModal] = useState(false);
+  const { isFullscreen, containerRef, toggleFullscreen } = useFullscreen<HTMLDivElement>();
 
   if (!isOpen) return null;
 
@@ -103,12 +107,17 @@ export const EnhancedParentDashboardModal: React.FC<EnhancedParentDashboardModal
   ];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/70 backdrop-blur-md overflow-y-auto">
+    <div className={`fixed inset-0 z-50 flex items-center justify-center ${isFullscreen ? 'p-0' : 'p-3 sm:p-4'} bg-slate-950/70 backdrop-blur-md overflow-y-auto`}>
       <motion.div
+        ref={containerRef}
         initial={{ scale: 0.95, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.95, opacity: 0 }}
-        className="bg-white rounded-3xl w-full max-w-5xl shadow-2xl border border-indigo-100 overflow-hidden flex flex-col max-h-[92vh]"
+        className={`bg-white ${
+          isFullscreen
+            ? 'w-full h-full max-w-none max-h-none rounded-none border-0'
+            : 'w-full max-w-5xl rounded-3xl shadow-2xl border border-indigo-100 max-h-[92vh]'
+        } overflow-hidden flex flex-col`}
       >
         {/* Header */}
         <div className="bg-gradient-to-r from-indigo-900 via-purple-900 to-emerald-900 p-4 sm:p-5 text-white flex items-center justify-between">
@@ -132,6 +141,14 @@ export const EnhancedParentDashboardModal: React.FC<EnhancedParentDashboardModal
             >
               <Printer className="w-4 h-4" />
               <span className="hidden sm:inline">Exporteer PDF</span>
+            </button>
+
+            <button
+              onClick={toggleFullscreen}
+              className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center cursor-pointer transition-all"
+              title={isFullscreen ? 'Verlaat Volledig Scherm' : 'Volledig Scherm'}
+            >
+              {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
             </button>
 
             <button
