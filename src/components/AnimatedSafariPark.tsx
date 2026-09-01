@@ -11,6 +11,7 @@ import { FOOD_ITEMS } from '../data/gameData';
 import { sound } from '../services/soundService';
 import { speech } from '../services/speechService';
 import { TocaAvatar } from './TocaAvatar';
+import { AnimalAvatar } from './AnimalAvatar';
 
 interface AnimatedSafariParkProps {
   animals: Animal[];
@@ -699,12 +700,12 @@ export const AnimatedSafariPark: React.FC<AnimatedSafariParkProps> = ({
               )}
 
               {/* Animal Avatar & Direction Flip */}
-              <div 
-                className={`text-3xl sm:text-4xl filter drop-shadow-md select-none transition-transform ${
+              <div
+                className={`transition-transform ${
                   state.direction === 'left' ? 'scale-x-[-1]' : 'scale-x-100'
                 }`}
               >
-                {animal.emoji}
+                <AnimalAvatar animalId={animal.id} size="sm" isAnimated={false} interactive={false} />
               </div>
 
               {/* Name Tag on Hover or Proximity */}
@@ -798,9 +799,13 @@ export const AnimatedSafariPark: React.FC<AnimatedSafariParkProps> = ({
               
               {/* Animal Identity Header */}
               <div className="flex items-center gap-3.5 w-full md:w-auto">
-                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-100 to-emerald-100 border-2 border-amber-300 flex items-center justify-center text-4xl shadow-md flex-shrink-0">
-                  {activeFocusAnimal.emoji}
-                </div>
+                <AnimalAvatar
+                  animalId={activeFocusAnimal.id}
+                  size="md"
+                  isAnimated={false}
+                  interactive={false}
+                  className="border-2 border-amber-300 shadow-md flex-shrink-0 bg-gradient-to-br from-amber-100 to-emerald-100"
+                />
                 <div>
                   <div className="flex items-center gap-2">
                     <h3 className="text-lg sm:text-xl font-black text-slate-900">
@@ -909,8 +914,8 @@ export const AnimatedSafariPark: React.FC<AnimatedSafariParkProps> = ({
               </button>
 
               <div className="bg-gradient-to-b from-amber-100 via-emerald-100 to-cyan-100 rounded-2xl p-6 mb-4 border border-slate-200 relative overflow-hidden flex flex-col items-center justify-center min-h-[220px]">
-                <div className="text-6xl mb-2 filter drop-shadow-md animate-bounce">
-                  {polaroidPhoto.animal.emoji}
+                <div className="mb-2 animate-bounce">
+                  <AnimalAvatar animalId={polaroidPhoto.animal.id} size="xl" isAnimated={false} interactive={false} />
                 </div>
                 <div className="flex items-center gap-2 mt-2">
                   <div className="p-0.5 rounded-xl bg-white shadow-xs">
