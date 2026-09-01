@@ -10,6 +10,7 @@ import { PlayerProfile } from '../types';
 import { sound } from '../services/soundService';
 import { speech } from '../services/speechService';
 import { useFullscreen } from '../hooks/useFullscreen';
+import { getEffectiveGrade } from '../utils/gradeTier';
 import confetti from 'canvas-confetti';
 
 interface WerkwoordBossArenaModalProps {
@@ -47,7 +48,7 @@ export interface BossProfile {
   maxHp: number;
   dialogueIntro: string;
   defeatDialogue: string;
-  targetGrade: 'Groep 4-5' | 'Groep 6-7' | 'Groep 7-8' | 'Groep 8';
+  targetGrade: 'Groep 3-5' | 'Groep 6-8';
   questionPool: BossDuelQuestion[];
 }
 
@@ -71,7 +72,7 @@ export const ALL_BOSS_PROFILES: BossProfile[] = [
     maxHp: 100,
     dialogueIntro: 'Wilde DT-DRAAK IGNIS verschijnt! "Haha! Niemand beheerst stam+t en inversie beter dan ik!"',
     defeatDialogue: 'Aaaargh! Jouw stam+t kennis is super effectief! DT-Draak Ignis buigt voor jouw meesterschap!',
-    targetGrade: 'Groep 8',
+    targetGrade: 'Groep 6-8',
     questionPool: [
       {
         id: 'dtd-inv-1',
@@ -231,7 +232,7 @@ export const ALL_BOSS_PROFILES: BossProfile[] = [
     maxHp: 100,
     dialogueIntro: "Wilde GRAAF 'T KOFSCHIP zweeft uit de mist! \"Weet jij of de verleden tijd op -te of -de eindigt?\"",
     defeatDialogue: "Onmogelijk! Jouw 't Kofschip analyse heeft mijn kasteel bevrijd! De vleermuizen buigen voor je!",
-    targetGrade: 'Groep 7-8',
+    targetGrade: 'Groep 6-8',
     questionPool: [
       {
         id: 'ck-verhuizen-1',
@@ -363,7 +364,7 @@ export const ALL_BOSS_PROFILES: BossProfile[] = [
     maxHp: 100,
     dialogueIntro: 'Wilde CYBER-ZOMBIE BYTER activeert! "Beep boop! Zelfs experts maken fouten met Engelse werkwoorden!"',
     defeatDialogue: 'Systeem oververhit! Jouw leenwoord-spelling is geprogrammeerd tot in absolute perfectie!',
-    targetGrade: 'Groep 8',
+    targetGrade: 'Groep 6-8',
     questionPool: [
       {
         id: 'lw-streamen-1',
@@ -495,7 +496,7 @@ export const ALL_BOSS_PROFILES: BossProfile[] = [
     maxHp: 100,
     dialogueIntro: 'Wilde SPHINX VAN LUXOR ontwaakt! "Wie mijn raadsels over signaalwoorden niet kent, zal hier niet passeren!"',
     defeatDialogue: 'Verbluffend! Jouw tekstbegrip en inzicht in signaalwoorden hebben de geheime piramide geopend!',
-    targetGrade: 'Groep 8',
+    targetGrade: 'Groep 6-8',
     questionPool: [
       {
         id: 'sph-desondanks-1',
@@ -627,7 +628,7 @@ export const ALL_BOSS_PROFILES: BossProfile[] = [
     maxHp: 100,
     dialogueIntro: 'Wilde KLANKEN-GOLEM GOR stampt de grond in! "Breek jij mijn stenen klanken over korte en lange klinkers?"',
     defeatDialogue: 'Waaaah! Jouw klankgroepen-kennis heeft mijn rotsblokken gekraakt! Super goed gespeld!',
-    targetGrade: 'Groep 4-5',
+    targetGrade: 'Groep 3-5',
     questionPool: [
       {
         id: 'kg-kikkers-1',
@@ -802,6 +803,18 @@ export const WerkwoordBossArenaModal: React.FC<WerkwoordBossArenaModalProps> = (
   const currentBoss = ALL_BOSS_PROFILES[selectedBossIndex] || ALL_BOSS_PROFILES[0];
   const currentQ = activeQuestions[currentQuestionIndex] || activeQuestions[0];
   const isRidheya = profile.name.toLowerCase().includes('ridheya');
+  const effectiveGrade = getEffectiveGrade(profile, isRidheya);
+  const targetGradeLabel = effectiveGrade === 'group_4_5' ? 'Groep 3-5' : 'Groep 6-8';
+  const visibleBossIndices = ALL_BOSS_PROFILES
+    .map((boss, idx) => ({ boss, idx }))
+    .filter(({ boss }) => boss.targetGrade === targetGradeLabel)
+    .map(({ idx }) => idx);
+
+  const getNextVisibleBossIndex = (fromIdx: number): number => {
+    const posInVisible = visibleBossIndices.indexOf(fromIdx);
+    const nextPos = posInVisible === -1 ? 0 : (posInVisible + 1) % visibleBossIndices.length;
+    return visibleBossIndices[nextPos];
+  };
 
   // Load and prioritize unseen questions for this boss
   const loadBossBattleQuestions = (bossIdx: number) => {
@@ -836,6 +849,15 @@ export const WerkwoordBossArenaModal: React.FC<WerkwoordBossArenaModalProps> = (
     setActiveProjectile(null);
     setDialogueText(targetBoss.dialogueIntro);
   };
+
+  // If the current boss doesn't match this profile's grade tier (e.g. the
+  // modal opened fresh, or the active profile changed while it was mounted),
+  // jump to the first boss that does.
+  useEffect(() => {
+    if (isOpen && !visibleBossIndices.includes(selectedBossIndex)) {
+      setSelectedBossIndex(visibleBossIndices[0] ?? 0);
+    }
+  }, [isOpen, targetGradeLabel]);
 
   // Initialize questions when modal opens or boss index changes
   useEffect(() => {
@@ -1016,7 +1038,7 @@ export const WerkwoordBossArenaModal: React.FC<WerkwoordBossArenaModalProps> = (
         confetti({ particleCount: 100, spread: 80 });
       } else {
         // Rematch or load fresh questions
-        loadBossBattleQuestions((selectedBossIndex + 1) % ALL_BOSS_PROFILES.length);
+        loadBossBattleQuestions(getNextVisibleBossIndex(selectedBossIndex));
       }
     }
   };
@@ -1059,9 +1081,11 @@ export const WerkwoordBossArenaModal: React.FC<WerkwoordBossArenaModalProps> = (
             </div>
           </div>
 
-          {/* Quick Boss Tabs */}
+          {/* Quick Boss Tabs (only this profile's grade tier) */}
           <div className="flex items-center gap-1.5 overflow-x-auto py-1 max-w-[55%] sm:max-w-none">
-            {ALL_BOSS_PROFILES.map((boss, bIdx) => (
+            {visibleBossIndices.map(bIdx => {
+              const boss = ALL_BOSS_PROFILES[bIdx];
+              return (
               <button
                 key={boss.id}
                 onClick={() => handleSelectBoss(bIdx)}
@@ -1074,7 +1098,8 @@ export const WerkwoordBossArenaModal: React.FC<WerkwoordBossArenaModalProps> = (
                 <span>{boss.emoji}</span>
                 <span className="hidden md:inline">{boss.name.split(' ')[0]}</span>
               </button>
-            ))}
+              );
+            })}
           </div>
 
           <div className="flex items-center gap-1.5">
@@ -1326,7 +1351,7 @@ export const WerkwoordBossArenaModal: React.FC<WerkwoordBossArenaModalProps> = (
                 <span className="bg-emerald-400/20 px-3 py-1 rounded-xl border border-emerald-400/40">📜 +6% Grammaticameesterschap</span>
               </div>
               <button
-                onClick={() => handleSelectBoss((selectedBossIndex + 1) % ALL_BOSS_PROFILES.length)}
+                onClick={() => handleSelectBoss(getNextVisibleBossIndex(selectedBossIndex))}
                 className="bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950 font-black text-xs sm:text-sm px-6 py-2.5 rounded-xl shadow-lg transition-transform hover:scale-105 active:scale-95 cursor-pointer flex items-center gap-2 mx-auto"
               >
                 <span>Volgende Baas Uitdagen</span>
@@ -1470,7 +1495,7 @@ export const WerkwoordBossArenaModal: React.FC<WerkwoordBossArenaModalProps> = (
                   </button>
 
                   <button
-                    onClick={() => handleSelectBoss((selectedBossIndex + 1) % ALL_BOSS_PROFILES.length)}
+                    onClick={() => handleSelectBoss(getNextVisibleBossIndex(selectedBossIndex))}
                     className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-black text-xs flex items-center justify-center gap-1.5 cursor-pointer active:scale-95 border border-slate-700"
                   >
                     <Compass className="w-3.5 h-3.5" />
