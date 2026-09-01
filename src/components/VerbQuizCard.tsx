@@ -180,7 +180,7 @@ export const VerbQuizCard: React.FC<VerbQuizCardProps> = ({
         <div className="md:col-span-5 bg-white/95 backdrop-blur-md rounded-3xl p-5 sm:p-6 shadow-xl shadow-emerald-950/5 border border-emerald-100 flex flex-col items-center justify-between text-center min-h-[300px]">
           <div className="w-full flex items-center justify-between">
             <span className="text-[11px] font-black uppercase tracking-wider text-emerald-800 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-full">
-              {isRidheya ? 'Groep 4-5 • Sterke Werkwoorden' : 'Groep 6-8 • Cito & Doorstroom'}
+              {isRidheya ? 'Groep 3-5 • Sterke Werkwoorden' : 'Groep 6-8 • Cito & Doorstroom'}
             </span>
             <span className="text-xs font-black text-amber-700 bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-full uppercase">
               {activeTierLabel}

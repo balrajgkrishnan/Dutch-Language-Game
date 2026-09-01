@@ -116,7 +116,7 @@ export const TopBar: React.FC<TopBarProps> = ({
                   title="Klik om het onderwijsniveau te wijzigen"
                 >
                   <GraduationCap className="w-3.5 h-3.5" />
-                  <span>{selectedGrade === 'group_4_5' ? 'Groep 4-5' : 'Groep 6-7-8'}</span>
+                  <span>{selectedGrade === 'group_4_5' ? 'Groep 3-5' : 'Groep 6-8'}</span>
                 </button>
               </div>
 

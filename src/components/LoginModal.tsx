@@ -82,7 +82,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({
               </div>
               <div className="font-black text-sm text-slate-800">Hemali</div>
               <div className="text-[10px] text-cyan-800 font-bold bg-cyan-100 px-2 py-0.5 rounded-full mt-1">
-                Groep 6-7-8
+                Groep 6-8
               </div>
             </button>
 
@@ -101,7 +101,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({
               </div>
               <div className="font-black text-sm text-slate-800">Ridheya</div>
               <div className="text-[10px] text-teal-800 font-bold bg-teal-100 px-2 py-0.5 rounded-full mt-1">
-                Groep 4-5
+                Groep 3-5
               </div>
             </button>
           </div>

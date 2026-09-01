@@ -36,6 +36,7 @@ import { BIOME_LEVELS_GROEP_4_5 } from './data/biomeLevels45';
 import { BIOME_LEVELS_GROEP_6_8 } from './data/biomeLevels68';
 import { WERKWOORDEN_DATA } from './data/werkwoorden';
 import { getVerbsInZone, getZoneMeta, isZoneComplete } from './data/verbZones';
+import { getEffectiveGrade } from './utils/gradeTier';
 import { Animal, Badge, PlayerProfile, GradeLevel, VerbItem, BiomeType, AccessibilitySettings } from './types';
 import { sound } from './services/soundService';
 import { 
@@ -217,7 +218,7 @@ export default function App() {
   const isHemali = currentUsername.toLowerCase() === 'hemali';
 
   // Ensure appropriate grade level defaults for each sister
-  const effectiveGrade = profile.selectedGrade || (isRidheya ? 'group_4_5' : 'group_6_7_8');
+  const effectiveGrade = getEffectiveGrade(profile, isRidheya);
   const levelsByGrade = effectiveGrade === 'group_4_5'
     ? BIOME_LEVELS_GROEP_4_5
     : BIOME_LEVELS_GROEP_6_8;
@@ -682,7 +683,7 @@ export default function App() {
                       <div className="flex items-center gap-1.5 pl-2">
                         <Zap className="w-4 h-4 text-amber-500" />
                         <span className="text-xs font-black text-slate-800 uppercase tracking-wider">
-                          Groep 6-7-8 Modus:
+                          Groep 6-8 Modus:
                         </span>
                       </div>
 
@@ -963,7 +964,7 @@ export default function App() {
         <div className="flex items-center gap-2">
           <span>🌍 Wereld Safaripark &amp; Boerderij</span>
           <span>•</span>
-          <span>7 Wereldlocaties • 42 Dieren • Groep 4-5 &amp; Groep 6-7-8</span>
+          <span>7 Wereldlocaties • 42 Dieren • Groep 3-5 &amp; Groep 6-8</span>
         </div>
 
         <button
