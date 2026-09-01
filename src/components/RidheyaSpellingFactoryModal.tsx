@@ -6,10 +6,11 @@ import {
   Maximize2, Minimize2
 } from 'lucide-react';
 import { SpellingFactoryItem, PlayerProfile } from '../types';
-import { COMPREHENSIVE_SPELLING_FACTORY_ITEMS } from '../data/comprehensiveSpellingData';
+import { SPELLING_GROEP_3_5, SPELLING_GROEP_6_8 } from '../data/comprehensiveSpellingData';
 import { sound } from '../services/soundService';
 import { speech } from '../services/speechService';
 import { useFullscreen } from '../hooks/useFullscreen';
+import { getEffectiveGrade } from '../utils/gradeTier';
 import confetti from 'canvas-confetti';
 
 interface RidheyaSpellingFactoryModalProps {
@@ -50,15 +51,26 @@ export const RidheyaSpellingFactoryModal: React.FC<RidheyaSpellingFactoryModalPr
   const blitzTimerRef = useRef<NodeJS.Timeout | null>(null);
   const { isFullscreen, containerRef, toggleFullscreen } = useFullscreen<HTMLDivElement>();
 
-  // Filtered pool of items based on category
+  const isRidheya = profile.name.toLowerCase().includes('ridheya');
+  const effectiveGrade = getEffectiveGrade(profile, isRidheya);
+  const gradePool = effectiveGrade === 'group_4_5' ? SPELLING_GROEP_3_5 : SPELLING_GROEP_6_8;
+
+  // Some categories (e.g. "samengesteld", compound words) only exist in the
+  // Groep 6-8 pool -- hide tabs that would show zero results for this grade.
+  const availableCategories = new Set(gradePool.map(item => item.category));
+  const visibleCategoryTabs = CATEGORY_TABS.filter(
+    tab => tab.id === 'all' || availableCategories.has(tab.id)
+  );
+
+  // Filtered pool of items based on category, scoped to this profile's grade tier
   const filteredItems = useMemo(() => {
     if (selectedCategory === 'all') {
-      return COMPREHENSIVE_SPELLING_FACTORY_ITEMS;
+      return gradePool;
     }
-    return COMPREHENSIVE_SPELLING_FACTORY_ITEMS.filter(item => item.category === selectedCategory);
-  }, [selectedCategory]);
+    return gradePool.filter(item => item.category === selectedCategory);
+  }, [selectedCategory, gradePool]);
 
-  const currentItem: SpellingFactoryItem = filteredItems[currentIndex] || filteredItems[0] || COMPREHENSIVE_SPELLING_FACTORY_ITEMS[0];
+  const currentItem: SpellingFactoryItem = filteredItems[currentIndex] || filteredItems[0] || gradePool[0];
 
   const handleSpeakWord = () => {
     sound.playPop();
@@ -204,6 +216,9 @@ export const RidheyaSpellingFactoryModal: React.FC<RidheyaSpellingFactoryModalPr
               <div className="flex items-center gap-2 flex-wrap">
                 <h3 className="text-lg sm:text-xl font-black">Spelling Fabriek</h3>
                 <span className="text-[10px] font-black uppercase bg-white/20 px-2 py-0.5 rounded-full border border-white/30">
+                  {effectiveGrade === 'group_4_5' ? 'Groep 3-5' : 'Groep 6-8'}
+                </span>
+                <span className="text-[10px] font-black uppercase bg-white/20 px-2 py-0.5 rounded-full border border-white/30">
                   {filteredItems.length} Woorden Beschikbaar
                 </span>
                 {streak > 1 && (
@@ -241,7 +256,7 @@ export const RidheyaSpellingFactoryModal: React.FC<RidheyaSpellingFactoryModalPr
         {/* Category Scroll Filter Tabs + Arcade Blitz Toggle */}
         <div className="bg-amber-50/80 border-b border-amber-200/70 px-4 py-2 flex items-center justify-between gap-2 overflow-x-auto no-scrollbar">
           <div className="flex items-center gap-1.5 flex-1 overflow-x-auto no-scrollbar">
-            {CATEGORY_TABS.map(tab => {
+            {visibleCategoryTabs.map(tab => {
               const isSelected = selectedCategory === tab.id;
               return (
                 <button

@@ -575,3 +575,16 @@ export const COMPREHENSIVE_SPELLING_FACTORY_ITEMS: SpellingFactoryItem[] = [
     emoji: '🦉'
   }
 ];
+
+// Two-tier split for the Spelling Fabriek game, reusing the existing
+// difficulty tag rather than re-authoring/duplicating entries: groep3-4 ->
+// Groep 3-5, groep5-6 + groep7-8 -> Groep 6-8. Confirmed every category has
+// at least 1 word in both pools except "samengesteld" (compound words),
+// which only exists in the Groep 6-8 pool -- that category tab should be
+// hidden when showing the Groep 3-5 pool.
+export const SPELLING_GROEP_3_5 = COMPREHENSIVE_SPELLING_FACTORY_ITEMS.filter(
+  item => item.difficulty === 'groep3-4'
+);
+export const SPELLING_GROEP_6_8 = COMPREHENSIVE_SPELLING_FACTORY_ITEMS.filter(
+  item => item.difficulty === 'groep5-6' || item.difficulty === 'groep7-8'
+);
