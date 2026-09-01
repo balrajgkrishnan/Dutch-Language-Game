@@ -151,53 +151,6 @@ export interface ExplorerCustomization {
   unlockedItems: string[];
 }
 
-export interface VocabularyWord {
-  word: string;
-  meaning: string;
-  syllables: string[];
-  exampleSentence: string;
-  emoji: string;
-  audioPronunciation?: string;
-}
-
-export interface StoryAdventure {
-  id: string;
-  title: string;
-  subtitle: string;
-  grade: GradeLevel;
-  biome: BiomeType;
-  coverEmoji: string;
-  heroAnimalId?: string;
-  estimatedMinutes?: number;
-  vocabulary: VocabularyWord[];
-  paragraphs: string[];
-  /** Generated illustration per paragraph, same index/length as `paragraphs`. Path under /story-images/. */
-  paragraphImages?: string[];
-  comprehensionQuestions: {
-    id?: string;
-    type?: string;
-    category?: string;
-    categoryIcon?: string;
-    hint?: string;
-    question: string;
-    options: string[];
-    correctOptionIndex: number;
-    explanation?: string;
-  }[];
-  sequenceEvents?: {
-    id: string;
-    text: string;
-    correctOrder: number;
-  }[];
-  summaryPrompt?: {
-    who?: string;
-    problem?: string;
-    solution?: string;
-    charactersQuestion?: string;
-    problemQuestion?: string;
-    solutionQuestion?: string;
-  };
-}
 
 export interface ReporterMission {
   id: string;

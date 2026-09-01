@@ -22,7 +22,6 @@ const THEMES: Record<HomeTileGroup, string> = {
 
 export interface HomeTileHandlers {
   openRpgAdventure: () => void;
-  openReading: () => void;
   openVerbArena: () => void;
   openDictionary: () => void;
   openReporter: () => void;
@@ -52,13 +51,7 @@ export function buildHomeTiles(handlers: HomeTileHandlers, ctx: HomeTileContext)
   return [
     // Learn
     {
-      id: 'reading', group: 'learn', size: 'large', emoji: '📖',
-      title: 'Voorleesavonturen',
-      subtitle: 'Beleef verhalen als een echt prentenboek, pagina voor pagina!',
-      theme: THEMES.learn, onClick: handlers.openReading
-    },
-    {
-      id: 'verb-zones', group: 'learn', size: 'standard', accented: true, emoji: '⚡',
+      id: 'verb-zones', group: 'learn', size: 'large', accented: true, emoji: '⚡',
       title: 'Sterke Werkwoorden Zones',
       subtitle: '10 zones, 200 werkwoorden, verdien een dierbeloning per zone!',
       theme: THEMES.learn, onClick: handlers.openVerbArena

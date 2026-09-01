@@ -1,0 +1,212 @@
+- generic [ref=f2e3]:
+  - generic:
+    - generic: 🌾
+    - generic: 🌸
+    - generic: 🚜
+    - generic: 🌻
+    - generic: 🍃
+    - generic: 🌾
+    - generic: 🌸
+  - generic [ref=f2e5]:
+    - generic [ref=f2e6]: "Toegankelijkheid & Leeshulp:"
+    - generic [ref=f2e11]:
+      - button "📖 Woordenboek" [ref=f2e12] [cursor=pointer]
+      - button "🎙️ Vrolijke Stem 🌸" [ref=f2e14] [cursor=pointer]
+      - button "Dyslexie Font Uit" [ref=f2e16] [cursor=pointer]
+      - generic [ref=f2e17]:
+        - button "A" [ref=f2e18] [cursor=pointer]
+        - button "A+" [ref=f2e19] [cursor=pointer]
+        - button "A++" [ref=f2e20] [cursor=pointer]
+      - button "Normaal" [ref=f2e21] [cursor=pointer]
+  - banner [ref=f2e22]:
+    - generic [ref=f2e23]:
+      - generic [ref=f2e24]:
+        - generic [ref=f2e25]:
+          - button "Klik om je Toca & Roblox karakter, haarstijl en streetwear aan te passen!" [ref=f2e26] [cursor=pointer]:
+            - img [ref=f2e28]:
+              - generic [ref=f2e36]: ★
+          - generic [ref=f2e90]:
+            - generic [ref=f2e91]:
+              - button "👤 Ridheya Wissel" [ref=f2e92] [cursor=pointer]:
+                - generic [ref=f2e93]: 👤 Ridheya
+                - generic [ref=f2e94]: Wissel
+              - button "Groep 4-5" [ref=f2e95] [cursor=pointer]
+            - generic [ref=f2e100]:
+              - generic [ref=f2e101]: De Vrolijke Boerderijheld & Leesheld
+              - generic [ref=f2e102]: •
+              - generic [ref=f2e103]: 1/73 Dieren
+        - generic [ref=f2e104]:
+          - button "Steminstellingen & Voorleessnelheid" [ref=f2e105] [cursor=pointer]
+          - button "Herstart voortgang vanaf level 1" [ref=f2e109] [cursor=pointer]
+          - button "Geluid & Spraak aan" [ref=f2e113] [cursor=pointer]
+      - generic [ref=f2e118]:
+        - generic [ref=f2e119]:
+          - generic [ref=f2e120]: Dieren
+          - generic [ref=f2e121]: 1%
+        - generic [ref=f2e122]:
+          - generic [ref=f2e123]: Score
+          - generic [ref=f2e124]: 0 🌟
+        - generic [ref=f2e125]:
+          - generic [ref=f2e126]: Munten
+          - generic [ref=f2e127]: 50 🪙
+        - generic [ref=f2e128]:
+          - generic [ref=f2e129]: Reeks
+          - generic [ref=f2e130]: 0 🔥
+  - main [ref=f2e132]:
+    - generic [ref=f2e134]:
+      - generic [ref=f2e135]:
+        - heading "📖 Leren" [level=3] [ref=f2e136]
+        - generic [ref=f2e137]:
+          - generic [ref=f2e138] [cursor=pointer]:
+            - generic [ref=f2e139]:
+              - generic [ref=f2e140]: 📖
+              - heading "Voorleesavonturen" [level=4] [ref=f2e141]
+              - paragraph [ref=f2e142]: Beleef verhalen als een echt prentenboek, pagina voor pagina!
+            - generic [ref=f2e143]: Openen
+          - generic [ref=f2e147] [cursor=pointer]:
+            - generic [ref=f2e148]:
+              - generic [ref=f2e149]: ⚡
+              - heading "Sterke Werkwoorden Zones" [level=4] [ref=f2e150]
+              - paragraph [ref=f2e151]: 10 zones, 200 werkwoorden, verdien een dierbeloning per zone!
+            - generic [ref=f2e152]: Openen
+          - generic [ref=f2e156] [cursor=pointer]:
+            - generic [ref=f2e157]:
+              - generic [ref=f2e158]: 📚
+              - heading "Nederlands Woordenboek" [level=4] [ref=f2e159]
+              - paragraph [ref=f2e160]: 7-traps woordontleding, Cito signaalwoorden & synoniemen!
+            - generic [ref=f2e161]: Openen
+          - generic [ref=f2e165] [cursor=pointer]:
+            - generic [ref=f2e166]:
+              - generic [ref=f2e167]: 📰
+              - heading "Hemali's Reporter Missie" [level=4] [ref=f2e168]
+              - paragraph [ref=f2e169]: Onderzoek het safaripark als een echte verslaggever!
+            - generic [ref=f2e170]: Openen
+          - generic [ref=f2e174] [cursor=pointer]:
+            - generic [ref=f2e175]:
+              - generic [ref=f2e176]: 🧪
+              - heading "Ridheya's Spelling Fabriek" [level=4] [ref=f2e177]
+              - paragraph [ref=f2e178]: Maak nieuwe woorden in de magische spellingfabriek!
+            - generic [ref=f2e179]: Openen
+      - generic [ref=f2e183]:
+        - heading "🎮 Spelen" [level=3] [ref=f2e184]
+        - generic [ref=f2e185]:
+          - generic [ref=f2e186] [cursor=pointer]:
+            - generic [ref=f2e187]:
+              - generic [ref=f2e188]: 🕹️
+              - heading "Safari Arcade Arena" [level=4] [ref=f2e189]
+              - paragraph [ref=f2e190]: Ballon Popper, Woord Sprint & Cito Turbo Dash!
+            - generic [ref=f2e191]: Openen
+          - generic [ref=f2e195] [cursor=pointer]:
+            - generic [ref=f2e196]:
+              - generic [ref=f2e197]: ⚔️
+              - heading "Poké-Boss Duel Arena" [level=4] [ref=f2e198]
+              - paragraph [ref=f2e199]: Vecht tegen de DT-Draak, 't Kofschip & de Klanken-Golem!
+            - generic [ref=f2e200]: Openen
+          - generic [ref=f2e204] [cursor=pointer]:
+            - generic [ref=f2e205]:
+              - generic [ref=f2e206]: 🐾
+              - heading "Dierenkamer" [level=4] [ref=f2e207]
+              - paragraph [ref=f2e208]: Verzorg, aai en voed je huisdier in de Dierenkamer!
+            - generic [ref=f2e209]: Openen
+          - generic [ref=f2e213] [cursor=pointer]:
+            - generic [ref=f2e214]:
+              - generic [ref=f2e215]: 🤝
+              - heading "Sister Team Samen-Quest" [level=4] [ref=f2e216]
+              - paragraph [ref=f2e217]: Werk samen met je zus aan een speciale missie!
+            - generic [ref=f2e218]: Openen
+      - generic [ref=f2e222]:
+        - heading "🧭 Ontdekken" [level=3] [ref=f2e223]
+        - generic [ref=f2e224]:
+          - generic [ref=f2e225] [cursor=pointer]:
+            - generic [ref=f2e226]:
+              - generic [ref=f2e227]: 🚜
+              - heading "Boerderij Expeditie" [level=4] [ref=f2e228]
+              - paragraph [ref=f2e229]: Bella’s Klavertjesweide • Level 1 van 6
+            - generic [ref=f2e230]: Openen
+          - generic [ref=f2e234] [cursor=pointer]:
+            - generic [ref=f2e235]:
+              - generic [ref=f2e236]: 🦁
+              - heading "Dierenpark" [level=4] [ref=f2e237]
+              - paragraph [ref=f2e238]: Bekijk en verzorg al je ontgrendelde dieren!
+            - generic [ref=f2e239]: Openen
+          - generic [ref=f2e243] [cursor=pointer]:
+            - generic [ref=f2e244]:
+              - generic [ref=f2e245]: 🗺️
+              - heading "Wereldkaart" [level=4] [ref=f2e246]
+              - paragraph [ref=f2e247]: Kies uit 7 werelddelen om te verkennen!
+            - generic [ref=f2e248]: Openen
+          - generic [ref=f2e252] [cursor=pointer]:
+            - generic [ref=f2e253]:
+              - generic [ref=f2e254]: 🏥
+              - heading "Dierenziekenhuis" [level=4] [ref=f2e255]
+              - paragraph [ref=f2e256]: Help Dokter Ridheya zieke dieren beter maken!
+            - generic [ref=f2e257]: Openen
+      - generic [ref=f2e261]:
+        - heading "🏆 Voortgang" [level=3] [ref=f2e262]
+        - generic [ref=f2e263]:
+          - generic [ref=f2e264] [cursor=pointer]:
+            - generic [ref=f2e265]:
+              - generic [ref=f2e266]: 🩺
+              - heading "Het Geheim van de Boomhut Dierenkliniek & De Dierenvallei 🐾" [level=4] [ref=f2e267]
+              - paragraph [ref=f2e268]: Reis met Ridheya en hondje Kopi door het oerwoud, ontdek moeilijke woorden met het pop-up woordenboek en genees dieren!
+            - generic [ref=f2e269]: Openen
+          - generic [ref=f2e273] [cursor=pointer]:
+            - generic [ref=f2e274]:
+              - generic [ref=f2e275]: 🏅
+              - heading "Medailles" [level=4] [ref=f2e276]
+              - paragraph [ref=f2e277]: Bekijk al je verdiende badges en prestaties!
+            - generic [ref=f2e278]: Openen
+          - generic [ref=f2e282] [cursor=pointer]:
+            - generic [ref=f2e283]:
+              - generic [ref=f2e284]: 📊
+              - heading "Ouder Scorebord" [level=4] [ref=f2e285]
+              - paragraph [ref=f2e286]: Bekijk de voortgang en statistieken van je kind!
+            - generic [ref=f2e287]: Openen
+  - contentinfo [ref=f2e291]:
+    - generic [ref=f2e292]:
+      - generic [ref=f2e293]: 🌍 Wereld Safaripark & Boerderij
+      - generic [ref=f2e294]: •
+      - generic [ref=f2e295]: 7 Wereldlocaties • 42 Dieren • Groep 4-5 & Groep 6-7-8
+    - button "v8.0.1" [ref=f2e296] [cursor=pointer]
+  - generic [ref=f2e758]:
+    - generic [ref=f2e759]:
+      - generic [ref=f2e760]:
+        - generic [ref=f2e761]: 🎙️
+        - generic [ref=f2e762]:
+          - generic [ref=f2e763]:
+            - heading "Safari Nieuws Verslaggever" [level=3] [ref=f2e764]
+            - generic [ref=f2e765]: Hemali Modus 🦉
+          - paragraph [ref=f2e766]: Spreekvaardigheid, Zelfvertrouwen & Vragen Stellen
+      - button [ref=f2e767] [cursor=pointer]
+    - generic [ref=f2e771]:
+      - button "🦁 🎙️ Safari Nieuws" [ref=f2e772] [cursor=pointer]:
+        - generic [ref=f2e773]: 🦁
+        - generic [ref=f2e774]: 🎙️ Safari Nieuws
+      - button "🦎 🌿 Weer- & Natuurverslag" [ref=f2e775] [cursor=pointer]:
+        - generic [ref=f2e776]: 🦎
+        - generic [ref=f2e777]: 🌿 Weer- & Natuurverslag
+      - button "🦉 🦉 Filosofeer met Professor Ollie" [ref=f2e778] [cursor=pointer]:
+        - generic [ref=f2e779]: 🦉
+        - generic [ref=f2e780]: 🦉 Filosofeer met Professor Ollie
+    - generic [ref=f2e781]:
+      - generic [ref=f2e782]:
+        - generic [ref=f2e783]: 🦁
+        - generic [ref=f2e784]:
+          - 'heading "🎙️ Safari Nieuws: Interview met de Leeuwenkoning" [level=4] [ref=f2e785]'
+          - paragraph [ref=f2e786]: Je staat oog in oog met de trotse koning van de savanne! Als hoofdverslaggever stel je drie scherpe vragen over het dagelijkse leven en de bescherming van de roedel.
+      - generic [ref=f2e787]:
+        - generic [ref=f2e788]: "Gebruik deze journalistwoorden:"
+        - generic [ref=f2e789]: ✨ roedel
+        - generic [ref=f2e790]: ✨ leefgebied
+        - generic [ref=f2e791]: ✨ samenwerking
+        - generic [ref=f2e792]: ✨ bescherming
+      - generic [ref=f2e793]:
+        - generic [ref=f2e794]:
+          - generic [ref=f2e795]: Vraag 1 van 3
+          - button "Luister Voorbeeld" [ref=f2e796] [cursor=pointer]
+        - generic [ref=f2e802]: "\"Stel jezelf voor als safari-verslaggever en vraag hoe een gewone dag op de savanne eruitziet.\""
+        - generic [ref=f2e803]:
+          - button "Druk & Spreek Je Antwoord In" [active] [ref=f2e824] [cursor=pointer]
+          - generic [ref=f2e809]: "Of typ jouw journalistenvraag hieronder:"
+        - textbox "Typ hier jouw eigen journalistenvraag of uitleg..." [ref=f2e810]
+      - button "Voltooi Verslag & Ontvang Beloning!" [ref=f2e812] [cursor=pointer]

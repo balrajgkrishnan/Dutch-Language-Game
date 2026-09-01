@@ -12,7 +12,6 @@ import { GradeSelectorModal } from './components/GradeSelectorModal';
 import { ProfileAvatarModal } from './components/ProfileAvatarModal';
 import { LoginModal } from './components/LoginModal';
 import { EnhancedParentDashboardModal } from './components/EnhancedParentDashboardModal';
-import { ReadingAdventureModal } from './components/ReadingAdventureModal';
 import { HemaliReporterModal } from './components/HemaliReporterModal';
 import { RidheyaSpellingFactoryModal } from './components/RidheyaSpellingFactoryModal';
 import { SisterTeamModal } from './components/SisterTeamModal';
@@ -91,7 +90,6 @@ export default function App() {
   const [showScoreboardModal, setShowScoreboardModal] = useState(false);
   
   // New Adaptive Modals state
-  const [showReadingModal, setShowReadingModal] = useState(false);
   const [showReporterModal, setShowReporterModal] = useState(false);
   const [showSpellingFactoryModal, setShowSpellingFactoryModal] = useState(false);
   const [showSisterTeamModal, setShowSisterTeamModal] = useState(false);
@@ -558,7 +556,6 @@ export default function App() {
   const homeTiles = buildHomeTiles(
     {
       openRpgAdventure: () => setShowCitoRpgModal(true),
-      openReading: () => setShowReadingModal(true),
       openVerbArena,
       openDictionary: () => setShowDictionaryModal(true),
       openReporter: () => setShowReporterModal(true),
@@ -1001,14 +998,6 @@ export default function App() {
         currentProfile={profile}
         onClose={() => setShowScoreboardModal(false)}
         onResetProgress={handleResetProgress}
-        onUpdateProfile={(updater) => setProfile(updater)}
-      />
-
-      {/* Reading Adventure Modal */}
-      <ReadingAdventureModal
-        isOpen={showReadingModal}
-        profile={profile}
-        onClose={() => setShowReadingModal(false)}
         onUpdateProfile={(updater) => setProfile(updater)}
       />
 
