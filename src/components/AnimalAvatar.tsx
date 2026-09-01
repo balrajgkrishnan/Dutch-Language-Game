@@ -59,6 +59,7 @@ export const AnimalAvatar: React.FC<AnimalAvatarProps> = ({
 
   const matchedAnimal = ALL_BIOME_ANIMALS.find(a => a.id === animalId);
   const currentEmoji = matchedAnimal?.emoji || '🌟';
+  const bgGradient = matchedAnimal?.bgGradient || 'from-slate-200 to-slate-300';
 
   return (
     <motion.div
@@ -71,13 +72,20 @@ export const AnimalAvatar: React.FC<AnimalAvatarProps> = ({
         interactive ? 'cursor-pointer transition-shadow hover:shadow-lg' : ''
       } ${className}`}
     >
+      {/* Habitat-colored platform, so the animal reads as standing in its
+          own space rather than a flat icon floating with nothing under it. */}
+      <div className={`absolute inset-0 rounded-full bg-gradient-to-br ${bgGradient} opacity-80 shadow-inner`} />
+
       <motion.div
-        animate={isAnimated ? { y: [0, -3, 0], rotate: [0, 1.5, -1.5, 0] } : {}}
+        animate={isAnimated ? { y: [0, -3, 0], rotate: [0, 1.5, -1.5, 0], scaleX: [1, 1.03, 1] } : {}}
         transition={{ repeat: Infinity, duration: 3, ease: 'easeInOut' }}
         className="relative flex items-center justify-center"
       >
         <span className="filter drop-shadow-md select-none">{currentEmoji}</span>
       </motion.div>
+
+      {/* Ground shadow -- gives the animal something to actually stand on */}
+      <div className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-2/3 h-1.5 rounded-full bg-black/25 blur-[2px]" />
 
       {/* Floating Pet Hearts */}
       <AnimatePresence>
