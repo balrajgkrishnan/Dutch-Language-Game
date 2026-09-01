@@ -1,8 +1,8 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { BookOpen, Search, Volume2, Sparkles, X, Puzzle, ArrowRight } from 'lucide-react';
 import { DUTCH_DICTIONARY_DB, DictionaryEntry } from '../data/dutchDictionaryData';
-import { lookupDutchWord, searchDictionaryWords } from '../services/dutchDictionaryService';
+import { lookupDutchWord, lookupDutchWordAsync, searchDictionaryWords } from '../services/dutchDictionaryService';
 import { sound } from '../services/soundService';
 
 interface DutchDictionaryModalProps {
@@ -21,6 +21,7 @@ export const DutchDictionaryModal: React.FC<DutchDictionaryModalProps> = ({
   const [searchQuery, setSearchQuery] = useState(initialQuery);
   const [activeTab, setActiveTab] = useState<TabType>('all');
   const [selectedWord, setSelectedWord] = useState<DictionaryEntry | null>(null);
+  const pendingWordRef = useRef<string | null>(null);
 
   // Filtered dictionary entries
   const displayedEntries = useMemo(() => {
@@ -51,6 +52,17 @@ export const DutchDictionaryModal: React.FC<DutchDictionaryModalProps> = ({
   const handleLookupCustomWord = (word: string) => {
     const entry = lookupDutchWord(word);
     setSelectedWord(entry);
+
+    // If the local dictionary didn't have a verified entry, quietly ask
+    // Wiktionary and upgrade the card if it finds a real answer.
+    if (entry.isGenerated) {
+      pendingWordRef.current = word;
+      lookupDutchWordAsync(word).then(refined => {
+        if (pendingWordRef.current === word) {
+          setSelectedWord(refined);
+        }
+      });
+    }
   };
 
   if (!isOpen) return null;

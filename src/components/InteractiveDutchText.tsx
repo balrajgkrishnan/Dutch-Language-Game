@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { lookupDutchWord, normalizeDutchWord } from '../services/dutchDictionaryService';
+import { lookupDutchWord, lookupDutchWordAsync, normalizeDutchWord } from '../services/dutchDictionaryService';
 import { DictionaryEntry } from '../data/dutchDictionaryData';
 import { DutchDictionaryTooltip } from './DutchDictionaryTooltip';
 
@@ -20,6 +20,19 @@ export const InteractiveDutchText: React.FC<InteractiveDutchTextProps> = ({
   const [tooltipPosition, setTooltipPosition] = useState<{ x: number; y: number } | null>(null);
   const [isPinned, setIsPinned] = useState(false);
   const hoverTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const pendingWordRef = useRef<string | null>(null);
+
+  // If the local lookup didn't have a verified entry, ask Wiktionary in the
+  // background and quietly upgrade the tooltip if it finds a real answer.
+  const refineWithWiktionary = (rawWord: string, entry: DictionaryEntry) => {
+    if (!entry.isGenerated) return;
+    pendingWordRef.current = rawWord;
+    lookupDutchWordAsync(rawWord).then(refined => {
+      if (pendingWordRef.current === rawWord) {
+        setActiveEntry(refined);
+      }
+    });
+  };
 
   // Close tooltip when clicking outside
   useEffect(() => {
@@ -29,6 +42,7 @@ export const InteractiveDutchText: React.FC<InteractiveDutchTextProps> = ({
         setActiveEntry(null);
         setTooltipPosition(null);
         setIsPinned(false);
+        pendingWordRef.current = null;
       }
     };
     window.addEventListener('click', handleGlobalClick);
@@ -84,6 +98,7 @@ export const InteractiveDutchText: React.FC<InteractiveDutchTextProps> = ({
     setActiveEntry(entry);
     setTooltipPosition(position);
     setIsPinned(true);
+    refineWithWiktionary(rawWord, entry);
 
     if (onWordClick) {
       onWordClick(rawWord, entry);
@@ -94,6 +109,7 @@ export const InteractiveDutchText: React.FC<InteractiveDutchTextProps> = ({
     const entry = lookupDutchWord(word);
     setActiveEntry(entry);
     setIsPinned(true);
+    refineWithWiktionary(word, entry);
   };
 
   // Parse text into tokens (bold words vs regular words vs whitespace vs punctuation)
@@ -171,6 +187,7 @@ export const InteractiveDutchText: React.FC<InteractiveDutchTextProps> = ({
           setActiveEntry(null);
           setTooltipPosition(null);
           setIsPinned(false);
+          pendingWordRef.current = null;
         }}
         onSelectWord={handleSelectSuggestionOrLemma}
         isPinned={isPinned}
