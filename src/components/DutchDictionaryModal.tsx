@@ -49,20 +49,25 @@ export const DutchDictionaryModal: React.FC<DutchDictionaryModalProps> = ({
     sound.speakDutch(`${entry.word}. ${entry.meaningNl}`);
   };
 
-  const handleLookupCustomWord = (word: string) => {
-    const entry = lookupDutchWord(word);
+  // Any time an entry becomes selected, quietly ask Wiktionary and upgrade
+  // the card if it came back as an unverified local-generated fallback --
+  // whether it was selected from the search results list or looked up
+  // directly (both can produce a generated entry, e.g. searchDictionaryWords
+  // returning a generated match instead of just the "not found" path).
+  const selectWord = (entry: DictionaryEntry) => {
     setSelectedWord(entry);
-
-    // If the local dictionary didn't have a verified entry, quietly ask
-    // Wiktionary and upgrade the card if it finds a real answer.
     if (entry.isGenerated) {
-      pendingWordRef.current = word;
-      lookupDutchWordAsync(word).then(refined => {
-        if (pendingWordRef.current === word) {
+      pendingWordRef.current = entry.word;
+      lookupDutchWordAsync(entry.word).then(refined => {
+        if (pendingWordRef.current === entry.word) {
           setSelectedWord(refined);
         }
       });
     }
+  };
+
+  const handleLookupCustomWord = (word: string) => {
+    selectWord(lookupDutchWord(word));
   };
 
   if (!isOpen) return null;
@@ -213,7 +218,7 @@ export const DutchDictionaryModal: React.FC<DutchDictionaryModalProps> = ({
                 displayedEntries.map((entry, idx) => (
                   <div
                     key={idx}
-                    onClick={() => setSelectedWord(entry)}
+                    onClick={() => selectWord(entry)}
                     className={`p-3 rounded-2xl border-2 transition-all cursor-pointer flex items-center justify-between gap-3 ${
                       selectedWord?.word === entry.word
                         ? 'bg-amber-100/90 border-amber-400 shadow-sm'

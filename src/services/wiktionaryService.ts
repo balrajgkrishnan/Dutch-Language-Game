@@ -60,6 +60,15 @@ function mapPartOfSpeech(pos: string): DictionaryEntry['wordType'] {
 }
 
 /**
+ * Wiktionary definitions/examples come as HTML (links, <span> wrappers around
+ * "form of" cross-references, etc.) -- strip tags so raw markup never renders.
+ */
+function stripHtml(html?: string): string {
+  if (!html) return '';
+  return html.replace(/<[^>]*>/g, '').trim();
+}
+
+/**
  * Simple Dutch syllable splitting (approximation)
  */
 function approximateSyllables(word: string): string[] {
@@ -122,26 +131,28 @@ export async function lookupWiktionary(
     }
     
     const data = await response.json();
-    
-    // Find Dutch definitions
-    const dutchEntry = data[normalizedWord]?.find(
+
+    // The REST API keys its top-level response by language code (e.g. "nl",
+    // "af"), not by the looked-up word -- data[normalizedWord] never exists.
+    const dutchEntry = data[language]?.find(
       (e: any) => e.language === 'Dutch' || e.language === 'Nederlands'
     );
-    
+
     if (!dutchEntry || !dutchEntry.definitions?.length) {
       return null;
     }
-    
+
     const firstDef = dutchEntry.definitions[0];
     const wordType = mapPartOfSpeech(dutchEntry.partOfSpeech || 'noun');
-    
+    const cleanDefinition = stripHtml(firstDef.definition) || 'Definitie niet gevonden';
+
     const entry: DictionaryEntry = {
       word: normalizedWord,
       wordType,
-      meaningNl: firstDef.definition || 'Definitie niet gevonden',
-      translationEn: firstDef.definition || 'Definition not found',
+      meaningNl: cleanDefinition,
+      translationEn: cleanDefinition,
       syllables: approximateSyllables(normalizedWord),
-      exampleNl: firstDef.example || `Het woord \"${normalizedWord}\" wordt gebruikt in het Nederlands.`,
+      exampleNl: stripHtml(firstDef.example) || `Het woord \"${normalizedWord}\" wordt gebruikt in het Nederlands.`,
       level: 'Groep 5-6 (AVI M5-E6)', // Default level for API-sourced words
       isGenerated: true,
     };
