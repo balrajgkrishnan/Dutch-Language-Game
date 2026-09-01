@@ -21,7 +21,6 @@ import { WerkwoordBossArenaModal } from './components/WerkwoordBossArenaModal';
 import { VoiceSettingsModal } from './components/VoiceSettingsModal';
 import { DutchDictionaryModal } from './components/DutchDictionaryModal';
 import { DutchArcadeArenaModal } from './components/DutchArcadeArenaModal';
-import { AccessibilityBar } from './components/AccessibilityBar';
 import { BiomeSelector } from './components/BiomeSelector';
 import { AmbientParticles } from './components/AmbientParticles';
 import { BentoTile } from './components/BentoTile';
@@ -587,21 +586,6 @@ export default function App() {
     <div className={`min-h-screen bg-slate-100/90 text-slate-900 flex flex-col ${fontClass} ${sizeClass} relative selection:bg-emerald-200 selection:text-emerald-950 pb-12`}>
       {/* Background ambient gentle particles */}
       <AmbientParticles biome={selectedBiome} />
-
-      {/* Accessibility Helper Bar */}
-      <div className="pt-2">
-        <AccessibilityBar
-          settings={profile.accessibility}
-          onOpenVoiceModal={() => setShowVoiceModal(true)}
-          onOpenDictionaryModal={() => setShowDictionaryModal(true)}
-          onChangeSettings={(updater) => {
-            setProfile(prev => ({
-              ...prev,
-              accessibility: updater(prev.accessibility)
-            }));
-          }}
-        />
-      </div>
 
       {/* Top Application Header Bar */}
       <TopBar

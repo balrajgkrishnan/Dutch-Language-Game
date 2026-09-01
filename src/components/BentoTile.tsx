@@ -23,7 +23,7 @@ export const BentoTile: React.FC<BentoTileProps> = ({ tile }) => {
         tile.onClick();
       }}
       className={`bg-gradient-to-br ${tile.theme} ${SIZE_CLASSES[tile.size]} border ${
-        tile.accented ? 'ring-2 ring-amber-400/60' : ''
+        tile.accented ? 'ring-4 ring-white/80' : ''
       } rounded-2xl text-white flex flex-col justify-between gap-3 shadow-md transition-all hover:scale-[1.02] cursor-pointer group`}
     >
       <div className="space-y-1.5">
@@ -37,7 +37,7 @@ export const BentoTile: React.FC<BentoTileProps> = ({ tile }) => {
         <h4 className={`font-black text-white ${isXl ? 'text-lg sm:text-xl' : 'text-sm'}`}>
           {tile.title}
         </h4>
-        <p className={`text-slate-300 font-medium ${isXl ? 'text-sm' : 'text-xs'} line-clamp-2`}>
+        <p className={`text-white/85 font-medium ${isXl ? 'text-sm' : 'text-xs'} line-clamp-2`}>
           {tile.subtitle}
         </p>
       </div>
