@@ -511,12 +511,12 @@ export const COMPREHENSIVE_SPELLING_FACTORY_ITEMS: SpellingFactoryItem[] = [
   // =========================================================================
   {
     id: 'spf-sg-1',
-    word: 'onderzoekschip',
+    word: 'onderzoeksschip',
     syllables: ['on', 'der', 'zoeks', 'schip'],
     missingIndex: 2,
     options: ['zoeks', 'zoek', 'soeks', 'zoex'],
-    soundRule: 'Samenstelling met tussen-s: onderzoek + s + schip = onderzoekschip.',
-    exampleSentence: 'Het moderne onderzoekschip vaart naar de Noordpool voor wetenschappelijk onderzoek.',
+    soundRule: 'Samenstelling met tussen-s: onderzoek + s + schip = onderzoeksschip (dubbele s).',
+    exampleSentence: 'Het moderne onderzoeksschip vaart naar de Noordpool voor wetenschappelijk onderzoek.',
     category: 'samengesteld',
     categoryLabel: '🔬 Samengestelde Woorden',
     difficulty: 'groep7-8',
@@ -573,6 +573,499 @@ export const COMPREHENSIVE_SPELLING_FACTORY_ITEMS: SpellingFactoryItem[] = [
     categoryLabel: '🔬 Samengestelde Woorden',
     difficulty: 'groep5-6',
     emoji: '🦉'
+  },
+
+  // =========================================================================
+  // 8. NIEUWE WOORDEN (curriculum-breed, niet-dieren thema's: school, sport,
+  //    weer, gezin, eten, ruimte/techniek, natuur) -- toegevoegd om beide
+  //    niveaus te verbreden voor de Spelling Fabriek & de Toets-modus.
+  // =========================================================================
+  // --- klinkerdief: Groep 3-5 ---
+  {
+    id: 'spf-kd-9',
+    word: 'wonen',
+    syllables: ['wo', 'nen'],
+    missingIndex: 0,
+    options: ['wo', 'woo', 'wou', 'we'],
+    soundRule: 'Klankgroep /wo/: je hoort een lange /oo/, maar je schrijft één o (klinkerdief).',
+    exampleSentence: 'Ridheya en Hemali wonen in een gezellig huis met een grote tuin.',
+    category: 'klinkerdief',
+    categoryLabel: '🌴 Klinkerdief (Lange Klank)',
+    difficulty: 'groep3-4',
+    emoji: '🏠'
+  },
+  {
+    id: 'spf-kd-10',
+    word: 'lopen',
+    syllables: ['lo', 'pen'],
+    missingIndex: 0,
+    options: ['lo', 'loo', 'lou', 'le'],
+    soundRule: 'Klankgroep /lo/: lange klank /oo/ aan het einde van de klankgroep schrijf je met één o.',
+    exampleSentence: 'Na school lopen de kinderen samen naar huis.',
+    category: 'klinkerdief',
+    categoryLabel: '🌴 Klinkerdief (Lange Klank)',
+    difficulty: 'groep3-4',
+    emoji: '🚶'
+  },
+  {
+    id: 'spf-kd-11',
+    word: 'dromen',
+    syllables: ['dro', 'men'],
+    missingIndex: 0,
+    options: ['dro', 'droo', 'drow', 'dre'],
+    soundRule: 'Klankgroep /dro/: je hoort een lange /oo/, maar de klinkerdief steelt een o.',
+    exampleSentence: "'s Nachts dromen kinderen vaak over spannende avonturen.",
+    category: 'klinkerdief',
+    categoryLabel: '🌴 Klinkerdief (Lange Klank)',
+    difficulty: 'groep3-4',
+    emoji: '💭'
+  },
+  // --- klinkerdief: Groep 6-8 ---
+  {
+    id: 'spf-kd-12',
+    word: 'planeten',
+    syllables: ['pla', 'ne', 'ten'],
+    missingIndex: 1,
+    options: ['ne', 'nee', 'nen', 'ni'],
+    soundRule: 'Klankgroep /ne/: lange klank /ee/ aan het einde van de klankgroep verliest een e (klinkerdief).',
+    exampleSentence: 'Door de telescoop bekeken de kinderen de verre planeten aan de sterrenhemel.',
+    category: 'klinkerdief',
+    categoryLabel: '🌴 Klinkerdief (Lange Klank)',
+    difficulty: 'groep5-6',
+    emoji: '🪐'
+  },
+  {
+    id: 'spf-kd-13',
+    word: 'tomaten',
+    syllables: ['to', 'ma', 'ten'],
+    missingIndex: 1,
+    options: ['ma', 'maa', 'man', 'mo'],
+    soundRule: 'Klankgroep /ma/: lange /aa/ aan het einde van de klankgroep schrijf je met één a.',
+    exampleSentence: 'Opa kweekt sappige tomaten in de moestuin achter het huis.',
+    category: 'klinkerdief',
+    categoryLabel: '🌴 Klinkerdief (Lange Klank)',
+    difficulty: 'groep5-6',
+    emoji: '🍅'
+  },
+  {
+    id: 'spf-kd-14',
+    word: 'reizigers',
+    syllables: ['rei', 'zi', 'gers'],
+    missingIndex: 1,
+    options: ['zi', 'zie', 'zij', 'ze'],
+    soundRule: 'Klankgroep /zi/: lange klank /ie/ aan het einde van de klankgroep schrijf je met één i.',
+    exampleSentence: 'Op het station wachtten de reizigers geduldig op de trein naar Amsterdam.',
+    category: 'klinkerdief',
+    categoryLabel: '🌴 Klinkerdief (Lange Klank)',
+    difficulty: 'groep5-6',
+    emoji: '🚆'
+  },
+
+  // --- dubbelzetter: Groep 3-5 ---
+  {
+    id: 'spf-dz-9',
+    word: 'zitten',
+    syllables: ['zit', 'ten'],
+    missingIndex: 0,
+    options: ['zit', 'zi', 'ziet', 'zet'],
+    soundRule: 'Korte klank /i/ in /zit/ krijgt een dubbele t (-tt-).',
+    exampleSentence: 'Tijdens de kringtijd moeten alle kinderen stil op hun stoel zitten.',
+    category: 'dubbelzetter',
+    categoryLabel: '⚡ Dubbelzetter (Korte Klank)',
+    difficulty: 'groep3-4',
+    emoji: '🪑'
+  },
+  {
+    id: 'spf-dz-10',
+    word: 'bakken',
+    syllables: ['bak', 'ken'],
+    missingIndex: 0,
+    options: ['bak', 'ba', 'baak', 'bek'],
+    soundRule: 'Korte klank /a/ in /bak/ krijgt een dubbele k (-kk-).',
+    exampleSentence: 'Op zaterdag gaan we samen een lekkere appeltaart bakken.',
+    category: 'dubbelzetter',
+    categoryLabel: '⚡ Dubbelzetter (Korte Klank)',
+    difficulty: 'groep3-4',
+    emoji: '🥧'
+  },
+  {
+    id: 'spf-dz-11',
+    word: 'rennen',
+    syllables: ['ren', 'nen'],
+    missingIndex: 0,
+    options: ['ren', 're', 'reen', 'ran'],
+    soundRule: 'Korte klank /e/ in /ren/ krijgt een dubbele n (-nn-).',
+    exampleSentence: 'Tijdens de gymles mogen de kinderen hard over het veld rennen.',
+    category: 'dubbelzetter',
+    categoryLabel: '⚡ Dubbelzetter (Korte Klank)',
+    difficulty: 'groep3-4',
+    emoji: '🏃'
+  },
+  // --- dubbelzetter: Groep 6-8 ---
+  {
+    id: 'spf-dz-12',
+    word: 'zwemmen',
+    syllables: ['zwem', 'men'],
+    missingIndex: 1,
+    options: ['men', 'en', 'man', 'nem'],
+    soundRule: 'Korte klank /e/ aan het einde van de klankgroep krijgt twee medeklinkers (-mm-).',
+    exampleSentence: 'Elke donderdagmiddag gaat groep zes vrolijk zwemmen in het buitenbad.',
+    category: 'dubbelzetter',
+    categoryLabel: '⚡ Dubbelzetter (Korte Klank)',
+    difficulty: 'groep5-6',
+    emoji: '🏊'
+  },
+  {
+    id: 'spf-dz-13',
+    word: 'bakkers',
+    syllables: ['bak', 'kers'],
+    missingIndex: 0,
+    options: ['bak', 'ba', 'baak', 'bek'],
+    soundRule: 'Korte klank /a/ in /bak/ krijgt een dubbele k (-kk-).',
+    exampleSentence: 'Vroeg in de ochtend beginnen de bakkers met het bakken van vers brood.',
+    category: 'dubbelzetter',
+    categoryLabel: '⚡ Dubbelzetter (Korte Klank)',
+    difficulty: 'groep5-6',
+    emoji: '🍞'
+  },
+  {
+    id: 'spf-dz-14',
+    word: 'hutten',
+    syllables: ['hut', 'ten'],
+    missingIndex: 0,
+    options: ['hut', 'hu', 'huut', 'het'],
+    soundRule: 'Korte klank /u/ in /hut/ krijgt een dubbele t (-tt-).',
+    exampleSentence: 'Tijdens het zomerkamp bouwden de kinderen knusse hutten van takken en bladeren.',
+    category: 'dubbelzetter',
+    categoryLabel: '⚡ Dubbelzetter (Korte Klank)',
+    difficulty: 'groep5-6',
+    emoji: '🏕️'
+  },
+
+  // --- langermaak: Groep 3-5 ---
+  {
+    id: 'spf-lm-7',
+    word: 'handdoek',
+    syllables: ['hand', 'doek'],
+    missingIndex: 0,
+    options: ['hand', 'hant', 'han', 'hang'],
+    soundRule: 'Langermaakregel: hand -> handen. Je hoort een /t/, maar schrijft een d.',
+    exampleSentence: 'Na het zwemmen droogde ze zich af met een zachte handdoek.',
+    category: 'langermaak',
+    categoryLabel: '🐢 Langermaakwoord (d of t)',
+    difficulty: 'groep3-4',
+    emoji: '🛁'
+  },
+  {
+    id: 'spf-lm-8',
+    word: 'vriendjes',
+    syllables: ['vriend', 'jes'],
+    missingIndex: 0,
+    options: ['vriend', 'vrient', 'vrind', 'vrend'],
+    soundRule: 'Langermaakregel: vriend -> vrienden. Je hoort een /t/, maar schrijft een d.',
+    exampleSentence: 'Op het schoolplein spelen alle vriendjes samen een leuk spel.',
+    category: 'langermaak',
+    categoryLabel: '🐢 Langermaakwoord (d of t)',
+    difficulty: 'groep3-4',
+    emoji: '🤝'
+  },
+  {
+    id: 'spf-lm-9',
+    word: 'eiland',
+    syllables: ['ei', 'land'],
+    missingIndex: 1,
+    options: ['land', 'lant', 'lan', 'lang'],
+    soundRule: 'Langermaakregel: land -> landen. Je hoort een /t/, maar schrijft een d.',
+    exampleSentence: 'Op vakantie zwommen ze naar een klein eiland midden in het meer.',
+    category: 'langermaak',
+    categoryLabel: '🐢 Langermaakwoord (d of t)',
+    difficulty: 'groep3-4',
+    emoji: '🏝️'
+  },
+  // --- langermaak: Groep 6-8 ---
+  {
+    id: 'spf-lm-10',
+    word: 'hoofdstad',
+    syllables: ['hoofd', 'stad'],
+    missingIndex: 0,
+    options: ['hoofd', 'hooft', 'hoft', 'hoofdt'],
+    soundRule: 'Langermaakregel: hoofd -> hoofden. Je hoort een /t/, maar schrijft een d.',
+    exampleSentence: 'Amsterdam is de hoofdstad van Nederland en trekt jaarlijks miljoenen toeristen.',
+    category: 'langermaak',
+    categoryLabel: '🐢 Langermaakwoord (d of t)',
+    difficulty: 'groep5-6',
+    emoji: '🏙️'
+  },
+  {
+    id: 'spf-lm-11',
+    word: 'handschoenen',
+    syllables: ['hand', 'schoe', 'nen'],
+    missingIndex: 0,
+    options: ['hand', 'hant', 'han', 'hang'],
+    soundRule: 'Langermaakregel: hand -> handen. Je hoort een /t/ klinken, maar schrijft een d.',
+    exampleSentence: 'Bij koud winterweer trekt oma warme handschoenen aan voordat ze naar buiten gaat.',
+    category: 'langermaak',
+    categoryLabel: '🐢 Langermaakwoord (d of t)',
+    difficulty: 'groep5-6',
+    emoji: '🧤'
+  },
+
+  // --- luchtwoord: Groep 3-5 ---
+  {
+    id: 'spf-lw-6',
+    word: 'achtbaan',
+    syllables: ['acht', 'baan'],
+    missingIndex: 0,
+    options: ['acht', 'agt', 'akt', 'aght'],
+    soundRule: 'Luchtwoord: korte klank /a/ + /cht/ schrijf je met de ch van lucht.',
+    exampleSentence: 'In het pretpark gingen ze samen in de snelle achtbaan.',
+    category: 'luchtwoord',
+    categoryLabel: '🌙 Luchtwoord (-cht)',
+    difficulty: 'groep3-4',
+    emoji: '🎢'
+  },
+  {
+    id: 'spf-lw-7',
+    word: 'krachtig',
+    syllables: ['kracht', 'ig'],
+    missingIndex: 0,
+    options: ['kracht', 'kragt', 'krakt', 'kraht'],
+    soundRule: 'Luchtwoord: korte klank /a/ + /cht/ schrijf je altijd met -cht.',
+    exampleSentence: 'De brandweerman is sterk en heeft krachtige spieren.',
+    category: 'luchtwoord',
+    categoryLabel: '🌙 Luchtwoord (-cht)',
+    difficulty: 'groep3-4',
+    emoji: '💪'
+  },
+  {
+    id: 'spf-lw-8',
+    word: 'nachtlampje',
+    syllables: ['nacht', 'lamp', 'je'],
+    missingIndex: 0,
+    options: ['nacht', 'nagt', 'nakt', 'naht'],
+    soundRule: 'Luchtwoord: korte klank /a/ + /cht/ schrijf je met ch van lucht.',
+    exampleSentence: 'Voor het slapengaan doet Ridheya haar knusse nachtlampje aan.',
+    category: 'luchtwoord',
+    categoryLabel: '🌙 Luchtwoord (-cht)',
+    difficulty: 'groep3-4',
+    emoji: '🛌'
+  },
+  // --- luchtwoord: Groep 6-8 ---
+  {
+    id: 'spf-lw-9',
+    word: 'gerecht',
+    syllables: ['ge', 'recht'],
+    missingIndex: 1,
+    options: ['recht', 'regt', 'rekt', 'rest'],
+    soundRule: 'Luchtwoord: korte klank /e/ + /cht/ schrijf je altijd met -cht.',
+    exampleSentence: 'Het hoofdgerecht tijdens het schoolfeest was een heerlijke pastaschotel.',
+    category: 'luchtwoord',
+    categoryLabel: '🌙 Luchtwoord (-cht)',
+    difficulty: 'groep5-6',
+    emoji: '🍝'
+  },
+  {
+    id: 'spf-lw-10',
+    word: 'wachtwoord',
+    syllables: ['wacht', 'woord'],
+    missingIndex: 0,
+    options: ['wacht', 'wagt', 'wakt', 'wecht'],
+    soundRule: 'Luchtwoord: korte klank /a/ + /cht/ schrijf je met de ch van lucht.',
+    exampleSentence: 'Voor de nieuwe schoolcomputer moet iedereen een geheim wachtwoord bedenken.',
+    category: 'luchtwoord',
+    categoryLabel: '🌙 Luchtwoord (-cht)',
+    difficulty: 'groep5-6',
+    emoji: '🔐'
+  },
+
+  // --- ij-ei-au-ou: Groep 3-5 ---
+  {
+    id: 'spf-ie-6',
+    word: 'zeilboot',
+    syllables: ['zeil', 'boot'],
+    missingIndex: 0,
+    options: ['zeil', 'zijl', 'zeel', 'zail'],
+    soundRule: 'Weetwoord: zeil schrijf je met de korte EI, niet met de lange IJ.',
+    exampleSentence: 'Op het meer voer een kleurige zeilboot voorbij.',
+    category: 'ij-ei-au-ou',
+    categoryLabel: '🦊 Weetwoorden (ij/ei & au/ou)',
+    difficulty: 'groep3-4',
+    emoji: '⛵'
+  },
+  {
+    id: 'spf-ie-7',
+    word: 'rijstpap',
+    syllables: ['rijst', 'pap'],
+    missingIndex: 0,
+    options: ['rijst', 'reist', 'rijzt', 'rijs'],
+    soundRule: 'Weetwoord: rijst schrijf je met de lange IJ (zoals rijp, ijs, pijl).',
+    exampleSentence: 'Voor het avondeten maakte oma een warme kom rijstpap.',
+    category: 'ij-ei-au-ou',
+    categoryLabel: '🦊 Weetwoorden (ij/ei & au/ou)',
+    difficulty: 'groep3-4',
+    emoji: '🍚'
+  },
+  {
+    id: 'spf-ie-8',
+    word: 'houten',
+    syllables: ['hou', 'ten'],
+    missingIndex: 0,
+    options: ['hou', 'hau', 'ho', 'how'],
+    soundRule: 'Weetwoord: houten schrijf je met de otje-OU, niet met AU.',
+    exampleSentence: 'In de klas staat een oude houten kast vol met boeken.',
+    category: 'ij-ei-au-ou',
+    categoryLabel: '🦊 Weetwoorden (ij/ei & au/ou)',
+    difficulty: 'groep3-4',
+    emoji: '🪑'
+  },
+  // --- ij-ei-au-ou: Groep 6-8 ---
+  {
+    id: 'spf-ie-9',
+    word: 'fontein',
+    syllables: ['fon', 'tein'],
+    missingIndex: 1,
+    options: ['tein', 'tijn', 'teen', 'tyn'],
+    soundRule: 'Weetwoord: fontein schrijf je met de korte EI, niet met de lange IJ.',
+    exampleSentence: 'Op een hete zomerdag spat het verfrissende water vrolijk uit de fontein in het park.',
+    category: 'ij-ei-au-ou',
+    categoryLabel: '🦊 Weetwoorden (ij/ei & au/ou)',
+    difficulty: 'groep5-6',
+    emoji: '⛲'
+  },
+  {
+    id: 'spf-ie-10',
+    word: 'ijsberg',
+    syllables: ['ijs', 'berg'],
+    missingIndex: 0,
+    options: ['ijs', 'eis', 'ies', 'eijs'],
+    soundRule: 'Weetwoord: ijsberg schrijf je met de lange IJ (zoals rijp, ijs, pijl).',
+    exampleSentence: 'De poolonderzoekers meten hoe snel de ijsberg smelt door de opwarming van de aarde.',
+    category: 'ij-ei-au-ou',
+    categoryLabel: '🦊 Weetwoorden (ij/ei & au/ou)',
+    difficulty: 'groep5-6',
+    emoji: '🧊'
+  },
+  {
+    id: 'spf-ie-11',
+    word: 'kauwgom',
+    syllables: ['kauw', 'gom'],
+    missingIndex: 0,
+    options: ['kauw', 'kouw', 'kou', 'kau'],
+    soundRule: 'Weetwoord: kauwgom staat op de au-plaat, dus met de at-au en een w erachter.',
+    exampleSentence: 'Tijdens de lange autorit deelde Hemali een rolletje kauwgom uit aan haar broertje.',
+    category: 'ij-ei-au-ou',
+    categoryLabel: '🦊 Weetwoorden (ij/ei & au/ou)',
+    difficulty: 'groep5-6',
+    emoji: '🍬'
+  },
+
+  // --- achtervoegsel: Groep 3-5 ---
+  {
+    id: 'spf-av-6',
+    word: 'voorzichtig',
+    syllables: ['voor', 'zich', 'tig'],
+    missingIndex: 2,
+    options: ['tig', 'tug', 'teg', 'tich'],
+    soundRule: 'Achtervoegsel -ig: Je hoort /tug/, maar je schrijft -tig.',
+    exampleSentence: 'Wees voorzichtig met de schaar tijdens de knutselles.',
+    category: 'achtervoegsel',
+    categoryLabel: '✨ Achtervoegsels (-lijk, -ig, -heid)',
+    difficulty: 'groep3-4',
+    emoji: '✂️'
+  },
+  {
+    id: 'spf-av-7',
+    word: 'vrolijk',
+    syllables: ['vro', 'lijk'],
+    missingIndex: 1,
+    options: ['lijk', 'luk', 'lik', 'lyke'],
+    soundRule: 'Achtervoegsel -lijk: Je hoort /luk/, maar je schrijft altijd -lijk.',
+    exampleSentence: 'Op haar verjaardag was Hemali de hele dag vrolijk.',
+    category: 'achtervoegsel',
+    categoryLabel: '✨ Achtervoegsels (-lijk, -ig, -heid)',
+    difficulty: 'groep3-4',
+    emoji: '😄'
+  },
+  {
+    id: 'spf-av-8',
+    word: 'eerlijk',
+    syllables: ['eer', 'lijk'],
+    missingIndex: 1,
+    options: ['lijk', 'luk', 'lik', 'liek'],
+    soundRule: 'Achtervoegsel -lijk: Je hoort /luk/, maar je schrijft altijd -lijk.',
+    exampleSentence: 'Het is belangrijk om altijd eerlijk te zijn tegen je vrienden.',
+    category: 'achtervoegsel',
+    categoryLabel: '✨ Achtervoegsels (-lijk, -ig, -heid)',
+    difficulty: 'groep3-4',
+    emoji: '🤞'
+  },
+  // --- achtervoegsel: Groep 6-8 ---
+  {
+    id: 'spf-av-9',
+    word: 'eenzaamheid',
+    syllables: ['een', 'zaam', 'heid'],
+    missingIndex: 2,
+    options: ['heid', 'hijd', 'heit', 'hyt'],
+    soundRule: 'Achtervoegsel -heid schrijf je altijd met de korte ei en een d aan het einde.',
+    exampleSentence: 'Na de verhuizing voelde Ridheya af en toe een lichte eenzaamheid.',
+    category: 'achtervoegsel',
+    categoryLabel: '✨ Achtervoegsels (-lijk, -ig, -heid)',
+    difficulty: 'groep5-6',
+    emoji: '😔'
+  },
+  {
+    id: 'spf-av-10',
+    word: 'duidelijk',
+    syllables: ['dui', 'de', 'lijk'],
+    missingIndex: 2,
+    options: ['lijk', 'luk', 'lik', 'liek'],
+    soundRule: 'Achtervoegsel -lijk: Je hoort /luk/, maar je schrijft altijd -lijk.',
+    exampleSentence: 'De juf legt duidelijk uit hoe je een deelsom moet oplossen.',
+    category: 'achtervoegsel',
+    categoryLabel: '✨ Achtervoegsels (-lijk, -ig, -heid)',
+    difficulty: 'groep5-6',
+    emoji: '📘'
+  },
+
+  // --- samengesteld: Groep 6-8 (no groep3-4 entries, by design) ---
+  {
+    id: 'spf-sg-6',
+    word: 'sneeuwpop',
+    syllables: ['sneeuw', 'pop'],
+    missingIndex: 0,
+    options: ['sneeuw', 'sneuw', 'snouw', 'sneew'],
+    soundRule: 'Samenstelling: sneeuw (met eeuw, want je hoort een lange /ee/ gevolgd door /w/) + pop.',
+    exampleSentence: 'In de winter bouwden Ridheya en haar broertje een grote sneeuwpop in de tuin.',
+    category: 'samengesteld',
+    categoryLabel: '🔬 Samengestelde Woorden',
+    difficulty: 'groep5-6',
+    emoji: '⛄'
+  },
+  {
+    id: 'spf-sg-7',
+    word: 'zonnestraal',
+    syllables: ['zon', 'ne', 'straal'],
+    missingIndex: 1,
+    options: ['ne', 'nen', 'ni', 'en'],
+    soundRule: 'Samenstelling met tussenletter n: zon + ne + straal = zonnestraal (je hoort maar één n-klank, maar schrijft er twee).',
+    exampleSentence: 'Een warme zonnestraal viel door het keukenraam naar binnen.',
+    category: 'samengesteld',
+    categoryLabel: '🔬 Samengestelde Woorden',
+    difficulty: 'groep5-6',
+    emoji: '☀️'
+  },
+  {
+    id: 'spf-sg-8',
+    word: 'natuurkunde',
+    syllables: ['na', 'tuur', 'kun', 'de'],
+    missingIndex: 1,
+    options: ['tuur', 'tur', 'toer', 'tuu'],
+    soundRule: 'Samenstelling: natuur (met uu, want je hoort een lange /uu/ vlak voor de r) + kunde.',
+    exampleSentence: 'Tijdens de natuurkundeles leerden de kinderen hoe een magneet werkt.',
+    category: 'samengesteld',
+    categoryLabel: '🔬 Samengestelde Woorden',
+    difficulty: 'groep5-6',
+    emoji: '🧲'
   }
 ];
 
