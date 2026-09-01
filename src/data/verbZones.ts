@@ -50,4 +50,25 @@ export function getZoneMeta(zoneIndex: number): ZoneMeta | undefined {
   return ZONE_REWARDS.find(z => z.index === zoneIndex);
 }
 
+/**
+ * Picks the next verb to quiz within a zone. Always serves a not-yet-mastered
+ * verb (whichever was least recently attempted, or never attempted), so a
+ * verb that's already been answered correctly never crowds out one that
+ * still needs work. Root-cause fix for zone progress feeling "stuck": the
+ * previous cycleIndex-modulo-into-all-20-verbs approach made a wrong verb's
+ * retry wait for a full lap through every verb in the zone (including
+ * already-mastered ones), not just the still-needed ones.
+ */
+export function pickNextVerbInZone(zoneVerbs: VerbItem[], profile: PlayerProfile): VerbItem | undefined {
+  if (zoneVerbs.length === 0) return undefined;
+  const notYetMastered = zoneVerbs.filter(v => !isVerbMastered(v, profile));
+  const pool = notYetMastered.length > 0 ? notYetMastered : zoneVerbs;
+  const history = profile.questionHistory || {};
+  return [...pool].sort((a, b) => {
+    const aSeen = history[`verb-${a.infinitief}`]?.lastSeen ?? 0;
+    const bSeen = history[`verb-${b.infinitief}`]?.lastSeen ?? 0;
+    return aSeen - bSeen;
+  })[0];
+}
+
 export { getZoneIndex, getVerbsInZone, getTotalZoneCount };

@@ -31,7 +31,7 @@ import { BIOMES, ALL_BIOME_ANIMALS } from './data/biomeData';
 import { BIOME_LEVELS_GROEP_4_5 } from './data/biomeLevels45';
 import { BIOME_LEVELS_GROEP_6_8 } from './data/biomeLevels68';
 import { WERKWOORDEN_DATA } from './data/werkwoorden';
-import { getVerbsInZone, getZoneMeta, getZoneProgress, isZoneComplete } from './data/verbZones';
+import { getVerbsInZone, getZoneMeta, getZoneProgress, isZoneComplete, pickNextVerbInZone } from './data/verbZones';
 import { getEffectiveGrade } from './utils/gradeTier';
 import { Animal, Badge, PlayerProfile, GradeLevel, VerbItem, BiomeType, AccessibilitySettings } from './types';
 import { sound } from './services/soundService';
@@ -230,8 +230,11 @@ export default function App() {
   const currentQuestion = pickNextItem(levelQuestions, seenSet, (q: (typeof levelQuestions)[number]) => q.id, currentQuestionIndex) || levelQuestions[0];
 
   // Sterke Werkwoorden: verbs are scoped to the selected zone, not tier.
+  // Always serves a not-yet-mastered verb (least-recently-attempted first),
+  // so a wrong answer's retry doesn't have to wait for a full lap through
+  // every verb in the zone -- see pickNextVerbInZone's own doc comment.
   const zoneVerbs = getVerbsInZone(selectedVerbZone, WERKWOORDEN_DATA);
-  const currentVerb: VerbItem = pickNextItem(zoneVerbs, seenSet, v => `verb-${v.infinitief}`, currentVerbIndex) || WERKWOORDEN_DATA[0];
+  const currentVerb: VerbItem = pickNextVerbInZone(zoneVerbs, profile) || WERKWOORDEN_DATA[0];
 
   // Mascot animal for current interaction
   const verbMascotAnimal = animals[currentVerbIndex % animals.length] || animals[0];
