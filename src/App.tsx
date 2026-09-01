@@ -35,7 +35,7 @@ import { BIOMES, ALL_BIOME_ANIMALS } from './data/biomeData';
 import { BIOME_LEVELS_GROEP_4_5 } from './data/biomeLevels45';
 import { BIOME_LEVELS_GROEP_6_8 } from './data/biomeLevels68';
 import { WERKWOORDEN_DATA } from './data/werkwoorden';
-import { getVerbsInZone, getZoneMeta, isZoneComplete } from './data/verbZones';
+import { getVerbsInZone, getZoneMeta, getZoneProgress, isZoneComplete } from './data/verbZones';
 import { getEffectiveGrade } from './utils/gradeTier';
 import { Animal, Badge, PlayerProfile, GradeLevel, VerbItem, BiomeType, AccessibilitySettings } from './types';
 import { sound } from './services/soundService';
@@ -765,6 +765,7 @@ export default function App() {
                         onNextVerb={handleNextVerb}
                         totalVerbsAvailable={zoneVerbs.length}
                         currentVerbIndex={currentVerbIndex}
+                        zoneProgress={getZoneProgress(selectedVerbZone, profile)}
                       />
                     </>
                   )}

@@ -24,6 +24,7 @@ interface VerbQuizCardProps {
   currentVerbIndex?: number;
   totalQuestions?: number;
   totalVerbsAvailable?: number;
+  zoneProgress?: { mastered: number; total: number };
   biome?: BiomeType;
   onAnswerCorrect: (points: number) => void;
   onAnswerIncorrect: () => void;
@@ -45,6 +46,7 @@ export const VerbQuizCard: React.FC<VerbQuizCardProps> = ({
   currentVerbIndex,
   totalQuestions,
   totalVerbsAvailable,
+  zoneProgress,
   biome = 'safari',
   onAnswerCorrect,
   onAnswerIncorrect,
@@ -217,10 +219,17 @@ export const VerbQuizCard: React.FC<VerbQuizCardProps> = ({
           <div>
             {/* Challenge Header */}
             <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 flex-wrap">
                 <span className="bg-emerald-600 text-white text-xs font-black px-3 py-1 rounded-full uppercase">
                   Vraag {activeQNum}/{activeTotal}
                 </span>
+                {zoneProgress && (
+                  <span className="bg-amber-100 text-amber-900 text-[10px] font-black px-2.5 py-1 rounded-full uppercase border border-amber-300">
+                    {zoneProgress.mastered >= zoneProgress.total
+                      ? '🎉 Zone Compleet!'
+                      : `🔓 Gemeesterd ${zoneProgress.mastered}/${zoneProgress.total} • nog ${zoneProgress.total - zoneProgress.mastered} goed nodig`}
+                  </span>
+                )}
                 {activeVerb.school_priority && (
                   <span className="bg-amber-500 text-white text-[10px] font-black px-2 py-0.5 rounded-full uppercase">
                     ⭐ CITO Kern
