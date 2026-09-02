@@ -216,6 +216,14 @@ export const SandboxSceneModal: React.FC<SandboxSceneModalProps> = ({
       .forEach(q => completeQuest(q));
   };
 
+  // Distance from a point to the nearest edge of a rect (0 if the point is
+  // already inside it).
+  const distanceToRect = (x: number, y: number, r: DOMRect): number => {
+    const dx = Math.max(r.left - x, 0, x - r.right);
+    const dy = Math.max(r.top - y, 0, y - r.bottom);
+    return Math.sqrt(dx * dx + dy * dy);
+  };
+
   const handleDragEnd = (item: SceneItem, info: PanInfo) => {
     // Always bump, regardless of whether the drop succeeds below, so the
     // item's motion.div remounts and Framer Motion's internal drag x/y
@@ -223,47 +231,55 @@ export const SandboxSceneModal: React.FC<SandboxSceneModalProps> = ({
     setDragResetTick(prev => ({ ...prev, [item.id]: (prev[item.id] || 0) + 1 }));
     if (!sceneRef.current) return;
 
-    // Characters first (serve interactions take priority over zones). Uses
-    // real DOM rects (with generous padding) rather than the layout's slot
-    // percentages -- the avatar renders below the character's nominal slot
-    // position (pushed down by its speech bubble), so a percentage-distance
-    // check against the raw slot anchor missed real drops onto the avatar.
-    const padding = 40;
+    // Nearest-valid-target snapping rather than exact rect containment.
+    // Rect-based hit-testing (even with generous padding) turned out to be
+    // fragile across viewport sizes/fullscreen -- confirmed live: reports of
+    // a drop registering on the wrong nearby item, and drops right next to
+    // the basket not registering at all. Since each item only ever has ONE
+    // real destination (only one zone accepts a given item id, likewise for
+    // character requests), there's no ambiguity in always picking whichever
+    // valid target is physically closest to the drop point -- it removes
+    // pixel-precision as a requirement entirely.
+    let bestCharacter: { characterId: string; requestId: string; distance: number } | null = null;
     for (const character of building.characters) {
+      const openRequest = character.requests.find(r => !satisfiedRequestIds.includes(r.id));
+      if (!openRequest || !openRequest.requiredItemIds.includes(item.id)) continue;
       const el = sceneRef.current?.querySelector(`[data-character-id="${character.id}"]`);
-      const charRect = el?.getBoundingClientRect();
-      if (!charRect) continue;
-      const withinCharacter =
-        info.point.x >= charRect.left - padding &&
-        info.point.x <= charRect.right + padding &&
-        info.point.y >= charRect.top - padding &&
-        info.point.y <= charRect.bottom + padding;
-      if (withinCharacter) {
-        const openRequest = character.requests.find(r => !satisfiedRequestIds.includes(r.id));
-        if (openRequest) {
-          handleServe(character.id, openRequest.id, item.id);
-          return;
-        }
+      const rect = el?.getBoundingClientRect();
+      if (!rect) continue;
+      const distance = distanceToRect(info.point.x, info.point.y, rect);
+      if (!bestCharacter || distance < bestCharacter.distance) {
+        bestCharacter = { characterId: character.id, requestId: openRequest.id, distance };
       }
     }
 
-    // Same real-DOM-rect + padding approach as characters above -- an exact
-    // percentage-rect check with zero tolerance was rejecting drops that
-    // landed visually right next to the zone (confirmed live: items sat
-    // beside the basket instead of snapping in).
-    let zone = building.dropZones.find(z => {
+    let bestZone: { zone: (typeof building.dropZones)[number]; distance: number } | null = null;
+    for (const z of building.dropZones) {
+      if (!z.acceptsItemIds.includes(item.id)) continue;
       const el = sceneRef.current?.querySelector(`[data-zone-id="${z.id}"]`);
-      const zoneRect = el?.getBoundingClientRect();
-      if (!zoneRect) return false;
-      return (
-        info.point.x >= zoneRect.left - padding &&
-        info.point.x <= zoneRect.right + padding &&
-        info.point.y >= zoneRect.top - padding &&
-        info.point.y <= zoneRect.bottom + padding
-      );
-    });
-    if (!zone) return;
-    if (!zone.acceptsItemIds.includes(item.id)) return;
+      const rect = el?.getBoundingClientRect();
+      if (!rect) continue;
+      const distance = distanceToRect(info.point.x, info.point.y, rect);
+      if (!bestZone || distance < bestZone.distance) {
+        bestZone = { zone: z, distance };
+      }
+    }
+
+    // Generous, but not unlimited -- without a cap, a drop nowhere near
+    // either valid target would still commit to whichever one happens to be
+    // (however distantly) closer, which can silently match the wrong thing
+    // on the opposite side of the scene. 320px is comfortably more than
+    // enough slack for real imprecision without spanning the whole scene.
+    const MAX_SNAP_DISTANCE = 320;
+    if (bestCharacter && bestCharacter.distance > MAX_SNAP_DISTANCE) bestCharacter = null;
+    if (bestZone && bestZone.distance > MAX_SNAP_DISTANCE) bestZone = null;
+
+    if (!bestCharacter && !bestZone) return; // nothing close enough to count as a real attempt
+
+    if (bestCharacter && (!bestZone || bestCharacter.distance <= bestZone.distance)) {
+      handleServe(bestCharacter.characterId, bestCharacter.requestId, item.id);
+      return;
+    }
 
     sound.playCorrect();
 
