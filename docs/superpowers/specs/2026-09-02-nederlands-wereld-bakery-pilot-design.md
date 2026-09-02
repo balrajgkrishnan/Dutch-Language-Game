@@ -11,9 +11,17 @@ sandbox mechanics before any further buildings are authored.
 
 The existing game (73 sanctuary animals, 7 biomes, Boerin Tess, the various
 quiz-style learning games) is **not replaced or discarded**. Nederlands
-Wereld is a new, additive section. The existing animal cast may appear
-inside future buildings as characters, but the pilot itself does not require
-that integration yet (see Out of Scope).
+Wereld is a new, additive section. The bakery *building* is new, but its
+customers are drawn from the existing 73 illustrated sanctuary animals (see
+Characters/Customers below) — free art reuse plus instant familiarity.
+
+**Revision note:** this spec was reviewed (external AI review, adopted with
+judgment) after the initial draft. The original pilot (drag 3 items into
+zones, one quest) was judged too shallow — a child would disengage in 2-3
+minutes. The revisions below (customers, quest variety, vocab tracking,
+ambient speech, more items) directly address that. Two suggestions from the
+same review were deliberately **not** adopted (multi-room buildings, a full
+generic item-state-machine) — see "Reviewed and deferred" below for why.
 
 ## Decisions made (this brainstorming session)
 
@@ -79,6 +87,8 @@ export interface SceneItem {
   position: { x: number; y: number };   // percent within the scene
   draggable: boolean;
   dropZoneId?: string;       // which drop zone (if any) this item belongs in
+  transformsInto?: string;   // optional: id of the item this becomes when
+                             // dropped in its zone (e.g. deeg -> brood via the oven)
 }
 
 export interface DropZone {
@@ -88,11 +98,31 @@ export interface DropZone {
   acceptsItemIds: string[];
 }
 
+// Customers: the "magic moment" fix for engagement. Reuses the existing
+// Animal roster (biomeAnimals.ts) via animalId -- no new art needed.
+export interface CharacterRequest {
+  id: string;
+  speechNl: string;        // "Ik wil graag een brood."
+  speechEn: string;
+  requiredItemIds: string[]; // items the child must serve to satisfy this request
+  thankYouNl: string;       // "Dank je wel!"
+  rewardCoins: number;
+}
+
+export interface SceneCharacter {
+  id: string;
+  animalId: string;          // references ALL_BIOME_ANIMALS -- reuses existing art
+  requests: CharacterRequest[];
+}
+
+export type QuestType = 'collect' | 'place' | 'serve' | 'discover';
+
 export interface MiniQuest {
   id: string;
+  type: QuestType;
   promptNl: string;          // e.g. "Zoek de 3 dingen om een boterham te maken!"
   promptEn: string;
-  requiredItemIds: string[]; // items that must be placed/found to complete
+  requiredItemIds: string[]; // 'discover' quests use word ids here instead
   rewardCoins: number;
   rewardStars: number;
 }
@@ -103,16 +133,24 @@ export interface Building {
   emoji: string;
   backgroundImageUrl?: string;
   unlocked: boolean;          // lets the hub show locked "coming soon" buildings
+  unlockHint?: string;        // shown on locked tiles, e.g. "Voltooi 3 opdrachten om te ontgrendelen"
   items: SceneItem[];
   dropZones: DropZone[];
+  characters: SceneCharacter[];
   quests: MiniQuest[];
+  ambientPhrases: { nl: string; en: string }[]; // idle lines, spoken occasionally
 }
 ```
 
 Content file: `src/data/nederlandsWereldBuildings.ts`, exporting
 `NEDERLANDS_WERELD_BUILDINGS: Building[]` — bakery fully populated, plus 2
-stub entries (`vet-clinic`, `shop`) with `unlocked: false` and no items, for
-the hub's "coming soon" tiles.
+stub entries (`vet-clinic`, `shop`) with `unlocked: false`, no items, and an
+`unlockHint` string, for the hub's "coming soon" tiles.
+
+**Item count:** target 10-12 items for the bakery (not the original 6-8, and
+short of the reviewed suggestion of 15-20 — customers/quest variety/ambient
+speech already add depth, so item count doesn't have to carry all of it;
+still cheap to grow later since it's pure content).
 
 ## Mechanics (all reusing existing app infrastructure — no new dependencies)
 
@@ -121,17 +159,48 @@ the hub's "coming soon" tiles.
   drag-and-drop library needed.
 - **Drop detection:** on `onDragEnd`, a simple bounding-rect overlap check
   between the dragged item and each `DropZone`; if inside an accepting zone,
-  snap the item into place and mark it "placed."
+  snap the item into place and mark it "placed." If the item has
+  `transformsInto` set, swap it for the target item instead (e.g. dough
+  dropped in the oven's zone becomes bread) — one small conditional branch,
+  not a general state machine.
 - **Tap-to-listen:** `speech.speak(item.vocab.audioText || item.vocab.word)`
   (existing `speechService`) + a small popup label showing "de/het + word"
   (Dutch) with the English translation underneath, auto-dismissing after a
-  few seconds.
-- **Mini-quest:** a banner showing the Dutch prompt and a checklist of
-  required items, updating live as items are correctly placed. On
-  completion: reward, confetti (`canvas-confetti`, already a dependency),
-  sound feedback (existing `soundService`).
-- **Progress/rewards:** extend `PlayerProfile` with
-  `nederlandsWereldProgress?: { unlockedBuildings: string[]; completedQuests: string[] }`,
+  few seconds. Every tap also records exposure (see Vocabulary tracking).
+- **Characters/customers:** each `SceneCharacter` references an existing
+  `animalId` (reusing `ALL_BIOME_ANIMALS` art and `AnimalAvatar` — zero new
+  art). A character shows a speech bubble with `CharacterRequest.speechNl`
+  ("Ik wil graag een brood."); dragging the matching item(s) onto the
+  character satisfies the request, triggers `thankYouNl` + reward, and the
+  character requests something else or leaves. This is the primary
+  engagement fix from the review — it turns isolated drags into a small
+  roleplay loop without becoming a quiz.
+- **Quest types:** `'collect'` (find/tap N items), `'place'` (drop specific
+  items in specific zones), `'serve'` (satisfy a character's request),
+  `'discover'` (tap N distinct new words) — same engine, `requiredItemIds`
+  means different things per type, checked in one small switch in
+  `SandboxSceneModal`.
+- **Ambient vocabulary:** on entering a building, speak one greeting phrase
+  from `ambientPhrases`; every ~30-45s of idle play, speak another random
+  one. Lightweight — a single `setInterval`, no scheduling system.
+- **Vocabulary exposure tracking:** extend `PlayerProfile` with
+  `nederlandsWereldWordStats?: Record<string, { heard: number }>`, keyed by
+  vocab word, incremented on every tap-to-listen or ambient utterance —
+  mirrors the existing `questionHistory` pattern already used elsewhere in
+  this app for the exact same "how many times has X been encountered"
+  purpose. Surfaced later as "You discovered N Dutch words" (not required
+  for the pilot's verification, just needs the data collected from day one).
+- **Progress/rewards:** extend `PlayerProfile` with:
+
+  ```ts
+  nederlandsWereldProgress?: {
+    unlockedBuildings: string[];
+    completedQuests: string[];
+    buildingStates: Record<string, { placedItems: string[] }>; // persists
+    // scene state across visits -- was left ambiguous in the first draft
+  };
+  ```
+
   updated via the same `onUpdateProfile` callback pattern every other modal
   in this app already uses.
 
@@ -140,9 +209,14 @@ the hub's "coming soon" tiles.
 Extend the proven Gemini image-gen pattern (`scripts/generateAnimalAvatars.mjs`,
 including the per-item resilience fix added this session so one flaky
 network call doesn't crash a whole batch) into a new
-`scripts/generateBakeryArt.mjs`: one background illustration + roughly 6-8
-item illustrations, same bold-flat-color children's-picture-book style
-already used for the animals and tile icons.
+`scripts/generateBakeryArt.mjs`: one background illustration + 10-12 item
+illustrations, same bold-flat-color children's-picture-book style already
+used for the animals and tile icons. Customers reuse existing animal art —
+no new generation needed for them. If any single item's prompt proves as
+stubborn as `simba-leeuw` did (a content-safety soft-block, not a network
+issue — confirmed this session by seeing the *same* item fail identically
+across three separate runs while everything else succeeded), reword that
+one prompt rather than retrying indefinitely.
 
 ## Rendering shell
 
@@ -161,20 +235,45 @@ from the bento grid.
 - Vet Clinic, Shop, and any other building beyond the Bakery.
 - Clothing/outfit customization tied to specific buildings (would extend the
   existing `TocaWardrobeStudioModal`/avatar-customization system later).
-- Sanctuary animals appearing as characters/customers inside buildings.
 - Two-tier (Groep 3-5 / 6-8) vocabulary splitting — the data shape doesn't
   block this (a `groepVariant`-style tag could be added to `DutchVocabWord`
   later, matching the derive-don't-store pattern used for spelling/verb
   content), but the pilot ships one vocabulary set for both grades.
 - Routing bakery interactions into the existing quiz/test engines.
+- Actual unlock *logic* for the hub's locked buildings — the pilot only
+  shows the locked tiles with an `unlockHint` string, no functional gating.
+
+## Reviewed and deliberately deferred (not adopted from the external review)
+
+- **Multi-room buildings** (`Building.rooms: Room[]` instead of flat
+  `items/dropZones/quests`). Premature for a one-building, one-room pilot —
+  neither the Bakery nor the next two planned buildings (Vet Clinic, Shop)
+  need multiple rooms. Wrapping the flat fields in a `rooms[]` array later,
+  once a building actually needs it, is a small mechanical refactor, not a
+  rewrite — not worth the added complexity now on spec alone.
+- **A general item-state-machine system** (arbitrary `state`/transition
+  chains). The one specific "magic moment" this would enable — dough
+  becoming bread — is captured cheaply via the single optional
+  `transformsInto` field above, without building generic state-machine
+  infrastructure that nothing else currently needs.
 
 ## Verification plan
 
 - `npm run lint` (`tsc --noEmit`) clean throughout.
 - Live browser check: open the hub, confirm Bakery is enabled and the other
-  two buildings show as locked/coming soon; enter the Bakery; drag at least
-  one item into its correct drop zone and confirm the mini-quest checklist
-  updates; complete the quest and confirm coins/stars update on the profile
-  and the reward fires (confetti + sound).
+  two buildings show as locked with their `unlockHint` text; enter the
+  Bakery.
+- Drag at least one item into its correct drop zone and confirm a `place`
+  quest's checklist updates; confirm the dough-in-oven `transformsInto`
+  swap actually renders the resulting item.
+- Satisfy a customer's request (`serve` quest) and confirm the thank-you
+  line, reward, and the character then requesting something new or leaving.
+- Complete at least one `collect` and one `discover` quest, confirming
+  reward + confetti + sound in each case.
 - Confirm tap-to-listen speaks the Dutch word and shows the de/het label for
-  at least 3 different items.
+  at least 3 different items, and that `nederlandsWereldWordStats` increments
+  on each tap.
+- Confirm an ambient phrase plays on entering the scene.
+- Leave the Bakery mid-session (with some items already placed) and reopen
+  it — confirm placed items and completed quests persist via
+  `nederlandsWereldProgress.buildingStates`.
