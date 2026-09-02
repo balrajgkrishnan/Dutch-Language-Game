@@ -179,15 +179,14 @@ export const SandboxSceneModal: React.FC<SandboxSceneModalProps> = ({
   };
 
   const handleDragEnd = (item: SceneItem, info: PanInfo) => {
-    const rect = sceneRef.current?.getBoundingClientRect();
-    if (!rect) return;
+    if (!sceneRef.current) return;
 
     // Characters first (serve interactions take priority over zones). Uses
     // real DOM rects (with generous padding) rather than the layout's slot
     // percentages -- the avatar renders below the character's nominal slot
     // position (pushed down by its speech bubble), so a percentage-distance
     // check against the raw slot anchor missed real drops onto the avatar.
-    const padding = 24;
+    const padding = 40;
     for (const character of building.characters) {
       const el = sceneRef.current?.querySelector(`[data-character-id="${character.id}"]`);
       const charRect = el?.getBoundingClientRect();
@@ -206,17 +205,23 @@ export const SandboxSceneModal: React.FC<SandboxSceneModalProps> = ({
       }
     }
 
-    const dropXPercent = ((info.point.x - rect.left) / rect.width) * 100;
-    const dropYPercent = ((info.point.y - rect.top) / rect.height) * 100;
-
-    const zone = building.dropZones.find(
-      z =>
-        dropXPercent >= z.position.x &&
-        dropXPercent <= z.position.x + z.position.width &&
-        dropYPercent >= z.position.y &&
-        dropYPercent <= z.position.y + z.position.height
-    );
-    if (!zone || !zone.acceptsItemIds.includes(item.id)) return;
+    // Same real-DOM-rect + padding approach as characters above -- an exact
+    // percentage-rect check with zero tolerance was rejecting drops that
+    // landed visually right next to the zone (confirmed live: items sat
+    // beside the basket instead of snapping in).
+    let zone = building.dropZones.find(z => {
+      const el = sceneRef.current?.querySelector(`[data-zone-id="${z.id}"]`);
+      const zoneRect = el?.getBoundingClientRect();
+      if (!zoneRect) return false;
+      return (
+        info.point.x >= zoneRect.left - padding &&
+        info.point.x <= zoneRect.right + padding &&
+        info.point.y >= zoneRect.top - padding &&
+        info.point.y <= zoneRect.bottom + padding
+      );
+    });
+    if (!zone) return;
+    if (!zone.acceptsItemIds.includes(item.id)) return;
 
     sound.playCorrect();
 
@@ -286,20 +291,21 @@ export const SandboxSceneModal: React.FC<SandboxSceneModalProps> = ({
           </div>
         </div>
 
-        {/* Quest checklist strip */}
-        <div className="bg-amber-50/80 border-b border-amber-200/70 px-4 py-2 flex items-center gap-2 overflow-x-auto no-scrollbar">
+        {/* Quest checklist strip -- full text, no truncation (was cutting
+            objectives off mid-word and making them unreadable); wraps to
+            two lines instead of scrolling off-screen. */}
+        <div className="bg-amber-50/80 border-b border-amber-200/70 px-4 py-2 flex flex-wrap items-center gap-2">
           {building.quests.map(q => {
             const done = completedQuestIds.includes(q.id);
             return (
               <span
                 key={q.id}
-                className={`text-[10px] font-black uppercase px-2.5 py-1 rounded-full whitespace-nowrap border flex items-center gap-1 ${
+                className={`text-[11px] font-black uppercase px-2.5 py-1 rounded-full border flex items-center gap-1.5 max-w-full ${
                   done ? 'bg-emerald-500 text-white border-emerald-600' : 'bg-white text-amber-800 border-amber-300'
                 }`}
-                title={q.promptNl}
               >
-                {done && <CheckCircle2 className="w-3 h-3" />}
-                {q.promptNl.length > 30 ? `${q.promptNl.slice(0, 30)}...` : q.promptNl}
+                {done && <CheckCircle2 className="w-3.5 h-3.5 flex-shrink-0" />}
+                <span>{q.promptNl}</span>
               </span>
             );
           })}
@@ -319,6 +325,7 @@ export const SandboxSceneModal: React.FC<SandboxSceneModalProps> = ({
           {building.dropZones.map(zone => (
             <div
               key={zone.id}
+              data-zone-id={zone.id}
               className="absolute rounded-2xl border-2 border-dashed border-amber-500/50 bg-amber-100/30 flex items-end justify-center pb-1"
               style={{
                 left: `${zone.position.x}%`,
