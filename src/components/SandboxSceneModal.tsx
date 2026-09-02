@@ -447,7 +447,7 @@ export const SandboxSceneModal: React.FC<SandboxSceneModalProps> = ({
                 dragConstraints={sceneRef}
                 dragMomentum={false}
                 onDragEnd={(_e, info) => handleDragEnd(item, info)}
-                onClick={() => handleTapItem(item)}
+                onTap={() => handleTapItem(item)}
                 whileHover={{ scale: 1.08 }}
                 whileTap={{ scale: 0.94 }}
                 className={`absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center ${item.draggable ? 'cursor-grab active:cursor-grabbing' : 'cursor-pointer'}`}

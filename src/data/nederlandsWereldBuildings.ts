@@ -203,7 +203,11 @@ const BAKERY: Building = {
       type: 'discover',
       promptNl: 'Ontdek 5 nieuwe Nederlandse woorden in de bakkerij!',
       promptEn: 'Discover 5 new Dutch words in the bakery!',
-      requiredItemIds: ['deeg', 'bloem', 'boter', 'melk', 'suiker'],
+      // 'deeg' is deliberately excluded: it disappears from the scene once
+      // baked into 'brood' (transformsInto), so requiring a tap on it could
+      // become permanently unwinnable if the player bakes before tapping it.
+      // 'brood' stays visible/tappable indefinitely (even once placed).
+      requiredItemIds: ['brood', 'bloem', 'boter', 'melk', 'suiker'],
       rewardCoins: 10,
       rewardStars: 1
     }
