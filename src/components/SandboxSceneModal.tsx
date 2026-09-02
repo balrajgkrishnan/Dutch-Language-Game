@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, PanInfo } from 'motion/react';
-import { X, Volume2, Maximize2, Minimize2, CheckCircle2 } from 'lucide-react';
+import { X, Volume2, Maximize2, Minimize2, CheckCircle2, RotateCcw } from 'lucide-react';
 import { Building, PlayerProfile, SceneItem, MiniQuest } from '../types';
 import { AnimalAvatar } from './AnimalAvatar';
 import { ALL_BIOME_ANIMALS } from '../data/biomeAnimals';
@@ -44,6 +44,12 @@ export const SandboxSceneModal: React.FC<SandboxSceneModalProps> = ({
   const [labelItem, setLabelItem] = useState<SceneItem | null>(null);
   const [customerMessage, setCustomerMessage] = useState<{ characterId: string; text: string } | null>(null);
   const [justCompletedQuest, setJustCompletedQuest] = useState<MiniQuest | null>(null);
+  // Framer Motion tracks drag position as an internal transform separate
+  // from React's render, which never gets cleared just because `left`/`top`
+  // change -- bumping a per-item key forces a clean remount after every
+  // drag gesture (success or fail) so the visual position always matches
+  // the logical one instead of drifting from leftover drag offset.
+  const [dragResetTick, setDragResetTick] = useState<Record<string, number>>({});
 
   useEffect(() => {
     if (!isOpen) return;
@@ -98,6 +104,38 @@ export const SandboxSceneModal: React.FC<SandboxSceneModalProps> = ({
               placedItems: nextPlaced ?? prevBuildingState?.placedItems ?? [],
               transformedItems: nextTransformed ?? prevBuildingState?.transformedItems ?? []
             }
+          }
+        }
+      };
+    });
+  };
+
+  const handleResetBuilding = () => {
+    speech.stop();
+    setPlacedItemIds([]);
+    setTransformedAwayIds([]);
+    setRevealedIds([]);
+    setTappedItemIds([]);
+    setSatisfiedRequestIds([]);
+    setCompletedQuestIds(prev => prev.filter(id => !building.quests.some(q => q.id === id)));
+    setDragResetTick({});
+    setJustCompletedQuest(null);
+    setCustomerMessage(null);
+    setLabelItem(null);
+    sound.playPop();
+
+    const buildingQuestIds = building.quests.map(q => q.id);
+    onUpdateProfile(prev => {
+      const prevProgress = prev.nederlandsWereldProgress;
+      if (!prevProgress) return prev;
+      return {
+        ...prev,
+        nederlandsWereldProgress: {
+          ...prevProgress,
+          completedQuests: prevProgress.completedQuests.filter(id => !buildingQuestIds.includes(id)),
+          buildingStates: {
+            ...prevProgress.buildingStates,
+            [building.id]: { placedItems: [], transformedItems: [] }
           }
         }
       };
@@ -179,6 +217,10 @@ export const SandboxSceneModal: React.FC<SandboxSceneModalProps> = ({
   };
 
   const handleDragEnd = (item: SceneItem, info: PanInfo) => {
+    // Always bump, regardless of whether the drop succeeds below, so the
+    // item's motion.div remounts and Framer Motion's internal drag x/y
+    // resets to match wherever it should actually render.
+    setDragResetTick(prev => ({ ...prev, [item.id]: (prev[item.id] || 0) + 1 }));
     if (!sceneRef.current) return;
 
     // Characters first (serve interactions take priority over zones). Uses
@@ -275,6 +317,13 @@ export const SandboxSceneModal: React.FC<SandboxSceneModalProps> = ({
             </div>
           </div>
           <div className="flex items-center gap-2">
+            <button
+              onClick={handleResetBuilding}
+              className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center cursor-pointer transition-all"
+              title="Begin opnieuw"
+            >
+              <RotateCcw className="w-4 h-4" />
+            </button>
             <button
               onClick={toggleFullscreen}
               className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center cursor-pointer transition-all"
@@ -377,7 +426,7 @@ export const SandboxSceneModal: React.FC<SandboxSceneModalProps> = ({
 
             return (
               <motion.div
-                key={item.id}
+                key={`${item.id}-${dragResetTick[item.id] || 0}`}
                 drag={item.draggable}
                 dragConstraints={sceneRef}
                 dragMomentum={false}
