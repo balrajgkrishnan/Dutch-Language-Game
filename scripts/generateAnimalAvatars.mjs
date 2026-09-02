@@ -41,7 +41,7 @@ const ANIMALS = [
   { id: 'zara-zebra', prompt: "Zara the Zebra: a playful zebra with bold black and white stripes, galloping joyfully." },
   { id: 'mo-meerkat', prompt: "Mo the Meerkat: a small alert meerkat standing upright on its hind legs, watchful and curious." },
   { id: 'charly-cheeta', prompt: "Charly the Cheetah: a sleek spotted cheetah resting proudly on a termite mound, calm smile." },
-  { id: 'simba-leeuw', prompt: "Simba the Lion Cub: a small brave lion cub with a fluffy tuft of mane, practicing a big roar." },
+  { id: 'simba-leeuw', prompt: "A small brave young lion cub character with a fluffy tuft of golden mane, standing proudly, mouth open in a cheerful shout, big round eyes." },
   { id: 'raffi-giraffe', prompt: "Raffi the Young Giraffe: a friendly young giraffe with soft brown patches, curiously peeking over treetops." },
   { id: 'jumbo-olifant', prompt: "Jumbo the Giant Elephant: a big wise elephant spraying a joyful splash of water with its trunk." },
   { id: 'kibo-neushoorn', prompt: "Kibo the White Rhino: a powerful grey rhino with a big horn, surprisingly gentle expression." },
