@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { motion } from 'motion/react';
 import { X, Volume2, CheckCircle2, XCircle, Maximize2, Minimize2, Trophy } from 'lucide-react';
 import { PlayerProfile, SpellingFactoryItem, TestResult } from '../types';
@@ -77,6 +77,13 @@ export const SpellingTestModal: React.FC<SpellingTestModalProps> = ({
     }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session.isComplete]);
+
+  // options[0] is always the correct answer in the data (authoring convention),
+  // so it must be shuffled before display or the answer is trivially the first chip.
+  const displayOptions = useMemo(
+    () => (session.currentQuestion ? fisherYatesShuffle(session.currentQuestion.options) : []),
+    [session.currentQuestion?.id]
+  );
 
   if (!isOpen) return null;
 
@@ -190,7 +197,7 @@ export const SpellingTestModal: React.FC<SpellingTestModalProps> = ({
                   className="w-full max-w-xs bg-slate-50 text-slate-800 font-black text-lg py-3 px-4 rounded-2xl border-2 border-violet-300 text-center outline-none focus:ring-2 focus:ring-violet-500 disabled:opacity-70"
                 />
                 <div className="flex flex-wrap items-center justify-center gap-1.5">
-                  {q.options.map((opt, i) => (
+                  {displayOptions.map((opt, i) => (
                     <button
                       key={i}
                       type="button"

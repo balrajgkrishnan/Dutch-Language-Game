@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { SpellingFactoryItem, PlayerProfile } from '../types';
 import { SPELLING_GROEP_3_5, SPELLING_GROEP_6_8 } from '../data/comprehensiveSpellingData';
+import { fisherYatesShuffle } from '../data/werkwoorden';
 import { sound } from '../services/soundService';
 import { speech } from '../services/speechService';
 import { useFullscreen } from '../hooks/useFullscreen';
@@ -71,6 +72,10 @@ export const RidheyaSpellingFactoryModal: React.FC<RidheyaSpellingFactoryModalPr
   }, [selectedCategory, gradePool]);
 
   const currentItem: SpellingFactoryItem = filteredItems[currentIndex] || filteredItems[0] || gradePool[0];
+
+  // options[0] is always the correct answer in the data (authoring convention),
+  // so it must be shuffled before display or the answer is trivially the first button.
+  const displayOptions = useMemo(() => fisherYatesShuffle(currentItem.options), [currentItem.id]);
 
   const handleSpeakWord = () => {
     sound.playPop();
@@ -368,7 +373,7 @@ export const RidheyaSpellingFactoryModal: React.FC<RidheyaSpellingFactoryModalPr
             <div className="space-y-2">
               <span className="text-xs font-black text-slate-700">Kies het juiste ontbrekende stukje:</span>
               <div className="grid grid-cols-2 gap-3">
-                {currentItem.options.map((opt, optIdx) => {
+                {displayOptions.map((opt, optIdx) => {
                   const isThisOpt = selectedOption === opt;
                   let btnStyle = 'bg-white hover:bg-slate-50 border-slate-200 text-slate-800 shadow-2xs hover:border-amber-300';
 
