@@ -40,6 +40,7 @@ export const SandboxSceneModal: React.FC<SandboxSceneModalProps> = ({
   const [revealedIds, setRevealedIds] = useState<string[]>([]);
   const [tappedItemIds, setTappedItemIds] = useState<string[]>([]);
   const [satisfiedRequestIds, setSatisfiedRequestIds] = useState<string[]>([]);
+  const [consumedItemIds, setConsumedItemIds] = useState<string[]>([]);
   const [completedQuestIds, setCompletedQuestIds] = useState<string[]>([]);
   const [labelItem, setLabelItem] = useState<SceneItem | null>(null);
   const [customerMessage, setCustomerMessage] = useState<{ characterId: string; text: string } | null>(null);
@@ -64,6 +65,7 @@ export const SandboxSceneModal: React.FC<SandboxSceneModalProps> = ({
     setCompletedQuestIds(profile.nederlandsWereldProgress?.completedQuests || []);
     setTappedItemIds([]);
     setSatisfiedRequestIds([]);
+    setConsumedItemIds([]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, building.id]);
 
@@ -117,6 +119,7 @@ export const SandboxSceneModal: React.FC<SandboxSceneModalProps> = ({
     setRevealedIds([]);
     setTappedItemIds([]);
     setSatisfiedRequestIds([]);
+    setConsumedItemIds([]);
     setCompletedQuestIds(prev => prev.filter(id => !building.quests.some(q => q.id === id)));
     setDragResetTick({});
     setJustCompletedQuest(null);
@@ -204,6 +207,15 @@ export const SandboxSceneModal: React.FC<SandboxSceneModalProps> = ({
 
     const nextSatisfied = [...satisfiedRequestIds, requestId];
     setSatisfiedRequestIds(nextSatisfied);
+    // The served item is handed to the customer -- it must stop rendering
+    // (including in whatever zone it was previously placed in), or it looks
+    // like giving it away silently failed and left it sitting in the basket.
+    setConsumedItemIds(prev => [...prev, itemId]);
+    if (placedItemIds.includes(itemId)) {
+      const nextPlaced = placedItemIds.filter(id => id !== itemId);
+      setPlacedItemIds(nextPlaced);
+      persistBuildingState(nextPlaced, completedQuestIds);
+    }
     setCustomerMessage({ characterId, text: request.thankYouNl });
     speech.speak(request.thankYouNl, { rate: 0.9 });
     sound.playCorrect();
@@ -305,6 +317,7 @@ export const SandboxSceneModal: React.FC<SandboxSceneModalProps> = ({
 
   const visibleItems = building.items.filter(item => {
     if (transformedAwayIds.includes(item.id)) return false;
+    if (consumedItemIds.includes(item.id)) return false;
     if (item.hiddenUntilTransformed && !revealedIds.includes(item.id)) return false;
     return true;
   });
@@ -436,9 +449,21 @@ export const SandboxSceneModal: React.FC<SandboxSceneModalProps> = ({
             const zoneForPlaced = item.transformsInto
               ? undefined
               : building.dropZones.find(z => z.acceptsItemIds.includes(item.id) && placedItemIds.includes(item.id));
-            const renderPos = zoneForPlaced
-              ? { x: zoneForPlaced.position.x + zoneForPlaced.position.width / 2, y: zoneForPlaced.position.y + zoneForPlaced.position.height / 2 }
-              : item.position;
+            // Multiple items can end up placed in the same zone (e.g. bread
+            // AND cookie in the basket) -- rendering them all dead-center
+            // stacked them exactly on top of each other, so only the topmost
+            // one could actually be seen or grabbed again. Fan them out
+            // horizontally by their order among items sharing that zone.
+            let renderPos = zoneForPlaced ? { x: zoneForPlaced.position.x + zoneForPlaced.position.width / 2, y: zoneForPlaced.position.y + zoneForPlaced.position.height / 2 } : item.position;
+            if (zoneForPlaced) {
+              const siblings = building.items.filter(
+                i => placedItemIds.includes(i.id) && building.dropZones.find(z => z.id === zoneForPlaced!.id && z.acceptsItemIds.includes(i.id))
+              );
+              const indexInZone = siblings.findIndex(i => i.id === item.id);
+              const spacing = Math.min(6, zoneForPlaced.position.width / Math.max(siblings.length, 1));
+              const offsetX = (indexInZone - (siblings.length - 1) / 2) * spacing;
+              renderPos = { x: renderPos.x + offsetX, y: renderPos.y };
+            }
 
             return (
               <motion.div
