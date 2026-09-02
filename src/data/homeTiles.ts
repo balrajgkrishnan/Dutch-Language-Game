@@ -30,7 +30,8 @@ const TILE_THEMES = {
   indigo: 'from-indigo-500 to-purple-700 border-indigo-300/60 hover:border-indigo-200',
   yellow: 'from-yellow-500 to-amber-600 border-yellow-300/60 hover:border-yellow-200',
   slate: 'from-blue-700 to-slate-800 border-blue-300/50 hover:border-blue-200',
-  lime: 'from-lime-500 to-green-700 border-lime-300/60 hover:border-lime-200'
+  lime: 'from-lime-500 to-green-700 border-lime-300/60 hover:border-lime-200',
+  teal: 'from-teal-500 to-emerald-800 border-teal-300/60 hover:border-teal-200'
 } as const;
 
 export interface HomeTileHandlers {
@@ -42,6 +43,7 @@ export interface HomeTileHandlers {
   openBossArena: () => void;
   openTamagotchi: () => void;
   openTestSelector: () => void;
+  openNederlandsWereld: () => void;
   openExpedition: () => void;
   goToSanctuary: () => void;
   goToMap: () => void;
@@ -122,6 +124,12 @@ export function buildHomeTiles(handlers: HomeTileHandlers, ctx: HomeTileContext)
       title: 'Wereldkaart',
       subtitle: 'Kies uit 7 werelddelen om te verkennen!',
       theme: TILE_THEMES.sky, onClick: handlers.goToMap
+    },
+    {
+      id: 'nederlands-wereld', group: 'explore', size: 'standard', emoji: '🏘️',
+      title: 'Nederlands Wereld',
+      subtitle: 'Bezoek de bakkerij, sleep, tik en ontdek nieuwe woorden!',
+      theme: TILE_THEMES.teal, onClick: handlers.openNederlandsWereld
     },
     // Progress
     {

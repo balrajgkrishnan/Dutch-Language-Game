@@ -16,6 +16,7 @@ import { RidheyaSpellingFactoryModal } from './components/RidheyaSpellingFactory
 import { TestModeSelectorModal } from './components/TestModeSelectorModal';
 import { SpellingTestModal } from './components/SpellingTestModal';
 import { SterkeWerkwoordenTestModal } from './components/SterkeWerkwoordenTestModal';
+import { NederlandsWereldHubModal } from './components/NederlandsWereldHubModal';
 import { TocaWardrobeStudioModal } from './components/TocaWardrobeStudioModal';
 import { TamagotchiPetRoomModal } from './components/TamagotchiPetRoomModal';
 import { VersionFlashModal } from './components/VersionFlashModal';
@@ -98,6 +99,7 @@ export default function App() {
   const [showTestSelectorModal, setShowTestSelectorModal] = useState(false);
   const [showSpellingTestModal, setShowSpellingTestModal] = useState(false);
   const [showWerkwoordenTestModal, setShowWerkwoordenTestModal] = useState(false);
+  const [showNederlandsWereldModal, setShowNederlandsWereldModal] = useState(false);
   const [showVoiceModal, setShowVoiceModal] = useState(false);
   const [showDictionaryModal, setShowDictionaryModal] = useState(false);
   const [showArcadeModal, setShowArcadeModal] = useState(false);
@@ -571,6 +573,7 @@ export default function App() {
       openBossArena: () => setShowBossArenaModal(true),
       openTamagotchi: () => setShowTamagotchiModal(true),
       openTestSelector: () => setShowTestSelectorModal(true),
+      openNederlandsWereld: () => setShowNederlandsWereldModal(true),
       openExpedition: () => setIsExpeditionActive(true),
       goToSanctuary: () => setActiveTab('sanctuary'),
       goToMap: () => setActiveTab('map'),
@@ -1017,6 +1020,14 @@ export default function App() {
         isOpen={showWerkwoordenTestModal}
         profile={profile}
         onClose={() => setShowWerkwoordenTestModal(false)}
+        onUpdateProfile={(updater) => setProfile(updater)}
+      />
+
+      {/* Nederlands Wereld: open-world sandbox pilot (Bakery) */}
+      <NederlandsWereldHubModal
+        isOpen={showNederlandsWereldModal}
+        profile={profile}
+        onClose={() => setShowNederlandsWereldModal(false)}
         onUpdateProfile={(updater) => setProfile(updater)}
       />
 

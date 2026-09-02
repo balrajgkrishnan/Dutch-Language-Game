@@ -306,6 +306,81 @@ export interface ActivityLogItem {
   spokenText?: string;
 }
 
+// --- Nederlands Wereld (open-world sandbox pilot: Bakery) ---
+
+export interface DutchVocabWord {
+  word: string;
+  article?: 'de' | 'het';
+  english: string;
+  audioText?: string;
+}
+
+export interface SceneItem {
+  id: string;
+  emoji: string;
+  imageUrl?: string;
+  vocab: DutchVocabWord;
+  position: { x: number; y: number };
+  draggable: boolean;
+  dropZoneId?: string;
+  transformsInto?: string;
+  hiddenUntilTransformed?: boolean; // e.g. 'brood' stays hidden until 'deeg' transforms into it
+}
+
+export interface DropZone {
+  id: string;
+  label: string;
+  position: { x: number; y: number; width: number; height: number };
+  acceptsItemIds: string[];
+}
+
+export interface CharacterRequest {
+  id: string;
+  speechNl: string;
+  speechEn: string;
+  requiredItemIds: string[];
+  thankYouNl: string;
+  rewardCoins: number;
+}
+
+export interface SceneCharacter {
+  id: string;
+  animalId: string;
+  requests: CharacterRequest[];
+}
+
+export type QuestType = 'collect' | 'place' | 'serve' | 'discover';
+
+export interface MiniQuest {
+  id: string;
+  type: QuestType;
+  promptNl: string;
+  promptEn: string;
+  requiredItemIds: string[];
+  rewardCoins: number;
+  rewardStars: number;
+}
+
+export interface Building {
+  id: string;
+  name: string;
+  emoji: string;
+  backgroundImageUrl?: string;
+  unlocked: boolean;
+  unlockHint?: string;
+  items: SceneItem[];
+  dropZones: DropZone[];
+  characters: SceneCharacter[];
+  quests: MiniQuest[];
+  ambientPhrases: { nl: string; en: string }[];
+}
+
+export interface NederlandsWereldProgress {
+  unlockedBuildings: string[];
+  completedQuests: string[];
+  buildingStates: Record<string, { placedItems: string[]; transformedItems?: string[] }>;
+}
+
 export interface TestResult {
   id: string;
   gameType: 'spelling' | 'werkwoorden';
@@ -354,6 +429,8 @@ export interface PlayerProfile {
   activityLogs?: ActivityLogItem[];
   lastActiveTimestamp?: number;
   testAttempts?: TestResult[];
+  nederlandsWereldProgress?: NederlandsWereldProgress;
+  nederlandsWereldWordStats?: Record<string, { heard: number }>;
 
   // New Adaptive & Child-Centric Features
   mastery: SkillMastery;
