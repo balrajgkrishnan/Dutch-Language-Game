@@ -361,6 +361,21 @@ export interface MiniQuest {
   rewardStars: number;
 }
 
+export interface FurniturePiece {
+  id: string;
+  vocab: DutchVocabWord;
+  emoji: string;
+  imageUrl?: string;
+  essential?: boolean; // counts toward the minimum needed to open for customers
+}
+
+export interface PlacedFurniture {
+  instanceId: string; // unique per placed copy -- the same piece can be placed more than once
+  furnitureId: string;
+  x: number; // percent position within the scene, freely chosen by the player
+  y: number;
+}
+
 export interface Building {
   id: string;
   name: string;
@@ -373,12 +388,19 @@ export interface Building {
   characters: SceneCharacter[];
   quests: MiniQuest[];
   ambientPhrases: { nl: string; en: string }[];
+  furniturePalette?: FurniturePiece[];
+  minEssentialToOpen?: number; // how many essential furniture pieces must be placed before "open for customers" unlocks
 }
 
 export interface NederlandsWereldProgress {
   unlockedBuildings: string[];
   completedQuests: string[];
-  buildingStates: Record<string, { placedItems: string[]; transformedItems?: string[] }>;
+  buildingStates: Record<string, {
+    placedItems: string[];
+    transformedItems?: string[];
+    placedFurniture?: PlacedFurniture[];
+    isOpenForCustomers?: boolean;
+  }>;
 }
 
 export interface TestResult {

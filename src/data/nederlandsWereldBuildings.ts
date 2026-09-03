@@ -217,6 +217,66 @@ const BAKERY: Building = {
     { nl: 'Vers brood, net uit de oven!', en: 'Fresh bread, straight from the oven!' },
     { nl: 'Wat wil je vandaag kopen?', en: 'What would you like to buy today?' },
     { nl: 'Mmm, ruik je die lekkere geur?', en: 'Mmm, do you smell that lovely scent?' }
+  ],
+  minEssentialToOpen: 3,
+  furniturePalette: [
+    {
+      id: 'furn-tafel',
+      vocab: { word: 'tafel', article: 'de', english: 'table' },
+      emoji: '🪑',
+      imageUrl: '/nederlands-wereld/furniture/tafel.png',
+      essential: true
+    },
+    {
+      id: 'furn-stoel',
+      vocab: { word: 'stoel', article: 'de', english: 'chair' },
+      emoji: '🪑',
+      imageUrl: '/nederlands-wereld/furniture/stoel.png',
+      essential: true
+    },
+    {
+      id: 'furn-kassa',
+      vocab: { word: 'kassa', article: 'de', english: 'cash register' },
+      emoji: '🧾',
+      imageUrl: '/nederlands-wereld/furniture/kassa.png',
+      essential: true
+    },
+    {
+      id: 'furn-plant',
+      vocab: { word: 'plant', article: 'de', english: 'plant' },
+      emoji: '🪴',
+      imageUrl: '/nederlands-wereld/furniture/plant.png'
+    },
+    {
+      id: 'furn-klok',
+      vocab: { word: 'klok', article: 'de', english: 'clock' },
+      emoji: '🕐',
+      imageUrl: '/nederlands-wereld/furniture/klok.png'
+    },
+    {
+      id: 'furn-lamp',
+      vocab: { word: 'lamp', article: 'de', english: 'lamp' },
+      emoji: '💡',
+      imageUrl: '/nederlands-wereld/furniture/lamp.png'
+    },
+    {
+      id: 'furn-schilderij',
+      vocab: { word: 'schilderij', article: 'het', english: 'painting' },
+      emoji: '🖼️',
+      imageUrl: '/nederlands-wereld/furniture/schilderij.png'
+    },
+    {
+      id: 'furn-vaas',
+      vocab: { word: 'vaas', article: 'de', english: 'vase' },
+      emoji: '🏺',
+      imageUrl: '/nederlands-wereld/furniture/vaas.png'
+    },
+    {
+      id: 'furn-kleed',
+      vocab: { word: 'kleed', article: 'het', english: 'rug' },
+      emoji: '🟫',
+      imageUrl: '/nederlands-wereld/furniture/kleed.png'
+    }
   ]
 };
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, PanInfo } from 'motion/react';
 import { X, Volume2, Maximize2, Minimize2, CheckCircle2, RotateCcw } from 'lucide-react';
-import { Building, PlayerProfile, SceneItem, MiniQuest } from '../types';
+import { Building, PlayerProfile, SceneItem, MiniQuest, PlacedFurniture } from '../types';
 import { AnimalAvatar } from './AnimalAvatar';
 import { ALL_BIOME_ANIMALS } from '../data/biomeAnimals';
 import { sound } from '../services/soundService';
@@ -45,12 +45,18 @@ export const SandboxSceneModal: React.FC<SandboxSceneModalProps> = ({
   const [labelItem, setLabelItem] = useState<SceneItem | null>(null);
   const [customerMessage, setCustomerMessage] = useState<{ characterId: string; text: string } | null>(null);
   const [justCompletedQuest, setJustCompletedQuest] = useState<MiniQuest | null>(null);
+  const [furnitureLabelId, setFurnitureLabelId] = useState<string | null>(null);
   // Framer Motion tracks drag position as an internal transform separate
   // from React's render, which never gets cleared just because `left`/`top`
   // change -- bumping a per-item key forces a clean remount after every
   // drag gesture (success or fail) so the visual position always matches
   // the logical one instead of drifting from leftover drag offset.
   const [dragResetTick, setDragResetTick] = useState<Record<string, number>>({});
+
+  // Design phase: furniture placement, before customers arrive.
+  const [placedFurniture, setPlacedFurniture] = useState<PlacedFurniture[]>([]);
+  const [isOpenForCustomers, setIsOpenForCustomers] = useState(true);
+  const [furnitureDragResetTick, setFurnitureDragResetTick] = useState<Record<string, number>>({});
 
   useEffect(() => {
     if (!isOpen) return;
@@ -66,6 +72,9 @@ export const SandboxSceneModal: React.FC<SandboxSceneModalProps> = ({
     setTappedItemIds([]);
     setSatisfiedRequestIds([]);
     setConsumedItemIds([]);
+    setPlacedFurniture(state?.placedFurniture || []);
+    // Buildings with no furniture palette skip the design phase entirely.
+    setIsOpenForCustomers(!building.furniturePalette || (state?.isOpenForCustomers ?? false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, building.id]);
 
@@ -80,14 +89,21 @@ export const SandboxSceneModal: React.FC<SandboxSceneModalProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, building.id]);
 
-  if (!isOpen) return null;
-
   // nextPlaced/nextTransformed are optional and, when omitted, preserve
   // whatever is already persisted -- callers that only need to update
   // completedQuests (e.g. completeQuest) must NOT pass a stale copy of
   // placedItemIds from their own render closure, or they'll clobber a value
   // a sibling call just wrote moments earlier in the same event handler.
-  const persistBuildingState = (nextPlaced?: string[], nextCompletedQuests?: string[], nextTransformed?: string[]) => {
+  // (Defined above the `if (!isOpen) return null` guard below because the
+  // furniture-persistence effect further down needs to call it, and hooks
+  // can't follow a conditional return.)
+  const persistBuildingState = (
+    nextPlaced?: string[],
+    nextCompletedQuests?: string[],
+    nextTransformed?: string[],
+    nextFurniture?: PlacedFurniture[],
+    nextIsOpen?: boolean
+  ) => {
     onUpdateProfile(prev => {
       const prevProgress = prev.nederlandsWereldProgress || {
         unlockedBuildings: ['bakery'],
@@ -104,13 +120,31 @@ export const SandboxSceneModal: React.FC<SandboxSceneModalProps> = ({
             ...prevProgress.buildingStates,
             [building.id]: {
               placedItems: nextPlaced ?? prevBuildingState?.placedItems ?? [],
-              transformedItems: nextTransformed ?? prevBuildingState?.transformedItems ?? []
+              transformedItems: nextTransformed ?? prevBuildingState?.transformedItems ?? [],
+              placedFurniture: nextFurniture ?? prevBuildingState?.placedFurniture ?? [],
+              isOpenForCustomers: nextIsOpen ?? prevBuildingState?.isOpenForCustomers ?? false
             }
           }
         }
       };
     });
   };
+
+  // Persists placedFurniture whenever it changes, rather than from inside
+  // the drag/remove handlers directly -- calling onUpdateProfile (parent
+  // state) synchronously from inside setPlacedFurniture's updater callback
+  // (needed there to read the true latest `prev` and avoid a stale-closure
+  // race across rapid consecutive drags) trips React's "Cannot update a
+  // component while rendering a different component" warning. An effect
+  // keyed on the value itself sidesteps that while still always persisting
+  // the latest state.
+  useEffect(() => {
+    if (!isOpen) return;
+    persistBuildingState(undefined, undefined, undefined, placedFurniture);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen, placedFurniture]);
+
+  if (!isOpen) return null;
 
   const handleResetBuilding = () => {
     speech.stop();
@@ -122,9 +156,12 @@ export const SandboxSceneModal: React.FC<SandboxSceneModalProps> = ({
     setConsumedItemIds([]);
     setCompletedQuestIds(prev => prev.filter(id => !building.quests.some(q => q.id === id)));
     setDragResetTick({});
+    setFurnitureDragResetTick({});
     setJustCompletedQuest(null);
     setCustomerMessage(null);
     setLabelItem(null);
+    setPlacedFurniture([]);
+    setIsOpenForCustomers(!building.furniturePalette);
     sound.playPop();
 
     const buildingQuestIds = building.quests.map(q => q.id);
@@ -138,11 +175,76 @@ export const SandboxSceneModal: React.FC<SandboxSceneModalProps> = ({
           completedQuests: prevProgress.completedQuests.filter(id => !buildingQuestIds.includes(id)),
           buildingStates: {
             ...prevProgress.buildingStates,
-            [building.id]: { placedItems: [], transformedItems: [] }
+            [building.id]: { placedItems: [], transformedItems: [], placedFurniture: [], isOpenForCustomers: false }
           }
         }
       };
     });
+  };
+
+  const essentialPlacedCount = placedFurniture.filter(pf =>
+    building.furniturePalette?.find(f => f.id === pf.furnitureId)?.essential
+  ).length;
+  const minEssentialToOpen = building.minEssentialToOpen ?? 3;
+
+  // All three handlers below update placedFurniture via the updater form,
+  // reading `prev` fresh rather than the outer `placedFurniture` render
+  // closure -- two drags fired back-to-back (plausible: a kid placing
+  // several furniture pieces quickly) could otherwise both read the same
+  // stale closure before either update commits, so the second drag would
+  // silently overwrite the first instead of appending to it. Persistence
+  // itself happens in the useEffect above, not here, to avoid updating the
+  // parent profile from inside this component's own setState updater.
+  const handleFurniturePaletteDragEnd = (piece: NonNullable<Building['furniturePalette']>[number], info: PanInfo) => {
+    setFurnitureDragResetTick(prev => ({ ...prev, [`palette-${piece.id}`]: (prev[`palette-${piece.id}`] || 0) + 1 }));
+    const rect = sceneRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    if (
+      info.point.x < rect.left || info.point.x > rect.right ||
+      info.point.y < rect.top || info.point.y > rect.bottom
+    ) {
+      return; // dropped outside the scene -- tile just springs back to the palette
+    }
+    const xPercent = ((info.point.x - rect.left) / rect.width) * 100;
+    const yPercent = ((info.point.y - rect.top) / rect.height) * 100;
+    const instance: PlacedFurniture = {
+      instanceId: `${piece.id}-${Date.now()}`,
+      furnitureId: piece.id,
+      x: Math.max(5, Math.min(95, xPercent)),
+      y: Math.max(5, Math.min(95, yPercent))
+    };
+    setPlacedFurniture(prev => [...prev, instance]);
+    sound.playPop();
+  };
+
+  const handlePlacedFurnitureDragEnd = (instanceId: string, info: PanInfo) => {
+    setFurnitureDragResetTick(prev => ({ ...prev, [instanceId]: (prev[instanceId] || 0) + 1 }));
+    const rect = sceneRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    const xPercent = Math.max(5, Math.min(95, ((info.point.x - rect.left) / rect.width) * 100));
+    const yPercent = Math.max(5, Math.min(95, ((info.point.y - rect.top) / rect.height) * 100));
+    setPlacedFurniture(prev => prev.map(pf => (pf.instanceId === instanceId ? { ...pf, x: xPercent, y: yPercent } : pf)));
+  };
+
+  const handleRemoveFurniture = (instanceId: string) => {
+    sound.playPop();
+    setPlacedFurniture(prev => prev.filter(pf => pf.instanceId !== instanceId));
+  };
+
+  const handleOpenForCustomers = () => {
+    setIsOpenForCustomers(true);
+    persistBuildingState(undefined, undefined, undefined, undefined, true);
+    sound.playVictory();
+    confetti({ particleCount: 60, spread: 80 });
+    speech.speak('De bakkerij is nu open voor klanten!', { rate: 0.9 });
+  };
+
+  const handleTapFurniture = (piece: NonNullable<Building['furniturePalette']>[number]) => {
+    sound.playPop();
+    speech.speak(piece.vocab.audioText || piece.vocab.word, { rate: 0.85 });
+    recordWordHeard(piece.vocab.word);
+    setFurnitureLabelId(piece.id);
+    setTimeout(() => setFurnitureLabelId(prev => (prev === piece.id ? null : prev)), 2500);
   };
 
   const recordWordHeard = (word: string) => {
@@ -371,7 +473,10 @@ export const SandboxSceneModal: React.FC<SandboxSceneModalProps> = ({
 
         {/* Quest checklist strip -- full text, no truncation (was cutting
             objectives off mid-word and making them unreadable); wraps to
-            two lines instead of scrolling off-screen. */}
+            two lines instead of scrolling off-screen. Hidden during the
+            design phase: every quest here is food/customer related and
+            makes no sense before the bakery has opened. */}
+        {isOpenForCustomers && (
         <div className="bg-amber-50/80 border-b border-amber-200/70 px-4 py-2 flex flex-wrap items-center gap-2">
           {building.quests.map(q => {
             const done = completedQuestIds.includes(q.id);
@@ -388,6 +493,58 @@ export const SandboxSceneModal: React.FC<SandboxSceneModalProps> = ({
             );
           })}
         </div>
+        )}
+
+        {/* Design phase: furniture palette + progress + open button */}
+        {building.furniturePalette && !isOpenForCustomers && (
+          <div className="bg-sky-50 border-b border-sky-200 px-4 py-3 flex flex-col gap-2">
+            <div className="flex items-center justify-between gap-3 flex-wrap">
+              <p className="text-xs font-black text-sky-800 uppercase">
+                Richt de bakkerij in! Sleep meubels naar binnen.
+              </p>
+              <div className="flex items-center gap-3">
+                <span className="text-[11px] font-bold text-sky-700">
+                  Geplaatst: {essentialPlacedCount}/{minEssentialToOpen} essentiële items
+                </span>
+                <button
+                  onClick={handleOpenForCustomers}
+                  disabled={essentialPlacedCount < minEssentialToOpen}
+                  className="text-xs font-black uppercase px-3 py-1.5 rounded-full bg-emerald-500 text-white disabled:bg-slate-300 disabled:cursor-not-allowed hover:bg-emerald-600 transition-all"
+                >
+                  Open de Bakkerij!
+                </button>
+              </div>
+            </div>
+            <div className="flex flex-wrap gap-3">
+              {building.furniturePalette.map(piece => (
+                <motion.div
+                  key={`palette-${piece.id}-${furnitureDragResetTick[`palette-${piece.id}`] || 0}`}
+                  drag
+                  dragSnapToOrigin
+                  dragMomentum={false}
+                  onDragEnd={(_e, info) => handleFurniturePaletteDragEnd(piece, info)}
+                  whileHover={{ scale: 1.08 }}
+                  whileTap={{ scale: 0.94 }}
+                  className="flex flex-col items-center gap-1 cursor-grab active:cursor-grabbing bg-white rounded-xl border border-sky-200 shadow-sm px-2 py-1.5"
+                  style={{ touchAction: 'none' }}
+                >
+                  {piece.imageUrl ? (
+                    <img
+                      src={piece.imageUrl}
+                      alt={piece.vocab.word}
+                      draggable={false}
+                      onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                      className="w-10 h-10 rounded-lg object-cover select-none pointer-events-none"
+                    />
+                  ) : (
+                    <span className="text-2xl select-none pointer-events-none">{piece.emoji}</span>
+                  )}
+                  <span className="text-[9px] font-bold text-sky-700 select-none pointer-events-none">{piece.vocab.word}</span>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Scene */}
         <div
@@ -399,8 +556,10 @@ export const SandboxSceneModal: React.FC<SandboxSceneModalProps> = ({
               : undefined
           }
         >
-          {/* Drop zones */}
-          {building.dropZones.map(zone => (
+          {/* Drop zones, characters and food items are the "open for
+              customers" gameplay -- kept out of the design phase so kids
+              furnish the room first, then customers arrive. */}
+          {isOpenForCustomers && building.dropZones.map(zone => (
             <div
               key={zone.id}
               data-zone-id={zone.id}
@@ -416,8 +575,65 @@ export const SandboxSceneModal: React.FC<SandboxSceneModalProps> = ({
             </div>
           ))}
 
+          {/* Placed furniture -- decor layer. Draggable/removable only during
+              the design phase; once open for customers it's a static
+              background layer and existing food-prep/customer mechanics
+              render on top of it unchanged (no z-index set here, so items'
+              explicit zIndex:10 always wins). */}
+          {placedFurniture.map(pf => {
+            const piece = building.furniturePalette?.find(p => p.id === pf.furnitureId);
+            if (!piece) return null;
+            return (
+              <motion.div
+                key={`${pf.instanceId}-${furnitureDragResetTick[pf.instanceId] || 0}`}
+                drag={!isOpenForCustomers}
+                dragConstraints={sceneRef}
+                dragMomentum={false}
+                onDragEnd={(_e, info) => handlePlacedFurnitureDragEnd(pf.instanceId, info)}
+                onTap={() => handleTapFurniture(piece)}
+                whileHover={!isOpenForCustomers ? { scale: 1.06 } : undefined}
+                className={`absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center ${!isOpenForCustomers ? 'cursor-grab active:cursor-grabbing' : 'cursor-pointer'}`}
+                style={{ left: `${pf.x}%`, top: `${pf.y}%` }}
+              >
+                {!isOpenForCustomers && (
+                  <button
+                    onClick={(e) => { e.stopPropagation(); handleRemoveFurniture(pf.instanceId); }}
+                    className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-rose-500 text-white text-[11px] font-black flex items-center justify-center shadow z-10"
+                    title="Verwijder"
+                  >
+                    ×
+                  </button>
+                )}
+                {piece.imageUrl ? (
+                  <img
+                    src={piece.imageUrl}
+                    alt={piece.vocab.word}
+                    draggable={false}
+                    onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                    className="w-14 h-14 rounded-xl object-cover shadow select-none pointer-events-none"
+                  />
+                ) : (
+                  <span className="text-3xl select-none drop-shadow-md">{piece.emoji}</span>
+                )}
+                <AnimatePresence>
+                  {furnitureLabelId === piece.id && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 4 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0 }}
+                      className="mt-1 bg-slate-900 text-white text-[11px] font-bold px-2 py-1 rounded-lg whitespace-nowrap pointer-events-none"
+                    >
+                      {piece.vocab.article ? `${piece.vocab.article} ${piece.vocab.word}` : piece.vocab.word}
+                      <span className="text-slate-300"> · {piece.vocab.english}</span>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+            );
+          })}
+
           {/* Characters */}
-          {building.characters.map((character, index) => {
+          {isOpenForCustomers && building.characters.map((character, index) => {
             const animal = ALL_BIOME_ANIMALS.find(a => a.id === character.animalId);
             const slot = characterSlot(index, building.characters.length);
             const openRequest = character.requests.find(r => !satisfiedRequestIds.includes(r.id));
@@ -445,7 +661,7 @@ export const SandboxSceneModal: React.FC<SandboxSceneModalProps> = ({
           })}
 
           {/* Items */}
-          {visibleItems.map(item => {
+          {isOpenForCustomers && visibleItems.map(item => {
             const zoneForPlaced = item.transformsInto
               ? undefined
               : building.dropZones.find(z => z.acceptsItemIds.includes(item.id) && placedItemIds.includes(item.id));
