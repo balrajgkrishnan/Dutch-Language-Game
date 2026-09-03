@@ -39,14 +39,14 @@ const BUBBLE_MISSIONS = [
     title: '⚡ Dubbelzetters Klopjacht',
     targetRule: 'dubbelzetter',
     description: 'Pop alle woorden met een korte klank & dubbele medeklinker (-mm-, -ll-, -kk-, -nn-)!',
-    correctWords: ['klimmen', 'savanne', 'vallen', 'kikkers', 'ballonnen', 'stoppen', 'kuddes', 'krokodillen', 'bliksem'],
-    distractorWords: ['bomen', 'slapen', 'jagers', 'vogels', 'kamelen', 'apen', 'raketten', 'hond']
+    correctWords: ['klimmen', 'savanne', 'vallen', 'kikkers', 'ballonnen', 'stoppen', 'kuddes', 'krokodillen', 'raketten'],
+    distractorWords: ['bomen', 'slapen', 'jagers', 'vogels', 'kamelen', 'apen', 'bliksem', 'hond']
   },
   {
     title: '🌴 Klinkerdief Jacht',
     targetRule: 'klinkerdief',
     description: 'Pop alle woorden met een lange klank die een klinker verliest (bomen, slapen, apen)!',
-    correctWords: ['bomen', 'slapen', 'jagers', 'vogels', 'kamelen', 'raketten', 'apen', 'olifanten'],
+    correctWords: ['bomen', 'slapen', 'jagers', 'vogels', 'kamelen', 'apen', 'olifanten'],
     distractorWords: ['klimmen', 'kikkers', 'vallen', 'stoppen', 'nacht', 'licht', 'schildpad']
   },
   {
@@ -67,7 +67,7 @@ const BUBBLE_MISSIONS = [
     title: '🦊 Weetwoorden (ij/ei & au/ou)',
     targetRule: 'weetwoord',
     description: 'Pop alle weetwoorden met ij, ei, au of ou!',
-    correctWords: ['woestijn', 'aardbei', 'kabeljauw', 'kabouter', 'bliksemflits', 'ijs', 'trein', 'saus', 'hout'],
+    correctWords: ['woestijn', 'aardbei', 'kabeljauw', 'kabouter', 'ijs', 'trein', 'saus', 'hout'],
     distractorWords: ['bomen', 'klimmen', 'savanne', 'vallen', 'kikkers', 'schildpad']
   },
   {
@@ -203,7 +203,7 @@ const CITO_TURBO_RAW_QUESTIONS: CitoTurboQuestionItem[] = [
   },
   {
     id: 'ct-verwijs-sleutel-15',
-    sentence: "Hemali vond een antieke sleutel. Ze opende de kist **waarmee** het mysterie werd opgelost. Wat is 'waarmee'?",
+    sentence: "Hemali vond een antieke sleutel **waarmee** het mysterie werd opgelost. Wat is 'waarmee'?",
     options: ["met de sleutel", "met het mysterie", "met de kist", "met Hemali"],
     correctIndex: 0,
     rule: "Verwijswoord: 'waarmee' verwijst naar 'met de sleutel'.",

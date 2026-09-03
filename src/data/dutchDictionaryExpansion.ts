@@ -38,7 +38,7 @@ const NOUNS: Record<string, DictionaryEntry> = {
   'woorden': { word: 'woorden', wordType: 'Zelfstandig naamwoord', meaningNl: 'Meervoud.', translationEn: 'Words', syllables: ['woor', 'den'], exampleNl: 'Lees alle woorden.', level: 'Groep 3-4 (AVI M3-E4)', compound: 'woord + en' },
   'letters': { word: 'letters', wordType: 'Zelfstandig naamwoord', meaningNl: 'Alfabettekens.', translationEn: 'Letters', syllables: ['let', 'ters'], exampleNl: 'Zoek de juiste letters.', level: 'Groep 3-4 (AVI M3-E4)', compound: 'letter + s' },
   'spelling': { word: 'spelling', wordType: 'Zelfstandig naamwoord', meaningNl: 'Schrijfwijze.', translationEn: 'Spelling', syllables: ['spel', 'ling'], exampleNl: 'De spelling is moeilijk.', level: 'Groep 4-5 (AVI E4-M5)', compound: 'spel + ling' },
-  'verhaal': { word: 'verhaal', wordType: 'Zelfstandig naamwoord', meaningNl: 'Beschrijving.', translationEn: 'Story', syllables: ['ver', 'haal'], exampleNl: 'Lees het verhaal.', level: 'Groep 3-4 (AVI M3-E4)', compound: 'ver + haal' },
+  'verhaal': { word: 'verhaal', wordType: 'Zelfstandig naamwoord', meaningNl: 'Een verteld of geschreven avontuur, echt of verzonnen.', translationEn: 'Story', syllables: ['ver', 'haal'], exampleNl: 'Lees het verhaal.', level: 'Groep 3-4 (AVI M3-E4)', compound: 'ver + haal' },
   'verhalen': { word: 'verhalen', wordType: 'Zelfstandig naamwoord', meaningNl: 'Meervoud.', translationEn: 'Stories', syllables: ['ver', 'ha', 'len'], exampleNl: 'Spannende verhalen.', level: 'Groep 3-4 (AVI M3-E4)', compound: 'verhaal + en' },
   'vraag': { word: 'vraag', wordType: 'Zelfstandig naamwoord', meaningNl: 'Iets wat je wilt weten.', translationEn: 'Question', syllables: ['vraag'], exampleNl: 'Heb je een vraag?', level: 'Groep 3-4 (AVI M3-E4)' },
   'vragen': { word: 'vragen', wordType: 'Zelfstandig naamwoord', meaningNl: 'Meervoud.', translationEn: 'Questions', syllables: ['vra', 'gen'], exampleNl: 'Beantwoord alle vragen.', level: 'Groep 3-4 (AVI M3-E4)', compound: 'vraag + en' },
@@ -106,7 +106,9 @@ const HIGH_FREQ_WORDS: Record<string, DictionaryEntry> = {
   // Common verbs
   'zijn': { word: 'zijn', wordType: 'Werkwoord', meaningNl: 'Bestaan.', translationEn: 'To be', syllables: ['zijn'], exampleNl: 'Wij zijn blij.', level: 'Groep 3-4 (AVI M3-E4)' },
   'komen': { word: 'komen', wordType: 'Werkwoord', meaningNl: 'Naar toe gaan.', translationEn: 'To come', syllables: ['ko', 'men'], exampleNl: 'Kom je mee?', level: 'Groep 3-4 (AVI M3-E4)' },
-  'helpen': { word: 'helpen', wordType: 'Werkwoord', meaningNl: 'Assisteren.', translationEn: 'To help', syllables: ['hel', 'pen'], exampleNl: 'Kan je me helpen?', level: 'Groep 3-4 (AVI M3-E4)' },
+  // 'helpen' intentionally omitted here -- dutchDictionaryData.ts already has a
+  // richer, story-grounded entry for it, and this file is spread on top of
+  // that one, so a duplicate key here would silently shadow the better entry.
   'moet': { word: 'moet', wordType: 'Werkwoord', meaningNl: 'Verplichting.', translationEn: 'Must', syllables: ['moet'], exampleNl: 'Je moet luisteren.', level: 'Groep 3-4 (AVI M3-E4)' },
   'moeten': { word: 'moeten', wordType: 'Werkwoord', meaningNl: 'Verplichting (meervoud).', translationEn: 'Must (plural)', syllables: ['moe', 'ten'], exampleNl: 'Wij moeten oefenen.', level: 'Groep 3-4 (AVI M3-E4)' },
   
@@ -117,12 +119,12 @@ const HIGH_FREQ_WORDS: Record<string, DictionaryEntry> = {
   
   // Common nouns
   'naam': { word: 'naam', wordType: 'Zelfstandig naamwoord', meaningNl: 'Iemands aanduiding.', translationEn: 'Name', syllables: ['naam'], exampleNl: 'Wat is jouw naam?', level: 'Groep 3-4 (AVI M3-E4)' },
-  'iets': { word: 'iets', wordType: 'Voorzetsel', meaningNl: 'Onbepaald.', translationEn: 'Something', syllables: ['iets'], exampleNl: 'Ik zie iets.', level: 'Groep 3-4 (AVI M3-E4)' },
-  'niets': { word: 'niets', wordType: 'Voorzetsel', meaningNl: 'Ontkenning.', translationEn: 'Nothing', syllables: ['niets'], exampleNl: 'Er is niets.', level: 'Groep 3-4 (AVI M3-E4)' },
-  
+  'iets': { word: 'iets', wordType: 'Verwijswoord', meaningNl: 'Onbepaald voornaamwoord: een niet-nader-genoemd ding.', translationEn: 'Something', syllables: ['iets'], exampleNl: 'Ik zie iets.', level: 'Groep 3-4 (AVI M3-E4)' },
+  'niets': { word: 'niets', wordType: 'Verwijswoord', meaningNl: 'Onbepaald voornaamwoord: geen enkel ding.', translationEn: 'Nothing', syllables: ['niets'], exampleNl: 'Er is niets.', level: 'Groep 3-4 (AVI M3-E4)' },
+
   // Pronouns
-  'ons': { word: 'ons', wordType: 'Voorzetsel', meaningNl: 'Wij (bezittelijk).', translationEn: 'Us / Our', syllables: ['ons'], exampleNl: 'Kom bij ons.', level: 'Groep 3-4 (AVI M3-E4)' },
-  'elke': { word: 'elke', wordType: 'Voorzetsel', meaningNl: 'Iedere.', translationEn: 'Every', syllables: ['el', 'ke'], exampleNl: 'Elke dag.', level: 'Groep 3-4 (AVI M3-E4)' }
+  'ons': { word: 'ons', wordType: 'Verwijswoord', meaningNl: 'Persoonlijk/bezittelijk voornaamwoord: wij/onze.', translationEn: 'Us / Our', syllables: ['ons'], exampleNl: 'Kom bij ons.', level: 'Groep 3-4 (AVI M3-E4)' },
+  'elke': { word: 'elke', wordType: 'Verwijswoord', meaningNl: 'Onbepaald voornaamwoord: iedere, elk apart.', translationEn: 'Every', syllables: ['el', 'ke'], exampleNl: 'Elke dag.', level: 'Groep 3-4 (AVI M3-E4)' }
 };
 
 export const DUTCH_DICTIONARY_EXPANSION: Record<string, DictionaryEntry> = {

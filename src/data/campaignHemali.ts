@@ -48,7 +48,7 @@ Plotseling begon het midden van het perkament te vonken. Er verscheen een geheim
     biome: 'Zwevend Marmeren Plateau in de Wolken',
     storyText: `Een flits van azuurblauw licht verlichtte de nachtelijke hemel. In een fractie van een seconde had Hemali zich geteleporteerd naar het zwevende **nevelplateau**. Rondom haar zweefden eeuwenoude pilaren van wit marmer boven het wolkendek.
 
-**Daardoor** dat zij haar val perfect had gecalculeerd, landde zij geruisloos op een grote runensteen. Voor haar rees een gigantische zonnewijzer op die werd aangedreven door kristallen tandwielen. Echter, het centrale tandwiel ontbrak, **waardoor** de tijdmechanismen van het universum haperden.`,
+**Doordat** zij haar val perfect had gecalculeerd, landde zij geruisloos op een grote runensteen. Voor haar rees een gigantische zonnewijzer op die werd aangedreven door kristallen tandwielen. Echter, het centrale tandwiel ontbrak, **waardoor** de tijdmechanismen van het universum haperden.`,
     targetWords: [
       {
         word: 'nevelplateau',

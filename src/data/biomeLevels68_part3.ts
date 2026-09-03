@@ -850,7 +850,7 @@ export const ENCHANTED_FOREST_LEVELS_68: Level[] = [
         type: 'choice',
         options: ['geweven', 'geweefd', 'geweeft'],
         correctOptionIndex: 0,
-        hint: 'Weven - weefde/woof - geweven.',
+        hint: 'Weven - weefde - geweven.',
         gradeBadge: 'Groep 6-7-8'
       },
       {

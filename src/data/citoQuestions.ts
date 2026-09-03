@@ -349,8 +349,8 @@ export const TWENTY_CITO_PLACEMENT_QUESTIONS: PlacementQuestion[] = [
       'De kleine babygiraf (Appel)',
       'Het tovernotitieboek'
     ],
-    correctIndex: 2,
-    explanation: '"Deze" fungeert hier als aanwijzend voornaamwoord dat terugslaat op de kleine babygiraf.',
+    correctIndex: 1,
+    explanation: '"Deze" staat vooraan de zin en is het lijdend voorwerp van "dronk" -- het diertje (het onderwerp) dronk "deze" niet. "Deze" verwijst dus terug naar de schaal met acaciabladeren, niet naar de giraffe zelf.',
     wordHelp: [
       {
         word: 'acaciabladeren',
