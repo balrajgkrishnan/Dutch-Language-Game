@@ -48,6 +48,7 @@ export const CitoRpgExamModal: React.FC<CitoRpgExamModalProps> = ({
   const [currentRpgPageNumber, setCurrentRpgPageNumber] = useState<number>(1);
   const [rpgMysteryAnswer, setRpgMysteryAnswer] = useState<number | null>(null);
   const [isRpgClueChecked, setIsRpgClueChecked] = useState<boolean>(false);
+  const [shuffledMysteryOptions, setShuffledMysteryOptions] = useState<{ text: string; isCorrect: boolean }[]>([]);
 
   // Helper functions for persistent storage
   const getStorageKey = (protagonist: 'ridheya' | 'hemali') => `cito_rpg_diagnostic_state_v2_${protagonist}`;
@@ -69,6 +70,7 @@ export const CitoRpgExamModal: React.FC<CitoRpgExamModalProps> = ({
   const [currentPlacementIdx, setCurrentPlacementIdx] = useState<number>(initialSaved?.currentPlacementIdx ?? 0);
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [isAnswerChecked, setIsAnswerChecked] = useState<boolean>(false);
+  const [shuffledPlacementOptions, setShuffledPlacementOptions] = useState<{ text: string; isCorrect: boolean }[]>([]);
   const [scores, setScores] = useState<{ totalAnswered: number; totalCorrect: number }>(
     initialSaved?.scores ?? { totalAnswered: 0, totalCorrect: 0 }
   );
@@ -109,23 +111,56 @@ export const CitoRpgExamModal: React.FC<CitoRpgExamModalProps> = ({
 
   const { isFullscreen, containerRef: modalContainerRef, toggleFullscreen } = useFullscreen<HTMLDivElement>();
 
-  if (!isOpen) return null;
-
   const currentProfile: ProtagonistProfile = PROTAGONISTS[selectedProtagonist];
-  
+
   // Find current campaign and active RPG page
   const currentCampaign: StoryCampaign = STORY_CAMPAIGNS.find(c => c.id === selectedCampaignId) || STORY_CAMPAIGNS[0];
   const campaignPages = currentCampaign.pages;
   const currentRpgPage: RpgPage = campaignPages.find(p => p.pageNumber === currentRpgPageNumber) || campaignPages[0];
 
+  // Shuffle the mystery-clue options so the correct answer isn't always in
+  // the same position -- ~92% of authored mysteryQuestions have correctIndex
+  // at options[1], which is trivially guessable if rendered in source order.
+  // (Must stay above the `if (!isOpen) return null` guard below -- hooks
+  // can't be called conditionally.)
+  useEffect(() => {
+    const q = currentRpgPage.mysteryQuestion;
+    if (!q) {
+      setShuffledMysteryOptions([]);
+      return;
+    }
+    const mapped = q.options.map((opt, idx) => ({ text: opt, isCorrect: idx === q.correctIndex }));
+    for (let i = mapped.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [mapped[i], mapped[j]] = [mapped[j], mapped[i]];
+    }
+    setShuffledMysteryOptions(mapped);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentRpgPage.pageNumber, selectedCampaignId]);
+
   // Filter Cito questions for selected profile
-  const filteredPlacementQuestions = PLACEMENT_QUESTIONS.filter(q => 
-    selectedProtagonist === 'ridheya' 
-      ? q.curriculumLevel.includes('Groep 3-4') 
+  const filteredPlacementQuestions = PLACEMENT_QUESTIONS.filter(q =>
+    selectedProtagonist === 'ridheya'
+      ? q.curriculumLevel.includes('Groep 3-4')
       : q.curriculumLevel.includes('Groep 5-6')
   );
-  
+
   const currentPlacementQ: PlacementQuestion = filteredPlacementQuestions[currentPlacementIdx] || filteredPlacementQuestions[0];
+
+  // Shuffle placement-question options so the correct answer isn't always in
+  // the same position -- 18/20 authored questions have correctIndex at
+  // options[1], trivially guessable if rendered in source order.
+  useEffect(() => {
+    const mapped = currentPlacementQ.options.map((opt, idx) => ({ text: opt, isCorrect: idx === currentPlacementQ.correctIndex }));
+    for (let i = mapped.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [mapped[i], mapped[j]] = [mapped[j], mapped[i]];
+    }
+    setShuffledPlacementOptions(mapped);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPlacementQ.id]);
+
+  if (!isOpen) return null;
 
   const handleSelectProtagonist = (id: 'ridheya' | 'hemali') => {
     sound.playPop();
@@ -181,7 +216,7 @@ export const CitoRpgExamModal: React.FC<CitoRpgExamModalProps> = ({
     setSelectedOption(optionIdx);
     setIsAnswerChecked(true);
 
-    const isCorrect = optionIdx === currentPlacementQ.correctIndex;
+    const isCorrect = shuffledPlacementOptions[optionIdx]?.isCorrect ?? false;
     setUserAnswersHistory(prev => ({
       ...prev,
       [currentPlacementQ.id]: { chosen: optionIdx, correct: isCorrect }
@@ -290,7 +325,7 @@ export const CitoRpgExamModal: React.FC<CitoRpgExamModalProps> = ({
     if (isRpgClueChecked) return;
     setRpgMysteryAnswer(idx);
     setIsRpgClueChecked(true);
-    if (currentRpgPage.mysteryQuestion && idx === currentRpgPage.mysteryQuestion.correctIndex) {
+    if (shuffledMysteryOptions[idx]?.isCorrect) {
       sound.playSuccess();
       confetti({ particleCount: 40, spread: 70 });
       if (onRewardStars) onRewardStars(20);
@@ -736,9 +771,9 @@ export const CitoRpgExamModal: React.FC<CitoRpgExamModalProps> = ({
                   </p>
 
                   <div className="space-y-2">
-                    {currentRpgPage.mysteryQuestion.options.map((opt, oIdx) => {
+                    {shuffledMysteryOptions.map((optionItem, oIdx) => {
                       const isSelected = rpgMysteryAnswer === oIdx;
-                      const isCorrect = oIdx === currentRpgPage.mysteryQuestion?.correctIndex;
+                      const isCorrect = optionItem.isCorrect;
                       let btnStyle = 'bg-white hover:bg-indigo-50 border-slate-200 text-slate-800';
 
                       if (isRpgClueChecked) {
@@ -754,7 +789,7 @@ export const CitoRpgExamModal: React.FC<CitoRpgExamModalProps> = ({
                           onClick={() => handleAnswerRpgClue(oIdx)}
                           className={`w-full text-left p-3 sm:p-3.5 rounded-2xl border-2 text-xs sm:text-sm transition-all cursor-pointer flex items-center justify-between gap-3 ${btnStyle}`}
                         >
-                          <span>{opt}</span>
+                          <span>{optionItem.text}</span>
                           {isRpgClueChecked && isCorrect && <Check className="w-4 h-4 text-emerald-700 flex-shrink-0" />}
                         </button>
                       );
@@ -1007,9 +1042,9 @@ export const CitoRpgExamModal: React.FC<CitoRpgExamModalProps> = ({
 
                   {/* Options Grid */}
                   <div className="grid grid-cols-1 gap-2.5">
-                    {currentPlacementQ.options.map((opt, oIdx) => {
+                    {shuffledPlacementOptions.map((optionItem, oIdx) => {
                       const isSelected = selectedOption === oIdx;
-                      const isCorrect = oIdx === currentPlacementQ.correctIndex;
+                      const isCorrect = optionItem.isCorrect;
                       let style = 'bg-slate-50 hover:bg-indigo-50 border-slate-200 text-slate-800';
 
                       if (isAnswerChecked) {
@@ -1025,7 +1060,7 @@ export const CitoRpgExamModal: React.FC<CitoRpgExamModalProps> = ({
                           onClick={() => handleAnswerPlacement(oIdx)}
                           className={`w-full text-left p-3.5 rounded-2xl border-2 text-xs sm:text-sm font-semibold transition-all cursor-pointer flex items-center justify-between gap-3 ${style}`}
                         >
-                          <span>{opt}</span>
+                          <span>{optionItem.text}</span>
                           {isAnswerChecked && isCorrect && <Check className="w-4 h-4 text-emerald-700 flex-shrink-0" />}
                         </button>
                       );
@@ -1036,12 +1071,12 @@ export const CitoRpgExamModal: React.FC<CitoRpgExamModalProps> = ({
                   {isAnswerChecked && (
                     <div className="pt-2 space-y-3">
                       <div className={`p-4 rounded-2xl text-xs sm:text-sm font-bold border ${
-                        selectedOption === currentPlacementQ.correctIndex
+                        shuffledPlacementOptions[selectedOption ?? -1]?.isCorrect
                           ? 'bg-emerald-50 text-emerald-950 border-emerald-300'
                           : 'bg-rose-50 text-rose-950 border-rose-300'
                       }`}>
                         <div className="flex items-center gap-2 mb-1 font-black">
-                          {selectedOption === currentPlacementQ.correctIndex ? '🎉 Helemaal Goed!' : '💡 Uitleg & Hulp:'}
+                          {shuffledPlacementOptions[selectedOption ?? -1]?.isCorrect ? '🎉 Helemaal Goed!' : '💡 Uitleg & Hulp:'}
                         </div>
                         <p>{currentPlacementQ.explanation}</p>
                       </div>

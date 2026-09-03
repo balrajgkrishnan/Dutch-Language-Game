@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   Compass, 
@@ -42,12 +42,30 @@ export const SafariPlacementModal: React.FC<SafariPlacementModalProps> = ({
   const [writingInput, setWritingInput] = useState('');
   const [stageScores, setStageScores] = useState<Record<string, number>>({});
   const [isCompleted, setIsCompleted] = useState(false);
-
-  if (!isOpen) return null;
+  const [shuffledStageOptions, setShuffledStageOptions] = useState<{ text: string; isCorrect: boolean }[]>([]);
 
   const currentStage: PlacementStage = SAFARI_PLACEMENT_STAGES[currentStageIdx] || SAFARI_PLACEMENT_STAGES[0];
   const totalStages = SAFARI_PLACEMENT_STAGES.length;
   const progressPct = ((currentStageIdx + 1) / totalStages) * 100;
+
+  // Shuffle options so the correct answer isn't always in the same position --
+  // every stage in assessmentData.ts has correctOptionIndex: 0, which would
+  // make this baseline placement test (used to set the girls' starting grade
+  // level) trivially solvable by always tapping the first option.
+  useEffect(() => {
+    if (!currentStage.options) {
+      setShuffledStageOptions([]);
+      return;
+    }
+    const mapped = currentStage.options.map((opt, idx) => ({ text: opt, isCorrect: idx === currentStage.correctOptionIndex }));
+    for (let i = mapped.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [mapped[i], mapped[j]] = [mapped[j], mapped[i]];
+    }
+    setShuffledStageOptions(mapped);
+  }, [currentStage]);
+
+  if (!isOpen) return null;
 
   const handleSelectOption = (index: number) => {
     setSelectedOption(index);
@@ -82,7 +100,7 @@ export const SafariPlacementModal: React.FC<SafariPlacementModalProps> = ({
     // Calculate score for this stage
     let score = 75; // default benchmark
     if (currentStage.type === 'vocab' || currentStage.type === 'comprehension' || currentStage.type === 'listening' || currentStage.type === 'spelling' || currentStage.type === 'math') {
-      if (selectedOption !== null && selectedOption === currentStage.correctOptionIndex) {
+      if (selectedOption !== null && shuffledStageOptions[selectedOption]?.isCorrect) {
         score = 90;
       } else {
         score = 60;
@@ -281,7 +299,7 @@ export const SafariPlacementModal: React.FC<SafariPlacementModalProps> = ({
                   {/* Multiple Choice Options */}
                   {currentStage.options && (
                     <div className="grid grid-cols-1 gap-2.5 pt-1">
-                      {currentStage.options.map((option, idx) => {
+                      {shuffledStageOptions.map((optionItem, idx) => {
                         const isSelected = selectedOption === idx;
                         return (
                           <button
@@ -293,7 +311,7 @@ export const SafariPlacementModal: React.FC<SafariPlacementModalProps> = ({
                                 : 'bg-slate-50 hover:bg-emerald-50/60 border-slate-200 text-slate-800'
                             }`}
                           >
-                            <span>{option}</span>
+                            <span>{optionItem.text}</span>
                             {isSelected && <Check className="w-4 h-4 shrink-0 text-white" />}
                           </button>
                         );

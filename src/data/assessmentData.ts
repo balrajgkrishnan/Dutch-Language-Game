@@ -29,7 +29,7 @@ export const SAFARI_PLACEMENT_STAGES: PlacementStage[] = [
     iconEmoji: '🐾',
     type: 'vocab',
     question: 'Een dier dat vooral in het donker leeft en actief is, noemen we een...',
-    options: ['Nachtdier (Nocturn)', 'Koudbloedig dier', 'Woestijndier', 'Kuddedier'],
+    options: ['Nachtdier', 'Koudbloedig dier', 'Woestijndier', 'Kuddedier'],
     correctOptionIndex: 0
   },
   {
@@ -85,7 +85,7 @@ export const SAFARI_PLACEMENT_STAGES: PlacementStage[] = [
     iconEmoji: '🧰',
     type: 'spelling',
     question: 'Kies het correct gespelde woord:',
-    options: ['Kudde (korte klank [u] -> dubbel d)', 'Kude', 'Kuddeu', 'Kudte'],
+    options: ['Kudde', 'Kude', 'Kuddeu', 'Kudte'],
     correctOptionIndex: 0
   },
   {
